@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class MovementStats
 {
-    public static float moveSpeed = 1;
+    public static float moveSpeed = 5;
     public static float moveInertia = 1;
     //intended to be able to change move speed in air.
     public static float jumpMoveSpeed = 1f;

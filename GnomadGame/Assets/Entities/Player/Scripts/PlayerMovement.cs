@@ -23,6 +23,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        Jump();
+        Move();
+    }
+
+    void Jump()
+    {
         IsGrounded();
         // We must ensure that we are grounded and not jumping before we begin to jump.
         if (Input.GetKeyDown(KeyCode.Space) && !isJumping && isGrounded)
@@ -39,19 +45,35 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.AddForce(Vector2.up * MovementStats.jumpSpeed);
         }
-        else 
+        else
         {
             // TODO: Implement non-frame independent lerp later
-            rb.velocity = Vector2.Lerp(rb.velocity, new Vector2(rb.velocity.x, Physics.gravity.y*5), Time.deltaTime);
+            rb.velocity = Vector2.Lerp(rb.velocity, new Vector2(rb.velocity.x, Physics.gravity.y * 5), Time.deltaTime);
             isJumping = false;
         }
+    }
+
+    void Move()
+    {
+        Vector2 movementVector = new(0,0);
+        if (Input.GetKey(KeyCode.A))
+        {
+            movementVector.x -= MovementStats.moveSpeed;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            movementVector.x += MovementStats.moveSpeed;
+        }
+        movementVector.y = rb.velocity.y;
+
+        rb.velocity = movementVector;
     }
 
     void IsGrounded()
     {
         // Check if the player is grounded with a boxcast instead of a raycast.
         // If necessary it can be changed to 2 raycasts on the bottom corners. 
-        RaycastHit2D hit = Physics2D.BoxCast(transform.position, col.bounds.extents, 0f, -transform.up, 1f, groundLayerMask);
+        RaycastHit2D hit = Physics2D.BoxCast(transform.position, col.bounds.extents*2, 0f, -transform.up, 0.5f, groundLayerMask);
         if(hit.collider && col.IsTouchingLayers(groundLayerMask))
         {
             Debug.Log("test");
