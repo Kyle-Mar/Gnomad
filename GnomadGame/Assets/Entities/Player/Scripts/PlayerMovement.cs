@@ -48,7 +48,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             // TODO: Implement non-frame independent lerp later
-            rb.velocity = Vector2.Lerp(rb.velocity, new Vector2(rb.velocity.x, Physics.gravity.y * 5), Time.deltaTime);
+            rb.velocity = Vector2.Lerp(rb.velocity, new Vector2(rb.velocity.x, MovementStats.fallSpeed), Time.deltaTime);
             isJumping = false;
         }
     }
