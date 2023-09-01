@@ -4,29 +4,49 @@ using UnityEngine;
 
 public class PlayerRunState : PlayerBaseState
 {
+    public PlayerRunState(PlayerStateMachine psm, PlayerStateFactory psf) : base(psm, psf)
+    {
+    }
+
     public override void CheckSwitchStates()
     {
-        throw new System.NotImplementedException();
+        if(Input.GetAxis("Horizontal") == 0)
+        {
+            SwitchState(factory.Idle());
+        }
     }
 
     public override void EnterState()
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 
     public override void ExitState()
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 
     public override void InitializeSubState()
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 
     public override void UpdateState()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("RUNNING?");
+        CheckSwitchStates();
+        Vector2 movementVector = new(0, 0);
+        if (Input.GetKey(KeyCode.A))
+        {
+            movementVector.x -= MovementStats.moveSpeed;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            movementVector.x += MovementStats.moveSpeed;
+        }
+        movementVector.y = context.rb.velocity.y;
+
+        context.rb.velocity = movementVector;
     }
 
     // Start is called before the first frame update

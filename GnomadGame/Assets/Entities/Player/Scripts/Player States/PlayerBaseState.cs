@@ -4,6 +4,19 @@ using UnityEngine;
 
 public abstract class PlayerBaseState
 {
+    protected bool isRootState;
+    protected PlayerStateMachine context;
+    protected PlayerStateFactory factory;
+    protected PlayerBaseState currentSuperState;
+    protected PlayerBaseState currentSubState;
+
+    public PlayerBaseState(PlayerStateMachine psm, PlayerStateFactory psf)
+    {
+        context = psm;
+        factory = psf;
+    }
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,8 +35,34 @@ public abstract class PlayerBaseState
     public abstract void CheckSwitchStates();
     public abstract void InitializeSubState();
 
-    void UpdateStates() { }
-    void SwitchState() { }
-    void SetSuperState() { }
-    void SetSubState() { }
+    public void UpdateStates() 
+    {
+        UpdateState();
+        if(currentSubState != null)
+        {
+            currentSubState.UpdateStates();
+        }
+    }
+    protected void SwitchState(PlayerBaseState newState) 
+    {
+        ExitState();
+        newState.EnterState();
+        if (isRootState)
+        {
+            context.CurrentState = newState;
+        }
+        else if(currentSuperState != null)
+        {
+            currentSuperState.SetSubState(newState);
+        }
+    }
+    protected void SetSuperState(PlayerBaseState newSuperState) 
+    {
+        currentSuperState = newSuperState;
+    }
+    protected void SetSubState(PlayerBaseState newSubState) 
+    {
+        currentSubState = newSubState;
+        newSubState.SetSuperState(this);
+    }
 }

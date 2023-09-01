@@ -4,29 +4,37 @@ using UnityEngine;
 
 public class PlayerIdleState : PlayerBaseState
 {
+    public PlayerIdleState(PlayerStateMachine psm, PlayerStateFactory psf) : base(psm, psf)
+    {
+    }
+
     public override void CheckSwitchStates()
     {
-        throw new System.NotImplementedException();
+        //Debug.Log(Input.GetAxis("Horizontal"));
+        if (Input.GetAxis("Horizontal") != 0)
+        {
+            SwitchState(factory.Run());
+        }
     }
 
     public override void EnterState()
     {
-        throw new System.NotImplementedException();
+
     }
 
     public override void ExitState()
     {
-        throw new System.NotImplementedException();
+
     }
 
     public override void InitializeSubState()
     {
-        throw new System.NotImplementedException();
     }
 
     public override void UpdateState()
     {
-        throw new System.NotImplementedException();
+        CheckSwitchStates();
+        // do nothing, maybe play idle anim later.
     }
 
     // Start is called before the first frame update

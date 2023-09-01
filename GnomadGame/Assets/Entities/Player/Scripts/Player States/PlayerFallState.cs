@@ -4,29 +4,49 @@ using UnityEngine;
 
 public class PlayerFallState : PlayerBaseState
 {
+    public PlayerFallState(PlayerStateMachine psm, PlayerStateFactory psf) : base(psm, psf)
+    {
+        isRootState = true;
+        InitializeSubState();
+    }
+
     public override void CheckSwitchStates()
     {
-        throw new System.NotImplementedException();
+        context.CheckIfGrounded();
+        if (context.IsGrounded)
+        {
+            SwitchState(factory.Grounded());
+        }
     }
 
     public override void EnterState()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("HELLO I AM FALLING");
+        //throw new System.NotImplementedException();
     }
 
     public override void ExitState()
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 
     public override void InitializeSubState()
     {
-        throw new System.NotImplementedException();
+        if (Input.GetAxis("Horizontal") != 0)
+        {
+            SetSubState(factory.Run());
+        }
+        else
+        {
+            SetSubState(factory.Idle());
+        }
     }
 
     public override void UpdateState()
     {
-        throw new System.NotImplementedException();
+        CheckSwitchStates();
+        //TODO: Implement non-frame independent lerp later
+        context.rb.velocity = Vector2.Lerp(context.rb.velocity, new Vector2(context.rb.velocity.x, MovementStats.fallSpeed), Time.deltaTime);
     }
 
     // Start is called before the first frame update

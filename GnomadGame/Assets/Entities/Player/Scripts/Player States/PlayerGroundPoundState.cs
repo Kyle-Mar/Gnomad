@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class PlayerGroundPoundState : PlayerBaseState
 {
+    public PlayerGroundPoundState(PlayerStateMachine psm, PlayerStateFactory psf) : base(psm, psf)
+    {
+    }
+
     public override void CheckSwitchStates()
     {
         throw new System.NotImplementedException();

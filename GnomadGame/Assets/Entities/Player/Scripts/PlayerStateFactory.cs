@@ -8,28 +8,28 @@ public class PlayerStateFactory
 
     public PlayerBaseState Idle()
     {
-        return new PlayerIdleState();
+        return new PlayerIdleState(context, this);
     }
     public PlayerBaseState Run()
     {
-        return new PlayerRunState();
+        return new PlayerRunState(context, this);
     }
     public PlayerBaseState Fall()
     {
-        return new PlayerFallState();
+        return new PlayerFallState(context, this);
     }
     public PlayerBaseState Jump()
     {
-        return new PlayerJumpState();
+        return new PlayerJumpState(context, this);
     }
 
     public PlayerBaseState Grounded()
     {
-        return new PlayerGroundedState();
+        return new PlayerGroundedState(context, this);
     }
 
     public PlayerBaseState GroundPound()
     {
-        return new PlayerGroundPoundState();
+        return new PlayerGroundPoundState(context, this);
     }
 }

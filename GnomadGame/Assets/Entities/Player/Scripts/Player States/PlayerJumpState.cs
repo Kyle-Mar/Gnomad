@@ -4,40 +4,57 @@ using UnityEngine;
 
 public class PlayerJumpState : PlayerBaseState
 {
+    public PlayerJumpState(PlayerStateMachine psm, PlayerStateFactory psf) : base(psm, psf)
+    {
+        isRootState = true;
+        InitializeSubState();
+    }
+
+    float startJumpTime;
+    float maxJumpTime;
+
     public override void CheckSwitchStates()
     {
-        throw new System.NotImplementedException();
+        
     }
 
     public override void EnterState()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("HELLO I AM JUMPING");
+        startJumpTime = Time.time;
+        maxJumpTime = startJumpTime + MovementStats.maxJumpHeight;
+        context.rb.velocity = new Vector2(context.rb.velocity.x, MovementStats.jumpSpeed);
+        //throw new System.NotImplementedException();
     }
 
     public override void ExitState()
     {
-        throw new System.NotImplementedException();
+        //
     }
 
     public override void InitializeSubState()
     {
-        throw new System.NotImplementedException();
+        if (Input.GetAxis("Horizontal") != 0)
+        {
+            SetSubState(factory.Run());
+        }
+        else
+        {
+            SetSubState(factory.Idle());
+        }
     }
 
     public override void UpdateState()
     {
-        throw new System.NotImplementedException();
-    }
+        CheckSwitchStates();
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (Input.GetKey(KeyCode.Space) && Time.time < maxJumpTime)
+        {
+            context.rb.AddForce(Vector2.up * MovementStats.jumpSpeed);
+        }
+        else
+        {
+            SwitchState(factory.Fall());
+        }
     }
 }

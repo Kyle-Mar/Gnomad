@@ -43,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
         // continue jumping as long as the timer will allow us.
         else if (Input.GetKey(KeyCode.Space) && isJumping && (maxJumpTime > Time.time))
         {
-            rb.AddForce(Vector2.up * MovementStats.jumpSpeed);
+             rb.AddForce(Vector2.up * MovementStats.jumpSpeed);
         }
         else
         {
