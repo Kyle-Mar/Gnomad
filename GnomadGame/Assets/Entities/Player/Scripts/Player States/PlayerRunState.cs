@@ -10,7 +10,7 @@ public class PlayerRunState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        if(Input.GetAxis("Horizontal") == 0)
+        if(context.Controls.Player.Move.ReadValue<Vector2>().x == 0)
         {
             SwitchState(factory.Idle());
         }
@@ -33,17 +33,11 @@ public class PlayerRunState : PlayerBaseState
 
     public override void UpdateState()
     {
-        //Debug.Log("RUNNING?");
+        Debug.Log("RUNNING?");
         CheckSwitchStates();
+        Vector2 inputVector = context.Controls.Player.Move.ReadValue<Vector2>();
         Vector2 movementVector = new(0, 0);
-        if (Input.GetKey(KeyCode.A))
-        {
-            movementVector.x -= MovementStats.moveSpeed;
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            movementVector.x += MovementStats.moveSpeed;
-        }
+        movementVector.x = inputVector.x * MovementStats.moveSpeed;
         movementVector.y = context.rb.velocity.y;
 
         context.rb.velocity = movementVector;

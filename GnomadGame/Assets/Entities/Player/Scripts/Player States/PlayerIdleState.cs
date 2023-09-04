@@ -11,7 +11,7 @@ public class PlayerIdleState : PlayerBaseState
     public override void CheckSwitchStates()
     {
         //Debug.Log(Input.GetAxis("Horizontal"));
-        if (Input.GetAxis("Horizontal") != 0)
+        if (context.Controls.Player.Move.ReadValue<Vector2>().x != 0)
         {
             SwitchState(factory.Run());
         }

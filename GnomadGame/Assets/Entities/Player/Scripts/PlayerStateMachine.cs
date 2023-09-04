@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerStateMachine : MonoBehaviour
 {
 
     PlayerBaseState currentState;
     PlayerStateFactory states;
+    public PlayerControls Controls;
 
     LayerMask groundLayerMask;
     ContactFilter2D floorContactFilter;
@@ -16,9 +18,9 @@ public class PlayerStateMachine : MonoBehaviour
     bool isTouchingWallLeft = false;
     bool isTouchingWallRight = false;
 
+    Vector2 lastMovementDirection = new(0,0);
 
     float jumpBufferTime = 0f;
-
 
     public Collider2D col;
     public Rigidbody2D rb;
@@ -28,13 +30,27 @@ public class PlayerStateMachine : MonoBehaviour
     public float JumpBufferTime { get { return jumpBufferTime; } private set { } }
     public bool IsTouchingWallLeft { get { return isTouchingWallLeft; } private set { } }
     public bool IsTouchingWallRight { get { return isTouchingWallRight; } private set { } }
+    public bool IsTouchingWall { get { return IsTouchingWallLeft || IsTouchingWallRight; } private set { } }
+    public Vector2 LastMovementDirection { get { return lastMovementDirection; } private set { } }
 
+
+    private void OnEnable()
+    {
+        Controls.Player.Move.performed += UpdateMovementDirection;
+        Controls.Enable();
+    }
+    private void OnDisable()
+    {
+        Controls.Enable();
+    }
 
     private void Awake()
     {
         groundLayerMask = LayerMask.GetMask("Ground");
         col = GetComponent<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
+
+        Controls = new PlayerControls();
 
         // this may need to be substituted with a sort of raycast+boxcast solution.
         floorContactFilter = new();
@@ -86,7 +102,7 @@ public class PlayerStateMachine : MonoBehaviour
 
     private void DoJumpBuffer()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Controls.Player.Jump.WasPressedThisFrame())
         {
             jumpBufferTime = 0.15f;
         }
@@ -102,6 +118,11 @@ public class PlayerStateMachine : MonoBehaviour
         {
             jumpBufferTime = 0f;
         }
+    }
+
+    private void UpdateMovementDirection(InputAction.CallbackContext cxt)
+    {
+        lastMovementDirection = cxt.ReadValue<Vector2>();
     }
 
     private void OnCollisionStay2D(Collision2D collision)

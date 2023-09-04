@@ -15,9 +15,13 @@ public class PlayerJumpState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (context.Controls.Player.Slide.WasPressedThisFrame())
         {
             SwitchState(factory.Slide());
+        }
+        if (context.Controls.Player.GroundPound.WasPressedThisFrame())
+        {
+            SwitchState(factory.GroundPound());
         }
     }
 
@@ -37,7 +41,7 @@ public class PlayerJumpState : PlayerBaseState
 
     public override void InitializeSubState()
     {
-        if (Input.GetAxis("Horizontal") != 0)
+        if (context.Controls.Player.Move.ReadValue<Vector2>().x != 0)
         {
             SetSubState(factory.Run());
         }
@@ -51,7 +55,7 @@ public class PlayerJumpState : PlayerBaseState
     {
         CheckSwitchStates();
 
-        if (Input.GetKey(KeyCode.Space) && Time.time < maxJumpTime)
+        if (context.Controls.Player.Jump.IsPressed() && Time.time < maxJumpTime)
         {
             context.rb.AddForce(Vector2.up * MovementStats.jumpSpeed);
         }

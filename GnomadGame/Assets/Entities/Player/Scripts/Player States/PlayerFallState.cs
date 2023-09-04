@@ -17,11 +17,11 @@ public class PlayerFallState : PlayerBaseState
         {
             SwitchState(factory.Grounded());
         }
-        if (Input.GetKeyDown(KeyCode.E))
+        if (context.Controls.Player.Slide.WasPressedThisFrame())
         {
             SwitchState(factory.Slide());
         }
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (context.Controls.Player.GroundPound.WasPressedThisFrame())
         {
             SwitchState(factory.GroundPound());
         }
@@ -40,7 +40,7 @@ public class PlayerFallState : PlayerBaseState
 
     public override void InitializeSubState()
     {
-        if (Input.GetAxis("Horizontal") != 0)
+        if (context.Controls.Player.Move.ReadValue<Vector2>().x != 0)
         {
             SetSubState(factory.Run());
         }

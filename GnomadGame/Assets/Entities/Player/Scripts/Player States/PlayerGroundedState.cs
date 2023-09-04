@@ -12,13 +12,13 @@ public class PlayerGroundedState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        if (Input.GetKeyDown(KeyCode.Space) || context.JumpBufferTime > 0)
+        if (context.Controls.Player.Jump.WasPressedThisFrame() || context.JumpBufferTime > 0)
         {
             context.ConsumeJumpBuffer();
             SwitchState(factory.Jump());
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (context.Controls.Player.Slide.WasPressedThisFrame())
         {
             SwitchState(factory.Slide());
         }
@@ -43,8 +43,7 @@ public class PlayerGroundedState : PlayerBaseState
 
     public override void InitializeSubState()
     {
-        //Debug.Log(Input.GetAxis("Horizontal"));
-        if (Input.GetAxis("Horizontal") != 0)
+        if (context.Controls.Player.Move.ReadValue<Vector2>().x != 0)
         {
             SetSubState(factory.Run());
         }

@@ -4,17 +4,18 @@ using UnityEngine;
 
 public class PlayerSlideState : PlayerBaseState
 {
+    Vector2 initialMovementDir;
     float slideEndTime;
     bool sliding = true;
     public PlayerSlideState(PlayerStateMachine psm, PlayerStateFactory psf) : base(psm, psf)
     {
         isRootState = true;
-        //InitializeSubState();
+        InitializeSubState();
     }
 
     public override void CheckSwitchStates()
     {
-        if (context.IsTouchingWallRight || context.IsTouchingWallLeft)
+        if (DidBonk())
         {
             context.CheckIfGrounded();
             if (!context.IsGrounded)
@@ -36,14 +37,13 @@ public class PlayerSlideState : PlayerBaseState
                 SwitchState(factory.Grounded());
             }
         }
-
-        //throw new System.NotImplementedException();
     }
 
     public override void EnterState()
     {
         slideEndTime = Time.time + MovementStats.slideDuration;
-        context.rb.velocity = new Vector2(MovementStats.slideSpeedX, MovementStats.fallSpeed/5);
+        initialMovementDir = context.LastMovementDirection;
+        context.rb.velocity = new Vector2(MovementStats.slideSpeedX * initialMovementDir.x, MovementStats.fallSpeed/5);
     }
 
     public override void ExitState()
@@ -63,8 +63,18 @@ public class PlayerSlideState : PlayerBaseState
             Debug.Log("NOT SLIDING");
             sliding = false;
         }
+        else
+        {
+            context.rb.velocity = new Vector2(MovementStats.slideSpeedX * initialMovementDir.x, MovementStats.fallSpeed / 5);
+        }
 
         CheckSwitchStates();
+    }
+
+    bool DidBonk()
+    {
+        return (context.IsTouchingWallRight && initialMovementDir.x > 0
+            || context.IsTouchingWallLeft && initialMovementDir.x < 0);
     }
 
     // Start is called before the first frame update
