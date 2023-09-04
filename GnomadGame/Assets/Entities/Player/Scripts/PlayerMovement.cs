@@ -43,12 +43,12 @@ public class PlayerMovement : MonoBehaviour
         // continue jumping as long as the timer will allow us.
         else if (Input.GetKey(KeyCode.Space) && isJumping && (maxJumpTime > Time.time))
         {
-            rb.AddForce(Vector2.up * MovementStats.jumpSpeed);
+             rb.AddForce(Vector2.up * MovementStats.jumpSpeed);
         }
         else
         {
             // TODO: Implement non-frame independent lerp later
-            rb.velocity = Vector2.Lerp(rb.velocity, new Vector2(rb.velocity.x, Physics.gravity.y * 5), Time.deltaTime);
+            rb.velocity = Vector2.Lerp(rb.velocity, new Vector2(rb.velocity.x, MovementStats.fallSpeed), Time.deltaTime);
             isJumping = false;
         }
     }
