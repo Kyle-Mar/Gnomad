@@ -7,6 +7,7 @@ using UnityEngine;
 public class MovementStats
 {
     public static float groundPoundXSpeed = 0f;
+    
     public static float groundPoundYSpeed = Physics.gravity.y * 8;
 
     public static float moveSpeed = 5;
@@ -18,5 +19,9 @@ public class MovementStats
     public static float jumpSpeed=12;
 
     public static float fallSpeed = Physics.gravity.y * 5;
+
+    public static float slideSpeedX = 10f;
+
+    public static float slideDuration = .5f;
 
 }

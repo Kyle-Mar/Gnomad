@@ -9,7 +9,14 @@ public class PlayerStateMachine : MonoBehaviour
     PlayerStateFactory states;
 
     LayerMask groundLayerMask;
+    ContactFilter2D floorContactFilter;
+    ContactFilter2D wallContactFilter;
+
     bool isGrounded = false;
+    bool isTouchingWallLeft = false;
+    bool isTouchingWallRight = false;
+
+
     float jumpBufferTime = 0f;
 
 
@@ -17,15 +24,26 @@ public class PlayerStateMachine : MonoBehaviour
     public Rigidbody2D rb;
 
     public PlayerBaseState CurrentState { get { return currentState; } set { currentState = value; } }
-    public bool IsGrounded { get { return isGrounded; } set { isGrounded = value; } }
-    public float JumpBufferTime { get { return jumpBufferTime; } set { jumpBufferTime = value; } }
-    
+    public bool IsGrounded { get { return isGrounded; } private set { } }
+    public float JumpBufferTime { get { return jumpBufferTime; } private set { } }
+    public bool IsTouchingWallLeft { get { return isTouchingWallLeft; } private set { } }
+    public bool IsTouchingWallRight { get { return isTouchingWallRight; } private set { } }
+
 
     private void Awake()
     {
         groundLayerMask = LayerMask.GetMask("Ground");
         col = GetComponent<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
+
+        // this may need to be substituted with a sort of raycast+boxcast solution.
+        floorContactFilter = new();
+        floorContactFilter.SetLayerMask(groundLayerMask);
+        floorContactFilter.SetNormalAngle(85, 95);
+
+        //wallContactFilter = new();
+        //wallContactFilter.SetLayerMask(groundLayerMask);
+        //wallContactFilter.SetNormalAngle(85, 95);
 
         states = new(this);
         currentState = states.Grounded();
@@ -52,9 +70,8 @@ public class PlayerStateMachine : MonoBehaviour
         RaycastHit2D hit = Physics2D.BoxCast(transform.position, col.bounds.extents * 2, 0f, -transform.up, 0.5f, groundLayerMask);
         //Debug.Log(hit.collider.name);
         //Debug.DrawRay(transform.position, -transform.up * col.bounds.extents.y * 2, Color.blue, .5f);
-        
 
-        if (hit.collider && col.IsTouchingLayers(groundLayerMask))
+        if (hit.collider && col.IsTouching(hit.collider, floorContactFilter))
         {
             //Debug.Log("TOUCHING LAYERS:" + col.IsTouchingLayers(groundLayerMask));
             //Debug.Log("TOUCHING COLLIDER:" + hit.collider.IsTouching(col));
@@ -69,7 +86,7 @@ public class PlayerStateMachine : MonoBehaviour
 
     private void DoJumpBuffer()
     {
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             jumpBufferTime = 0.15f;
         }
@@ -84,6 +101,24 @@ public class PlayerStateMachine : MonoBehaviour
         if(jumpBufferTime >= 0)
         {
             jumpBufferTime = 0f;
+        }
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if(collision.transform.tag == "Ground")
+        {
+            foreach (ContactPoint2D contact in collision.contacts)
+            {
+                float angle = Vector2.SignedAngle(Vector2.up, contact.normal);
+                angle = Mathf.RoundToInt(angle);
+
+                isTouchingWallRight = (angle == -90f) ? true : false;
+                isTouchingWallRight = (angle == 90f) ? true : false;
+                
+                //angle == 0f i am touching ceiling.
+                //angle == 180f i am touching floor.
+            }
         }
     }
 }

@@ -17,6 +17,12 @@ public class PlayerGroundedState : PlayerBaseState
             context.ConsumeJumpBuffer();
             SwitchState(factory.Jump());
         }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            SwitchState(factory.Slide());
+        }
+
         context.CheckIfGrounded();
         if (!context.IsGrounded)
         {
@@ -26,7 +32,7 @@ public class PlayerGroundedState : PlayerBaseState
 
     public override void EnterState()
     {
-        Debug.Log("HELLO WORLD I AM GROUNDED!");
+        //Debug.Log("HELLO WORLD I AM GROUNDED!");
         //context.rb.velocity = new(context.rb.velocity.x, 0);
     }
 
@@ -37,7 +43,7 @@ public class PlayerGroundedState : PlayerBaseState
 
     public override void InitializeSubState()
     {
-        Debug.Log(Input.GetAxis("Horizontal"));
+        //Debug.Log(Input.GetAxis("Horizontal"));
         if (Input.GetAxis("Horizontal") != 0)
         {
             SetSubState(factory.Run());

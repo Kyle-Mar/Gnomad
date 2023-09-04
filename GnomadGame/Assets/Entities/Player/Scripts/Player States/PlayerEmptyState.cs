@@ -2,18 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerRunState : PlayerBaseState
+// Used for changing to an empty substate.
+public class PlayerEmptyState : PlayerBaseState
 {
-    public PlayerRunState(PlayerStateMachine psm, PlayerStateFactory psf) : base(psm, psf)
+    public PlayerEmptyState(PlayerStateMachine psm, PlayerStateFactory psf) : base(psm, psf)
     {
     }
 
     public override void CheckSwitchStates()
     {
-        if(Input.GetAxis("Horizontal") == 0)
-        {
-            SwitchState(factory.Idle());
-        }
+        //throw new System.NotImplementedException();
     }
 
     public override void EnterState()
@@ -33,20 +31,7 @@ public class PlayerRunState : PlayerBaseState
 
     public override void UpdateState()
     {
-        //Debug.Log("RUNNING?");
-        CheckSwitchStates();
-        Vector2 movementVector = new(0, 0);
-        if (Input.GetKey(KeyCode.A))
-        {
-            movementVector.x -= MovementStats.moveSpeed;
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            movementVector.x += MovementStats.moveSpeed;
-        }
-        movementVector.y = context.rb.velocity.y;
-
-        context.rb.velocity = movementVector;
+        //throw new System.NotImplementedException();
     }
 
     // Start is called before the first frame update

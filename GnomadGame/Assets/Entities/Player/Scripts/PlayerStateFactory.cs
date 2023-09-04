@@ -32,4 +32,14 @@ public class PlayerStateFactory
     {
         return new PlayerGroundPoundState(context, this);
     }
+
+    public PlayerBaseState Slide()
+    {
+        return new PlayerSlideState(context, this);
+    }
+
+    public PlayerBaseState Empty()
+    {
+        return new PlayerEmptyState(context, this);
+    }
 }

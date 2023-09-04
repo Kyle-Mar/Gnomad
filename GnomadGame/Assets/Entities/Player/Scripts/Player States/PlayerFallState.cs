@@ -17,6 +17,10 @@ public class PlayerFallState : PlayerBaseState
         {
             SwitchState(factory.Grounded());
         }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            SwitchState(factory.Slide());
+        }
         if (Input.GetKeyDown(KeyCode.Q))
         {
             SwitchState(factory.GroundPound());
@@ -25,7 +29,7 @@ public class PlayerFallState : PlayerBaseState
 
     public override void EnterState()
     {
-        Debug.Log("HELLO I AM FALLING");
+        //Debug.Log("HELLO I AM FALLING");
         //throw new System.NotImplementedException();
     }
 

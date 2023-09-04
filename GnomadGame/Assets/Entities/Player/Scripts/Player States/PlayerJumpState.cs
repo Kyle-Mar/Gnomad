@@ -15,7 +15,10 @@ public class PlayerJumpState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            SwitchState(factory.Slide());
+        }
     }
 
     public override void EnterState()
