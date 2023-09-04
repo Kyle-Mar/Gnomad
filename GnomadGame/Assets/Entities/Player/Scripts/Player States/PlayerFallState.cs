@@ -17,6 +17,10 @@ public class PlayerFallState : PlayerBaseState
         {
             SwitchState(factory.Grounded());
         }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            SwitchState(factory.GroundPound());
+        }
     }
 
     public override void EnterState()

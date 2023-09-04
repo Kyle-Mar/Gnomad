@@ -7,7 +7,7 @@ using UnityEngine;
 public class MovementStats
 {
     public static float groundPoundXSpeed = 0f;
-    public static float groundPoundYSpeed = Physics.gravity.y * 6;
+    public static float groundPoundYSpeed = Physics.gravity.y * 8;
 
     public static float moveSpeed = 5;
     //intended to be able to change move speed in air.

@@ -6,31 +6,38 @@ public class PlayerGroundPoundState : PlayerBaseState
 {
     public PlayerGroundPoundState(PlayerStateMachine psm, PlayerStateFactory psf) : base(psm, psf)
     {
+        isRootState = true;
+        InitializeSubState();
     }
 
     public override void CheckSwitchStates()
     {
-        throw new System.NotImplementedException();
+        context.CheckIfGrounded();
+        if (context.IsGrounded)
+        {
+            SwitchState(factory.Grounded());
+        }
     }
 
     public override void EnterState()
     {
-        throw new System.NotImplementedException();
+        context.ConsumeJumpBuffer();
     }
 
     public override void ExitState()
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 
     public override void InitializeSubState()
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 
     public override void UpdateState()
     {
-        throw new System.NotImplementedException();
+        CheckSwitchStates();
+        context.rb.velocity = new Vector2(MovementStats.groundPoundXSpeed, MovementStats.groundPoundYSpeed);
     }
 
     // Start is called before the first frame update
