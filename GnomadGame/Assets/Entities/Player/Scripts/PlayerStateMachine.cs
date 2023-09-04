@@ -10,12 +10,15 @@ public class PlayerStateMachine : MonoBehaviour
 
     LayerMask groundLayerMask;
     bool isGrounded = false;
+    float jumpBufferTime = 0f;
+
 
     public Collider2D col;
     public Rigidbody2D rb;
 
     public PlayerBaseState CurrentState { get { return currentState; } set { currentState = value; } }
     public bool IsGrounded { get { return isGrounded; } set { isGrounded = value; } }
+    public float JumpBufferTime { get { return jumpBufferTime; } set { jumpBufferTime = value; } }
     
 
     private void Awake()
@@ -40,6 +43,7 @@ public class PlayerStateMachine : MonoBehaviour
     {
         //Debug.Log(currentState);
         //CheckIfGrounded();
+        DoJumpBuffer();
         currentState.UpdateStates();
     }
 
@@ -52,14 +56,34 @@ public class PlayerStateMachine : MonoBehaviour
 
         if (hit.collider && col.IsTouchingLayers(groundLayerMask))
         {
-            Debug.Log("TOUCHING LAYERS:" + col.IsTouchingLayers(groundLayerMask));
-            Debug.Log("TOUCHING COLLIDER:" + hit.collider.IsTouching(col));
+            //Debug.Log("TOUCHING LAYERS:" + col.IsTouchingLayers(groundLayerMask));
+            //Debug.Log("TOUCHING COLLIDER:" + hit.collider.IsTouching(col));
 
             isGrounded = true;
         }
         else
         {
             isGrounded = false;
+        }
+    }
+
+    private void DoJumpBuffer()
+    {
+        if (Input.GetKey(KeyCode.Space))
+        {
+            jumpBufferTime = 0.15f;
+        }
+        else if( jumpBufferTime >= 0)
+        {
+            jumpBufferTime -= Time.deltaTime;
+        }
+    }
+
+    public void ConsumeJumpBuffer()
+    {
+        if(jumpBufferTime >= 0)
+        {
+            jumpBufferTime = 0f;
         }
     }
 }

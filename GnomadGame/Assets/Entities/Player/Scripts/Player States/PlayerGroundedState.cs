@@ -12,9 +12,9 @@ public class PlayerGroundedState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) || context.JumpBufferTime > 0)
         {
-            Debug.Log("TEST");
+            context.ConsumeJumpBuffer();
             SwitchState(factory.Jump());
         }
         context.CheckIfGrounded();
