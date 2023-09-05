@@ -53,7 +53,7 @@ public class PlayerFallState : PlayerBaseState
     public override void UpdateState()
     {
         CheckSwitchStates();
-        //TODO: Implement non-frame independent lerp later
+        // https://www.youtube.com/watch?v=YJB1QnEmlTs Timestamp: t=7:25
         float k = Mathf.Abs(1.0f - Mathf.Pow(10f, Time.deltaTime));
         context.rb.velocity = Vector2.Lerp(context.rb.velocity, new Vector2(context.rb.velocity.x, MovementStats.fallSpeed), k);
     }
