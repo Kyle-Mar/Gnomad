@@ -54,7 +54,8 @@ public class PlayerFallState : PlayerBaseState
     {
         CheckSwitchStates();
         //TODO: Implement non-frame independent lerp later
-        context.rb.velocity = Vector2.Lerp(context.rb.velocity, new Vector2(context.rb.velocity.x, MovementStats.fallSpeed), Time.deltaTime);
+        float k = Mathf.Abs(1.0f - Mathf.Pow(10f, Time.deltaTime));
+        context.rb.velocity = Vector2.Lerp(context.rb.velocity, new Vector2(context.rb.velocity.x, MovementStats.fallSpeed), k);
     }
 
     // Start is called before the first frame update
