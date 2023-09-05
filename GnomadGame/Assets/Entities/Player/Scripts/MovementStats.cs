@@ -8,20 +8,20 @@ public class MovementStats
 {
     public static float groundPoundXSpeed = 0f;
     
-    public static float groundPoundYSpeed = Physics.gravity.y * 8;
+    public static float groundPoundYSpeed = Physics.gravity.y * 7;
 
-    public static float moveSpeed = 5;
+    public static float moveSpeed = 8.5f;
     //intended to be able to change move speed in air.
     public static float jumpMoveSpeed = 1f;
     //Controls the time for how long the player can jump.
-    public static float maxJumpHeight = 0.15f;
+    public static float maxJumpHeight = 0.20f;
     //Force Multiplier for jumping.
     public static float jumpSpeed=12;
 
-    public static float fallSpeed = Physics.gravity.y * 5;
+    public static float fallSpeed = Physics.gravity.y * 15f;
 
-    public static float slideSpeedX = 10f;
+    public static float slideSpeedX = 15f;
 
-    public static float slideDuration = .5f;
+    public static float slideDuration = .35f;
 
 }
