@@ -122,14 +122,16 @@ public class PlayerStateMachine : MonoBehaviour
 
     private void UpdateMovementDirection(InputAction.CallbackContext cxt)
     {
-        lastMovementDirection = cxt.ReadValue<Vector2>();
-        if (lastMovementDirection == Vector2.left)
+       Vector2 inputVector = cxt.ReadValue<Vector2>();
+
+        if (inputVector == Vector2.left)
         {
-            GetComponent<SpriteRenderer>().flipX = false;
+            lastMovementDirection = inputVector;
         }
-        else if (lastMovementDirection == Vector2.right)
+        else if (inputVector == Vector2.right)
         {
-            GetComponent<SpriteRenderer>().flipX = true;
+            lastMovementDirection = inputVector;
+
         }
     }
 

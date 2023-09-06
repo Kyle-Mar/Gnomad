@@ -65,7 +65,7 @@ public class PlayerSlideState : PlayerBaseState
         }
         else
         {
-            context.rb.velocity = new Vector2(MovementStats.slideSpeedX * initialMovementDir.x, MovementStats.fallSpeed / 5);
+            context.rb.velocity = new Vector2(MovementStats.slideSpeedX * initialMovementDir.x, MovementStats.slideFallSpeed);
         }
 
         CheckSwitchStates();
