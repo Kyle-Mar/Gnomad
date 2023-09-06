@@ -123,6 +123,14 @@ public class PlayerStateMachine : MonoBehaviour
     private void UpdateMovementDirection(InputAction.CallbackContext cxt)
     {
         lastMovementDirection = cxt.ReadValue<Vector2>();
+        if (lastMovementDirection == Vector2.left)
+        {
+            GetComponent<SpriteRenderer>().flipX = false;
+        }
+        else if (lastMovementDirection == Vector2.right)
+        {
+            GetComponent<SpriteRenderer>().flipX = true;
+        }
     }
 
     private void OnCollisionStay2D(Collision2D collision)
