@@ -14,13 +14,13 @@ public class PlayerStateMachine : MonoBehaviour
     ContactFilter2D floorContactFilter;
     ContactFilter2D wallContactFilter;
 
-    bool isGrounded = false;
-    bool isTouchingWallLeft = false;
-    bool isTouchingWallRight = false;
+    [SerializeField] bool isGrounded = false;
+    [SerializeField] bool isTouchingWallLeft = false;
+    [SerializeField] bool isTouchingWallRight = false;
 
-    Vector2 lastMovementDirection = new(0,0);
+    [SerializeField] Vector2 lastMovementDirection = new(0,0);
 
-    float jumpBufferTime = 0f;
+    [SerializeField] float jumpBufferTime = 0f;
 
     public Collider2D col;
     public Rigidbody2D rb;
@@ -73,9 +73,15 @@ public class PlayerStateMachine : MonoBehaviour
     }
 
     // Update is called once per frame
+
+    private void FixedUpdate()
+    {
+        //Debug.Log("TEST!");
+    }
+
     void Update()
     {
-        //Debug.Log(currentState);
+        //Debug.Log("TEST");
         //CheckIfGrounded();
         DoJumpBuffer();
         currentState.UpdateStates();
