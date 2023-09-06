@@ -26,6 +26,7 @@ public class PlayerGroundPoundState : PlayerBaseState
 
     public override void ExitState()
     {
+        context.rb.velocity = new(0, 0);
         //throw new System.NotImplementedException();
     }
 
@@ -37,7 +38,9 @@ public class PlayerGroundPoundState : PlayerBaseState
     public override void UpdateState()
     {
         CheckSwitchStates();
-        context.rb.velocity = new Vector2(MovementStats.groundPoundXSpeed, MovementStats.groundPoundYSpeed);
+        context.rb.velocity = Vector2.Lerp(context.rb.velocity,
+                              new(MovementStats.groundPoundXSpeed, MovementStats.groundPoundYSpeed),
+                              Utils.GetInterpolant(100f));
     }
 
     // Start is called before the first frame update

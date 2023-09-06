@@ -33,7 +33,7 @@ public class PlayerRunState : PlayerBaseState
 
     public override void UpdateState()
     {
-        Debug.Log("RUNNING?");
+        //Debug.Log("RUNNING?");
         CheckSwitchStates();
         Vector2 inputVector = context.Controls.Player.Move.ReadValue<Vector2>();
         Vector2 movementVector = new(0, 0);

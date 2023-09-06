@@ -62,7 +62,7 @@ public class PlayerJumpState : PlayerBaseState
         }
         else
         {
-            Debug.Log(context.transform.position.y);
+            //Debug.Log(context.transform.position.y);
             SwitchState(factory.Fall());
         }
     }

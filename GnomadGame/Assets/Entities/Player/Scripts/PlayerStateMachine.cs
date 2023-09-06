@@ -156,4 +156,12 @@ public class PlayerStateMachine : MonoBehaviour
             }
         }
     }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if(collision.transform.tag == "Ground")
+        {
+            isTouchingWallLeft = false;
+            isTouchingWallRight = false;
+        }
+    }
 }

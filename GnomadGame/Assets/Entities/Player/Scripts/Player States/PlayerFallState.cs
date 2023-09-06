@@ -53,9 +53,7 @@ public class PlayerFallState : PlayerBaseState
     public override void UpdateState()
     {
         CheckSwitchStates();
-        // https://www.youtube.com/watch?v=YJB1QnEmlTs Timestamp: t=7:25
-        float k = Mathf.Abs(1.0f - Mathf.Pow(10f, Time.deltaTime));
-        context.rb.velocity = Vector2.Lerp(context.rb.velocity, new Vector2(context.rb.velocity.x, MovementStats.fallSpeed), k);
+        context.rb.velocity = Vector2.Lerp(context.rb.velocity, new Vector2(context.rb.velocity.x, MovementStats.fallSpeed), Utils.GetInterpolant(10f));
     }
 
     // Start is called before the first frame update
