@@ -27,8 +27,7 @@ public class PlayerJumpState : PlayerBaseState
 
     public override void EnterState()
     {
-        Debug.Log("HELLO I AM JUMPING");
-        startJumpTime = Time.time;
+        startJumpTime = 0;
         maxJumpTime = startJumpTime + MovementStats.maxJumpHeight;
         context.rb.velocity = new Vector2(context.rb.velocity.x, MovementStats.jumpSpeed);
         //throw new System.NotImplementedException();
@@ -55,12 +54,15 @@ public class PlayerJumpState : PlayerBaseState
     {
         CheckSwitchStates();
 
-        if (context.Controls.Player.Jump.IsPressed() && Time.time < maxJumpTime)
+        maxJumpTime -= Time.deltaTime;
+
+        if (context.Controls.Player.Jump.IsPressed() && maxJumpTime > 0)
         {
-            context.rb.AddForce(Vector2.up * MovementStats.jumpSpeed);
+            context.rb.velocity = Vector2.up * MovementStats.jumpSpeed;
         }
         else
         {
+            Debug.Log(context.transform.position.y);
             SwitchState(factory.Fall());
         }
     }
