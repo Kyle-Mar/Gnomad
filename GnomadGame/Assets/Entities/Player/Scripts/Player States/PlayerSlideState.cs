@@ -43,7 +43,7 @@ public class PlayerSlideState : PlayerBaseState
     {
         slideEndTime = Time.time + MovementStats.slideDuration;
         initialMovementDir = context.LastMovementDirection;
-        context.rb.velocity = new Vector2(MovementStats.slideSpeedX * initialMovementDir.x, MovementStats.slideFallSpeed);
+        context.rb.velocity = new Vector2(MovementStats.slideSpeedX * initialMovementDir.x, MovementStats.fallSpeed/5);
     }
 
     public override void ExitState()
@@ -60,11 +60,12 @@ public class PlayerSlideState : PlayerBaseState
     {
         if(Time.time > slideEndTime)
         {
+            Debug.Log("NOT SLIDING");
             sliding = false;
         }
         else
         {
-            context.rb.velocity = Vector2.Lerp(context.rb.velocity, new Vector2(0, MovementStats.slideFallSpeed), Utils.GetInterpolant(10f));
+            context.rb.velocity = new Vector2(MovementStats.slideSpeedX * initialMovementDir.x, MovementStats.slideFallSpeed);
         }
 
         CheckSwitchStates();
