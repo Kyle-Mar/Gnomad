@@ -37,9 +37,9 @@ public class PlayerRunState : PlayerBaseState
         CheckSwitchStates();
         Vector2 inputVector = context.Controls.Player.Move.ReadValue<Vector2>();
         if (inputVector == Vector2.left)
-        { context.GetComponent<SpriteRenderer>().flipX = false;}
+        { context.spriteRenderer.flipX = false;}
         else if (inputVector == Vector2.right)
-        { context.GetComponent<SpriteRenderer>().flipX = true;}
+        { context.spriteRenderer.flipX = true;}
         Vector2 movementVector = new(0, 0);
         movementVector.x = inputVector.x * MovementStats.moveSpeed;
         movementVector.y = context.rb.velocity.y;

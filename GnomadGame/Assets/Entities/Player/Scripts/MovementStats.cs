@@ -14,9 +14,9 @@ public class MovementStats
     //intended to be able to change move speed in air.
     public static float jumpMoveSpeed = 1f;
     //Controls the time for how long the player can jump.
-    public static float maxJumpHeight = 0.2f;
+    public static float maxJumpHeight = 0.3f;
     //Force Multiplier for jumping.
-    public static float jumpSpeed=15;
+    public static float jumpSpeed=15f;
 
     public static float fallSpeed = Physics.gravity.y * 5f;
 

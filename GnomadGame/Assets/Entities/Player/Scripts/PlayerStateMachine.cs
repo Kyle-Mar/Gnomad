@@ -24,6 +24,8 @@ public class PlayerStateMachine : MonoBehaviour
 
     public Collider2D col;
     public Rigidbody2D rb;
+    public SpriteRenderer spriteRenderer;
+
 
     public PlayerBaseState CurrentState { get { return currentState; } set { currentState = value; } }
     public bool IsGrounded { get { return isGrounded; } private set { } }
@@ -49,6 +51,7 @@ public class PlayerStateMachine : MonoBehaviour
         groundLayerMask = LayerMask.GetMask("Ground");
         col = GetComponent<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = transform.GetComponentInChildren<SpriteRenderer>();
 
         Controls = new PlayerControls();
 
