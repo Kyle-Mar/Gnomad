@@ -39,13 +39,13 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Background Far
+  - name: BackgroundFar
     uniqueID: 1699708449
     locked: 0
   - name: Background
     uniqueID: 3675152125
     locked: 0
-  - name: Background Near
+  - name: BackgroundNear
     uniqueID: 1639774475
     locked: 0
   - name: Ground Far
@@ -63,6 +63,6 @@ TagManager:
   - name: Foreground
     uniqueID: 375447829
     locked: 0
-  - name: Foreground Close
+  - name: ForegroundNear
     uniqueID: 4262118043
     locked: 0
