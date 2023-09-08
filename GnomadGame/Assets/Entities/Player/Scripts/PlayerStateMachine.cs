@@ -30,6 +30,7 @@ public class PlayerStateMachine : MonoBehaviour
     public SpriteRenderer hatSpriteRenderer;
     public PhysicsMaterial2D sticky;
     public PhysicsMaterial2D slippery;
+    public GameObject deathPartsPrefab;
 
 
     public PlayerBaseState CurrentState { get { return currentState; } set { currentState = value; } }
@@ -44,6 +45,7 @@ public class PlayerStateMachine : MonoBehaviour
     private void OnEnable()
     {
         Controls.Player.Move.performed += UpdateMovementDirection;
+        Controls.Player.Die.performed += Die;
         Controls.Enable();
     }
     private void OnDisable()
@@ -62,6 +64,7 @@ public class PlayerStateMachine : MonoBehaviour
 
         Assert.IsNotNull(spriteRenderer);
         Assert.IsNotNull(hatSpriteRenderer);
+        Assert.IsNotNull(deathPartsPrefab);
 
         Controls = new PlayerControls();
 
@@ -209,5 +212,12 @@ public class PlayerStateMachine : MonoBehaviour
         {
         //flip hinge joint angles
         }
+    }
+
+    public void Die(InputAction.CallbackContext cxt)
+    {
+        hatSpriteRenderer.gameObject.SetActive(false);
+        Instantiate(deathPartsPrefab, transform.position, Quaternion.identity);
+
     }
 }

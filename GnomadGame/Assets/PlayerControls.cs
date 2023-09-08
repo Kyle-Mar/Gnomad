@@ -62,6 +62,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Die"",
+                    ""type"": ""Button"",
+                    ""id"": ""da163fd0-c698-48af-b4f7-59648ee20477"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -282,6 +291,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Slide"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4d1ad2ee-80fa-4cb0-87b1-1eee49979b45"",
+                    ""path"": ""<Keyboard>/m"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Die"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -873,6 +893,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_GroundPound = m_Player.FindAction("GroundPound", throwIfNotFound: true);
         m_Player_Slide = m_Player.FindAction("Slide", throwIfNotFound: true);
+        m_Player_Die = m_Player.FindAction("Die", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -950,6 +971,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_GroundPound;
     private readonly InputAction m_Player_Slide;
+    private readonly InputAction m_Player_Die;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -958,6 +980,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @GroundPound => m_Wrapper.m_Player_GroundPound;
         public InputAction @Slide => m_Wrapper.m_Player_Slide;
+        public InputAction @Die => m_Wrapper.m_Player_Die;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -979,6 +1002,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Slide.started += instance.OnSlide;
             @Slide.performed += instance.OnSlide;
             @Slide.canceled += instance.OnSlide;
+            @Die.started += instance.OnDie;
+            @Die.performed += instance.OnDie;
+            @Die.canceled += instance.OnDie;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -995,6 +1021,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Slide.started -= instance.OnSlide;
             @Slide.performed -= instance.OnSlide;
             @Slide.canceled -= instance.OnSlide;
+            @Die.started -= instance.OnDie;
+            @Die.performed -= instance.OnDie;
+            @Die.canceled -= instance.OnDie;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1181,6 +1210,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnGroundPound(InputAction.CallbackContext context);
         void OnSlide(InputAction.CallbackContext context);
+        void OnDie(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
