@@ -26,7 +26,6 @@ public abstract class PlayerBaseState
     // Update is called once per frame
     void Update()
     {
-        
     }
 
     public abstract void EnterState();

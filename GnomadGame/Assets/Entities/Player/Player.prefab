@@ -60,7 +60,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 1
+  orthographic: 0
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
@@ -109,7 +109,7 @@ MonoBehaviour:
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 0
-  m_Antialiasing: 0
+  m_Antialiasing: 2
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 0
@@ -129,7 +129,8 @@ GameObject:
   - component: {fileID: 1324028803}
   - component: {fileID: 1324028806}
   - component: {fileID: 1324028807}
-  m_Layer: 0
+  - component: {fileID: 4668829882800693099}
+  m_Layer: 31
   m_Name: Hat Pin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -164,10 +165,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 2
+  m_Mass: 2.27
   m_LinearDrag: 7.66
   m_AngularDrag: 3.41
-  m_GravityScale: -17.47
+  m_GravityScale: -43
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -197,6 +198,32 @@ HingeJoint2D:
   m_AngleLimits:
     m_LowerAngle: -20
     m_UpperAngle: 20
+--- !u!61 &4668829882800693099
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1324028802}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.22097626, y: 2.2148547}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.5580475, y: 3.6461306}
+  m_EdgeRadius: 0
 --- !u!1 &1833863531845689382
 GameObject:
   m_ObjectHideFlags: 0
@@ -429,7 +456,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4849896907349682111}
   - component: {fileID: 385279951182527587}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Hat Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -491,7 +518,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 100
   m_Sprite: {fileID: 21300000, guid: 1b99d2861ba0cc241b07f3b8f14380c8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
