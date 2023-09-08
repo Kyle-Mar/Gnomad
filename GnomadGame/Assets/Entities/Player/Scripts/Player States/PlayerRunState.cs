@@ -8,6 +8,8 @@ public class PlayerRunState : PlayerBaseState
     {
     }
 
+    Vector2 inputVec;
+
     public override void CheckSwitchStates()
     {
         if(context.Controls.Player.Move.ReadValue<Vector2>().x == 0)
@@ -26,6 +28,19 @@ public class PlayerRunState : PlayerBaseState
         //throw new System.NotImplementedException();
     }
 
+    public override void FixedUpdateState()
+    {
+
+        Vector2 movementVector = new(0, 0);
+        movementVector.x = inputVec.x * MovementStats.moveSpeed;
+        movementVector.y = context.rb.velocity.y;
+
+        movementVector.x = Mathf.Lerp(context.rb.velocity.x, movementVector.x, Utils.GetInterpolant(100f));
+
+        context.rb.velocity = movementVector;
+
+    }
+
     public override void InitializeSubState()
     {
         //throw new System.NotImplementedException();
@@ -34,18 +49,18 @@ public class PlayerRunState : PlayerBaseState
     public override void UpdateState()
     {
         CheckSwitchStates();
-        Vector2 inputVector = context.Controls.Player.Move.ReadValue<Vector2>();
+        inputVec = context.Controls.Player.Move.ReadValue<Vector2>();
 
-        if (inputVector.x <= -0.001 && context.spriteRenderer.flipX)
+        if (inputVec.x <= -0.001 && context.spriteRenderer.flipX)
         { context.FlipSprite(); }
-        else if (inputVector.x >= 0.001 && !context.spriteRenderer.flipX)
+        else if (inputVec.x >= 0.001 && !context.spriteRenderer.flipX)
         { context.FlipSprite(); }
 
-        Vector2 movementVector = new(0, 0);
-        movementVector.x = inputVector.x * MovementStats.moveSpeed;
-        movementVector.y = context.rb.velocity.y;
-
-        context.rb.velocity = movementVector;
+        if(inputVec.x == 0)
+        {
+            context.rb.velocity = new(0, context.rb.velocity.y);
+        }
+        
     }
 
     // Start is called before the first frame update

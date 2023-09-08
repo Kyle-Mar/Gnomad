@@ -40,7 +40,7 @@ public class PlayerJumpState : PlayerBaseState
 
     public override void ExitState()
     {
-        //
+         context.rb.velocity = new(context.rb.velocity.x, context.rb.velocity.y / 3);
     }
 
     public override void InitializeSubState()
@@ -63,12 +63,17 @@ public class PlayerJumpState : PlayerBaseState
 
         if (context.Controls.Player.Jump.IsPressed() && maxJumpTime > 0)
         {
-            context.rb.velocity = Vector2.up * MovementStats.jumpSpeed;
+            context.rb.velocity = new(context.rb.velocity.x, MovementStats.jumpSpeed);
         }
         else
         {
             //Debug.Log(context.transform.position.y);
             SwitchState(factory.Fall());
         }
+    }
+
+    public override void FixedUpdateState()
+    {
+        //throw new System.NotImplementedException();
     }
 }

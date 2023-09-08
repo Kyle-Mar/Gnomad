@@ -36,8 +36,8 @@ public class PlayerWallJumpState : PlayerBaseState
         startJumpTime = 0;
         initialMovementDir = context.LastMovementDirection;
         initialMovementDir.y = 0;
-        maxJumpTime = startJumpTime + MovementStats.maxJumpHeight;
-        context.rb.velocity = new Vector2(context.rb.velocity.x, MovementStats.jumpSpeed);
+        maxJumpTime = startJumpTime + MovementStats.maxJumpHeight/2;
+        //context.rb.velocity = new Vector2(context.rb.velocity.x, MovementStats.jumpSpeed);
     }
 
     public override void ExitState()
@@ -47,7 +47,14 @@ public class PlayerWallJumpState : PlayerBaseState
 
     public override void InitializeSubState()
     {
-        
+        if (context.Controls.Player.Move.ReadValue<Vector2>().x != 0)
+        {
+            SetSubState(factory.Run());
+        }
+        else
+        {
+            SetSubState(factory.Idle());
+        }
     }
 
     public override void UpdateState()
@@ -56,9 +63,11 @@ public class PlayerWallJumpState : PlayerBaseState
 
         maxJumpTime -= Time.deltaTime;
 
+
+        Vector2 vec = new(MovementStats.moveSpeed * -initialMovementDir.x *2, -MovementStats.fallSpeed/4);
         if (context.Controls.Player.Jump.IsPressed() && maxJumpTime > 0)
         {
-            context.rb.velocity = (Vector2.up - initialMovementDir) * MovementStats.jumpSpeed;
+            context.rb.velocity = vec;
         }
         else
         {
@@ -77,5 +86,10 @@ public class PlayerWallJumpState : PlayerBaseState
     void Update()
     {
         
+    }
+
+    public override void FixedUpdateState()
+    {
+        //throw new System.NotImplementedException();
     }
 }

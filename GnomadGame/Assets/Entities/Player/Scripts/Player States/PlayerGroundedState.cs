@@ -41,6 +41,11 @@ public class PlayerGroundedState : PlayerBaseState
         //throw new System.NotImplementedException();
     }
 
+    public override void FixedUpdateState()
+    {
+        //throw new System.NotImplementedException();
+    }
+
     public override void InitializeSubState()
     {
         if (context.Controls.Player.Move.ReadValue<Vector2>().x != 0)

@@ -49,6 +49,11 @@ public class PlayerWallSlideState : PlayerBaseState
         //throw new System.NotImplementedException();
     }
 
+    public override void FixedUpdateState()
+    {
+        //throw new System.NotImplementedException();
+    }
+
     public override void InitializeSubState()
     {
         SetSubState(factory.Empty());

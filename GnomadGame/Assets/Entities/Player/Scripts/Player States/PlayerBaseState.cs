@@ -31,6 +31,8 @@ public abstract class PlayerBaseState
 
     public abstract void EnterState();
     public abstract void UpdateState();
+
+    public abstract void FixedUpdateState();
     public abstract void ExitState();
     public abstract void CheckSwitchStates();
     public abstract void InitializeSubState();
@@ -41,6 +43,15 @@ public abstract class PlayerBaseState
         if(currentSubState != null)
         {
             currentSubState.UpdateStates();
+        }
+    }
+
+    public void FixedUpdateStates()
+    {
+        FixedUpdateState();
+        if(currentSubState != null)
+        {
+            currentSubState.FixedUpdateStates();
         }
     }
     protected void SwitchState(PlayerBaseState newState) 

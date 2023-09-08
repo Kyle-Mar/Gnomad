@@ -89,13 +89,14 @@ public class PlayerStateMachine : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //Debug.Log("TEST!");
+        Debug.Log(lastMovementDirection);
+        currentState.FixedUpdateStates();
     }
 
     void Update()
     {
         //Debug.Log("TEST");
-        //CheckIfGrounded();
+        CheckIfGrounded();
         DoJumpBuffer();
         currentState.UpdateStates();
     }

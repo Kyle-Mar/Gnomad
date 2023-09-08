@@ -51,14 +51,9 @@ public class PlayerSlideState : PlayerBaseState
         context.rb.velocity = new Vector2(0, 0);
     }
 
-    public override void InitializeSubState()
+    public override void FixedUpdateState()
     {
-        SetSubState(factory.Empty());
-    }
-
-    public override void UpdateState()
-    {
-        if(Time.time > slideEndTime)
+        if (Time.time > slideEndTime)
         {
             Debug.Log("NOT SLIDING");
             sliding = false;
@@ -67,6 +62,15 @@ public class PlayerSlideState : PlayerBaseState
         {
             context.rb.velocity = new Vector2(MovementStats.slideSpeedX * initialMovementDir.x, MovementStats.slideFallSpeed);
         }
+    }
+
+    public override void InitializeSubState()
+    {
+        SetSubState(factory.Empty());
+    }
+
+    public override void UpdateState()
+    {
 
         CheckSwitchStates();
     }

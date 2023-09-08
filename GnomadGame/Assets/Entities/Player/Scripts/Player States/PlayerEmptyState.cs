@@ -24,6 +24,11 @@ public class PlayerEmptyState : PlayerBaseState
         //throw new System.NotImplementedException();
     }
 
+    public override void FixedUpdateState()
+    {
+       // throw new System.NotImplementedException();
+    }
+
     public override void InitializeSubState()
     {
         //throw new System.NotImplementedException();

@@ -41,6 +41,12 @@ public class PlayerFallState : PlayerBaseState
 
     public override void ExitState()
     {
+        Physics2D.gravity = new(0, -9.8f);
+        //throw new System.NotImplementedException();
+    }
+
+    public override void FixedUpdateState()
+    {
         //throw new System.NotImplementedException();
     }
 
@@ -59,7 +65,12 @@ public class PlayerFallState : PlayerBaseState
     public override void UpdateState()
     {
         CheckSwitchStates();
-        context.rb.velocity = Vector2.Lerp(context.rb.velocity, new Vector2(context.rb.velocity.x, MovementStats.fallSpeed), Utils.GetInterpolant(10f));
+        Debug.Log("HELLO WORLD");
+
+        
+        Physics2D.gravity = new(0, MovementStats.fallSpeed);
+
+        //context.rb.velocity = Vector2.Lerp(context.rb.velocity, new Vector2(context.rb.velocity.x, MovementStats.fallSpeed), Utils.GetInterpolant(10f));
     }
 
     // Start is called before the first frame update

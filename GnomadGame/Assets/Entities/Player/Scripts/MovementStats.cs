@@ -11,6 +11,8 @@ public class MovementStats
     public static float groundPoundYSpeed = Physics.gravity.y * 7;
 
     public static float moveSpeed = 9.5f;
+
+    public static float moveSpeedReduced = 0.5f;
     //intended to be able to change move speed in air.
     public static float jumpMoveSpeed = 1f;
     //Controls the time for how long the player can jump.
