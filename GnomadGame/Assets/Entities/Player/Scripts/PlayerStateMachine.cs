@@ -25,6 +25,8 @@ public class PlayerStateMachine : MonoBehaviour
     public Collider2D col;
     public Rigidbody2D rb;
     public SpriteRenderer spriteRenderer;
+    public PhysicsMaterial2D sticky;
+    public PhysicsMaterial2D slippery;
 
 
     public PlayerBaseState CurrentState { get { return currentState; } set { currentState = value; } }
@@ -144,6 +146,26 @@ public class PlayerStateMachine : MonoBehaviour
         }
     }
 
+    public bool DoWallSlide()
+    {
+        CheckIfGrounded();
+        if (IsGrounded)
+        {
+            return false;
+        }
+        Debug.Log(IsTouchingWallLeft);
+        float inputX = Controls.Player.Move.ReadValue<Vector2>().x;
+        if (IsTouchingWallLeft && inputX < 0)
+        {
+            return true;
+        }
+        if (IsTouchingWallRight && inputX > 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
     private void OnCollisionStay2D(Collision2D collision)
     {
         if(collision.transform.tag == "Ground")
@@ -153,7 +175,7 @@ public class PlayerStateMachine : MonoBehaviour
                 float angle = Vector2.SignedAngle(Vector2.up, contact.normal);
                 angle = Mathf.RoundToInt(angle);
 
-                isTouchingWallRight = (angle == -90f) ? true : false;
+                isTouchingWallLeft = (angle == -90f) ? true : false;
                 isTouchingWallRight = (angle == 90f) ? true : false;
                 
                 //angle == 0f i am touching ceiling.

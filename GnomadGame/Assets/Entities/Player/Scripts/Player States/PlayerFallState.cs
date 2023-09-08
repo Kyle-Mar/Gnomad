@@ -17,6 +17,12 @@ public class PlayerFallState : PlayerBaseState
         {
             SwitchState(factory.Grounded());
         }
+
+        if (context.DoWallSlide())
+        {
+            SwitchState(factory.WallSlide());
+        }
+
         if (context.Controls.Player.Slide.WasPressedThisFrame())
         {
             SwitchState(factory.Slide());

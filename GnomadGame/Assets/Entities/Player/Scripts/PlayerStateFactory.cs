@@ -38,6 +38,11 @@ public class PlayerStateFactory
         return new PlayerSlideState(context, this);
     }
 
+    public PlayerBaseState WallSlide()
+    {
+        return new PlayerWallSlideState(context, this);
+    }
+
     public PlayerBaseState Empty()
     {
         return new PlayerEmptyState(context, this);

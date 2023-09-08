@@ -15,6 +15,11 @@ public class PlayerJumpState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
+        if (context.DoWallSlide())
+        {
+            SwitchState(factory.WallSlide());
+        }
+
         if (context.Controls.Player.Slide.WasPressedThisFrame())
         {
             SwitchState(factory.Slide());
