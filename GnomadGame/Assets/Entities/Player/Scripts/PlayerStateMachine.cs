@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
 
 public class PlayerStateMachine : MonoBehaviour
@@ -25,6 +27,7 @@ public class PlayerStateMachine : MonoBehaviour
     public Collider2D col;
     public Rigidbody2D rb;
     public SpriteRenderer spriteRenderer;
+    public SpriteRenderer hatSpriteRenderer;
     public PhysicsMaterial2D sticky;
     public PhysicsMaterial2D slippery;
 
@@ -53,7 +56,12 @@ public class PlayerStateMachine : MonoBehaviour
         groundLayerMask = LayerMask.GetMask("Ground");
         col = GetComponent<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
-        spriteRenderer = transform.GetComponentInChildren<SpriteRenderer>();
+
+        //spriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
+        //hatSpriteRenderer = transform.GetChild(1).GetComponent<SpriteRenderer>();
+
+        Assert.IsNotNull(spriteRenderer);
+        Assert.IsNotNull(hatSpriteRenderer);
 
         Controls = new PlayerControls();
 
@@ -189,6 +197,16 @@ public class PlayerStateMachine : MonoBehaviour
         {
             isTouchingWallLeft = false;
             isTouchingWallRight = false;
+        }
+    }
+
+    public void FlipSprite()
+    {
+        spriteRenderer.flipX = !spriteRenderer.flipX;
+        hatSpriteRenderer.flipX = !hatSpriteRenderer.flipX;
+        if (!spriteRenderer.flipX)
+        {
+        //flip hinge joint angles
         }
     }
 }

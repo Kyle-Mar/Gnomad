@@ -33,13 +33,14 @@ public class PlayerRunState : PlayerBaseState
 
     public override void UpdateState()
     {
-        //Debug.Log("RUNNING?");
         CheckSwitchStates();
         Vector2 inputVector = context.Controls.Player.Move.ReadValue<Vector2>();
-        if (inputVector == Vector2.left)
-        { context.spriteRenderer.flipX = false;}
-        else if (inputVector == Vector2.right)
-        { context.spriteRenderer.flipX = true;}
+
+        if (inputVector.x <= -0.001 && context.spriteRenderer.flipX)
+        { context.FlipSprite(); }
+        else if (inputVector.x >= 0.001 && !context.spriteRenderer.flipX)
+        { context.FlipSprite(); }
+
         Vector2 movementVector = new(0, 0);
         movementVector.x = inputVector.x * MovementStats.moveSpeed;
         movementVector.y = context.rb.velocity.y;
