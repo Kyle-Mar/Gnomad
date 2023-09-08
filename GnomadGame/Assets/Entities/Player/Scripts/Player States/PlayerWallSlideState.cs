@@ -18,6 +18,10 @@ public class PlayerWallSlideState : PlayerBaseState
         {
             SwitchState(factory.Grounded());
         }
+        if (context.Controls.Player.Jump.IsPressed())
+        {
+            SwitchState(factory.WallJump());
+        }
         if (context.IsTouchingWallLeft && inputX >= 0)
         {
             SwitchState(factory.Fall());
@@ -54,7 +58,7 @@ public class PlayerWallSlideState : PlayerBaseState
     {
         CheckSwitchStates();
         Physics2D.gravity = new(0, 0);
-        context.rb.velocity = new(0, 0);
+        context.rb.velocity = new(0, -3);
 
     }
 

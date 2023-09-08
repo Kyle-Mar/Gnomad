@@ -1,3 +1,5 @@
+using System;
+
 public class PlayerStateFactory
 {
     PlayerStateMachine context;
@@ -26,6 +28,11 @@ public class PlayerStateFactory
     public PlayerBaseState Grounded()
     {
         return new PlayerGroundedState(context, this);
+    }
+
+    public PlayerBaseState WallJump()
+    {
+        return new PlayerWallJumpState(context, this);
     }
 
     public PlayerBaseState GroundPound()
