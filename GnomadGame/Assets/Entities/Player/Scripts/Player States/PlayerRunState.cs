@@ -29,14 +29,14 @@ public class PlayerRunState : PlayerBaseState
     }
 
     public override void FixedUpdateState()
-    {
-
+    {   
         Vector2 movementVector = new(0, 0);
-        movementVector.x = inputVec.x * MovementStats.moveSpeed;
+        movementVector.x = inputVec.x * context.CurrentMoveSpeed;
         movementVector.y = context.rb.velocity.y;
 
         movementVector.x = Mathf.Lerp(context.rb.velocity.x, movementVector.x, Utils.GetInterpolant(100f));
 
+        Debug.Log(context.CurrentMoveSpeed);
         context.rb.velocity = movementVector;
 
     }

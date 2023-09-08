@@ -23,6 +23,7 @@ public class PlayerStateMachine : MonoBehaviour
     [SerializeField] Vector2 lastMovementDirection = new(0,0);
 
     [SerializeField] float jumpBufferTime = 0f;
+    [SerializeField] float currentMoveSpeed = MovementStats.moveSpeed;
 
     public Collider2D col;
     public Rigidbody2D rb;
@@ -32,7 +33,6 @@ public class PlayerStateMachine : MonoBehaviour
     public PhysicsMaterial2D slippery;
     public GameObject deathPartsPrefab;
 
-
     public PlayerBaseState CurrentState { get { return currentState; } set { currentState = value; } }
     public bool IsGrounded { get { return isGrounded; } private set { } }
     public float JumpBufferTime { get { return jumpBufferTime; } private set { } }
@@ -40,6 +40,8 @@ public class PlayerStateMachine : MonoBehaviour
     public bool IsTouchingWallRight { get { return isTouchingWallRight; } private set { } }
     public bool IsTouchingWall { get { return IsTouchingWallLeft || IsTouchingWallRight; } private set { } }
     public Vector2 LastMovementDirection { get { return lastMovementDirection; } private set { } }
+
+    public float CurrentMoveSpeed { get { return currentMoveSpeed; } private set { } }
 
 
     private void OnEnable()
@@ -58,6 +60,7 @@ public class PlayerStateMachine : MonoBehaviour
         groundLayerMask = LayerMask.GetMask("Ground");
         col = GetComponent<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
+        currentMoveSpeed = MovementStats.moveSpeed;
 
         //spriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
         //hatSpriteRenderer = transform.GetChild(1).GetComponent<SpriteRenderer>();
@@ -92,7 +95,6 @@ public class PlayerStateMachine : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Debug.Log(lastMovementDirection);
         currentState.FixedUpdateStates();
     }
 
@@ -121,6 +123,11 @@ public class PlayerStateMachine : MonoBehaviour
         {
             isGrounded = false;
         }
+    }
+
+    public void SetMoveSpeed(float value)
+    {
+        currentMoveSpeed = value;
     }
 
     private void DoJumpBuffer()

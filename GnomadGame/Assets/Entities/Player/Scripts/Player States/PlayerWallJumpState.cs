@@ -16,9 +16,9 @@ public class PlayerWallJumpState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        if (context.DoWallSlide())
+        if (context.IsGrounded)
         {
-            //SwitchState(factory.WallSlide());
+            SwitchState(factory.Grounded());
         }
 
         if (context.Controls.Player.Slide.WasPressedThisFrame())
@@ -35,14 +35,16 @@ public class PlayerWallJumpState : PlayerBaseState
     {
         startJumpTime = 0;
         initialMovementDir = context.LastMovementDirection;
-        initialMovementDir.y = 0;
-        maxJumpTime = startJumpTime + MovementStats.maxJumpHeight/2;
-        //context.rb.velocity = new Vector2(context.rb.velocity.x, MovementStats.jumpSpeed);
+        maxJumpTime = startJumpTime + MovementStats.maxJumpHeight/5;
+
+        context.SetMoveSpeed(MovementStats.moveSpeedReduced);
+        
+        context.rb.AddForce(new Vector2(MovementStats.moveSpeed * -initialMovementDir.x, MovementStats.jumpSpeed), ForceMode2D.Impulse);
     }
 
     public override void ExitState()
     {
-        
+        context.SetMoveSpeed(MovementStats.moveSpeed);
     }
 
     public override void InitializeSubState()
@@ -55,6 +57,7 @@ public class PlayerWallJumpState : PlayerBaseState
         {
             SetSubState(factory.Idle());
         }
+        //SetSubState(factory.Empty());
     }
 
     public override void UpdateState()
@@ -63,11 +66,11 @@ public class PlayerWallJumpState : PlayerBaseState
 
         maxJumpTime -= Time.deltaTime;
 
+        context.SetMoveSpeed( Mathf.Lerp(context.CurrentMoveSpeed, MovementStats.moveSpeed, Utils.GetInterpolant(100f)));
 
-        Vector2 vec = new(MovementStats.moveSpeed * -initialMovementDir.x *2, -MovementStats.fallSpeed/4);
         if (context.Controls.Player.Jump.IsPressed() && maxJumpTime > 0)
         {
-            context.rb.velocity = vec;
+            context.rb.velocity = new Vector2(MovementStats.moveSpeed * -initialMovementDir.x, MovementStats.jumpSpeed);
         }
         else
         {
