@@ -108,7 +108,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 2
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -189,7 +189,7 @@ HingeJoint2D:
   m_BreakTorque: Infinity
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: -0.47}
-  m_ConnectedAnchor: {x: 0.0048999786, y: 0.52188396}
+  m_ConnectedAnchor: {x: 0.0049, y: 0.52188396}
   m_UseMotor: 0
   m_Motor:
     m_MotorSpeed: 0
@@ -416,6 +416,7 @@ MonoBehaviour:
   hatSpriteRenderer: {fileID: 385279951182527587}
   sticky: {fileID: 6200000, guid: 2355efac08a503748b6666ec64f644a9, type: 2}
   slippery: {fileID: 6200000, guid: d4b1abf687d9c194d80ef8df16bf0799, type: 2}
+  deathPartsPrefab: {fileID: 0}
 --- !u!114 &8820136772556286469
 MonoBehaviour:
   m_ObjectHideFlags: 0
