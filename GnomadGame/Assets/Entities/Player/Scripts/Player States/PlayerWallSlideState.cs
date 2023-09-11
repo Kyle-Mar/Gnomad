@@ -39,6 +39,8 @@ public class PlayerWallSlideState : PlayerBaseState
     public override void EnterState()
     {
         //Debug.Log("slide");
+        Object.Instantiate(context.JumpCloudParticles, context.transform.position, Quaternion.identity);
+
 
     }
 

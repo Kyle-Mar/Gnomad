@@ -47,6 +47,9 @@ public class PlayerWallJumpState : PlayerBaseState
         context.SetMoveSpeed(MovementStats.moveSpeedReduced);
         
         context.rb.AddForce(new Vector2(MovementStats.moveSpeed * -initialMovementDir.x, MovementStats.jumpSpeed), ForceMode2D.Impulse);
+
+        Object.Instantiate(context.JumpCloudParticles, context.transform.position, Quaternion.identity);
+
     }
 
     public override void ExitState()
