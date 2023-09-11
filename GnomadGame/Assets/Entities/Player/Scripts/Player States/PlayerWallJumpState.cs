@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class PlayerWallJumpState : PlayerBaseState
 {
+    float startJumpTime;
+    float jumpTimer;
+    Vector2 initialMovementDir;
     public PlayerWallJumpState(PlayerStateMachine psm, PlayerStateFactory psf) : base(psm, psf)
     {
         isRootState = true;
         InitializeSubState();
     }
 
-    float startJumpTime;
-    float maxJumpTime;
-    Vector2 initialMovementDir;
 
     public override void CheckSwitchStates()
     {
@@ -20,7 +20,10 @@ public class PlayerWallJumpState : PlayerBaseState
         {
             SwitchState(factory.Grounded());
         }
-
+        if(!context.Controls.Player.Jump.IsPressed() || jumpTimer <= 0)
+        {
+            SwitchState(factory.Fall());
+        }
         if (context.Controls.Player.Slide.WasPressedThisFrame())
         {
             SwitchState(factory.Slide());
@@ -29,13 +32,17 @@ public class PlayerWallJumpState : PlayerBaseState
         {
             SwitchState(factory.GroundPound());
         }
+        
     }
 
     public override void EnterState()
     {
         startJumpTime = 0;
         initialMovementDir = context.LastMovementDirection;
-        maxJumpTime = startJumpTime + MovementStats.maxJumpHeight/5;
+
+        // default direction based on which wall you're touching instead?
+
+        jumpTimer = startJumpTime + MovementStats.maxWallJumpHeight;
 
         context.SetMoveSpeed(MovementStats.moveSpeedReduced);
         
@@ -57,25 +64,19 @@ public class PlayerWallJumpState : PlayerBaseState
         {
             SetSubState(factory.Idle());
         }
-        //SetSubState(factory.Empty());
     }
 
     public override void UpdateState()
     {
         CheckSwitchStates();
 
-        maxJumpTime -= Time.deltaTime;
+        jumpTimer -= Time.deltaTime;
 
         context.SetMoveSpeed( Mathf.Lerp(context.CurrentMoveSpeed, MovementStats.moveSpeed, Utils.GetInterpolant(100f)));
 
-        if (context.Controls.Player.Jump.IsPressed() && maxJumpTime > 0)
+        if (context.Controls.Player.Jump.IsPressed() && jumpTimer > 0)
         {
             context.rb.velocity = new Vector2(MovementStats.moveSpeed * -initialMovementDir.x, MovementStats.jumpSpeed);
-        }
-        else
-        {
-            //Debug.Log(context.transform.position.y);
-            SwitchState(factory.Fall());
         }
     }
 

@@ -111,7 +111,6 @@ public class PlayerStateMachine : MonoBehaviour
 
     void Update()
     {
-        //Debug.Log("TEST");
         CheckIfGrounded();
         DoJumpBuffer();
         currentState.UpdateStates();
@@ -183,7 +182,6 @@ public class PlayerStateMachine : MonoBehaviour
         {
             return false;
         }
-        Debug.Log(IsTouchingWallLeft);
         float inputX = Controls.Player.Move.ReadValue<Vector2>().x;
         if (IsTouchingWallLeft && inputX < 0)
         {

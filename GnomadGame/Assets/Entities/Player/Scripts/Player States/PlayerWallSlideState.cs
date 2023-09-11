@@ -38,15 +38,14 @@ public class PlayerWallSlideState : PlayerBaseState
 
     public override void EnterState()
     {
-        Debug.Log("slide");
+        //Debug.Log("slide");
 
     }
 
 
     public override void ExitState()
     {
-
-        //throw new System.NotImplementedException();
+        context.SetMoveSpeed(MovementStats.moveSpeed);
     }
 
     public override void FixedUpdateState()
