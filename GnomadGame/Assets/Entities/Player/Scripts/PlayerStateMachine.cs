@@ -32,6 +32,14 @@ public class PlayerStateMachine : MonoBehaviour
     public PhysicsMaterial2D sticky;
     public PhysicsMaterial2D slippery;
     public GameObject deathPartsPrefab;
+    public Camera cam;
+    public Transform feet;
+
+    [Header("Zone Dependent Assets")]
+    public ParticleSystem walk_particles;
+    public ParticleSystem jump_cloud_particles;
+    public ParticleSystem land_particles;
+
 
     public PlayerBaseState CurrentState { get { return currentState; } set { currentState = value; } }
     public bool IsGrounded { get { return isGrounded; } private set { } }
@@ -61,6 +69,7 @@ public class PlayerStateMachine : MonoBehaviour
         col = GetComponent<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
         currentMoveSpeed = MovementStats.moveSpeed;
+        cam = GetComponent<Camera>();
 
         //spriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
         //hatSpriteRenderer = transform.GetChild(1).GetComponent<SpriteRenderer>();
@@ -68,6 +77,8 @@ public class PlayerStateMachine : MonoBehaviour
         Assert.IsNotNull(spriteRenderer);
         Assert.IsNotNull(hatSpriteRenderer);
         Assert.IsNotNull(deathPartsPrefab);
+        Assert.IsNotNull(feet);
+
 
         Controls = new PlayerControls();
 
@@ -222,9 +233,14 @@ public class PlayerStateMachine : MonoBehaviour
     }
 
     public void Die(InputAction.CallbackContext cxt)
-    {
+    {//this is a temperary function mostly for shits &/Or giggles
+     //this should probably be it's own state and this code is not 
+     //necessarily great
         hatSpriteRenderer.gameObject.SetActive(false);
-        Instantiate(deathPartsPrefab, transform.position, Quaternion.identity);
-
+        spriteRenderer.gameObject.SetActive(false);
+        col.enabled = false;
+        rb.bodyType = RigidbodyType2D.Static;
+        GameObject deathParts = Instantiate(deathPartsPrefab, transform.position, Quaternion.identity);
+        //deathParts.GetComponent<SortingLayer>().sod
     }
 }

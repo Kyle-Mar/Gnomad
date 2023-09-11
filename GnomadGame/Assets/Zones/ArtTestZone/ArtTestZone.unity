@@ -498,7 +498,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
   m_Color: {r: 0.822874, g: 0.8301887, b: 0.24592379, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.3
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 1
   m_ApplyToSortingLayers: 00000000192d50ba
@@ -5613,6 +5613,10 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 2909414793760120209, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3227372096603623619, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_Cameras.Array.size
       value: 3
@@ -5647,11 +5651,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4446419450577938882, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 1.27
       objectReference: {fileID: 0}
     - target: {fileID: 4446419450577938882, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.19
       objectReference: {fileID: 0}
     - target: {fileID: 4446419450577938882, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5686,9 +5690,29 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4446419450577938884, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4446419450577938884, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: jump_particles
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4446419450577938884, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: land_particles
+      value: 
+      objectReference: {fileID: 6970482471691421841, guid: 7b477171c9bb7bd43a1e8adabdc129d9, type: 3}
+    - target: {fileID: 4446419450577938884, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: walk_particles
+      value: 
+      objectReference: {fileID: 112438054345840056, guid: 1227be19308dc9a41829b5795ecb33be, type: 3}
+    - target: {fileID: 4446419450577938884, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: deathPartsPrefab
       value: 
       objectReference: {fileID: 9204305893009503476, guid: b28f77a9f4fa21446b68718bf0ed59cd, type: 3}
+    - target: {fileID: 4446419450577938884, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: jump_cloud_particles
+      value: 
+      objectReference: {fileID: 6970482471691421841, guid: 7b477171c9bb7bd43a1e8adabdc129d9, type: 3}
     - target: {fileID: 4446419450577938910, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_Name
       value: Player
@@ -5720,6 +5744,10 @@ PrefabInstance:
     - target: {fileID: 8336997621704572764, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_RootOrder
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8829103598606105906, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: m_RootOrder
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
@@ -6613,9 +6641,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1033172829}
   - component: {fileID: 1033172828}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Grid
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7095,7 +7123,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
   m_Color: {r: 0.822874, g: 0.8301887, b: 0.24592379, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.3
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 1
   m_ApplyToSortingLayers: 00000000192d50ba
@@ -27151,7 +27179,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
   m_Color: {r: 0.822874, g: 0.8301887, b: 0.24592379, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.3
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 1
   m_ApplyToSortingLayers: 00000000192d50ba
