@@ -65,7 +65,7 @@ public class PlayerFallState : PlayerBaseState
     public override void UpdateState()
     {
         CheckSwitchStates();
-        Debug.Log("HELLO WORLD");
+        //Debug.Log("HELLO WORLD");
 
         
         Physics2D.gravity = new(0, MovementStats.fallSpeed);
