@@ -51,9 +51,9 @@ public class PlayerRunState : PlayerBaseState
         CheckSwitchStates();
         inputVec = context.Controls.Player.Move.ReadValue<Vector2>();
 
-        if (inputVec.x <= -0.001 && context.spriteRenderer.flipX)
+        if (inputVec.x <= -0.001 && context.SpriteRenderer.flipX)
         { context.FlipSprite(); }
-        else if (inputVec.x >= 0.001 && !context.spriteRenderer.flipX)
+        else if (inputVec.x >= 0.001 && !context.SpriteRenderer.flipX)
         { context.FlipSprite(); }
 
         if(inputVec.x == 0)
@@ -62,7 +62,7 @@ public class PlayerRunState : PlayerBaseState
         }
         else if (context.IsGrounded)
         {
-            ParticleSystem run_particle_object = Object.Instantiate(context.walk_particles, context.feet.position, Quaternion.identity);
+            ParticleSystem run_particle_object = Object.Instantiate(context.WalkParticles, context.Feet.position, Quaternion.identity);
         }
         
     }

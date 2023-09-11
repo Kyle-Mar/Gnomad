@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 577172803}
   - component: {fileID: 577172802}
   - component: {fileID: 577172804}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Camera Sharp
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -64,7 +64,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 63
+    m_Bits: 127
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -121,9 +121,9 @@ GameObject:
   - component: {fileID: 1324028806}
   - component: {fileID: 1324028807}
   - component: {fileID: 4668829882800693099}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Hat Pin
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -156,10 +156,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 2.27
+  m_Mass: 1.7
   m_LinearDrag: 7.66
   m_AngularDrag: 3.41
-  m_GravityScale: -43
+  m_GravityScale: -20
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -226,7 +226,7 @@ GameObject:
   - component: {fileID: 4363242048298623648}
   - component: {fileID: 4413444325477924932}
   - component: {fileID: 193756974405598595}
-  m_Layer: 31
+  m_Layer: 6
   m_Name: Camera Blur Weak
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -334,7 +334,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3892010041494561358}
   - component: {fileID: 7429131846331849822}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -421,7 +421,7 @@ GameObject:
   - component: {fileID: 4446419450577938911}
   - component: {fileID: 4446419450577938884}
   - component: {fileID: 8820136772556286469}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -514,16 +514,16 @@ MonoBehaviour:
   currentMoveSpeed: 9.5
   col: {fileID: 0}
   rb: {fileID: 0}
-  spriteRenderer: {fileID: 7429131846331849822}
-  hatSpriteRenderer: {fileID: 385279951182527587}
+  SpriteRenderer: {fileID: 7429131846331849822}
+  HatSpriteRenderer: {fileID: 385279951182527587}
   sticky: {fileID: 6200000, guid: 2355efac08a503748b6666ec64f644a9, type: 2}
   slippery: {fileID: 6200000, guid: d4b1abf687d9c194d80ef8df16bf0799, type: 2}
-  deathPartsPrefab: {fileID: 0}
-  cam: {fileID: 0}
-  feet: {fileID: 8829103598606105906}
-  walk_particles: {fileID: 112438054345840056, guid: 1227be19308dc9a41829b5795ecb33be, type: 3}
-  jump_cloud_particles: {fileID: 6970482471691421841, guid: 7b477171c9bb7bd43a1e8adabdc129d9, type: 3}
-  land_particles: {fileID: 6970482471691421841, guid: 7b477171c9bb7bd43a1e8adabdc129d9, type: 3}
+  DeathPartsPrefab: {fileID: 9204305893009503476, guid: b28f77a9f4fa21446b68718bf0ed59cd, type: 3}
+  Cam: {fileID: 6548657028270022997}
+  Feet: {fileID: 8829103598606105906}
+  WalkParticles: {fileID: 112438054345840056, guid: 1227be19308dc9a41829b5795ecb33be, type: 3}
+  JumpCloudParticles: {fileID: 6970482471691421841, guid: 7b477171c9bb7bd43a1e8adabdc129d9, type: 3}
+  LandParticles: {fileID: 6970482471691421841, guid: 7b477171c9bb7bd43a1e8adabdc129d9, type: 3}
 --- !u!114 &8820136772556286469
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -566,7 +566,7 @@ GameObject:
   - component: {fileID: 6548657028270022997}
   - component: {fileID: 4262001642742445380}
   - component: {fileID: 3227372096603623619}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cameras
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -688,7 +688,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4849896907349682111}
   - component: {fileID: 385279951182527587}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Hat Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -773,7 +773,7 @@ GameObject:
   - component: {fileID: 2782137460536705820}
   - component: {fileID: 1163693426213850432}
   - component: {fileID: 5291615041518507915}
-  m_Layer: 30
+  m_Layer: 6
   m_Name: Camera Blur Strong
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -880,7 +880,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8829103598606105906}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Feet
   m_TagString: Untagged
   m_Icon: {fileID: 0}

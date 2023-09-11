@@ -27,18 +27,18 @@ public class PlayerStateMachine : MonoBehaviour
 
     public Collider2D col;
     public Rigidbody2D rb;
-    public SpriteRenderer spriteRenderer;
-    public SpriteRenderer hatSpriteRenderer;
+    public SpriteRenderer SpriteRenderer;
+    public SpriteRenderer HatSpriteRenderer;
     public PhysicsMaterial2D sticky;
     public PhysicsMaterial2D slippery;
-    public GameObject deathPartsPrefab;
-    public Camera cam;
-    public Transform feet;
+    public GameObject DeathPartsPrefab;
+    public Camera Cam;
+    public Transform Feet;
 
     [Header("Zone Dependent Assets")]
-    public ParticleSystem walk_particles;
-    public ParticleSystem jump_cloud_particles;
-    public ParticleSystem land_particles;
+    public ParticleSystem WalkParticles;
+    public ParticleSystem JumpCloudParticles;
+    public ParticleSystem LandParticles;
 
 
     public PlayerBaseState CurrentState { get { return currentState; } set { currentState = value; } }
@@ -69,15 +69,15 @@ public class PlayerStateMachine : MonoBehaviour
         col = GetComponent<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
         currentMoveSpeed = MovementStats.moveSpeed;
-        cam = GetComponent<Camera>();
+        Cam = GetComponent<Camera>();
 
         //spriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
         //hatSpriteRenderer = transform.GetChild(1).GetComponent<SpriteRenderer>();
 
-        Assert.IsNotNull(spriteRenderer);
-        Assert.IsNotNull(hatSpriteRenderer);
-        Assert.IsNotNull(deathPartsPrefab);
-        Assert.IsNotNull(feet);
+        Assert.IsNotNull(SpriteRenderer);
+        Assert.IsNotNull(HatSpriteRenderer);
+        Assert.IsNotNull(DeathPartsPrefab);
+        Assert.IsNotNull(Feet);
 
 
         Controls = new PlayerControls();
@@ -224,9 +224,9 @@ public class PlayerStateMachine : MonoBehaviour
 
     public void FlipSprite()
     {
-        spriteRenderer.flipX = !spriteRenderer.flipX;
-        hatSpriteRenderer.flipX = !hatSpriteRenderer.flipX;
-        if (!spriteRenderer.flipX)
+        SpriteRenderer.flipX = !SpriteRenderer.flipX;
+        HatSpriteRenderer.flipX = !HatSpriteRenderer.flipX;
+        if (!SpriteRenderer.flipX)
         {
         //flip hinge joint angles
         }
@@ -236,11 +236,11 @@ public class PlayerStateMachine : MonoBehaviour
     {//this is a temperary function mostly for shits &/Or giggles
      //this should probably be it's own state and this code is not 
      //necessarily great
-        hatSpriteRenderer.gameObject.SetActive(false);
-        spriteRenderer.gameObject.SetActive(false);
+        HatSpriteRenderer.gameObject.SetActive(false);
+        SpriteRenderer.gameObject.SetActive(false);
         col.enabled = false;
         rb.bodyType = RigidbodyType2D.Static;
-        GameObject deathParts = Instantiate(deathPartsPrefab, transform.position, Quaternion.identity);
+        GameObject deathParts = Instantiate(DeathPartsPrefab, transform.position, Quaternion.identity);
         //deathParts.GetComponent<SortingLayer>().sod
     }
 }
