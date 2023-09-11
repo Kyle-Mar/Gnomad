@@ -36,8 +36,8 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - Hat
+  - Blur Strong
+  - Blur Weak
   m_SortingLayers:
   - name: BackgroundFar
     uniqueID: 1699708449

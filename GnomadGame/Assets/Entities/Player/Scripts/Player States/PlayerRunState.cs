@@ -36,7 +36,7 @@ public class PlayerRunState : PlayerBaseState
 
         movementVector.x = Mathf.Lerp(context.rb.velocity.x, movementVector.x, Utils.GetInterpolant(100f));
 
-        Debug.Log(context.CurrentMoveSpeed);
+        //.Log(context.CurrentMoveSpeed);
         context.rb.velocity = movementVector;
 
     }
@@ -59,6 +59,10 @@ public class PlayerRunState : PlayerBaseState
         if(inputVec.x == 0)
         {
             context.rb.velocity = new(0, context.rb.velocity.y);
+        }
+        else if (context.IsGrounded)
+        {
+            ParticleSystem run_particle_object = Object.Instantiate(context.walk_particles, context.feet.position, Quaternion.identity);
         }
         
     }

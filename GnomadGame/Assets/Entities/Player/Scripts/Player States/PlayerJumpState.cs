@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PlayerJumpState : PlayerBaseState
 {
     public PlayerJumpState(PlayerStateMachine psm, PlayerStateFactory psf) : base(psm, psf)
@@ -35,7 +36,7 @@ public class PlayerJumpState : PlayerBaseState
         startJumpTime = 0;
         maxJumpTime = startJumpTime + MovementStats.maxJumpHeight;
         context.rb.velocity = new Vector2(context.rb.velocity.x, MovementStats.jumpSpeed);
-        //throw new System.NotImplementedException();
+        Object.Instantiate(context.jump_cloud_particles, context.feet.position, Quaternion.identity);
     }
 
     public override void ExitState()
