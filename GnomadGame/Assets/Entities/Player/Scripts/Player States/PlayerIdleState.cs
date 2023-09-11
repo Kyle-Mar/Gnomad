@@ -40,6 +40,7 @@ public class PlayerIdleState : PlayerBaseState
     public override void UpdateState()
     {
         CheckSwitchStates();
+        context.rb.velocity = new(0, context.rb.velocity.y);
         // do nothing, maybe play idle anim later.
     }
 
