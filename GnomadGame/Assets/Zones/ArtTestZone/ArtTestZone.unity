@@ -5594,6 +5594,10 @@ PrefabInstance:
       value: 0.52188396
       objectReference: {fileID: 0}
     - target: {fileID: 193756974405598595, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: m_CameraType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 193756974405598595, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_ClearDepth
       value: 1
       objectReference: {fileID: 0}
@@ -5604,6 +5608,10 @@ PrefabInstance:
     - target: {fileID: 771886049957538466, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_Layer
       value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 771886049957538466, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2537942049109479993, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_RootOrder
@@ -5725,6 +5733,10 @@ PrefabInstance:
       propertyPath: m_CameraType
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6548657028270022997, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7353958679973697125, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_Layer
       value: 0
@@ -5736,6 +5748,10 @@ PrefabInstance:
     - target: {fileID: 8320716667687584566, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_Layer
       value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8320716667687584566, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8320716667687584566, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_StaticEditorFlags
