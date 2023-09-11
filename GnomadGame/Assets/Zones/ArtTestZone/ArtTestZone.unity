@@ -3991,6 +3991,11 @@ Transform:
   m_Father: {fileID: 352850379}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &413678058 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 7429131846331849822, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+  m_PrefabInstance: {fileID: 854344350}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &415164937
 GameObject:
   m_ObjectHideFlags: 0
@@ -5701,6 +5706,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4446419450577938884, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: SpriteRenderer
+      value: 
+      objectReference: {fileID: 413678058}
     - target: {fileID: 4446419450577938884, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: jump_particles
       value: 
