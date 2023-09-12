@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 577172804}
   m_Layer: 6
   m_Name: Camera Sharp
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -228,7 +228,7 @@ GameObject:
   - component: {fileID: 193756974405598595}
   m_Layer: 6
   m_Name: Camera Blur Weak
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -314,7 +314,7 @@ MonoBehaviour:
     m_Bits: 2147483648
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 1
+  m_RenderPostProcessing: 0
   m_Antialiasing: 2
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -421,6 +421,7 @@ GameObject:
   - component: {fileID: 4446419450577938911}
   - component: {fileID: 4446419450577938884}
   - component: {fileID: 8820136772556286469}
+  - component: {fileID: 5543262545783957246}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -472,7 +473,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1.5}
-  m_EdgeRadius: 0
+  m_EdgeRadius: 0.06
 --- !u!50 &4446419450577938911
 Rigidbody2D:
   serializedVersion: 4
@@ -554,6 +555,22 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!70 &5543262545783957246
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4446419450577938910}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: d4b1abf687d9c194d80ef8df16bf0799, type: 2}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.039065182, y: -0.05022669}
+  m_Size: {x: 0.97994363, y: 1.5469124}
+  m_Direction: 0
 --- !u!1 &5103359430112115205
 GameObject:
   m_ObjectHideFlags: 0
@@ -568,7 +585,7 @@ GameObject:
   - component: {fileID: 3227372096603623619}
   m_Layer: 6
   m_Name: Cameras
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -622,7 +639,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -665,7 +682,7 @@ MonoBehaviour:
   m_RendererIndex: -1
   m_VolumeLayerMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 0
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 0
@@ -861,7 +878,7 @@ MonoBehaviour:
     m_Bits: 1073741824
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 1
+  m_RenderPostProcessing: 0
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0

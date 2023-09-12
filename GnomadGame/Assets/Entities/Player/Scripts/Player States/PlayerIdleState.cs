@@ -40,7 +40,7 @@ public class PlayerIdleState : PlayerBaseState
     public override void UpdateState()
     {
         CheckSwitchStates();
-        context.rb.velocity = new(0, context.rb.velocity.y);
+        context.rb.velocity = new(0, context.rb.velocity.y);// this generates warnings, but will not be called when death state is added so no need to fix
         // do nothing, maybe play idle anim later.
     }
 
