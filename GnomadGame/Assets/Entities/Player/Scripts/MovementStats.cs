@@ -21,11 +21,13 @@ public class MovementStats
     //Force Multiplier for jumping.
     public static float jumpSpeed=15f;
 
-    public static float fallSpeed = Physics.gravity.y * 5f;
+    public static float fallSpeed = Physics.gravity.y * 7f;
 
     public static float slideSpeedX = 15f;
 
     public static float slideDuration = .35f;
 
     public static float slideFallSpeed = Physics.gravity.y * 2f;
+
+    public static float wallSlideSpeed = -5f;
 }

@@ -64,7 +64,7 @@ public class PlayerWallSlideState : PlayerBaseState
     {
         CheckSwitchStates();
         Physics2D.gravity = new(0, 0);
-        context.rb.velocity = new(0, -3);
+        context.rb.velocity = new(0, MovementStats.wallSlideSpeed);
 
     }
 
