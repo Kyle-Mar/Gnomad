@@ -422,6 +422,7 @@ GameObject:
   - component: {fileID: 4446419450577938884}
   - component: {fileID: 8820136772556286469}
   - component: {fileID: 5543262545783957246}
+  - component: {fileID: 5328745095105525767}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -510,6 +511,7 @@ MonoBehaviour:
   isGrounded: 0
   isTouchingWallLeft: 0
   isTouchingWallRight: 0
+  wallSlideExpired: 0
   lastMovementDirection: {x: 0, y: 0}
   jumpBufferTime: 0
   currentMoveSpeed: 9.5
@@ -571,6 +573,20 @@ CapsuleCollider2D:
   m_Offset: {x: 0.039065182, y: -0.05022669}
   m_Size: {x: 0.97994363, y: 1.5469124}
   m_Direction: 0
+--- !u!114 &5328745095105525767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4446419450577938910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6f0fd13debd54445af68798958ff6ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  width: 3
+  height: 3
 --- !u!1 &5103359430112115205
 GameObject:
   m_ObjectHideFlags: 0
