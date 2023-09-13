@@ -5,7 +5,7 @@ using UnityEngine;
 // Used for changing to an empty substate.
 public class PlayerEmptyState : PlayerBaseState
 {
-    public PlayerEmptyState(PlayerStateMachine psm, PlayerStateFactory psf) : base(psm, psf)
+    public PlayerEmptyState(PlayerStateMachine psm) : base(psm)
     {
     }
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerGroundPoundState : PlayerBaseState
 {
-    public PlayerGroundPoundState(PlayerStateMachine psm, PlayerStateFactory psf) : base(psm, psf)
+    public PlayerGroundPoundState(PlayerStateMachine psm) : base(psm)
     {
         isRootState = true;
         InitializeSubState();
@@ -15,7 +15,7 @@ public class PlayerGroundPoundState : PlayerBaseState
         context.CheckIfGrounded();
         if (context.IsGrounded)
         {
-            SwitchState(factory.Grounded());
+            SwitchState(context.GroundedState);
         }
     }
 

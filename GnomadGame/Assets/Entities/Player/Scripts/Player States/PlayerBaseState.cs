@@ -2,77 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class PlayerBaseState
+public abstract class PlayerBaseState: BaseState
 {
-    protected bool isRootState;
-    protected PlayerStateMachine context;
-    protected PlayerStateFactory factory;
-    protected PlayerBaseState currentSuperState;
-    protected PlayerBaseState currentSubState;
+    //I tried using the suggested "new" keyword, but it really doesn't seem to do what we want here. 
+    //Feel free to try it yourself. It will stop the errors, but totall screw up the machine
+    protected PlayerStateMachine context;//Trouble
+    protected PlayerBaseState currentSuperState;//Trouble
+    protected PlayerBaseState currentSubState;//Trouble
 
-    public PlayerBaseState(PlayerStateMachine psm, PlayerStateFactory psf)
+    public PlayerBaseState(PlayerStateMachine psm) : base(psm)
     {
-        context = psm;
-        factory = psf;
-    }
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
-    public abstract void EnterState();
-    public abstract void UpdateState();
-
-    public abstract void FixedUpdateState();
-    public abstract void ExitState();
-    public abstract void CheckSwitchStates();
-    public abstract void InitializeSubState();
-
-    public void UpdateStates() 
-    {
-        UpdateState();
-        if(currentSubState != null)
-        {
-            currentSubState.UpdateStates();
-        }
-    }
-
-    public void FixedUpdateStates()
-    {
-        FixedUpdateState();
-        if(currentSubState != null)
-        {
-            currentSubState.FixedUpdateStates();
-        }
-    }
-    protected void SwitchState(PlayerBaseState newState) 
-    {
-        ExitState();
-        newState.EnterState();
-        if (isRootState)
-        {
-            context.CurrentState = newState;
-        }
-        else if(currentSuperState != null)
-        {
-            currentSuperState.SetSubState(newState);
-        }
-    }
-    protected void SetSuperState(PlayerBaseState newSuperState) 
-    {
-        currentSuperState = newSuperState;
-    }
-    protected void SetSubState(PlayerBaseState newSubState) 
-    {
-        currentSubState = newSubState;
-        newSubState.SetSuperState(this);
+        context = (PlayerStateMachine)psm;
+        currentSubState = base.currentSubState as PlayerBaseState;
+        currentSuperState = base.currentSuperState as PlayerBaseState;
     }
 }

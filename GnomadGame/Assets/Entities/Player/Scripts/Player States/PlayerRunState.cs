@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerRunState : PlayerBaseState
 {
-    public PlayerRunState(PlayerStateMachine psm, PlayerStateFactory psf) : base(psm, psf)
+    public PlayerRunState(PlayerStateMachine psm) : base(psm)
     {
     }
 
@@ -14,7 +14,7 @@ public class PlayerRunState : PlayerBaseState
     {
         if(context.Controls.Player.Move.ReadValue<Vector2>().x == 0)
         {
-            SwitchState(factory.Idle());
+            SwitchState(context.IdleState);
         }
     }
 
@@ -29,7 +29,9 @@ public class PlayerRunState : PlayerBaseState
     }
 
     public override void FixedUpdateState()
-    {   
+    {
+        Debug.Log("Fixed Updeate");
+
         Vector2 movementVector = new(0, 0);
         movementVector.x = inputVec.x * context.CurrentMoveSpeed;
         movementVector.y = context.rb.velocity.y;

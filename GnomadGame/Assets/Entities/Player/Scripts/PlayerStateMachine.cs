@@ -5,16 +5,29 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
 
-public class PlayerStateMachine : MonoBehaviour
+public class PlayerStateMachine : StateMachine
 {
+    [Header("States")]
 
-    PlayerBaseState currentState;
-    PlayerStateFactory states;
+    public PlayerGroundedState GroundedState;
+    public PlayerFallState FallState;
+    public PlayerGroundPoundState GroundPoundState;
+    public PlayerIdleState IdleState;
+    public PlayerRunState RunState;
+    public PlayerSlideState SlideState;
+    public PlayerJumpState JumpState;
+    public PlayerWallJumpState WallJumpState;
+    public PlayerWallSlideState WallSlideState;
+    public PlayerEmptyState EmptyState;
+
+    PlayerBaseState currentState;//Trouble
     public PlayerControls Controls;
 
     LayerMask groundLayerMask;
     ContactFilter2D floorContactFilter;
     ContactFilter2D wallContactFilter;
+
+    [Header("Movement")]
 
     [SerializeField] bool isGrounded = false;
     [SerializeField] bool isTouchingWallLeft = false;
@@ -26,6 +39,7 @@ public class PlayerStateMachine : MonoBehaviour
     [SerializeField] float jumpBufferTime = 0f;
     [SerializeField] float currentMoveSpeed = MovementStats.moveSpeed;
 
+    [Header("Components")]
 
     public Collider2D col;
     public Rigidbody2D rb;
@@ -42,8 +56,9 @@ public class PlayerStateMachine : MonoBehaviour
     public ParticleSystem JumpCloudParticles;
     public ParticleSystem LandParticles;
 
+    override public PlayerBaseState CurrentState { get { return currentState; } set { currentState = value; } }//Trouble
 
-    public PlayerBaseState CurrentState { get { return currentState; } set { currentState = value; } }
+
     public bool IsGrounded => isGrounded;
     public float JumpBufferTime => jumpBufferTime;
     public bool IsTouchingWallLeft => isTouchingWallLeft;
@@ -94,8 +109,9 @@ public class PlayerStateMachine : MonoBehaviour
         //wallContactFilter.SetLayerMask(groundLayerMask);
         //wallContactFilter.SetNormalAngle(85, 95);
 
-        states = new(this);
-        currentState = states.Grounded();
+        InstantiateStates();
+            
+        currentState = GroundedState;
         currentState.EnterState();
     }
 
@@ -117,20 +133,17 @@ public class PlayerStateMachine : MonoBehaviour
         CheckIfGrounded();
         DoJumpBuffer();
         currentState.UpdateStates();
+
+        if (true)//currentState != GroundedState)
+        {
+            Debug.Log("Current State: " + currentState);
+        }
     }
 
     public void CheckIfGrounded()
     {
-        Debug.Log(col.bounds.extents);
-        RaycastHit2D hit = Physics2D.BoxCast(transform.position, col.bounds.extents * 2, 0f, -transform.up, 0.5f, groundLayerMask);
-        //Debug.Log(hit.collider.name);
-        //Debug.DrawRay(transform.position, -transform.up * col.bounds.extents.y * 2, Color.blue, .5f);
-
-        if (hit.collider && col.IsTouching(hit.collider, floorContactFilter))
+        if (ContextUtils.CheckIfGrounded(ref col, transform, ref floorContactFilter))
         {
-            //Debug.Log("TOUCHING LAYERS:" + col.IsTouchingLayers(groundLayerMask));
-            //Debug.Log("TOUCHING COLLIDER:" + hit.collider.IsTouching(col));
-
             isGrounded = true;
             wallSlideExpired = false;
         }
@@ -219,7 +232,7 @@ public class PlayerStateMachine : MonoBehaviour
                 float angle = Vector2.SignedAngle(Vector2.up, contact.normal);
                 angle = Mathf.RoundToInt(angle);
 
-                Debug.Log(angle);
+                //Debug.Log(angle);
 
                 isTouchingWallLeft = (angle == -90f) ? true : false;
                 isTouchingWallRight = (angle == 90f) ? true : false;
@@ -259,4 +272,20 @@ public class PlayerStateMachine : MonoBehaviour
         GameObject deathParts = Instantiate(DeathPartsPrefab, transform.position, Quaternion.identity);
         //deathParts.GetComponent<SortingLayer>().sod
     }
+
+    private void InstantiateStates()
+    {
+        EmptyState = new PlayerEmptyState(this);
+        IdleState = new PlayerIdleState(this);
+        GroundedState = new PlayerGroundedState(this);
+        FallState = new PlayerFallState(this);
+        GroundPoundState = new PlayerGroundPoundState(this);
+        RunState = new PlayerRunState(this);
+        SlideState = new PlayerSlideState(this);
+        JumpState = new PlayerJumpState(this);
+        WallJumpState = new PlayerWallJumpState(this);
+        WallSlideState = new PlayerWallSlideState(this);
+
+    }
+
 }

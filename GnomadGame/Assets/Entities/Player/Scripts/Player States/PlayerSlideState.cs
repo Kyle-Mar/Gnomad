@@ -7,7 +7,7 @@ public class PlayerSlideState : PlayerBaseState
     Vector2 initialMovementDir;
     float slideEndTime;
     bool sliding = true;
-    public PlayerSlideState(PlayerStateMachine psm, PlayerStateFactory psf) : base(psm, psf)
+    public PlayerSlideState(PlayerStateMachine psm) : base(psm)
     {
         isRootState = true;
         InitializeSubState();
@@ -20,21 +20,21 @@ public class PlayerSlideState : PlayerBaseState
             context.CheckIfGrounded();
             if (!context.IsGrounded)
             {
-                SwitchState(factory.Fall());
+                SwitchState(context.FallState);
             }
             else
             {
-                SwitchState(factory.Grounded());
+                SwitchState(context.GroundedState);
             }
         }else if (!sliding)
         {
             if (!context.IsGrounded)
             {
-                SwitchState(factory.Fall());
+                SwitchState(context.FallState);
             }
             else
             {
-                SwitchState(factory.Grounded());
+                SwitchState(context.GroundedState);
             }
         }
     }
@@ -66,7 +66,7 @@ public class PlayerSlideState : PlayerBaseState
 
     public override void InitializeSubState()
     {
-        SetSubState(factory.Empty());
+        SetSubState(context.EmptyState);
     }
 
     public override void UpdateState()

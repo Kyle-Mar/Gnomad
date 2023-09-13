@@ -4,16 +4,15 @@ using UnityEngine;
 
 public class PlayerIdleState : PlayerBaseState
 {
-    public PlayerIdleState(PlayerStateMachine psm, PlayerStateFactory psf) : base(psm, psf)
+    public PlayerIdleState(PlayerStateMachine psm) : base(psm)
     {
     }
 
     public override void CheckSwitchStates()
     {
-        //Debug.Log(Input.GetAxis("Horizontal"));
         if (context.Controls.Player.Move.ReadValue<Vector2>().x != 0)
         {
-            SwitchState(factory.Run());
+            SwitchState(context.RunState);
         }
     }
 

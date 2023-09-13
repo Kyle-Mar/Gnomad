@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerJumpState : PlayerBaseState
 {
-    public PlayerJumpState(PlayerStateMachine psm, PlayerStateFactory psf) : base(psm, psf)
+    public PlayerJumpState(PlayerStateMachine psm) : base(psm)
     {
         isRootState = true;
         InitializeSubState();
@@ -23,11 +23,11 @@ public class PlayerJumpState : PlayerBaseState
 
         if (context.Controls.Player.Slide.WasPressedThisFrame())
         {
-            SwitchState(factory.Slide());
+            SwitchState(context.SlideState);
         }
         if (context.Controls.Player.GroundPound.WasPressedThisFrame())
         {
-            SwitchState(factory.GroundPound());
+            SwitchState(context.GroundPoundState);
         }
     }
 
@@ -48,11 +48,11 @@ public class PlayerJumpState : PlayerBaseState
     {
         if (context.Controls.Player.Move.ReadValue<Vector2>().x != 0)
         {
-            SetSubState(factory.Run());
+            SetSubState(context.RunState);
         }
         else
         {
-            SetSubState(factory.Idle());
+            SetSubState(context.IdleState);
         }
     }
 
@@ -69,7 +69,7 @@ public class PlayerJumpState : PlayerBaseState
         else
         {
             //Debug.Log(context.transform.position.y);
-            SwitchState(factory.Fall());
+            SwitchState(context.FallState);
         }
     }
 
