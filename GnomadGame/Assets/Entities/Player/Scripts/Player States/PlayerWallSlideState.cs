@@ -10,6 +10,8 @@ public class PlayerWallSlideState : PlayerBaseState
         InitializeSubState();
     }
 
+    float timer;
+
     public override void CheckSwitchStates()
     {
         float inputX = context.Controls.Player.Move.ReadValue<Vector2>().x;
@@ -21,6 +23,11 @@ public class PlayerWallSlideState : PlayerBaseState
         if (context.Controls.Player.Jump.IsPressed())
         {
             SwitchState(factory.WallJump());
+        }
+        if(timer <= 0)
+        {
+            context.SetWallSlideExpired(true);
+            SwitchState(factory.Fall());
         }
         if (context.IsTouchingWallLeft && inputX >= 0)
         {
@@ -38,8 +45,7 @@ public class PlayerWallSlideState : PlayerBaseState
 
     public override void EnterState()
     {
-        //Debug.Log("slide");
-
+        timer = 0.5f;
     }
 
 
@@ -63,7 +69,7 @@ public class PlayerWallSlideState : PlayerBaseState
         CheckSwitchStates();
         Physics2D.gravity = new(0, 0);
         context.rb.velocity = new(0, -3);
-
+        timer -= Time.deltaTime;
     }
 
     // Start is called before the first frame update

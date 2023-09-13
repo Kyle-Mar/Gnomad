@@ -19,11 +19,13 @@ public class PlayerStateMachine : MonoBehaviour
     [SerializeField] bool isGrounded = false;
     [SerializeField] bool isTouchingWallLeft = false;
     [SerializeField] bool isTouchingWallRight = false;
+    [SerializeField] bool wallSlideExpired = false;
 
     [SerializeField] Vector2 lastMovementDirection = new(0,0);
 
     [SerializeField] float jumpBufferTime = 0f;
     [SerializeField] float currentMoveSpeed = MovementStats.moveSpeed;
+
 
     public Collider2D col;
     public Rigidbody2D rb;
@@ -42,14 +44,15 @@ public class PlayerStateMachine : MonoBehaviour
 
 
     public PlayerBaseState CurrentState { get { return currentState; } set { currentState = value; } }
-    public bool IsGrounded { get { return isGrounded; } private set { } }
-    public float JumpBufferTime { get { return jumpBufferTime; } private set { } }
-    public bool IsTouchingWallLeft { get { return isTouchingWallLeft; } private set { } }
-    public bool IsTouchingWallRight { get { return isTouchingWallRight; } private set { } }
-    public bool IsTouchingWall { get { return IsTouchingWallLeft || IsTouchingWallRight; } private set { } }
-    public Vector2 LastMovementDirection { get { return lastMovementDirection; } private set { } }
+    public bool IsGrounded => isGrounded;
+    public float JumpBufferTime => jumpBufferTime;
+    public bool IsTouchingWallLeft => isTouchingWallLeft;
+    public bool IsTouchingWallRight => isTouchingWallRight;
+    public bool IsTouchingWall => isTouchingWallLeft || isTouchingWallRight;
+    public bool WallSlideExpired => wallSlideExpired;
+    public Vector2 LastMovementDirection => lastMovementDirection;
+    public float CurrentMoveSpeed => currentMoveSpeed;
 
-    public float CurrentMoveSpeed { get { return currentMoveSpeed; } private set { } }
 
 
     private void OnEnable()
@@ -128,6 +131,7 @@ public class PlayerStateMachine : MonoBehaviour
             //Debug.Log("TOUCHING COLLIDER:" + hit.collider.IsTouching(col));
 
             isGrounded = true;
+            wallSlideExpired = false;
         }
         else
         {
@@ -138,6 +142,11 @@ public class PlayerStateMachine : MonoBehaviour
     public void SetMoveSpeed(float value)
     {
         currentMoveSpeed = value;
+    }
+
+    public void SetWallSlideExpired ( bool value)
+    {
+        wallSlideExpired = value;
     }
 
     private void DoJumpBuffer()
@@ -182,6 +191,12 @@ public class PlayerStateMachine : MonoBehaviour
         {
             return false;
         }
+
+        if (wallSlideExpired)
+        {
+            return false;
+        }
+
         float inputX = Controls.Player.Move.ReadValue<Vector2>().x;
         if (IsTouchingWallLeft && inputX < 0)
         {
