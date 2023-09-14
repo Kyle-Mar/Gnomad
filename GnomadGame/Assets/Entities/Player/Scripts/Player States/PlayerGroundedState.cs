@@ -8,7 +8,7 @@ public class PlayerGroundedState : PlayerBaseState
     public PlayerGroundedState(PlayerStateMachine psm) : base(psm)
     {
         isRootState = true;
-        InitializeSubState();
+        
     }
 
     public override void CheckSwitchStates()
@@ -36,7 +36,7 @@ public class PlayerGroundedState : PlayerBaseState
         //Debug.Log("HELLO WORLD I AM GROUNDED!");
         //context.rb.velocity = new(context.rb.velocity.x, 0);
         Object.Instantiate(context.LandParticles, context.Feet.position, Quaternion.identity);
-
+        InitializeSubState();
     }
 
     public override void ExitState()

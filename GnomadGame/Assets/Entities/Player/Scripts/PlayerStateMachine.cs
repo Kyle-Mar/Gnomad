@@ -20,7 +20,6 @@ public class PlayerStateMachine : StateMachine
     public PlayerWallSlideState WallSlideState;
     public PlayerEmptyState EmptyState;
 
-    PlayerBaseState currentState;//Trouble
     public PlayerControls Controls;
 
     LayerMask groundLayerMask;
@@ -55,9 +54,6 @@ public class PlayerStateMachine : StateMachine
     public ParticleSystem WalkParticles;
     public ParticleSystem JumpCloudParticles;
     public ParticleSystem LandParticles;
-
-    override public PlayerBaseState CurrentState { get { return currentState; } set { currentState = value; } }//Trouble
-
 
     public bool IsGrounded => isGrounded;
     public float JumpBufferTime => jumpBufferTime;
