@@ -18,7 +18,7 @@ public class PlayerIdleState : PlayerBaseState
 
     public override void EnterState()
     {
-
+        InitializeSubState();
     }
 
     public override void ExitState()

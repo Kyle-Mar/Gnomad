@@ -7,7 +7,6 @@ public class PlayerWallSlideState : PlayerBaseState
     public PlayerWallSlideState(PlayerStateMachine psm) : base(psm)
     {
         isRootState = true;
-        InitializeSubState();
     }
 
     float timer;
@@ -45,6 +44,7 @@ public class PlayerWallSlideState : PlayerBaseState
 
     public override void EnterState()
     {
+        InitializeSubState();
         timer = 0.5f;
     }
 

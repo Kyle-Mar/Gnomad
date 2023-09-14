@@ -7,7 +7,6 @@ public class PlayerFallState : PlayerBaseState
     public PlayerFallState(PlayerStateMachine psm) : base(psm)
     {
         isRootState = true;
-        InitializeSubState();
     }
 
     public override void CheckSwitchStates()
@@ -37,6 +36,7 @@ public class PlayerFallState : PlayerBaseState
     {
         //Debug.Log("HELLO I AM FALLING");
         //throw new System.NotImplementedException();
+        InitializeSubState();
     }
 
     public override void ExitState()

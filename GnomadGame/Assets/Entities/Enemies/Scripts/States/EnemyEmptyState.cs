@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Used for changing to an empty substate.
-public class PlayerEmptyState : PlayerBaseState
+public class EnemyEmptyState : EnemyBaseState
 {
-    public PlayerEmptyState(PlayerStateMachine psm) : base(psm)
+    public EnemyEmptyState(EnemyStateMachine esm) : base(esm)
     {
     }
 
@@ -26,7 +26,7 @@ public class PlayerEmptyState : PlayerBaseState
 
     public override void FixedUpdateState()
     {
-       // throw new System.NotImplementedException();
+        // throw new System.NotImplementedException();
     }
 
     public override void InitializeSubState()
@@ -41,11 +41,11 @@ public class PlayerEmptyState : PlayerBaseState
 
     void Start()
     {
-        
+
     }
 
     void Update()
     {
-        
+
     }
 }

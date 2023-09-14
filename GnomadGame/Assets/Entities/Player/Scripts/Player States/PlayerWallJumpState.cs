@@ -10,7 +10,6 @@ public class PlayerWallJumpState : PlayerBaseState
     public PlayerWallJumpState(PlayerStateMachine psm) : base(psm)
     {
         isRootState = true;
-        InitializeSubState();
     }
 
 
@@ -37,6 +36,7 @@ public class PlayerWallJumpState : PlayerBaseState
 
     public override void EnterState()
     {
+        InitializeSubState();
         startJumpTime = 0;
         initialMovementDir = context.LastMovementDirection;
 

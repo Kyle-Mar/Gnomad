@@ -6,9 +6,9 @@ public abstract class PlayerBaseState: BaseState
 {
     //I tried using the suggested "new" keyword, but it really doesn't seem to do what we want here. 
     //Feel free to try it yourself. It will stop the errors, but totall screw up the machine
-    protected PlayerStateMachine context;//Trouble
-    protected BaseState currentSuperState;//Trouble
-    protected BaseState currentSubState;//Trouble
+    new protected PlayerStateMachine context;//Trouble
+    new protected BaseState currentSuperState;//Trouble
+    new protected BaseState currentSubState;//Trouble
 
     public PlayerBaseState(StateMachine psm) : base(psm)
     {

@@ -85,8 +85,6 @@ public class PlayerStateMachine : StateMachine
         currentMoveSpeed = MovementStats.moveSpeed;
         Cam = GetComponent<Camera>();
 
-        //spriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
-        //hatSpriteRenderer = transform.GetChild(1).GetComponent<SpriteRenderer>();
 
         Assert.IsNotNull(SpriteRenderer);
         Assert.IsNotNull(HatSpriteRenderer);
@@ -110,18 +108,9 @@ public class PlayerStateMachine : StateMachine
         currentState = GroundedState;
         currentState.EnterState();
     }
-
-    // Start is called before the first frame update
     void Start()
     {
         CheckIfGrounded();
-    }
-
-    // Update is called once per frame
-
-    private void FixedUpdate()
-    {
-        currentState.FixedUpdateStates();
     }
 
     void Update()
@@ -130,10 +119,6 @@ public class PlayerStateMachine : StateMachine
         DoJumpBuffer();
         currentState.UpdateStates();
 
-        if (true)//currentState != GroundedState)
-        {
-            Debug.Log("Current State: " + currentState);
-        }
     }
 
     public void CheckIfGrounded()

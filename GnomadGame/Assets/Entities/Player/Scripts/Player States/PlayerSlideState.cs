@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 
 public class PlayerSlideState : PlayerBaseState
@@ -10,7 +11,6 @@ public class PlayerSlideState : PlayerBaseState
     public PlayerSlideState(PlayerStateMachine psm) : base(psm)
     {
         isRootState = true;
-        InitializeSubState();
     }
 
     public override void CheckSwitchStates()
@@ -41,6 +41,8 @@ public class PlayerSlideState : PlayerBaseState
 
     public override void EnterState()
     {
+        InitializeSubState();
+        sliding = true;
         slideEndTime = Time.time + MovementStats.slideDuration;
         initialMovementDir = context.LastMovementDirection;
         context.rb.velocity = new Vector2(MovementStats.slideSpeedX * initialMovementDir.x, MovementStats.fallSpeed/5);
@@ -53,9 +55,9 @@ public class PlayerSlideState : PlayerBaseState
 
     public override void FixedUpdateState()
     {
+        //Debug.Log("Time.Time: " + Time.time + " slideEndTime " + slideEndTime);
         if (Time.time > slideEndTime)
         {
-            Debug.Log("NOT SLIDING");
             sliding = false;
         }
         else

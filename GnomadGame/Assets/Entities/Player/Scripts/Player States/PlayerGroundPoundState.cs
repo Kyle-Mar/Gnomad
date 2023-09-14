@@ -7,7 +7,6 @@ public class PlayerGroundPoundState : PlayerBaseState
     public PlayerGroundPoundState(PlayerStateMachine psm) : base(psm)
     {
         isRootState = true;
-        InitializeSubState();
     }
 
     public override void CheckSwitchStates()
@@ -21,6 +20,7 @@ public class PlayerGroundPoundState : PlayerBaseState
 
     public override void EnterState()
     {
+        InitializeSubState();
         context.ConsumeJumpBuffer();
     }
 

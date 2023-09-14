@@ -8,7 +8,6 @@ public class PlayerJumpState : PlayerBaseState
     public PlayerJumpState(PlayerStateMachine psm) : base(psm)
     {
         isRootState = true;
-        InitializeSubState();
     }
 
     float startJumpTime;
@@ -33,10 +32,12 @@ public class PlayerJumpState : PlayerBaseState
 
     public override void EnterState()
     {
+        InitializeSubState();
         startJumpTime = 0;
         maxJumpTime = startJumpTime + MovementStats.maxJumpHeight;
         context.rb.velocity = new Vector2(context.rb.velocity.x, MovementStats.jumpSpeed);
         Object.Instantiate(context.JumpCloudParticles, context.Feet.position, Quaternion.identity);
+
     }
 
     public override void ExitState()

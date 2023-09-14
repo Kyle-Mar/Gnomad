@@ -21,6 +21,7 @@ public class PlayerRunState : PlayerBaseState
     public override void EnterState()
     {
         //throw new System.NotImplementedException();
+
     }
 
     public override void ExitState()
@@ -30,7 +31,6 @@ public class PlayerRunState : PlayerBaseState
 
     public override void FixedUpdateState()
     {
-        Debug.Log("Fixed Updeate");
 
         Vector2 movementVector = new(0, 0);
         movementVector.x = inputVec.x * context.CurrentMoveSpeed;
