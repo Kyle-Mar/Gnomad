@@ -22,14 +22,14 @@ namespace PlayerInventory {
 
         private void Awake()
         {
-            var testObject = gameObject.AddComponent<TestItem>();
+            //var testObject = gameObject.AddComponent<TestItem>();
             grid = new(3, 4);
             //grid.OutputTXT();
             //grid.ReverseColumns();
             //grid.Transpose();
             //grid.OutputTXT();
 
-            PlaceItem(testObject, new Vector2Int(0,2));
+            //PlaceItem(testObject, new Vector2Int(0,2));
             grid.OutputTXT();
 
             
@@ -56,14 +56,15 @@ namespace PlayerInventory {
         }
     }
 
+    [System.Serializable]
     public class Grid : IEnumerable
     {
         int numColumns;
         int numRows;
-        int[,] matrix;
+        public int[] matrix;
 
-        public int NumColumns => numColumns;
-        public int NumRows => numRows;
+        public int NumColumns { get { return numColumns; } set { numColumns = value; } }
+        public int NumRows { get { return numRows; } set { numRows = value; } }
 
 
         public enum CellStatus {
@@ -75,18 +76,19 @@ namespace PlayerInventory {
         {
             numRows = r;
             numColumns = c;
-            matrix = new int[r, c];
+            matrix = new int[r*c];
+
             for (int i = 0; i < r; i++)
             {
                 for (int j = 0; j < c; j++)
                 {
                     if (j <= 0)
                     {
-                        matrix[i, j] = 1;
+                        this[i,j] = 1;
                     }
                     else
                     {
-                        matrix[i, j] = 0;
+                        this[i, j] = 0;
                     }
                 }
             }
@@ -94,10 +96,10 @@ namespace PlayerInventory {
 
         public int this[int r, int c]
         {
-            get => matrix[r, c];
+            get => matrix[r + c*numColumns];
             set
             {
-                matrix[r, c] = value;
+                matrix[r+c*numColumns] = value;
             }
         }
 
@@ -107,21 +109,21 @@ namespace PlayerInventory {
             {
                 for (int c = 0; c < numColumns / 2; c++)
                 {
-                    var tmp = matrix[r, c];
-                    matrix[r, c] = matrix[r, numColumns - c - 1];
-                    matrix[r, numColumns - c - 1] = tmp;
+                    var tmp = this[r, c];
+                    this[r, c] = this[r, numColumns - c - 1];
+                    this[r, numColumns - c - 1] = tmp;
                 }
             }
         }
 
         public void Transpose()
         {
-            var newArray = new int[numColumns, numRows];
+            var newArray = new int[numColumns * numRows];
             for (int c = 0; c < numColumns; c++)
             {
                 for (int r = 0; r < numRows; r++)
                 {
-                    newArray[c, r] = matrix[r, c];
+                    newArray[c + r * numRows] = this[r, c];
                 }
             }
             matrix = newArray;
@@ -144,7 +146,7 @@ namespace PlayerInventory {
             {
                 for (int j = 0; j < numColumns; j++)
                 {
-                    writer.Write(matrix[i, j]);
+                    writer.Write(this[i, j]);
                 }
                 writer.Write('\n');
             }
