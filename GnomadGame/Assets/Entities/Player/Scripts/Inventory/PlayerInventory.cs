@@ -11,17 +11,48 @@ namespace PlayerInventory {
         Grid grid;
         Dictionary<BaseItem, Vector2Int> itemPositions = new();
 
+        int this[int i, int j]
+        {
+            get => grid[i, j];
+            set
+            {
+                grid[i, j] = value;
+            }
+        }
 
         private void Awake()
         {
-            var testObject = gameObject.AddComponent<TestItem>().GetGrid();
+            var testObject = gameObject.AddComponent<TestItem>();
             grid = new(3, 4);
             //grid.OutputTXT();
             //grid.ReverseColumns();
             //grid.Transpose();
             //grid.OutputTXT();
 
-            Debug.Log(grid.CheckCollisionWithGrid(ref testObject, new Vector2Int(0, 0)));
+            PlaceItem(testObject, new Vector2Int(0,2));
+            grid.OutputTXT();
+
+            
+        }
+        public bool PlaceItem(BaseItem item, Vector2Int desiredPos)
+        {
+            Grid collGrid = item.GetGrid();
+            if (grid.CheckCollisionWithGrid(ref collGrid, desiredPos))
+            {
+                return false;
+            }
+
+            for (int i = desiredPos.x; i < collGrid.NumRows + desiredPos.x; i++)
+            {
+                for (int j = desiredPos.y; j < collGrid.NumColumns + desiredPos.y; j++)
+                {
+                    if (collGrid[i-desiredPos.x, j-desiredPos.y] != (int)Grid.CellStatus.Empty)
+                    {
+                        grid[i, j] = collGrid[i-desiredPos.x, j-desiredPos.y];
+                    }
+                }
+            }
+            return true;
         }
     }
 
@@ -30,6 +61,10 @@ namespace PlayerInventory {
         int numColumns;
         int numRows;
         int[,] matrix;
+
+        public int NumColumns => numColumns;
+        public int NumRows => numRows;
+
 
         public enum CellStatus {
             Empty,
@@ -116,6 +151,12 @@ namespace PlayerInventory {
             writer.Close();
         }
 
+        /// <summary>
+        /// Compares two grids for collisions
+        /// </summary>
+        /// <param name="collGrid">The smaller grid to be checked against.</param>
+        /// <param name="desiredPos">Where the top left corner of the grid will be placed.</param>
+        /// <returns>If collision -> true; else -> false</returns>
         public bool CheckCollisionWithGrid(ref Grid collGrid, Vector2Int desiredPos)
         {
 
@@ -136,7 +177,7 @@ namespace PlayerInventory {
                 for (int j = desiredPos.y; j < collGrid.numColumns + desiredPos.y; j++)
                 {
                     // Would the cell be need to become occupied and is it already occupied?
-                    if (collGrid[i, j] != (int)CellStatus.Empty
+                    if (collGrid[i-desiredPos.x, j-desiredPos.y] != (int)CellStatus.Empty
                         && this[i, j] != (int)CellStatus.Empty)
                     {
                         return true;
@@ -146,6 +187,7 @@ namespace PlayerInventory {
 
             return false;
         }
+        
         public IEnumerator GetEnumerator()
         {
             // implement a better one in the future and convert.
