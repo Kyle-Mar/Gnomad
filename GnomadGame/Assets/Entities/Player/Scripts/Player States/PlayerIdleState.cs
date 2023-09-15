@@ -14,6 +14,7 @@ public class PlayerIdleState : PlayerBaseState
         {
             SwitchState(context.RunState);
         }
+
     }
 
     public override void EnterState()
@@ -33,11 +34,19 @@ public class PlayerIdleState : PlayerBaseState
 
     public override void InitializeSubState()
     {
-
+        if (context.Controls.Player.Slash.WasPressedThisFrame() || context.IsSlashing)
+        {
+            SetSubState(context.SlashState);
+        }
+        else
+        {
+            SetSubState(context.NotAttackState);
+        }
     }
 
     public override void UpdateState()
     {
+
         CheckSwitchStates();
         context.rb.velocity = new(0, context.rb.velocity.y);// this generates warnings, but will not be called when death state is added so no need to fix
         // do nothing, maybe play idle anim later.

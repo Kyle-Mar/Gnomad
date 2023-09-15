@@ -19,6 +19,8 @@ public class PlayerStateMachine : StateMachine
     public PlayerWallJumpState WallJumpState;
     public PlayerWallSlideState WallSlideState;
     public PlayerEmptyState EmptyState;
+    public PlayerSlashingState SlashState;
+    public PlayerNotAttackingState NotAttackState;
 
     public PlayerControls Controls;
 
@@ -32,6 +34,7 @@ public class PlayerStateMachine : StateMachine
     [SerializeField] bool isTouchingWallLeft = false;
     [SerializeField] bool isTouchingWallRight = false;
     [SerializeField] bool wallSlideExpired = false;
+    [SerializeField] bool isSlashing = false;
 
     [SerializeField] Vector2 lastMovementDirection = new(0,0);
 
@@ -49,6 +52,8 @@ public class PlayerStateMachine : StateMachine
     public GameObject DeathPartsPrefab;
     public Camera Cam;
     public Transform Feet;
+    public Collider2D SlashCollider;
+    public Collider2D GroundPoundCollider;
 
     [Header("Zone Dependent Assets")]
     public ParticleSystem WalkParticles;
@@ -59,6 +64,8 @@ public class PlayerStateMachine : StateMachine
     public float JumpBufferTime => jumpBufferTime;
     public bool IsTouchingWallLeft => isTouchingWallLeft;
     public bool IsTouchingWallRight => isTouchingWallRight;
+
+    public bool IsSlashing { get { return isSlashing; } set { isSlashing = value; } }
     public bool IsTouchingWall => isTouchingWallLeft || isTouchingWallRight;
     public bool WallSlideExpired => wallSlideExpired;
     public Vector2 LastMovementDirection => lastMovementDirection;
@@ -90,7 +97,8 @@ public class PlayerStateMachine : StateMachine
         Assert.IsNotNull(HatSpriteRenderer);
         Assert.IsNotNull(DeathPartsPrefab);
         Assert.IsNotNull(Feet);
-
+        Assert.IsNotNull(SlashCollider);
+        Assert.IsNotNull(GroundPoundCollider);
 
         Controls = new PlayerControls();
 
@@ -177,6 +185,11 @@ public class PlayerStateMachine : StateMachine
             lastMovementDirection = inputVector;
 
         }
+    }
+
+    private void DoSlash()
+    {
+
     }
 
     public bool DoWallSlide()
@@ -266,6 +279,8 @@ public class PlayerStateMachine : StateMachine
         JumpState = new PlayerJumpState(this);
         WallJumpState = new PlayerWallJumpState(this);
         WallSlideState = new PlayerWallSlideState(this);
+        SlashState = new PlayerSlashingState(this);
+        NotAttackState = new PlayerNotAttackingState(this);
 
     }
 

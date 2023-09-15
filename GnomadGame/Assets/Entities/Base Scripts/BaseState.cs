@@ -41,16 +41,22 @@ public abstract class BaseState
     }
     protected void SwitchState(BaseState newState)
     {
-        ExitState();
         newState.EnterState();
+        ExitState();
         if (isRootState)
         {
 
             context.CurrentState = newState;
         }
-        else if (currentSuperState != null)
-        {
+        else { 
             currentSuperState.SetSubState(newState);
+        }
+        if (currentSubState != null)
+        {
+            newState.SetSubState(currentSubState);
+        }
+        else
+        {
         }
     }
     protected void SetSuperState(BaseState newSuperState)
@@ -60,6 +66,7 @@ public abstract class BaseState
     protected void SetSubState(BaseState newSubState)
     {
         currentSubState = newSubState;
+        
         newSubState.SetSuperState(this);
     }
 }

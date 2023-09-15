@@ -22,11 +22,13 @@ public class PlayerGroundPoundState : PlayerBaseState
     {
         InitializeSubState();
         context.ConsumeJumpBuffer();
+        context.GroundPoundCollider.enabled = true;
     }
 
     public override void ExitState()
     {
         context.rb.velocity = new(0, 0);
+        context.GroundPoundCollider.enabled = false;
         //throw new System.NotImplementedException();
     }
 

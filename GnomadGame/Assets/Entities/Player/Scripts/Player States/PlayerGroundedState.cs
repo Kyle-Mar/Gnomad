@@ -4,7 +4,7 @@ using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 public class PlayerGroundedState : PlayerBaseState
-{
+{ 
     public PlayerGroundedState(PlayerStateMachine psm) : base(psm)
     {
         isRootState = true;

@@ -16,12 +16,12 @@ public class PlayerRunState : PlayerBaseState
         {
             SwitchState(context.IdleState);
         }
+
     }
 
     public override void EnterState()
     {
-        //throw new System.NotImplementedException();
-
+        InitializeSubState();
     }
 
     public override void ExitState()
@@ -45,11 +45,18 @@ public class PlayerRunState : PlayerBaseState
 
     public override void InitializeSubState()
     {
-        //throw new System.NotImplementedException();
+        if (context.Controls.Player.Slash.WasPressedThisFrame() || context.IsSlashing)
+        {
+            SetSubState(context.SlashState);
+        }
+        else
+        {
+            SetSubState(context.NotAttackState);
+        }
     }
 
     public override void UpdateState()
-    {
+    { 
         CheckSwitchStates();
         inputVec = context.Controls.Player.Move.ReadValue<Vector2>();
 
