@@ -106,7 +106,7 @@ public class EnemyStateMachine : StateMachine
     }
 
 
-    public void FlipSprite()
+    public void FlipComponents()
     {
         SpriteRenderer.flipX = !SpriteRenderer.flipX;
     }

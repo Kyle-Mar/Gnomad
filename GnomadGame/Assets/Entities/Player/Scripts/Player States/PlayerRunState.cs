@@ -61,9 +61,9 @@ public class PlayerRunState : PlayerBaseState
         inputVec = context.Controls.Player.Move.ReadValue<Vector2>();
 
         if (inputVec.x <= -0.001 && context.SpriteRenderer.flipX)
-        { context.FlipSprite(); }
+        { context.FlipComponents(); }
         else if (inputVec.x >= 0.001 && !context.SpriteRenderer.flipX)
-        { context.FlipSprite(); }
+        { context.FlipComponents    (); }
 
         if(inputVec.x == 0)
         {

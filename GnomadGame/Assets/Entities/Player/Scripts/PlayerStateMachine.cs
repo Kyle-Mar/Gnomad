@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
@@ -54,6 +55,7 @@ public class PlayerStateMachine : StateMachine
     public Transform Feet;
     public Collider2D SlashCollider;
     public Collider2D GroundPoundCollider;
+    public Collider2D SlideCollider;
 
     [Header("Zone Dependent Assets")]
     public ParticleSystem WalkParticles;
@@ -99,6 +101,7 @@ public class PlayerStateMachine : StateMachine
         Assert.IsNotNull(Feet);
         Assert.IsNotNull(SlashCollider);
         Assert.IsNotNull(GroundPoundCollider);
+        Assert.IsNotNull(SlideCollider);
 
         Controls = new PlayerControls();
 
@@ -245,14 +248,19 @@ public class PlayerStateMachine : StateMachine
         }
     }
 
-    public void FlipSprite()
+    public void FlipComponents()
     {
+        Vector2 sliderHitboxOffset = SlideCollider.GetComponent<BoxCollider2D>().offset;
+        Vector2 slashHitboxOffset = SlashCollider.GetComponent<PolygonCollider2D>().offset;
+
         SpriteRenderer.flipX = !SpriteRenderer.flipX;
         HatSpriteRenderer.flipX = !HatSpriteRenderer.flipX;
-        if (!SpriteRenderer.flipX)
-        {
-        //flip hinge joint angles
-        }
+        //SlideCollider.GetComponent<BoxCollider2D>().offset = new Vector2(-1 * sliderHitboxOffset.x, sliderHitboxOffset.y);
+        SlideCollider.transform.localScale = new Vector2(SlideCollider.transform.localScale.x*-1, SlideCollider.transform.localScale.y);
+        //SlashCollider.GetComponent<PolygonCollider2D>().offset = new Vector2(-1 * slashHitboxOffset.x, slashHitboxOffset.y);
+        SlashCollider.transform.localScale = new Vector2(SlashCollider.transform.localScale.x * -1, SlashCollider.transform.localScale.y);
+
+
     }
 
     public void Die(InputAction.CallbackContext cxt)

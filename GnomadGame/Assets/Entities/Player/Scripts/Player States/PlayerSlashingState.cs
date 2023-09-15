@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class PlayerSlashingState : PlayerBaseState
 {
-    Vector2 slashDirection;
     float slashEndTime;
     public PlayerSlashingState(PlayerStateMachine psm) : base(psm)
     {
@@ -22,17 +21,17 @@ public class PlayerSlashingState : PlayerBaseState
     public override void EnterState()
     {
         context.IsSlashing = true;
+        context.HatSpriteRenderer.enabled = false; //will be changed when animations are added
         slashEndTime = MovementStats.slashDuration;
-        slashDirection = context.LastMovementDirection;
 
-        context.SlashCollider.transform.localScale = new Vector3(slashDirection.x, 1, 1);
-        context.SlashCollider.enabled = true;
+        context.SlashCollider.gameObject.SetActive(true);
     }
 
     public override void ExitState()
     {
         context.IsSlashing = false;
-        context.SlashCollider.enabled = false;
+        context.HatSpriteRenderer.enabled = true; //will be changed when animations are added
+        context.SlashCollider.gameObject.SetActive(false);
     }
 
     public override void FixedUpdateState()

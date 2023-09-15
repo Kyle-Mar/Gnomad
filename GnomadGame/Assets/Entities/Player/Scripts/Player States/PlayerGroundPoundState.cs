@@ -21,14 +21,18 @@ public class PlayerGroundPoundState : PlayerBaseState
     public override void EnterState()
     {
         InitializeSubState();
+        context.SpriteRenderer.flipY = true; //will be changed when animations are added
+        context.HatSpriteRenderer.enabled = false; //will be changed when animations are added
         context.ConsumeJumpBuffer();
-        context.GroundPoundCollider.enabled = true;
+        context.GroundPoundCollider.gameObject.SetActive(true);
     }
 
     public override void ExitState()
     {
+        context.SpriteRenderer.flipY = false; //will be changed when animations are added
+        context.HatSpriteRenderer.enabled = true; //will be changed when animations are added
         context.rb.velocity = new(0, 0);
-        context.GroundPoundCollider.enabled = false;
+        context.GroundPoundCollider.gameObject.SetActive(false);
         //throw new System.NotImplementedException();
     }
 
