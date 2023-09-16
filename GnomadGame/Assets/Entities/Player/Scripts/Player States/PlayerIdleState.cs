@@ -19,6 +19,7 @@ public class PlayerIdleState : PlayerBaseState
 
     public override void EnterState()
     {
+        Debug.Log("ENTER IDLE");
         InitializeSubState();
     }
 
@@ -36,6 +37,7 @@ public class PlayerIdleState : PlayerBaseState
     {
         if (context.Controls.Player.Slash.WasPressedThisFrame() || context.IsSlashing)
         {
+            Debug.Log("SLASHING");
             SetSubState(context.SlashState);
         }
         else
@@ -47,9 +49,9 @@ public class PlayerIdleState : PlayerBaseState
     public override void UpdateState()
     {
 
-        CheckSwitchStates();
         context.rb.velocity = new(0, context.rb.velocity.y);// this generates warnings, but will not be called when death state is added so no need to fix
         // do nothing, maybe play idle anim later.
+        CheckSwitchStates();
     }
 
     // Start is called before the first frame update

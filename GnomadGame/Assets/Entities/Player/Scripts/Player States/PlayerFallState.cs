@@ -64,11 +64,11 @@ public class PlayerFallState : PlayerBaseState
 
     public override void UpdateState()
     {
-        CheckSwitchStates();
         //Debug.Log("HELLO WORLD");
 
         
         Physics2D.gravity = new(0, MovementStats.fallSpeed);
+        CheckSwitchStates();
 
         //context.rb.velocity = Vector2.Lerp(context.rb.velocity, new Vector2(context.rb.velocity.x, MovementStats.fallSpeed), Utils.GetInterpolant(10f));
     }

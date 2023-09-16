@@ -21,6 +21,7 @@ public class PlayerSlashingState : PlayerBaseState
     public override void EnterState()
     {
         context.IsSlashing = true;
+        //Debug.Log("SLASHING ENTER");
         context.HatSpriteRenderer.enabled = false; //will be changed when animations are added
         slashEndTime = MovementStats.slashDuration;
 

@@ -23,10 +23,16 @@ public class PlayerJumpState : PlayerBaseState
         if (context.Controls.Player.Slide.WasPressedThisFrame())
         {
             SwitchState(context.SlideState);
+            return;
         }
         if (context.Controls.Player.GroundPound.WasPressedThisFrame())
         {
             SwitchState(context.GroundPoundState);
+            return;
+        }
+        if(maxJumpTime < 0)
+        {
+            SwitchState(context.FallState);
         }
     }
 
@@ -42,7 +48,7 @@ public class PlayerJumpState : PlayerBaseState
 
     public override void ExitState()
     {
-         context.rb.velocity = new(context.rb.velocity.x, context.rb.velocity.y / 3);
+         //context.rb.velocity = new(context.rb.velocity.x, context.rb.velocity.y / 3);
     }
 
     public override void InitializeSubState()
@@ -59,7 +65,6 @@ public class PlayerJumpState : PlayerBaseState
 
     public override void UpdateState()
     {
-        CheckSwitchStates();
 
         maxJumpTime -= Time.deltaTime;
 
@@ -67,10 +72,7 @@ public class PlayerJumpState : PlayerBaseState
         {
             context.rb.velocity = new(context.rb.velocity.x, MovementStats.jumpSpeed);
         }
-        else
-        {
-            SwitchState(context.FallState);
-        }
+        CheckSwitchStates();
     }
 
     public override void FixedUpdateState()

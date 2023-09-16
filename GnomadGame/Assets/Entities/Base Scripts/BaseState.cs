@@ -25,6 +25,7 @@ public abstract class BaseState
     public void UpdateStates()
     {
         UpdateState();
+        //Debug.Log($"{this} + {currentSubState}");
         if (currentSubState != null)
         {
             currentSubState.UpdateStates();
@@ -41,23 +42,17 @@ public abstract class BaseState
     }
     protected void SwitchState(BaseState newState)
     {
-        newState.EnterState();
+        Debug.Log("Switch State" + this + " " + newState);
         ExitState();
+        newState.EnterState();
         if (isRootState)
         {
-
             context.CurrentState = newState;
         }
-        else { 
+        else {
             currentSuperState.SetSubState(newState);
         }
-        if (currentSubState != null)
-        {
-            newState.SetSubState(currentSubState);
-        }
-        else
-        {
-        }
+       
     }
     protected void SetSuperState(BaseState newSuperState)
     {
@@ -65,8 +60,27 @@ public abstract class BaseState
     }
     protected void SetSubState(BaseState newSubState)
     {
+        if(newSubState != currentSubState)
+        {
+            if(newSubState != null)
+            {
+                newSubState.EnterState();
+            }
+            if (currentSubState != null)
+            {
+                currentSubState.ExitState();
+            }
+        }
         currentSubState = newSubState;
+        //Debug.Log($"{newSubState} {currentSuperState}");
         
-        newSubState.SetSuperState(this);
+        if(newSubState != null)
+        {
+            newSubState.SetSuperState(this);
+        }
+    }
+    public string CurrentSubState()
+    {
+        return currentSubState.ToString();
     }
 }

@@ -31,7 +31,7 @@ public class PlayerEmptyState : PlayerBaseState
 
     public override void InitializeSubState()
     {
-        //throw new System.NotImplementedException();
+        SetSubState(null);
     }
 
     public override void UpdateState()
