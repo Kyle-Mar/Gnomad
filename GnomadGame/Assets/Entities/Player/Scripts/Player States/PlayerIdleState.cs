@@ -19,7 +19,7 @@ public class PlayerIdleState : PlayerBaseState
 
     public override void EnterState()
     {
-        Debug.Log("ENTER IDLE");
+        //Debug.Log("ENTER IDLE");
         InitializeSubState();
     }
 

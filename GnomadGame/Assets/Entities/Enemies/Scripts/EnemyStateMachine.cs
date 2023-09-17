@@ -7,6 +7,9 @@ using UnityEngine.InputSystem;
 
 public class EnemyStateMachine : StateMachine
 {
+    [Header("Stats")]
+    //health, etc
+
     [Header("States")]
 
     //declare states here

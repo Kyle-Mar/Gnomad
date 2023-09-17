@@ -23,6 +23,7 @@ public class PlayerStateMachine : StateMachine
     public PlayerSlashingState SlashState;
     public PlayerNotAttackingState NotAttackState;
     public PlayerDeathState DeathState;
+    public PlayerGPBounceState GPBounceState;
 
     public PlayerControls Controls;
 
@@ -37,6 +38,7 @@ public class PlayerStateMachine : StateMachine
     [SerializeField] bool isTouchingWallRight = false;
     [SerializeField] bool wallSlideExpired = false;
     [SerializeField] bool isSlashing = false;
+    [SerializeField] bool isGPBounceQueued = false;
 
     [SerializeField] Vector2 lastMovementDirection = new(0,0);
 
@@ -67,6 +69,7 @@ public class PlayerStateMachine : StateMachine
     public float JumpBufferTime => jumpBufferTime;
     public bool IsTouchingWallLeft => isTouchingWallLeft;
     public bool IsTouchingWallRight => isTouchingWallRight;
+    public bool IsGPBounceQueued { get { return isGPBounceQueued; } set { isGPBounceQueued = value; } }
 
     public bool IsSlashing { get { return isSlashing; } set { isSlashing = value; } }
     public bool IsTouchingWall => isTouchingWallLeft || isTouchingWallRight;
@@ -176,6 +179,7 @@ public class PlayerStateMachine : StateMachine
             jumpBufferTime = 0f;
         }
     }
+
 
     private void UpdateMovementDirection(InputAction.CallbackContext cxt)
     {
@@ -301,6 +305,7 @@ public class PlayerStateMachine : StateMachine
         SlashState = new PlayerSlashingState(this);
         NotAttackState = new PlayerNotAttackingState(this);
         DeathState = new PlayerDeathState(this);
+        GPBounceState = new PlayerGPBounceState(this);
     }
 
 }
