@@ -22,6 +22,7 @@ public class PlayerStateMachine : StateMachine
     public PlayerEmptyState EmptyState;
     public PlayerSlashingState SlashState;
     public PlayerNotAttackingState NotAttackState;
+    public PlayerDeathState DeathState;
 
     public PlayerControls Controls;
 
@@ -79,6 +80,7 @@ public class PlayerStateMachine : StateMachine
     {
         Controls.Player.Move.performed += UpdateMovementDirection;
         Controls.Player.Die.performed += Die;
+        Controls.Player.Respawn.performed += ReloadScene;
         Controls.Enable();
     }
     private void OnDisable()
@@ -267,12 +269,21 @@ public class PlayerStateMachine : StateMachine
     {//this is a temperary function mostly for shits &/Or giggles
      //this should probably be it's own state and this code is not 
      //necessarily great
-        HatSpriteRenderer.gameObject.SetActive(false);
-        SpriteRenderer.gameObject.SetActive(false);
-        col.enabled = false;
-        rb.bodyType = RigidbodyType2D.Static;
-        GameObject deathParts = Instantiate(DeathPartsPrefab, transform.position, Quaternion.identity);
+
         //deathParts.GetComponent<SortingLayer>().sod
+
+        // I don't know if you'd want me to exit out of the previous state
+        // I don't think it would even matter since the player is dead
+        if (currentState != DeathState)
+        {
+            currentState = DeathState;
+            currentState.EnterState();
+        }
+    }
+
+    public void ReloadScene(InputAction.CallbackContext cxt)
+    {
+        // Load Scene Stuff Here
     }
 
     private void InstantiateStates()
@@ -289,7 +300,7 @@ public class PlayerStateMachine : StateMachine
         WallSlideState = new PlayerWallSlideState(this);
         SlashState = new PlayerSlashingState(this);
         NotAttackState = new PlayerNotAttackingState(this);
-
+        DeathState = new PlayerDeathState(this);
     }
 
 }
