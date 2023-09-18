@@ -5,17 +5,28 @@ using UnityEngine;
 
 
 namespace PlayerInventory{
+
+    
+
     [CreateAssetMenu(menuName = "Items/Create New Item", order = 1)]
     public class BaseItem : ScriptableObject
     {
         
         public Grid grid = new(1,1);
+        //unset value flag but not nullable because that's weird with 0's
+        public int ItemID = -1;
         
         //Image at somepoint
 
         private void Awake()
         {
-
+// if we're in the editor, and the asset doesn't already have an itemid, generate a new itemid.
+#if UNITY_EDITOR
+            if(ItemID == -1)
+            {
+                ItemID = ItemIDManager.GetNextAvailableID();
+            }
+#endif
         }
 
         public virtual void ApplyEffect()
@@ -34,7 +45,7 @@ namespace PlayerInventory{
         
     }
 
-
+#if UNITY_EDITOR
     [CustomEditor(typeof(BaseItem))]
     [CanEditMultipleObjects]
     public class ItemEditor: UnityEditor.Editor
@@ -53,13 +64,11 @@ namespace PlayerInventory{
             {
                 values.Add(item.grid.matrix[i]);
             }
-            Debug.Log($"{values.Count} {item.grid.matrix.Length}");
             grid = serializedObject.FindProperty("grid");
-            Debug.Log(grid.type);
+            
         }
         public override void OnInspectorGUI()
         {
-            //DrawDefaultInspector();
             EditorGUILayout.PropertyField(grid);
             var item = target as BaseItem;
             EditorGUILayout.LabelField("NumColumns");
@@ -122,7 +131,7 @@ namespace PlayerInventory{
                     EditorGUILayout.BeginHorizontal();
                     j = 0;
                 }
-                values[i] = EditorGUILayout.IntField(item.grid.matrix[i], GUILayout.Width(50f)); ;
+                var num = EditorGUILayout.IntField(item.grid.matrix[i], GUILayout.Width(50f)); ;
             }
             EditorGUILayout.EndHorizontal();
             for(int i = 0; i<item.grid.matrix.Length; i++)
@@ -161,5 +170,6 @@ namespace PlayerInventory{
         }
 
     }
+    #endif
 }
 

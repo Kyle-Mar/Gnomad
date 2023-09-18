@@ -63,7 +63,7 @@ public class PlayerStateMachine : MonoBehaviour
     }
     private void OnDisable()
     {
-        Controls.Enable();
+        Controls.Disable();
     }
 
     private void Awake()
