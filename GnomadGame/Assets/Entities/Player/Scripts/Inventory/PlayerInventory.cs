@@ -100,7 +100,6 @@ namespace PlayerInventory {
             {
                 for (int j = 0; j < c; j++)
                 {
-                    Debug.Log(i * this.numColumns + j + " " + this.matrix.Length);
                     if (j <= 0)
                     {
                         this[i,j] = 1;

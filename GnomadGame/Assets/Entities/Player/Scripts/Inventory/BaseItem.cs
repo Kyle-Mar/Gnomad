@@ -20,13 +20,6 @@ namespace PlayerInventory{
 
         private void Awake()
         {
-// if we're in the editor, and the asset doesn't already have an itemid, generate a new itemid.
-#if UNITY_EDITOR
-            if(ItemID == -1)
-            {
-                ItemID = ItemIDManager.GetNextAvailableID();
-            }
-#endif
         }
 
         public virtual void ApplyEffect()
