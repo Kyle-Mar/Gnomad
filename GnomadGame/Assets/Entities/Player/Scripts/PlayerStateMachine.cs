@@ -284,6 +284,7 @@ public class PlayerStateMachine : StateMachine
     public void ReloadScene(InputAction.CallbackContext cxt)
     {
         // Load Scene Stuff Here
+        StartCoroutine(LevelUtils.LoadNewSceneAsync());
     }
 
     private void InstantiateStates()
@@ -302,5 +303,7 @@ public class PlayerStateMachine : StateMachine
         NotAttackState = new PlayerNotAttackingState(this);
         DeathState = new PlayerDeathState(this);
     }
+
+    
 
 }
