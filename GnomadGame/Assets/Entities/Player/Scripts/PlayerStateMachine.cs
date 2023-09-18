@@ -121,7 +121,7 @@ public class PlayerStateMachine : MonoBehaviour
 
     public void CheckIfGrounded()
     {
-        Debug.Log(col.bounds.extents);
+        //Debug.Log(col.bounds.extents);
         RaycastHit2D hit = Physics2D.BoxCast(transform.position, col.bounds.extents * 2, 0f, -transform.up, 0.5f, groundLayerMask);
         //Debug.Log(hit.collider.name);
         //Debug.DrawRay(transform.position, -transform.up * col.bounds.extents.y * 2, Color.blue, .5f);

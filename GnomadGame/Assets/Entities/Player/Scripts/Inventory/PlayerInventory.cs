@@ -8,6 +8,8 @@ namespace PlayerInventory {
 
     public class PlayerInventory : MonoBehaviour
     {
+        [SerializeField] Object panelPrefab;
+        [SerializeField] Canvas canvas;
         Grid grid;
         Dictionary<BaseItem, Vector2Int> itemPositions = new();
 
@@ -30,10 +32,24 @@ namespace PlayerInventory {
             //grid.OutputTXT();
 
             //PlaceItem(testObject, new Vector2Int(0,2));
-            grid.OutputTXT();
+            //grid.OutputTXT();
 
-            
+            DrawInventoryToCanvas();
         }
+
+        public void DrawInventoryToCanvas()
+        {
+            for(int i = 0; i < grid.NumRows; i++)
+            {
+                for (int j = 0; j < grid.NumColumns; j++)
+                {
+                    var panel = Instantiate(panelPrefab) as GameObject;
+                    panel.transform.SetParent(canvas.transform, false);
+                }
+            }
+        }
+
+
         public bool PlaceItem(BaseItem item, Vector2Int desiredPos)
         {
             Grid collGrid = item.GetGrid();
@@ -57,6 +73,8 @@ namespace PlayerInventory {
     }
 
     [System.Serializable]
+
+    //row first grid.
     public class Grid : IEnumerable
     {
         int numColumns;
@@ -76,12 +94,13 @@ namespace PlayerInventory {
         {
             numRows = r;
             numColumns = c;
-            matrix = new int[r*c];
+            matrix = new int[r * c];
 
             for (int i = 0; i < r; i++)
             {
                 for (int j = 0; j < c; j++)
                 {
+                    Debug.Log(i * this.numColumns + j + " " + this.matrix.Length);
                     if (j <= 0)
                     {
                         this[i,j] = 1;
@@ -96,10 +115,14 @@ namespace PlayerInventory {
 
         public int this[int r, int c]
         {
-            get => matrix[r + c*numColumns];
+            get
+            {
+                Debug.Log(r * numColumns + c);
+                return matrix[r * numColumns + c];
+            }
             set
             {
-                matrix[r+c*numColumns] = value;
+                matrix[r*numColumns + c] = value;
             }
         }
 
