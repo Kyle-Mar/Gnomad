@@ -21,14 +21,14 @@ public class ItemIDManager : UnityEditor.AssetModificationProcessor
 
     public static int GetNextAvailableID()
     {
-        int nextItemId = 0;
+        int nextItemId = 1;
         bool wasGap = false;
 
         UsedItemIDs = GetItemIdListFromTXT();
 
         if (UsedItemIDs.Count <= 0)
         {
-            nextItemId = 0;
+            nextItemId = 1;
             UsedItemIDs.Add(0);
             //This is disgusting but i'm lazy
             goto buildItemIdString;
@@ -37,10 +37,10 @@ public class ItemIDManager : UnityEditor.AssetModificationProcessor
 
         for (int i = 0; i < UsedItemIDs.Count-1; i++)
         {
-            if(UsedItemIDs[0] != 0)
+            if(UsedItemIDs[0] != 1)
             {
                 wasGap = true;
-                nextItemId = 0;
+                nextItemId = 1;
                 UsedItemIDs.Insert(0, nextItemId);
                 goto buildItemIdString;
             }
