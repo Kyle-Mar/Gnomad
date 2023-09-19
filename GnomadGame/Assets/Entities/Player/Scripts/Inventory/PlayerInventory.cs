@@ -58,7 +58,7 @@ namespace PlayerInventory {
                     var panel = Instantiate(panelPrefab) as GameObject;
                     panel.transform.SetParent(backpack.transform, false);
                     panel.transform.localScale = new Vector3(panelWidth, panelHeight, 1);
-                    panel.transform.localPosition = new Vector3(topLeftCorner.x + panelOffsetX * j + panelOffsetX/2, topLeftCorner.y, 1);
+                    panel.transform.localPosition = new Vector3(topLeftCorner.x + panelOffsetX * j + panelOffsetX/2, topLeftCorner.y - panelOffsetY * i - panelOffsetY/2, 1);
                 }
             }
         }
