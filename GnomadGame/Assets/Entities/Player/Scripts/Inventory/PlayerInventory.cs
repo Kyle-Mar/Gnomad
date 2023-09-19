@@ -10,6 +10,7 @@ namespace PlayerInventory {
     {
         [SerializeField] Object panelPrefab;
         [SerializeField] Canvas canvas;
+        [SerializeField] GameObject backpack;
         Grid grid;
         Dictionary<BaseItem, Vector2Int> itemPositions = new();
 
@@ -39,12 +40,25 @@ namespace PlayerInventory {
 
         public void DrawInventoryToCanvas()
         {
-            for(int i = 0; i < grid.NumRows; i++)
+            var panelWidth = 1f / grid.NumColumns;
+            var panelHeight = 1f / grid.NumRows;
+
+            var rectTrans = backpack.GetComponent<RectTransform>();
+            Vector3[] arr = new Vector3[4];
+            rectTrans.GetLocalCorners(arr);
+            var topLeftCorner = arr[1];
+
+            var panelOffsetX = rectTrans.rect.height / grid.NumColumns;
+            var panelOffsetY = rectTrans.rect.height / grid.NumRows;
+
+            for (int i = 0; i < grid.NumRows; i++)
             {
                 for (int j = 0; j < grid.NumColumns; j++)
                 {
                     var panel = Instantiate(panelPrefab) as GameObject;
-                    panel.transform.SetParent(canvas.transform, false);
+                    panel.transform.SetParent(backpack.transform, false);
+                    panel.transform.localScale = new Vector3(panelWidth, panelHeight, 1);
+                    panel.transform.localPosition = new Vector3(topLeftCorner.x + panelOffsetX * j + panelOffsetX/2, topLeftCorner.y, 1);
                 }
             }
         }
