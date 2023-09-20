@@ -29,7 +29,7 @@ public class ItemIDManager : UnityEditor.AssetModificationProcessor
         if (UsedItemIDs.Count <= 0)
         {
             nextItemId = 1;
-            UsedItemIDs.Add(0);
+            UsedItemIDs.Add(1);
             //This is disgusting but i'm lazy
             goto buildItemIdString;
         }
@@ -162,7 +162,6 @@ public class ItemIDManager : UnityEditor.AssetModificationProcessor
         //Exactly the opposite of what you'd expect lmfao unity what the hell?
         return AssetDeleteResult.DidNotDelete;
     }
-
 
     public static void WriteToTXT(string stringToWrite)
     {
