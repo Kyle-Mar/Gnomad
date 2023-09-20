@@ -80,7 +80,7 @@ namespace PlayerInventory {
 
             var topLeftCorner = GetBackpackTopLeftCorner();
 
-            var panelOffsetX = backpackRectTransform.rect.height / grid.NumColumns;
+            var panelOffsetX = backpackRectTransform.rect.width / grid.NumColumns;
             var panelOffsetY = backpackRectTransform.rect.height / grid.NumRows;
 
             for (int i = 0; i < grid.NumRows; i++)
@@ -105,13 +105,14 @@ namespace PlayerInventory {
 
             foreach(var kvp in itemPositions)
             {
-
                 var item = Instantiate(itemPrefab) as GameObject;
                 var baseItem = kvp.Key;
                 item.GetComponent<Image>().sprite = Sprite.Create(baseItem.itemTexture, new(0, 0, baseItem.itemTexture.width , baseItem.itemTexture.height), new(.5f,.5f));
                 item.transform.SetParent(backpack.transform, false);
                 item.transform.localScale = new Vector3(panelWidth * baseItem.grid.NumColumns, panelHeight * baseItem.grid.NumRows, 1);
-                item.transform.localPosition = GetNewItemLocalPosition(topLeftCorner, panelOffsetX, panelOffsetY, kvp.Value.x, kvp.Value.y);
+                var itemOffsetX = backpackRectTransform.rect.width * item.transform.localScale.x;
+                var itemOffsetY = backpackRectTransform.rect.height * item.transform.localScale.y;
+                item.transform.localPosition = GetNewItemLocalPosition(topLeftCorner, itemOffsetX, itemOffsetY, panelOffsetX, panelOffsetY,kvp.Value.x, kvp.Value.y);
             }
         }
 
@@ -141,9 +142,10 @@ namespace PlayerInventory {
             return new Vector3(backpackTopLeftCorner.x + panelOffsetX * col + panelOffsetX / 2, backpackTopLeftCorner.y - panelOffsetY * row - panelOffsetY / 2, 1);
         }
 
-        Vector3 GetNewItemLocalPosition(Vector3 backpackTopLeftCorner, float panelOffsetX, float panelOffsetY, int row, int col)
+        Vector3 GetNewItemLocalPosition(Vector3 backpackTopLeftCorner, float itemSizeX, float itemSizeY, float cellSizeX, float cellSizeY, int row, int col)
         {
-            return new Vector3(backpackTopLeftCorner.x + panelOffsetX * col + panelOffsetX, backpackTopLeftCorner.y - panelOffsetY * row - panelOffsetY, 1);
+            return new Vector3(backpackTopLeftCorner.x + cellSizeX * col + itemSizeX / 2, backpackTopLeftCorner.y - cellSizeY * row - itemSizeY / 2, 1);
+
         }
 
         Vector3 GetBackpackTopLeftCorner()

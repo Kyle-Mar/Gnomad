@@ -219,7 +219,7 @@ public class PlayerStateMachine : MonoBehaviour
                 float angle = Vector2.SignedAngle(Vector2.up, contact.normal);
                 angle = Mathf.RoundToInt(angle);
 
-                Debug.Log(angle);
+                //Debug.Log(angle);
 
                 isTouchingWallLeft = (angle == -90f) ? true : false;
                 isTouchingWallRight = (angle == 90f) ? true : false;
