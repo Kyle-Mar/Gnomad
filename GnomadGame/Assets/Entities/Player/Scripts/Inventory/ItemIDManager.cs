@@ -192,7 +192,7 @@ public class ItemCreationListener : UnityEditor.AssetPostprocessor
                 continue;
             }
             var item = AssetDatabase.LoadAssetAtPath<PlayerInventory.BaseItem>(x) as PlayerInventory.BaseItem;
-            if (item.ItemID == -1)
+            if (item.ItemID == -0xBEEF)
             {
                 item.ItemID = ItemIDManager.GetNextAvailableID();
             }

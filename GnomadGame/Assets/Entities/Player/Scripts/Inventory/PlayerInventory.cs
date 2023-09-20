@@ -145,8 +145,8 @@ namespace PlayerInventory {
 
 
         public enum CellStatus {
-            Empty,
-            Occupied
+            Locked = -1,
+            Empty = 0,
         }
 
         public Grid(int r, int c)

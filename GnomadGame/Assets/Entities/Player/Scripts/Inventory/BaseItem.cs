@@ -14,7 +14,7 @@ namespace PlayerInventory{
         
         public Grid grid = new(1,1);
         //unset value flag but not nullable because that's weird with 0's
-        public int ItemID = -1;
+        public int ItemID = -0xBEEF;
         
         //Image at somepoint
 
@@ -124,7 +124,19 @@ namespace PlayerInventory{
                     EditorGUILayout.BeginHorizontal();
                     j = 0;
                 }
-                var num = EditorGUILayout.IntField(item.grid.matrix[i], GUILayout.Width(50f)); ;
+                var num = EditorGUILayout.IntField(item.grid.matrix[i], GUILayout.Width(50f));
+                if(num == item.ItemID)
+                {
+                    values[i] = item.ItemID;
+                }
+                else if(num == 0)
+                {
+                    values[i] = 0; 
+                }
+                else if(num != item.ItemID)
+                {
+                    values[i] = item.ItemID;
+                }
             }
             EditorGUILayout.EndHorizontal();
             for(int i = 0; i<item.grid.matrix.Length; i++)
