@@ -22762,11 +22762,27 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2066853357}
     - target: {fileID: 5328745095105525767, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: jasonItem
+      value: 
+      objectReference: {fileID: 11400000, guid: b4da248e18cb8d944a56f6e9c62221d0, type: 2}
+    - target: {fileID: 5328745095105525767, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: itemPrefab
+      value: 
+      objectReference: {fileID: 1491362556479459070, guid: 922500a090e6e06458f7ba672aaf9399, type: 3}
+    - target: {fileID: 5328745095105525767, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: panelPrefab
       value: 
       objectReference: {fileID: 1491362556479459070, guid: ed3061d75302c514c8298a566bdb89fd, type: 3}
     - target: {fileID: 5328745095105525767, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: CanvasPrefab
+      value: 
+      objectReference: {fileID: 1491362556479459070, guid: ed3061d75302c514c8298a566bdb89fd, type: 3}
+    - target: {fileID: 5328745095105525767, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: emptyCellPrefab
+      value: 
+      objectReference: {fileID: 1491362556479459070, guid: dcf6b3e867d2bca499537ff9319d7a06, type: 3}
+    - target: {fileID: 5328745095105525767, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: lockedCellPrefab
       value: 
       objectReference: {fileID: 1491362556479459070, guid: ed3061d75302c514c8298a566bdb89fd, type: 3}
     - target: {fileID: 5543262545783957246, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}

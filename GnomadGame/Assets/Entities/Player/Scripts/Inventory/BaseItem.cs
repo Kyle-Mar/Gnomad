@@ -12,7 +12,8 @@ namespace PlayerInventory{
     public class BaseItem : ScriptableObject
     {
         
-        public Grid grid = new(1,1);
+        public Grid grid = new(1,1,0);
+        public Texture2D itemTexture;
         //unset value flag but not nullable because that's weird with 0's
         public int ItemID = -0xBEEF;
         
@@ -62,7 +63,8 @@ namespace PlayerInventory{
         }
         public override void OnInspectorGUI()
         {
-            EditorGUILayout.PropertyField(grid);
+            DrawDefaultInspector();
+            //EditorGUILayout.PropertyField(grid);
             var item = target as BaseItem;
             EditorGUILayout.LabelField("NumColumns");
             EditorGUILayout.FloatField(item.grid.NumColumns);

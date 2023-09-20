@@ -3,16 +3,20 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace PlayerInventory {
 
     public class PlayerInventory : MonoBehaviour
     {
-        [SerializeField] Object panelPrefab;
+        [SerializeField] Object lockedCellPrefab;
+        [SerializeField] Object emptyCellPrefab;
+        [SerializeField] Object itemPrefab;
+        [SerializeField] BaseItem jasonItem;
         [SerializeField] Canvas canvas;
         [SerializeField] GameObject backpack;
         RectTransform backpackRectTransform;
-        List<GameObject> panelList;
+        List<GameObject> cellList;
         Grid grid;
         Dictionary<BaseItem, Vector2Int> itemPositions = new();
 
@@ -28,8 +32,10 @@ namespace PlayerInventory {
         private void Awake()
         {
             //var testObject = gameObject.AddComponent<TestItem>();
-            grid = new(3, 4);
-            panelList = new();
+            grid = new(3, 3, (int)Grid.CellStatus.Locked);
+            this[1, 1] = (int)Grid.CellStatus.Empty;
+            cellList = new();
+            itemPositions.Add(jasonItem, new(0, 0));
             backpackRectTransform = backpack.GetComponent<RectTransform>();
             //grid.OutputTXT();
             //grid.ReverseColumns();
@@ -60,13 +66,12 @@ namespace PlayerInventory {
             {
                 for(int j = 0; j < grid.NumColumns; j++)
                 {
-                    var panel = panelList[GetIndex(i, j)];
+                    var panel = cellList[GetIndex(i, j)];
                     panel.transform.localScale = new Vector3(panelWidth, panelHeight, 1);
                     panel.transform.localPosition = GetNewPanelLocalPosition(topLeftCorner, panelOffsetX, panelOffsetY, i, j);
                 }
             }
         }
-
 
         public void InitialDrawInventoryToCanvas()
         {
@@ -82,15 +87,33 @@ namespace PlayerInventory {
             {
                 for (int j = 0; j < grid.NumColumns; j++)
                 {
-                    var panel = Instantiate(panelPrefab) as GameObject;
-                    panel.transform.SetParent(backpack.transform, false);
-                    panel.transform.localScale = new Vector3(panelWidth, panelHeight, 1);
-                    panel.transform.localPosition = GetNewPanelLocalPosition(topLeftCorner, panelOffsetX, panelOffsetY, i, j);
-                    panelList.Add(panel);
+                    GameObject cell;
+                    if(this[i,j] == (int)Grid.CellStatus.Locked)
+                    {
+                        cell = Instantiate(lockedCellPrefab) as GameObject;
+                    }
+                    else
+                    {
+                        cell = Instantiate(emptyCellPrefab) as GameObject;
+                    }
+                    cell.transform.SetParent(backpack.transform, false);
+                    cell.transform.localScale = new Vector3(panelWidth, panelHeight, 1);
+                    cell.transform.localPosition = GetNewPanelLocalPosition(topLeftCorner, panelOffsetX, panelOffsetY, i, j);
+                    cellList.Add(cell);
                 }
             }
-        }
 
+            foreach(var kvp in itemPositions)
+            {
+
+                var item = Instantiate(itemPrefab) as GameObject;
+                var baseItem = kvp.Key;
+                item.GetComponent<Image>().sprite = Sprite.Create(baseItem.itemTexture, new(0, 0, baseItem.itemTexture.width , baseItem.itemTexture.height), new(.5f,.5f));
+                item.transform.SetParent(backpack.transform, false);
+                item.transform.localScale = new Vector3(panelWidth * baseItem.grid.NumColumns, panelHeight * baseItem.grid.NumRows, 1);
+                item.transform.localPosition = GetNewItemLocalPosition(topLeftCorner, panelOffsetX, panelOffsetY, kvp.Value.x, kvp.Value.y);
+            }
+        }
 
         public bool PlaceItem(BaseItem item, Vector2Int desiredPos)
         {
@@ -116,6 +139,11 @@ namespace PlayerInventory {
         Vector3 GetNewPanelLocalPosition(Vector3 backpackTopLeftCorner, float panelOffsetX, float panelOffsetY, int row, int col)
         {
             return new Vector3(backpackTopLeftCorner.x + panelOffsetX * col + panelOffsetX / 2, backpackTopLeftCorner.y - panelOffsetY * row - panelOffsetY / 2, 1);
+        }
+
+        Vector3 GetNewItemLocalPosition(Vector3 backpackTopLeftCorner, float panelOffsetX, float panelOffsetY, int row, int col)
+        {
+            return new Vector3(backpackTopLeftCorner.x + panelOffsetX * col + panelOffsetX, backpackTopLeftCorner.y - panelOffsetY * row - panelOffsetY, 1);
         }
 
         Vector3 GetBackpackTopLeftCorner()
@@ -149,7 +177,7 @@ namespace PlayerInventory {
             Empty = 0,
         }
 
-        public Grid(int r, int c)
+        public Grid(int r, int c, int defaultValue)
         {
             numRows = r;
             numColumns = c;
@@ -159,14 +187,7 @@ namespace PlayerInventory {
             {
                 for (int j = 0; j < c; j++)
                 {
-                    if (j <= 0)
-                    {
-                        this[i,j] = 1;
-                    }
-                    else
-                    {
-                        this[i, j] = 0;
-                    }
+                    this[i, j] = defaultValue;
                 }
             }
         }
