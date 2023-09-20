@@ -10,6 +10,9 @@ namespace PlayerInventory {
     {
         [SerializeField] Object panelPrefab;
         [SerializeField] Canvas canvas;
+        [SerializeField] GameObject backpack;
+        RectTransform backpackRectTransform;
+        List<GameObject> panelList;
         Grid grid;
         Dictionary<BaseItem, Vector2Int> itemPositions = new();
 
@@ -26,6 +29,8 @@ namespace PlayerInventory {
         {
             //var testObject = gameObject.AddComponent<TestItem>();
             grid = new(3, 4);
+            panelList = new();
+            backpackRectTransform = backpack.GetComponent<RectTransform>();
             //grid.OutputTXT();
             //grid.ReverseColumns();
             //grid.Transpose();
@@ -34,17 +39,54 @@ namespace PlayerInventory {
             //PlaceItem(testObject, new Vector2Int(0,2));
             //grid.OutputTXT();
 
-            DrawInventoryToCanvas();
+            InitialDrawInventoryToCanvas();
         }
 
-        public void DrawInventoryToCanvas()
+        private void Update()
         {
-            for(int i = 0; i < grid.NumRows; i++)
+            UpdateInventoryAlreadyOnCanvas();
+        }
+
+
+        //If marked dirty, we'll need to do a full refresh?
+        void UpdateInventoryAlreadyOnCanvas()
+        {
+            var panelWidth = 1f / grid.NumColumns;
+            var panelHeight = 1f / grid.NumRows;
+            var panelOffsetX = backpackRectTransform.rect.height / grid.NumColumns;
+            var panelOffsetY = backpackRectTransform.rect.height / grid.NumRows;
+            var topLeftCorner = GetBackpackTopLeftCorner();
+            for(int i = 0; i< grid.NumRows; i++)
+            {
+                for(int j = 0; j < grid.NumColumns; j++)
+                {
+                    var panel = panelList[GetIndex(i, j)];
+                    panel.transform.localScale = new Vector3(panelWidth, panelHeight, 1);
+                    panel.transform.localPosition = GetNewPanelLocalPosition(topLeftCorner, panelOffsetX, panelOffsetY, i, j);
+                }
+            }
+        }
+
+
+        public void InitialDrawInventoryToCanvas()
+        {
+            var panelWidth = 1f / grid.NumColumns;
+            var panelHeight = 1f / grid.NumRows;
+
+            var topLeftCorner = GetBackpackTopLeftCorner();
+
+            var panelOffsetX = backpackRectTransform.rect.height / grid.NumColumns;
+            var panelOffsetY = backpackRectTransform.rect.height / grid.NumRows;
+
+            for (int i = 0; i < grid.NumRows; i++)
             {
                 for (int j = 0; j < grid.NumColumns; j++)
                 {
                     var panel = Instantiate(panelPrefab) as GameObject;
-                    panel.transform.SetParent(canvas.transform, false);
+                    panel.transform.SetParent(backpack.transform, false);
+                    panel.transform.localScale = new Vector3(panelWidth, panelHeight, 1);
+                    panel.transform.localPosition = GetNewPanelLocalPosition(topLeftCorner, panelOffsetX, panelOffsetY, i, j);
+                    panelList.Add(panel);
                 }
             }
         }
@@ -70,6 +112,23 @@ namespace PlayerInventory {
             }
             return true;
         }
+
+        Vector3 GetNewPanelLocalPosition(Vector3 backpackTopLeftCorner, float panelOffsetX, float panelOffsetY, int row, int col)
+        {
+            return new Vector3(backpackTopLeftCorner.x + panelOffsetX * col + panelOffsetX / 2, backpackTopLeftCorner.y - panelOffsetY * row - panelOffsetY / 2, 1);
+        }
+
+        Vector3 GetBackpackTopLeftCorner()
+        {
+            Vector3[] arr = new Vector3[4];
+            backpackRectTransform.GetLocalCorners(arr);
+            return arr[1];
+        }
+
+        int GetIndex(int r, int c)
+        {
+            return r * grid.NumColumns + c;
+        }
     }
 
     [System.Serializable]
@@ -86,8 +145,8 @@ namespace PlayerInventory {
 
 
         public enum CellStatus {
-            Empty,
-            Occupied
+            Locked = -1,
+            Empty = 0,
         }
 
         public Grid(int r, int c)
@@ -100,7 +159,6 @@ namespace PlayerInventory {
             {
                 for (int j = 0; j < c; j++)
                 {
-                    Debug.Log(i * this.numColumns + j + " " + this.matrix.Length);
                     if (j <= 0)
                     {
                         this[i,j] = 1;
@@ -117,7 +175,6 @@ namespace PlayerInventory {
         {
             get
             {
-                Debug.Log(r * numColumns + c);
                 return matrix[r * numColumns + c];
             }
             set

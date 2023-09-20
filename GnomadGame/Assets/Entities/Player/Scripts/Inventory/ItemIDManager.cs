@@ -5,6 +5,7 @@ using UnityEngine;
 using System.Text;
 using System;
 using System.IO;
+using System.Linq;
 
 
 
@@ -20,16 +21,15 @@ public class ItemIDManager : UnityEditor.AssetModificationProcessor
 
     public static int GetNextAvailableID()
     {
-        int nextItemId = 0;
+        int nextItemId = 1;
         bool wasGap = false;
 
         UsedItemIDs = GetItemIdListFromTXT();
 
         if (UsedItemIDs.Count <= 0)
         {
-            Debug.Log("EMPTY");
-            nextItemId = 0;
-            UsedItemIDs.Add(0);
+            nextItemId = 1;
+            UsedItemIDs.Add(1);
             //This is disgusting but i'm lazy
             goto buildItemIdString;
         }
@@ -37,20 +37,16 @@ public class ItemIDManager : UnityEditor.AssetModificationProcessor
 
         for (int i = 0; i < UsedItemIDs.Count-1; i++)
         {
-            Debug.Log("IN LOOP");
-            Debug.Log((UsedItemIDs[i]) - UsedItemIDs[i + 1]);
-            if(UsedItemIDs[0] != 0)
+            if(UsedItemIDs[0] != 1)
             {
                 wasGap = true;
-                nextItemId = 0;
-                Debug.Log("PREPEND");
+                nextItemId = 1;
                 UsedItemIDs.Insert(0, nextItemId);
                 goto buildItemIdString;
             }
 
             if((UsedItemIDs[i]) - UsedItemIDs[i + 1] < -1)
             {
-                Debug.Log("INSERT IN GAP");
                 wasGap = true;
                 nextItemId = UsedItemIDs[i] + 1;
                 UsedItemIDs.Insert(i+1, nextItemId);
@@ -61,7 +57,6 @@ public class ItemIDManager : UnityEditor.AssetModificationProcessor
         if (!wasGap)
         {
 
-            Debug.Log("APPEND");
             nextItemId = UsedItemIDs[UsedItemIDs.Count - 1] + 1;
             UsedItemIDs.Add(nextItemId);
             goto buildItemIdString;
@@ -77,14 +72,7 @@ public class ItemIDManager : UnityEditor.AssetModificationProcessor
         }
         WriteToTXT(sb.ToString());
 
-        Debug.Log(nextItemId);
-
         return nextItemId;
-    }
-
-    static void OnWillCreateAsset(string assetName)
-    {
-       
     }
 
     static List<int> GetItemIdListFromTXT()
@@ -139,8 +127,6 @@ public class ItemIDManager : UnityEditor.AssetModificationProcessor
             }
             
             //at the comma.
-            Debug.Log(i - (sb.Length));
-            Debug.Log(sb.ToString().Length + 1);
             if (sb.ToString() == itemID.ToString())
             {
                 //account for the comma w/ +1
@@ -173,11 +159,9 @@ public class ItemIDManager : UnityEditor.AssetModificationProcessor
 
         WriteToTXT(listString);
 
-        Debug.Log(listString);
         //Exactly the opposite of what you'd expect lmfao unity what the hell?
         return AssetDeleteResult.DidNotDelete;
     }
-
 
     public static void WriteToTXT(string stringToWrite)
     {
@@ -191,6 +175,28 @@ public class ItemIDManager : UnityEditor.AssetModificationProcessor
     {
         TextAsset txt = AssetDatabase.LoadAssetAtPath("Assets/Editor/ItemIDs.txt", typeof(TextAsset)) as TextAsset;
         return txt.text;
+    }
+}
+
+
+public class ItemCreationListener : UnityEditor.AssetPostprocessor
+{
+
+    // This may need optimization if we're moving many assets at once or importing many assets at once.
+    public static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths, bool didDomainReload)
+    {
+        foreach(var x in importedAssets)
+        {
+            if(AssetDatabase.GetMainAssetTypeAtPath(x) != typeof(PlayerInventory.BaseItem))
+            {
+                continue;
+            }
+            var item = AssetDatabase.LoadAssetAtPath<PlayerInventory.BaseItem>(x) as PlayerInventory.BaseItem;
+            if (item.ItemID == -0xBEEF)
+            {
+                item.ItemID = ItemIDManager.GetNextAvailableID();
+            }
+        }
     }
 }
 
