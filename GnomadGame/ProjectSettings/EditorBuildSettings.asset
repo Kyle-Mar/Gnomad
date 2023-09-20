@@ -11,5 +11,17 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Zones/Playground/Playground.unity
     guid: a1e06de27215fba4ab709c3c113ee178
+  - enabled: 1
+    path: Assets/Zones/GameplayScene.unity
+    guid: ea8531b1723dba641a7a553cde24b0ad
+  - enabled: 1
+    path: Assets/Zones/Playground/AdditiveTestScenes/TestScene1.unity
+    guid: 1e576db59fff98248a122283de71b136
+  - enabled: 1
+    path: Assets/Zones/Playground/AdditiveTestScenes/TestScene2.unity
+    guid: 97d6c014c9328f04f8982e64dffb954b
+  - enabled: 1
+    path: Assets/Zones/Playground/AdditiveTestScenes/TestScene3.unity
+    guid: fdaf2a5f79f5c0840b428e8905523a0a
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 685aaf994ef330e47aa6563784fdfb36, type: 2}

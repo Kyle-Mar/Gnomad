@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
@@ -284,7 +283,7 @@ public class PlayerStateMachine : StateMachine
     public void ReloadScene(InputAction.CallbackContext cxt)
     {
         // Load Scene Stuff Here
-        StartCoroutine(LevelUtils.LoadNewSceneAsync());
+        StartCoroutine(LevelManager.LoadSceneAsync("reloadScene"));
     }
 
     private void InstantiateStates()
