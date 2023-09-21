@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 namespace PlayerInventory {
 
@@ -32,18 +33,24 @@ namespace PlayerInventory {
         private void Awake()
         {
             //var testObject = gameObject.AddComponent<TestItem>();
-            grid = new(3, 3, (int)Grid.CellStatus.Locked);
+            grid = new(3, 4, (int)Grid.CellStatus.Locked);
             this[1, 1] = (int)Grid.CellStatus.Empty;
             cellList = new();
             itemPositions.Add(jasonItem, new(0, 0));
             backpackRectTransform = backpack.GetComponent<RectTransform>();
-            //grid.OutputTXT();
-            //grid.ReverseColumns();
-            //grid.Transpose();
-            //grid.OutputTXT();
+            grid.OutputTXT();
+            grid.ReverseColumns();
+            grid.OutputTXT();
+            grid.Transpose();
+            grid.OutputTXT();
 
             //PlaceItem(testObject, new Vector2Int(0,2));
             //grid.OutputTXT();
+
+            foreach (var x in grid)
+            {
+                Debug.Log(x.value + " " + x.row + " " + x.col);
+            }
 
             InitialDrawInventoryToCanvas();
         }
@@ -53,7 +60,6 @@ namespace PlayerInventory {
             UpdateInventoryAlreadyOnCanvas();
         }
 
-
         //If marked dirty, we'll need to do a full refresh?
         void UpdateInventoryAlreadyOnCanvas()
         {
@@ -62,14 +68,12 @@ namespace PlayerInventory {
             var panelOffsetX = backpackRectTransform.rect.height / grid.NumColumns;
             var panelOffsetY = backpackRectTransform.rect.height / grid.NumRows;
             var topLeftCorner = GetBackpackTopLeftCorner();
-            for(int i = 0; i< grid.NumRows; i++)
+
+            foreach (var x in grid)
             {
-                for(int j = 0; j < grid.NumColumns; j++)
-                {
-                    var panel = cellList[GetIndex(i, j)];
-                    panel.transform.localScale = new Vector3(panelWidth, panelHeight, 1);
-                    panel.transform.localPosition = GetNewPanelLocalPosition(topLeftCorner, panelOffsetX, panelOffsetY, i, j);
-                }
+                var panel = cellList[GetIndex(x.row, x.col)];
+                panel.transform.localScale = new Vector3(panelWidth, panelHeight, 1);
+                panel.transform.localPosition = GetNewPanelLocalPosition(topLeftCorner, panelOffsetX, panelOffsetY, x.row, x.col);
             }
         }
 
@@ -78,29 +82,33 @@ namespace PlayerInventory {
             var panelWidth = 1f / grid.NumColumns;
             var panelHeight = 1f / grid.NumRows;
 
-            var topLeftCorner = GetBackpackTopLeftCorner();
+            var backpackTopLeftCorner = GetBackpackTopLeftCorner();
 
             var panelOffsetX = backpackRectTransform.rect.width / grid.NumColumns;
             var panelOffsetY = backpackRectTransform.rect.height / grid.NumRows;
 
-            for (int i = 0; i < grid.NumRows; i++)
+            foreach (var x in grid)
             {
-                for (int j = 0; j < grid.NumColumns; j++)
+                // Instantiate the correct cell ui element based off of the value in the grid.
+                GameObject cell;
+                if (this[x.row, x.col] == (int)Grid.CellStatus.Locked)
                 {
-                    GameObject cell;
-                    if(this[i,j] == (int)Grid.CellStatus.Locked)
-                    {
-                        cell = Instantiate(lockedCellPrefab) as GameObject;
-                    }
-                    else
-                    {
-                        cell = Instantiate(emptyCellPrefab) as GameObject;
-                    }
-                    cell.transform.SetParent(backpack.transform, false);
-                    cell.transform.localScale = new Vector3(panelWidth, panelHeight, 1);
-                    cell.transform.localPosition = GetNewPanelLocalPosition(topLeftCorner, panelOffsetX, panelOffsetY, i, j);
-                    cellList.Add(cell);
+                    cell = Instantiate(lockedCellPrefab) as GameObject;
                 }
+                else
+                {
+                    cell = Instantiate(emptyCellPrefab) as GameObject;
+                }
+                cell.transform.SetParent(backpack.transform, false);
+
+                // set callback and update scale and position
+                InventoryCell ic;
+                if (cell.TryGetComponent(out ic))
+                {
+                    ic.OnCellClicked += DoAThing;
+                    ic.UpdateTransform(new Vector3(panelWidth, panelHeight, 1), GetNewPanelLocalPosition(backpackTopLeftCorner, panelOffsetX, panelOffsetY, x.row, x.col));
+                }
+                cellList.Add(cell);
             }
 
             foreach(var kvp in itemPositions)
@@ -112,9 +120,10 @@ namespace PlayerInventory {
                 item.transform.localScale = new Vector3(panelWidth * baseItem.grid.NumColumns, panelHeight * baseItem.grid.NumRows, 1);
                 var itemOffsetX = backpackRectTransform.rect.width * item.transform.localScale.x;
                 var itemOffsetY = backpackRectTransform.rect.height * item.transform.localScale.y;
-                item.transform.localPosition = GetNewItemLocalPosition(topLeftCorner, itemOffsetX, itemOffsetY, panelOffsetX, panelOffsetY,kvp.Value.x, kvp.Value.y);
+                item.transform.localPosition = GetNewItemLocalPosition(backpackTopLeftCorner, itemOffsetX, itemOffsetY, panelOffsetX, panelOffsetY,kvp.Value.x, kvp.Value.y);
             }
         }
+
 
         public bool PlaceItem(BaseItem item, Vector2Int desiredPos)
         {
@@ -159,144 +168,9 @@ namespace PlayerInventory {
         {
             return r * grid.NumColumns + c;
         }
-    }
-
-    [System.Serializable]
-
-    //row first grid.
-    public class Grid : IEnumerable
-    {
-        int numColumns;
-        int numRows;
-        public int[] matrix;
-
-        public int NumColumns { get { return numColumns; } set { numColumns = value; } }
-        public int NumRows { get { return numRows; } set { numRows = value; } }
-
-
-        public enum CellStatus {
-            Locked = -1,
-            Empty = 0,
-        }
-
-        public Grid(int r, int c, int defaultValue)
+        public void DoAThing(InventoryCell cell)
         {
-            numRows = r;
-            numColumns = c;
-            matrix = new int[r * c];
-
-            for (int i = 0; i < r; i++)
-            {
-                for (int j = 0; j < c; j++)
-                {
-                    this[i, j] = defaultValue;
-                }
-            }
-        }
-
-        public int this[int r, int c]
-        {
-            get
-            {
-                return matrix[r * numColumns + c];
-            }
-            set
-            {
-                matrix[r*numColumns + c] = value;
-            }
-        }
-
-        public void ReverseColumns()
-        {
-            for (int r = 0; r < numRows; r++)
-            {
-                for (int c = 0; c < numColumns / 2; c++)
-                {
-                    var tmp = this[r, c];
-                    this[r, c] = this[r, numColumns - c - 1];
-                    this[r, numColumns - c - 1] = tmp;
-                }
-            }
-        }
-
-        public void Transpose()
-        {
-            var newArray = new int[numColumns * numRows];
-            for (int c = 0; c < numColumns; c++)
-            {
-                for (int r = 0; r < numRows; r++)
-                {
-                    newArray[c + r * numRows] = this[r, c];
-                }
-            }
-            matrix = newArray;
-
-            var tmp = numRows;
-            numRows = numColumns;
-            numColumns = tmp;
-        }
-
-        public void OutputTXT()
-        {
-            string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            path += "\\debug.txt";
-
-            Debug.Log(path);
-            StreamWriter writer = new(path, append: true);
-
-            writer.Write('\n');
-            for (int i = 0; i < numRows; i++)
-            {
-                for (int j = 0; j < numColumns; j++)
-                {
-                    writer.Write(this[i, j]);
-                }
-                writer.Write('\n');
-            }
-            writer.Close();
-        }
-
-        /// <summary>
-        /// Compares two grids for collisions
-        /// </summary>
-        /// <param name="collGrid">The smaller grid to be checked against.</param>
-        /// <param name="desiredPos">Where the top left corner of the grid will be placed.</param>
-        /// <returns>If collision -> true; else -> false</returns>
-        public bool CheckCollisionWithGrid(ref Grid collGrid, Vector2Int desiredPos)
-        {
-
-            // Will placing this grid on top of the other grid place the grid outside of the larger grid?
-            // Or: Does it fit?
-            if (collGrid.numRows + desiredPos.x > numRows || desiredPos.x < 0)
-            {
-                return true;
-            }
-            if (collGrid.numColumns + desiredPos.y > numRows || desiredPos.y < 0)
-            {
-                return true;
-            }
-
-            // Is there something else in the way currently?
-            for (int i = desiredPos.x; i < collGrid.numRows + desiredPos.x; i++)
-            {
-                for (int j = desiredPos.y; j < collGrid.numColumns + desiredPos.y; j++)
-                {
-                    // Would the cell be need to become occupied and is it already occupied?
-                    if (collGrid[i-desiredPos.x, j-desiredPos.y] != (int)CellStatus.Empty
-                        && this[i, j] != (int)CellStatus.Empty)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-        
-        public IEnumerator GetEnumerator()
-        {
-            // implement a better one in the future and convert.
-            return matrix.GetEnumerator();
+            Debug.Log("I HAVE BEEN CLICKED");
         }
     }
 }
