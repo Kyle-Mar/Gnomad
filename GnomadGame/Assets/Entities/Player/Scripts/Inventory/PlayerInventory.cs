@@ -38,11 +38,11 @@ namespace PlayerInventory {
             cellList = new();
             itemPositions.Add(jasonItem, new(0, 0));
             backpackRectTransform = backpack.GetComponent<RectTransform>();
-            grid.OutputTXT();
-            grid.ReverseColumns();
-            grid.OutputTXT();
-            grid.Transpose();
-            grid.OutputTXT();
+            //grid.OutputTXT();
+            //grid.ReverseColumns();
+            //grid.OutputTXT();
+            //grid.Transpose();
+            //grid.OutputTXT();
 
             //PlaceItem(testObject, new Vector2Int(0,2));
             //grid.OutputTXT();
