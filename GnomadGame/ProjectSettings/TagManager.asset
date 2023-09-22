@@ -39,30 +39,30 @@ TagManager:
   - Blur Strong
   - Blur Weak
   m_SortingLayers:
-  - name: BackgroundFar
+  - name: BG Back
     uniqueID: 1699708449
     locked: 0
-  - name: Background
+  - name: BG
     uniqueID: 3675152125
     locked: 0
-  - name: BackgroundNear
+  - name: BG Front
     uniqueID: 1639774475
     locked: 0
-  - name: Ground Far
+  - name: G Back
     uniqueID: 1872869021
     locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Ground Near
+  - name: G Front
     uniqueID: 3125816601
     locked: 0
-  - name: Foreground Far
+  - name: FG Back
     uniqueID: 819897003
     locked: 0
-  - name: Foreground
+  - name: 'FG '
     uniqueID: 375447829
     locked: 0
-  - name: ForegroundNear
+  - name: FG Front
     uniqueID: 4262118043
     locked: 0
