@@ -8,16 +8,23 @@ using System.Linq;
 
 namespace PlayerInventory {
 
+    [RequireComponent(typeof(PlayerStateMachine))]
     public class PlayerInventory : MonoBehaviour
     {
         [SerializeField] Object lockedCellPrefab;
         [SerializeField] Object emptyCellPrefab;
         [SerializeField] Object itemPrefab;
+        [SerializeField] Object selectedCellIcon;
         [SerializeField] BaseItem jasonItem;
         [SerializeField] Canvas canvas;
         [SerializeField] GameObject backpack;
-        RectTransform backpackRectTransform;
+        [SerializeField] bool isOpen;
+        [SerializeField] RectTransform backpackRectTransform;
+        PlayerControls controls;
         List<GameObject> cellList;
+        List<GameObject> itemList;
+        GameObject cursor;
+        Vector2Int cursorPosition;
         Grid grid;
         Dictionary<BaseItem, Vector2Int> itemPositions = new();
 
@@ -33,31 +40,77 @@ namespace PlayerInventory {
         private void Awake()
         {
             //var testObject = gameObject.AddComponent<TestItem>();
-            grid = new(3, 4, (int)Grid.CellStatus.Locked);
+            grid = new(3, 3, (int)Grid.CellStatus.Locked);
             this[1, 1] = (int)Grid.CellStatus.Empty;
             cellList = new();
-            itemPositions.Add(jasonItem, new(0, 0));
+            itemList = new();
+            //itemPositions.Add(jasonItem, new(0, 0));
             backpackRectTransform = backpack.GetComponent<RectTransform>();
-            //grid.OutputTXT();
-            //grid.ReverseColumns();
-            //grid.OutputTXT();
-            //grid.Transpose();
-            //grid.OutputTXT();
-
-            //PlaceItem(testObject, new Vector2Int(0,2));
-            //grid.OutputTXT();
 
             foreach (var x in grid)
             {
                 Debug.Log(x.value + " " + x.row + " " + x.col);
             }
 
+            // Initialize the inventory
             InitialDrawInventoryToCanvas();
+            CloseInventory();
+        }
+
+        private void Start()
+        {
+            controls = GetComponent<PlayerStateMachine>().Controls;
         }
 
         private void Update()
         {
-            UpdateInventoryAlreadyOnCanvas();
+            if(!isOpen && controls.Inventory.OpenClose.WasPressedThisFrame())
+            {
+                isOpen = true;
+                OpenInventory();
+                
+            }
+            else if(isOpen && controls.Inventory.OpenClose.WasPressedThisFrame())
+            {
+                isOpen = false;
+                CloseInventory();
+            }
+
+            if (isOpen)
+            {
+                //Vector2 invMoveVector = controls.Player.Move.ReadValue<Vector2>();
+
+                // I have no idea why this is so reversed but it is so deal with it.
+                if (controls.Inventory.MoveCursorX.WasPressedThisFrame())
+                {
+                    float inputX = controls.Inventory.MoveCursorX.ReadValue<Vector2>().x;
+                    Debug.Log(inputX);
+                    if (inputX > 0)
+                    {
+                        cursorPosition.x = Mathf.Clamp(cursorPosition.x + 1, 0, grid.NumColumns-1);
+                    }
+                    else if (inputX < 0)
+                    {
+                        cursorPosition.x = Mathf.Clamp(cursorPosition.x - 1, 0, grid.NumColumns-1);
+                    }
+                    
+                }
+                if (controls.Inventory.MoveCursorY.WasPressedThisFrame())
+                {
+                    float inputY = controls.Inventory.MoveCursorY.ReadValue<Vector2>().y;
+                    Debug.Log(inputY);
+                    if (inputY > 0)
+                    {
+                        cursorPosition.y = Mathf.Clamp(cursorPosition.y - 1, 0, grid.NumColumns - 1);
+                    }
+                    else if (inputY < 0)
+                    {
+                        cursorPosition.y = Mathf.Clamp(cursorPosition.y + 1, 0, grid.NumColumns - 1);
+                    }
+
+                }
+                UpdateInventoryAlreadyOnCanvas();
+            }
         }
 
         //If marked dirty, we'll need to do a full refresh?
@@ -67,14 +120,16 @@ namespace PlayerInventory {
             var panelHeight = 1f / grid.NumRows;
             var panelOffsetX = backpackRectTransform.rect.height / grid.NumColumns;
             var panelOffsetY = backpackRectTransform.rect.height / grid.NumRows;
-            var topLeftCorner = GetBackpackTopLeftCorner();
+            var backpackTopLeftCorner = GetBackpackTopLeftCorner();
 
             foreach (var x in grid)
             {
                 var panel = cellList[GetIndex(x.row, x.col)];
                 panel.transform.localScale = new Vector3(panelWidth, panelHeight, 1);
-                panel.transform.localPosition = GetNewPanelLocalPosition(topLeftCorner, panelOffsetX, panelOffsetY, x.row, x.col);
+                panel.transform.localPosition = GetNewPanelLocalPosition(backpackTopLeftCorner, panelOffsetX, panelOffsetY, x.row, x.col);
             }
+            cursor.transform.localPosition = GetNewPanelLocalPosition(backpackTopLeftCorner, panelOffsetX, panelOffsetY, cursorPosition.y, cursorPosition.x);
+
         }
 
         public void InitialDrawInventoryToCanvas()
@@ -121,9 +176,41 @@ namespace PlayerInventory {
                 var itemOffsetX = backpackRectTransform.rect.width * item.transform.localScale.x;
                 var itemOffsetY = backpackRectTransform.rect.height * item.transform.localScale.y;
                 item.transform.localPosition = GetNewItemLocalPosition(backpackTopLeftCorner, itemOffsetX, itemOffsetY, panelOffsetX, panelOffsetY,kvp.Value.x, kvp.Value.y);
+                itemList.Add(item);
+            }
+
+            GameObject cur = Instantiate(selectedCellIcon) as GameObject;
+            cur.transform.SetParent(backpack.transform, false);
+            cur.transform.localScale = new(panelWidth, panelHeight, 1);
+            Vector2Int cursorPos = GetCursorIndexOnGrid();
+            cursorPosition = cursorPos;
+            cur.transform.localPosition = GetNewPanelLocalPosition(backpackTopLeftCorner, panelOffsetX, panelOffsetY, cursorPos.x, cursorPos.y);
+            cursor = cur;
+        }
+
+        void CloseInventory()
+        {
+            foreach (var x in cellList)
+            {
+                x.SetActive(false);
+            }
+            foreach (var x in itemList)
+            {
+                x.SetActive(false);
             }
         }
 
+        void OpenInventory()
+        {
+            foreach (var x in cellList)
+            {
+                x.SetActive(true);
+            }
+            foreach (var x in itemList)
+            {
+                x.SetActive(true);
+            }
+        }
 
         public bool PlaceItem(BaseItem item, Vector2Int desiredPos)
         {
@@ -164,6 +251,14 @@ namespace PlayerInventory {
             return arr[1];
         }
 
+        // put in middle of grid.
+        Vector2Int GetCursorIndexOnGrid()
+        {
+            int r = grid.NumColumns / 2;
+            int c = grid.NumRows / 2;
+
+            return new(r, c);
+        }
         int GetIndex(int r, int c)
         {
             return r * grid.NumColumns + c;
