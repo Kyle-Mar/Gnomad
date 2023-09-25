@@ -42,7 +42,7 @@ public abstract class BaseState
     }
     protected void SwitchState(BaseState newState)
     {
-        Debug.Log("Switch State" + this + " " + newState);
+        //Debug.Log("Switch State" + this + " " + newState);
         ExitState();
         newState.EnterState();
         if (isRootState)
