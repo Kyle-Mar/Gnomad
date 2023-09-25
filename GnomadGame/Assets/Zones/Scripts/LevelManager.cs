@@ -15,8 +15,9 @@ public static class LevelManager
     /// </summary>
     /// <param name="connectedScenes">All the connected scenes (rooms) to the root room.</param>
     /// <param name="occupiedScene">The scene the player is presently in.</param>
-    public static void UpdateLoadedScenes(List<SceneInfo> connectedScenes, SceneInfo occupiedScene)
+    public static void UpdateLoadedScenes(List<SceneInfo> connectedScenes, SceneInfo occupiedScene, SceneLoader loader)
     {
+        Debug.Log(loader.name);
         List<SceneInfo> removeScenes = new List<SceneInfo>();
         if (timeTillNextUpdate > 0f)
         {
@@ -25,14 +26,14 @@ public static class LevelManager
         if (!occupiedScene.isLoaded)
         {
             loadedScenes.Add(occupiedScene);
-            occupiedScene.LoadScene();
+            loader.LoadScene(occupiedScene);
         }
 
         foreach (SceneInfo scene in loadedScenes)
         {
             if (!connectedScenes.Contains(scene) && scene != occupiedScene)
             {
-                scene.UnloadScene();
+                loader.UnloadScene(scene);
                 removeScenes.Add(scene);
             }
         }
@@ -42,7 +43,7 @@ public static class LevelManager
             if (!loadedScenes.Contains(scene))
             {
                 loadedScenes.Add(scene);
-                scene.LoadScene();
+                loader.LoadScene(scene);
             }
         }
 
@@ -52,7 +53,6 @@ public static class LevelManager
         }
     }
 
-
     public static IEnumerator LoadSceneAsync(string sceneName)
     {
         if (sceneName == "reloadScene")
@@ -61,7 +61,6 @@ public static class LevelManager
         }
 
         AsyncOperation op = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-
 
         while (!op.isDone)
         {

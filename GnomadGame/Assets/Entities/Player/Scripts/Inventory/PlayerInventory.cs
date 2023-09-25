@@ -47,8 +47,8 @@ namespace PlayerInventory {
             cellList = new();
             itemList = new();
             //itemPositions.Add(jasonItem, new(0, 0));
-            backpackRectTransform = backpack.GetComponent<RectTransform>();
-            if(TryPlaceItem(jasonItem, new(0, 0)))
+            //backpackRectTransform = backpack.GetComponent<RectTransform>();
+            /*if(TryPlaceItem(jasonItem, new(0, 0)))
             {
                 Debug.Log("HELLO WORLD");
             }
@@ -60,17 +60,17 @@ namespace PlayerInventory {
 
             // Initialize the inventory
             //RedrawInventoryToCanvas();
-            CloseInventory();
+            CloseInventory();*/
         }
 
         private void Start()
         {
-            controls = GetComponent<PlayerStateMachine>().Controls;
+            //controls = GetComponent<PlayerStateMachine>().Controls;
         }
 
         private void Update()
         {
-            if(!isOpen && controls.Inventory.OpenClose.WasPressedThisFrame())
+            /*if(!isOpen && controls.Inventory.OpenClose.WasPressedThisFrame())
             {
                 isOpen = true;
                 OpenInventory();
@@ -116,7 +116,7 @@ namespace PlayerInventory {
 
                 }
                 UpdateInventoryAlreadyOnCanvas();
-            }
+            }*/
         }
 
         //If marked dirty, we'll need to do a full refresh?
