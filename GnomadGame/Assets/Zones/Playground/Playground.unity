@@ -353,6 +353,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4446419450577938884, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: LevelManager
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4446419450577938884, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: deathPartsPrefab
       value: 
       objectReference: {fileID: 9204305893009503476, guid: b28f77a9f4fa21446b68718bf0ed59cd, type: 3}

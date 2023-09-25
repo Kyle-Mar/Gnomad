@@ -4,22 +4,23 @@ using UnityEngine;
 
 public class PlayerIdleState : PlayerBaseState
 {
-    public PlayerIdleState(PlayerStateMachine psm, PlayerStateFactory psf) : base(psm, psf)
+    public PlayerIdleState(PlayerStateMachine psm) : base(psm)
     {
     }
 
     public override void CheckSwitchStates()
     {
-        //Debug.Log(Input.GetAxis("Horizontal"));
         if (context.Controls.Player.Move.ReadValue<Vector2>().x != 0)
         {
-            SwitchState(factory.Run());
+            SwitchState(context.RunState);
         }
+
     }
 
     public override void EnterState()
     {
-
+        Debug.Log("ENTER IDLE");
+        InitializeSubState();
     }
 
     public override void ExitState()
@@ -34,14 +35,23 @@ public class PlayerIdleState : PlayerBaseState
 
     public override void InitializeSubState()
     {
-
+        if (context.Controls.Player.Slash.WasPressedThisFrame() || context.IsSlashing)
+        {
+            Debug.Log("SLASHING");
+            SetSubState(context.SlashState);
+        }
+        else
+        {
+            SetSubState(context.NotAttackState);
+        }
     }
 
     public override void UpdateState()
     {
-        CheckSwitchStates();
+
         context.rb.velocity = new(0, context.rb.velocity.y);// this generates warnings, but will not be called when death state is added so no need to fix
         // do nothing, maybe play idle anim later.
+        CheckSwitchStates();
     }
 
     // Start is called before the first frame update
