@@ -5,10 +5,9 @@ using UnityEngine;
 
 public class PlayerJumpState : PlayerBaseState
 {
-    public PlayerJumpState(PlayerStateMachine psm, PlayerStateFactory psf) : base(psm, psf)
+    public PlayerJumpState(PlayerStateMachine psm) : base(psm)
     {
         isRootState = true;
-        InitializeSubState();
     }
 
     float startJumpTime;
@@ -23,42 +22,49 @@ public class PlayerJumpState : PlayerBaseState
 
         if (context.Controls.Player.Slide.WasPressedThisFrame())
         {
-            SwitchState(factory.Slide());
+            SwitchState(context.SlideState);
+            return;
         }
         if (context.Controls.Player.GroundPound.WasPressedThisFrame())
         {
-            SwitchState(factory.GroundPound());
+            SwitchState(context.GroundPoundState);
+            return;
+        }
+        if(maxJumpTime < 0)
+        {
+            SwitchState(context.FallState);
         }
     }
 
     public override void EnterState()
     {
+        InitializeSubState();
         startJumpTime = 0;
         maxJumpTime = startJumpTime + MovementStats.maxJumpHeight;
         context.rb.velocity = new Vector2(context.rb.velocity.x, MovementStats.jumpSpeed);
         Object.Instantiate(context.JumpCloudParticles, context.Feet.position, Quaternion.identity);
+
     }
 
     public override void ExitState()
     {
-         context.rb.velocity = new(context.rb.velocity.x, context.rb.velocity.y / 3);
+         //context.rb.velocity = new(context.rb.velocity.x, context.rb.velocity.y / 3);
     }
 
     public override void InitializeSubState()
     {
         if (context.Controls.Player.Move.ReadValue<Vector2>().x != 0)
         {
-            SetSubState(factory.Run());
+            SetSubState(context.RunState);
         }
         else
         {
-            SetSubState(factory.Idle());
+            SetSubState(context.IdleState);
         }
     }
 
     public override void UpdateState()
     {
-        CheckSwitchStates();
 
         maxJumpTime -= Time.deltaTime;
 
@@ -66,11 +72,7 @@ public class PlayerJumpState : PlayerBaseState
         {
             context.rb.velocity = new(context.rb.velocity.x, MovementStats.jumpSpeed);
         }
-        else
-        {
-            //Debug.Log(context.transform.position.y);
-            SwitchState(factory.Fall());
-        }
+        CheckSwitchStates();
     }
 
     public override void FixedUpdateState()

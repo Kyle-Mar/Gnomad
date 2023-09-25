@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 
 public class PlayerSlideState : PlayerBaseState
@@ -7,10 +9,10 @@ public class PlayerSlideState : PlayerBaseState
     Vector2 initialMovementDir;
     float slideEndTime;
     bool sliding = true;
-    public PlayerSlideState(PlayerStateMachine psm, PlayerStateFactory psf) : base(psm, psf)
+
+    public PlayerSlideState(PlayerStateMachine psm) : base(psm)
     {
         isRootState = true;
-        InitializeSubState();
     }
 
     public override void CheckSwitchStates()
@@ -20,42 +22,52 @@ public class PlayerSlideState : PlayerBaseState
             context.CheckIfGrounded();
             if (!context.IsGrounded)
             {
-                SwitchState(factory.Fall());
+                SwitchState(context.FallState);
             }
             else
             {
-                SwitchState(factory.Grounded());
+                SwitchState(context.GroundedState);
             }
         }else if (!sliding)
         {
             if (!context.IsGrounded)
             {
-                SwitchState(factory.Fall());
+                SwitchState(context.FallState);
             }
             else
             {
-                SwitchState(factory.Grounded());
+                SwitchState(context.GroundedState);
             }
         }
     }
 
     public override void EnterState()
     {
-        slideEndTime = Time.time + MovementStats.slideDuration;
+        InitializeSubState();
+        context.SpriteRenderer.transform.rotation = Quaternion.Euler(0,0,90*context.LastMovementDirection.x*-1); //will be changed when animations are added
+        context.HatSpriteRenderer.enabled = false; //will be changed when animations are added
         initialMovementDir = context.LastMovementDirection;
+        sliding = true;
+
+        context.SlideCollider.gameObject.SetActive(true);
+
+        slideEndTime = Time.time + MovementStats.slideDuration;
         context.rb.velocity = new Vector2(MovementStats.slideSpeedX * initialMovementDir.x, MovementStats.fallSpeed/5);
     }
 
     public override void ExitState()
     {
+        context.SpriteRenderer.transform.rotation = Quaternion.Euler(0, 0, 0); //will be changed when animations are added
+        context.SlideCollider.gameObject.SetActive(false);
+        context.HatSpriteRenderer.enabled = true; //will be changed when animations are added
         context.rb.velocity = new Vector2(0, 0);
     }
 
     public override void FixedUpdateState()
     {
+        //Debug.Log("Time.Time: " + Time.time + " slideEndTime " + slideEndTime);
         if (Time.time > slideEndTime)
         {
-            Debug.Log("NOT SLIDING");
             sliding = false;
         }
         else
@@ -66,7 +78,7 @@ public class PlayerSlideState : PlayerBaseState
 
     public override void InitializeSubState()
     {
-        SetSubState(factory.Empty());
+        SetSubState(context.EmptyState);
     }
 
     public override void UpdateState()

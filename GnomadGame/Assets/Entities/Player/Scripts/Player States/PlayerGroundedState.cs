@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 public class PlayerGroundedState : PlayerBaseState
-{
-    public PlayerGroundedState(PlayerStateMachine psm, PlayerStateFactory psf) : base(psm, psf)
+{ 
+    public PlayerGroundedState(PlayerStateMachine psm) : base(psm)
     {
         isRootState = true;
-        InitializeSubState();
+        
     }
 
     public override void CheckSwitchStates()
@@ -15,27 +16,27 @@ public class PlayerGroundedState : PlayerBaseState
         if (context.Controls.Player.Jump.WasPressedThisFrame() || context.JumpBufferTime > 0)
         {
             context.ConsumeJumpBuffer();
-            SwitchState(factory.Jump());
+            SwitchState(context.JumpState);
         }
 
         if (context.Controls.Player.Slide.WasPressedThisFrame())
         {
-            SwitchState(factory.Slide());
+            SwitchState(context.SlideState);
         }
 
         context.CheckIfGrounded();
         if (!context.IsGrounded)
         {
-            SwitchState(factory.Fall());
+            SwitchState(context.FallState);
         }
     }
 
     public override void EnterState()
     {
+        InitializeSubState();
         //Debug.Log("HELLO WORLD I AM GROUNDED!");
         //context.rb.velocity = new(context.rb.velocity.x, 0);
         Object.Instantiate(context.LandParticles, context.Feet.position, Quaternion.identity);
-
     }
 
     public override void ExitState()
@@ -52,11 +53,11 @@ public class PlayerGroundedState : PlayerBaseState
     {
         if (context.Controls.Player.Move.ReadValue<Vector2>().x != 0)
         {
-            SetSubState(factory.Run());
+            SetSubState(context.RunState);
         }
         else
         {
-            SetSubState(factory.Idle());
+            SetSubState(context.IdleState);
         }
     }
 

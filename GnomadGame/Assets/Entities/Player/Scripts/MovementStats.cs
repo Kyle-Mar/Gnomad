@@ -30,4 +30,6 @@ public class MovementStats
     public static float slideFallSpeed = Physics.gravity.y * 2f;
 
     public static float wallSlideSpeed = -5f;
+
+    public static float slashDuration = .15f;
 }

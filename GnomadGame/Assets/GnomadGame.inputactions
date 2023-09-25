@@ -49,22 +49,29 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Slash",
+                    "type": "Button",
+                    "id": "8573f74c-138c-42c1-a5dc-ce5dd9dde822",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Respawn",
+                    "type": "Button",
+                    "id": "86501f44-9114-4c57-95df-48f1e9802e40",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
                 {
-                    "name": "",
-                    "id": "978bfe49-cc26-4a3d-ab7b-7d7a29327403",
-                    "path": "<Gamepad>/leftStick",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "WASD",
+                    "name": "Arrow Keys",
                     "id": "00ca640b-d935-4593-8157-c05846ea39b3",
                     "path": "2DVector",
                     "interactions": "",
@@ -131,17 +138,6 @@
                 },
                 {
                     "name": "",
-                    "id": "3ea4d645-4504-4529-b061-ab81934c3752",
-                    "path": "<Joystick>/stick",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Joystick",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "749fa180-8a26-4a4a-a25e-c93a8e645b4e",
                     "path": "<XInputController>/dpad",
                     "interactions": "",
@@ -154,7 +150,7 @@
                 {
                     "name": "",
                     "id": "cba327cd-1bea-472b-b1a8-0856d046cebd",
-                    "path": "<Keyboard>/space",
+                    "path": "<Keyboard>/z",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -187,7 +183,7 @@
                 {
                     "name": "",
                     "id": "c618d743-52fb-46ca-9388-2507a4652cd8",
-                    "path": "<Keyboard>/q",
+                    "path": "<Keyboard>/downArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -198,7 +194,7 @@
                 {
                     "name": "",
                     "id": "903164b6-c6c1-45ed-8b74-415e8684c7e2",
-                    "path": "<XInputController>/leftTrigger",
+                    "path": "<XInputController>/dpad/down",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -209,7 +205,7 @@
                 {
                     "name": "",
                     "id": "6f184a36-7aff-432f-bfa8-10a63f919a42",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/v",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -236,6 +232,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "Die",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7ffc44e0-7b2e-4e69-b52b-0f1a1545e6cd",
+                    "path": "<Keyboard>/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Slash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7fc793c4-e910-430c-9250-725c1340b06c",
+                    "path": "<XInputController>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Slash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "32ff4c68-876a-4c32-86f2-cd39099676ad",
+                    "path": "<Keyboard>/f2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Respawn",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerRunState : PlayerBaseState
 {
-    public PlayerRunState(PlayerStateMachine psm, PlayerStateFactory psf) : base(psm, psf)
+    public PlayerRunState(PlayerStateMachine psm) : base(psm)
     {
     }
 
@@ -14,13 +14,14 @@ public class PlayerRunState : PlayerBaseState
     {
         if(context.Controls.Player.Move.ReadValue<Vector2>().x == 0)
         {
-            SwitchState(factory.Idle());
+            SwitchState(context.IdleState);
         }
+
     }
 
     public override void EnterState()
     {
-        //throw new System.NotImplementedException();
+        InitializeSubState();
     }
 
     public override void ExitState()
@@ -29,7 +30,8 @@ public class PlayerRunState : PlayerBaseState
     }
 
     public override void FixedUpdateState()
-    {   
+    {
+
         Vector2 movementVector = new(0, 0);
         movementVector.x = inputVec.x * context.CurrentMoveSpeed;
         movementVector.y = context.rb.velocity.y;
@@ -43,18 +45,25 @@ public class PlayerRunState : PlayerBaseState
 
     public override void InitializeSubState()
     {
-        //throw new System.NotImplementedException();
+        if (context.Controls.Player.Slash.WasPressedThisFrame() || context.IsSlashing)
+        {
+            SetSubState(context.SlashState);
+        }
+        else
+        {
+            SetSubState(context.NotAttackState);
+        }
     }
 
     public override void UpdateState()
-    {
+    { 
         CheckSwitchStates();
         inputVec = context.Controls.Player.Move.ReadValue<Vector2>();
 
         if (inputVec.x <= -0.001 && context.SpriteRenderer.flipX)
-        { context.FlipSprite(); }
+        { context.FlipComponents(); }
         else if (inputVec.x >= 0.001 && !context.SpriteRenderer.flipX)
-        { context.FlipSprite(); }
+        { context.FlipComponents    (); }
 
         if(inputVec.x == 0)
         {
