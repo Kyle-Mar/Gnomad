@@ -119,10 +119,12 @@ namespace PlayerInventory
             // Or: Does it fit?
             if (collGrid.numRows + desiredPos.x > numRows || desiredPos.x < 0)
             {
+                Debug.Log("too big rows");
                 return true;
             }
             if (collGrid.numColumns + desiredPos.y > numRows || desiredPos.y < 0)
             {
+                Debug.Log("too big columns");
                 return true;
             }
 
@@ -135,6 +137,7 @@ namespace PlayerInventory
                     if (collGrid[i - desiredPos.x, j - desiredPos.y] != (int)CellStatus.Empty
                         && this[i, j] != (int)CellStatus.Empty)
                     {
+                        Debug.Log("something in the way.");
                         return true;
                     }
                 }
