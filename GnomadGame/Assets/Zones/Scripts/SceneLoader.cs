@@ -33,10 +33,15 @@ public class SceneLoader : MonoBehaviour
 
         // Get root objects and search for the composite collider which has the information of 
         // the size of the tilemap and not the tilemap collider for some reason.
+        int idx = sceneInfo.adjacentScenes.FindIndex(0, x => x.name == scene.name);
+        if(idx == -1)
+        {
+            return;
+        }
         var objectsList = SceneManager.GetSceneByName(scene.name).GetRootGameObjects();
         CompositeCollider2D col = new();
         
-        int idx = sceneInfo.adjacentScenes.FindIndex(0, x => x.name == scene.name);
+        
         GameObject doorPos = DoorPositions[idx];
         Vector3 doorPosition = doorPos.transform.position;
         Vector3 curRoomCenter = Vector3.zero;
@@ -82,7 +87,11 @@ public class SceneLoader : MonoBehaviour
 
     public void UnloadScene(SceneInfo scene)
     {
-        StartCoroutine(LevelManager.UnloadSceneAsync(scene.name));
         scene.isLoaded = false;
+        if (!SceneManager.GetSceneByName(scene.name).isLoaded)
+        {
+            return;
+        }
+        StartCoroutine(LevelManager.UnloadSceneAsync(scene.name));
     }
 }

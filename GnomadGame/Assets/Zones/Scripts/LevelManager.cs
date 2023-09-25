@@ -17,18 +17,24 @@ public static class LevelManager
     /// <param name="occupiedScene">The scene the player is presently in.</param>
     public static void UpdateLoadedScenes(List<SceneInfo> connectedScenes, SceneInfo occupiedScene, SceneLoader loader)
     {
-        Debug.Log(loader.name);
         List<SceneInfo> removeScenes = new List<SceneInfo>();
         if (timeTillNextUpdate > 0f)
         {
             return;
         }
-        if (!occupiedScene.isLoaded)
+        if (SceneManager.GetSceneByName(occupiedScene.name).isLoaded)
         {
-            loadedScenes.Add(occupiedScene);
-            loader.LoadScene(occupiedScene);
+            loader.sceneInfo.isLoaded = true;
+            loadedScenes.Add(loader.sceneInfo);
         }
-
+        else
+        {
+            if (!occupiedScene.isLoaded)
+            {
+                loadedScenes.Add(occupiedScene);
+                loader.LoadScene(occupiedScene);
+            }
+        }
         foreach (SceneInfo scene in loadedScenes)
         {
             if (!connectedScenes.Contains(scene) && scene != occupiedScene)
@@ -42,6 +48,7 @@ public static class LevelManager
         {
             if (!loadedScenes.Contains(scene))
             {
+                Debug.Log(scene.name);
                 loadedScenes.Add(scene);
                 loader.LoadScene(scene);
             }
