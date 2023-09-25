@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class PlayerFallState : PlayerBaseState
 {
-    public PlayerFallState(PlayerStateMachine psm, PlayerStateFactory psf) : base(psm, psf)
+    public PlayerFallState(PlayerStateMachine psm) : base(psm)
     {
         isRootState = true;
-        InitializeSubState();
     }
 
     public override void CheckSwitchStates()
@@ -15,21 +14,21 @@ public class PlayerFallState : PlayerBaseState
         context.CheckIfGrounded();
         if (context.IsGrounded)
         {
-            SwitchState(factory.Grounded());
+            SwitchState(context.GroundedState);
         }
 
         if (context.DoWallSlide())
         {
-            SwitchState(factory.WallSlide());
+            SwitchState(context.WallSlideState);
         }
 
         if (context.Controls.Player.Slide.WasPressedThisFrame())
         {
-            SwitchState(factory.Slide());
+            SwitchState(context.SlideState);
         }
         if (context.Controls.Player.GroundPound.WasPressedThisFrame())
         {
-            SwitchState(factory.GroundPound());
+            SwitchState(context.GroundPoundState);
         }
     }
 
@@ -37,6 +36,7 @@ public class PlayerFallState : PlayerBaseState
     {
         //Debug.Log("HELLO I AM FALLING");
         //throw new System.NotImplementedException();
+        InitializeSubState();
     }
 
     public override void ExitState()
@@ -54,21 +54,21 @@ public class PlayerFallState : PlayerBaseState
     {
         if (context.Controls.Player.Move.ReadValue<Vector2>().x != 0)
         {
-            SetSubState(factory.Run());
+            SetSubState(context.RunState);
         }
         else
         {
-            SetSubState(factory.Idle());
+            SetSubState(context.IdleState);
         }
     }
 
     public override void UpdateState()
     {
-        CheckSwitchStates();
         //Debug.Log("HELLO WORLD");
 
         
         Physics2D.gravity = new(0, MovementStats.fallSpeed);
+        CheckSwitchStates();
 
         //context.rb.velocity = Vector2.Lerp(context.rb.velocity, new Vector2(context.rb.velocity.x, MovementStats.fallSpeed), Utils.GetInterpolant(10f));
     }

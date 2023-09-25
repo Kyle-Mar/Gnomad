@@ -9,4 +9,5 @@ public static class Utils
         // https://www.youtube.com/watch?v=YJB1QnEmlTs Timestamp: t=7:25
         return Mathf.Abs(1.0f - Mathf.Pow(k, Time.deltaTime));
     }
+
 }

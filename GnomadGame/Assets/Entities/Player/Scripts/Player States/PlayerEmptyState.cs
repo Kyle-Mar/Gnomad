@@ -5,7 +5,7 @@ using UnityEngine;
 // Used for changing to an empty substate.
 public class PlayerEmptyState : PlayerBaseState
 {
-    public PlayerEmptyState(PlayerStateMachine psm, PlayerStateFactory psf) : base(psm, psf)
+    public PlayerEmptyState(PlayerStateMachine psm) : base(psm)
     {
     }
 
@@ -31,7 +31,7 @@ public class PlayerEmptyState : PlayerBaseState
 
     public override void InitializeSubState()
     {
-        //throw new System.NotImplementedException();
+        SetSubState(null);
     }
 
     public override void UpdateState()
@@ -39,13 +39,11 @@ public class PlayerEmptyState : PlayerBaseState
         //throw new System.NotImplementedException();
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
         

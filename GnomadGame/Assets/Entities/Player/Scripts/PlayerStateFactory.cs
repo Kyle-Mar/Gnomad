@@ -1,5 +1,5 @@
 using System;
-
+/*
 public class PlayerStateFactory
 {
     PlayerStateMachine context;
@@ -54,4 +54,4 @@ public class PlayerStateFactory
     {
         return new PlayerEmptyState(context, this);
     }
-}
+}*/

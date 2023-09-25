@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class PlayerWallSlideState : PlayerBaseState
 {
-    public PlayerWallSlideState(PlayerStateMachine psm, PlayerStateFactory psf) : base(psm, psf)
+    public PlayerWallSlideState(PlayerStateMachine psm) : base(psm)
     {
         isRootState = true;
-        InitializeSubState();
     }
 
     float timer;
@@ -18,33 +17,34 @@ public class PlayerWallSlideState : PlayerBaseState
         context.CheckIfGrounded();
         if (context.IsGrounded)
         {
-            SwitchState(factory.Grounded());
+            SwitchState(context.GroundedState);
         }
         if (context.Controls.Player.Jump.IsPressed())
         {
-            SwitchState(factory.WallJump());
+            SwitchState(context.WallJumpState);
         }
         if(timer <= 0)
         {
             context.SetWallSlideExpired(true);
-            SwitchState(factory.Fall());
+            SwitchState(context.FallState);
         }
         if (context.IsTouchingWallLeft && inputX >= 0)
         {
-            SwitchState(factory.Fall());
+            SwitchState(context.FallState);
         }
         if(context.IsTouchingWallRight && inputX <= 0)
         {
-            SwitchState(factory.Fall());
+            SwitchState(context.FallState);
         }
         if (!context.IsTouchingWall)
         {
-            SwitchState(factory.Fall());
+            SwitchState(context.FallState);
         }
     }
 
     public override void EnterState()
     {
+        InitializeSubState();
         timer = 0.5f;
     }
 
@@ -61,7 +61,7 @@ public class PlayerWallSlideState : PlayerBaseState
 
     public override void InitializeSubState()
     {
-        SetSubState(factory.Empty());
+        SetSubState(context.EmptyState);
     }
 
     public override void UpdateState()
