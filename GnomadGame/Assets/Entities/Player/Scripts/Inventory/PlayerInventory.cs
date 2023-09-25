@@ -41,11 +41,17 @@ namespace PlayerInventory {
         {
             //var testObject = gameObject.AddComponent<TestItem>();
             grid = new(3, 3, (int)Grid.CellStatus.Locked);
+            this[0, 0] = (int)Grid.CellStatus.Empty;
+            this[1, 0] = (int)Grid.CellStatus.Empty;
             this[1, 1] = (int)Grid.CellStatus.Empty;
             cellList = new();
             itemList = new();
             //itemPositions.Add(jasonItem, new(0, 0));
             backpackRectTransform = backpack.GetComponent<RectTransform>();
+            if(TryPlaceItem(jasonItem, new(0, 0)))
+            {
+                Debug.Log("HELLO WORLD");
+            }
 
             foreach (var x in grid)
             {
@@ -53,7 +59,7 @@ namespace PlayerInventory {
             }
 
             // Initialize the inventory
-            InitialDrawInventoryToCanvas();
+            //RedrawInventoryToCanvas();
             CloseInventory();
         }
 
@@ -132,8 +138,19 @@ namespace PlayerInventory {
 
         }
 
-        public void InitialDrawInventoryToCanvas()
+        public void RedrawInventoryToCanvas()
         {
+            foreach (var x in cellList)
+            {
+                Destroy(x);
+            }
+            foreach (var x in itemList)
+            {
+                Destroy(x);
+            }
+            cellList.Clear();
+            itemList.Clear();
+
             var panelWidth = 1f / grid.NumColumns;
             var panelHeight = 1f / grid.NumRows;
 
@@ -212,24 +229,26 @@ namespace PlayerInventory {
             }
         }
 
-        public bool PlaceItem(BaseItem item, Vector2Int desiredPos)
+
+        public bool TryPlaceItem(BaseItem item, Vector2Int desiredPos)
         {
             Grid collGrid = item.GetGrid();
             if (grid.CheckCollisionWithGrid(ref collGrid, desiredPos))
             {
                 return false;
             }
-
             for (int i = desiredPos.x; i < collGrid.NumRows + desiredPos.x; i++)
             {
                 for (int j = desiredPos.y; j < collGrid.NumColumns + desiredPos.y; j++)
                 {
-                    if (collGrid[i-desiredPos.x, j-desiredPos.y] != (int)Grid.CellStatus.Empty)
+                    if (collGrid[i - desiredPos.x, j - desiredPos.y] != (int)Grid.CellStatus.Empty)
                     {
-                        grid[i, j] = collGrid[i-desiredPos.x, j-desiredPos.y];
+                        grid[i, j] = collGrid[i - desiredPos.x, j - desiredPos.y];
                     }
                 }
             }
+            itemPositions.Add(item, desiredPos);
+            RedrawInventoryToCanvas();
             return true;
         }
 
