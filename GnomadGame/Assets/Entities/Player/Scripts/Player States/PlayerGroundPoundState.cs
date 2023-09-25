@@ -12,7 +12,11 @@ public class PlayerGroundPoundState : PlayerBaseState
     public override void CheckSwitchStates()
     {
         context.CheckIfGrounded();
-        if (context.IsGrounded)
+        if (context.IsGPBounceQueued)
+        {
+            SwitchState(context.GPBounceState);
+        }
+        else if (context.IsGrounded)
         {
             SwitchState(context.GroundedState);
         }
@@ -29,7 +33,7 @@ public class PlayerGroundPoundState : PlayerBaseState
 
     public override void ExitState()
     {
-        Debug.Log("exiting");
+        //Debug.Log("exiting");
         context.SpriteRenderer.flipY = false; //will be changed when animations are added
         context.HatSpriteRenderer.enabled = true; //will be changed when animations are added
         context.rb.velocity = new(0, 0);

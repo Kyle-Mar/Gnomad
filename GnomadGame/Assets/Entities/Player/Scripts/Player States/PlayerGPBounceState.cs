@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class PlayerJumpState : PlayerBaseState
+public class PlayerGPBounceState : PlayerBaseState
 {
-    public PlayerJumpState(PlayerStateMachine psm) : base(psm)
+    public PlayerGPBounceState(PlayerStateMachine psm) : base(psm)
     {
         isRootState = true;
     }
 
-    float startJumpTime;
-    float maxJumpTime;
+    float startBounceTime;
+    float maxBounceTime;
 
     public override void CheckSwitchStates()
     {
@@ -30,7 +30,7 @@ public class PlayerJumpState : PlayerBaseState
             SwitchState(context.GroundPoundState);
             return;
         }
-        if(maxJumpTime < 0)
+        if(maxBounceTime < 0)
         {
             SwitchState(context.FallState);
         }
@@ -39,16 +39,17 @@ public class PlayerJumpState : PlayerBaseState
     public override void EnterState()
     {
         InitializeSubState();
-        startJumpTime = 0;
-        maxJumpTime = startJumpTime + MovementStats.maxJumpHeight;
-        context.rb.velocity = new Vector2(context.rb.velocity.x, MovementStats.jumpSpeed);
-        Object.Instantiate(context.JumpCloudParticles, context.Feet.position, Quaternion.identity);
+        context.IsGPBounceQueued = false;
+        Debug.Log("GroundPoundBounce state has been entered");
+        startBounceTime = 0;
+        maxBounceTime = startBounceTime + MovementStats.maxGPBounceHeight;
+        context.rb.velocity = new Vector2(context.rb.velocity.x, MovementStats.bounceSpeed);
 
     }
 
     public override void ExitState()
     {
-         context.rb.velocity = new(context.rb.velocity.x, context.rb.velocity.y / 3);
+         //context.rb.velocity = new(context.rb.velocity.x, context.rb.velocity.y / 3);
     }
 
     public override void InitializeSubState()
@@ -66,11 +67,11 @@ public class PlayerJumpState : PlayerBaseState
     public override void UpdateState()
     {
 
-        maxJumpTime -= Time.deltaTime;
+        maxBounceTime -= Time.deltaTime;
 
-        if (context.Controls.Player.Jump.IsPressed() && maxJumpTime > 0)
+        if (maxBounceTime > 0)
         {
-            context.rb.velocity = new(context.rb.velocity.x, MovementStats.jumpSpeed);
+            context.rb.velocity = new(context.rb.velocity.x, MovementStats.bounceSpeed);
         }
         CheckSwitchStates();
     }
