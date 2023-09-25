@@ -138,12 +138,7 @@ public class PlayerStateMachine : StateMachine
 
     public void CheckIfGrounded()
     {
-        //Debug.Log(col.bounds.extents);
-        RaycastHit2D hit = Physics2D.BoxCast(transform.position, col.bounds.extents * 2, 0f, -transform.up, 0.5f, groundLayerMask);
-        //Debug.Log(hit.collider.name);
-        //Debug.DrawRay(transform.position, -transform.up * col.bounds.extents.y * 2, Color.blue, .5f);
-
-        if (hit.collider && col.IsTouching(hit.collider, floorContactFilter))
+        if (ContextUtils.CheckIfGrounded(ref col, transform, ref floorContactFilter))
         {
             isGrounded = true;
             wallSlideExpired = false;
@@ -188,6 +183,7 @@ public class PlayerStateMachine : StateMachine
     private void UpdateMovementDirection(InputAction.CallbackContext cxt)
     {
        Vector2 inputVector = cxt.ReadValue<Vector2>();
+        Debug.Log(inputVector);
 
         if (inputVector == Vector2.left)
         {
@@ -239,7 +235,6 @@ public class PlayerStateMachine : StateMachine
                 float angle = Vector2.SignedAngle(Vector2.up, contact.normal);
                 angle = Mathf.RoundToInt(angle);
 
-                //Debug.Log(angle);
 
                 isTouchingWallLeft = (angle == -90f) ? true : false;
                 isTouchingWallRight = (angle == 90f) ? true : false;
