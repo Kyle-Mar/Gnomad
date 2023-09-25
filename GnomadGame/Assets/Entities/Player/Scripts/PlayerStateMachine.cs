@@ -179,6 +179,7 @@ public class PlayerStateMachine : StateMachine
     private void UpdateMovementDirection(InputAction.CallbackContext cxt)
     {
        Vector2 inputVector = cxt.ReadValue<Vector2>();
+        Debug.Log(inputVector);
 
         if (inputVector == Vector2.left)
         {
