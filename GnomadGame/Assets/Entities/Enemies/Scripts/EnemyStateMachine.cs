@@ -108,6 +108,16 @@ public class EnemyStateMachine : StateMachine
         }
     }
 
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        /*
+        if (collision.gameObject.TryGetComponent<IDamagable.IDamagable>(out damagable))
+        {
+            // Apply Damage to Player
+            damagable.damage(10f);
+        }
+        */
+    }
 
     public void FlipComponents()
     {
@@ -117,5 +127,22 @@ public class EnemyStateMachine : StateMachine
     private void InstantiateStates()
     {
         //instance all states here
+    }
+
+    // Can probably be moved to a different script,
+    // This is just here temporarily
+    public void OnCollisionEnter2D(Collision collision)
+    {
+        IDamageable damageable = null;
+        
+        if (collision.gameObject.tag == "player")
+        {
+            if (collision.gameObject.TryGetComponent<IDamageable>(out damageable))
+            {
+                damageable.Damage(10f);
+                Debug.Log("Damaging Player");
+            }
+        }
+        
     }
 }

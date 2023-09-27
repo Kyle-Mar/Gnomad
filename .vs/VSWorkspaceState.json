@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\GnomadGame",
+    "\\GnomadGame\\Assets",
+    "\\GnomadGame\\Assets\\Entities",
+    "\\GnomadGame\\Assets\\Entities\\Enemies",
+    "\\GnomadGame\\Assets\\Entities\\Enemies\\Scripts",
+    "\\GnomadGame\\Assets\\Entities\\Enemies\\Scripts\\States"
+  ],
+  "SelectedNode": "\\GnomadGame\\Assets\\Entities\\Enemies\\Scripts\\States\\EnemyEmptyState.cs",
+  "PreviewInSolutionExplorer": false
+}

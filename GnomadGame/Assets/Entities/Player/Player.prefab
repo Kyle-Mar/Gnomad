@@ -199,7 +199,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.22097626, y: 2.2148547}
@@ -964,11 +964,13 @@ GameObject:
   m_Component:
   - component: {fileID: 4446419450577938882}
   - component: {fileID: 4446419450577938880}
+  - component: {fileID: 4460034375800154194}
   - component: {fileID: 4446419450577938911}
   - component: {fileID: 4446419450577938884}
   - component: {fileID: 8820136772556286469}
   - component: {fileID: 5543262545783957246}
   - component: {fileID: 5328745095105525767}
+  - component: {fileID: 8667429524613491808}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -1024,6 +1026,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.7468796, y: 1.5}
   m_EdgeRadius: 0.04
+--- !u!114 &4460034375800154194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4446419450577938910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd641dd00fe97a84fbb83e4819f9beb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageCooldown: 1
+  canTakeDamage: 1
 --- !u!50 &4446419450577938911
 Rigidbody2D:
   serializedVersion: 4
@@ -1139,8 +1155,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6f0fd13debd54445af68798958ff6ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 3
-  height: 3
+  lockedCellPrefab: {fileID: 0}
+  emptyCellPrefab: {fileID: 0}
+  itemPrefab: {fileID: 0}
+  selectedCellIcon: {fileID: 0}
+  jasonItem: {fileID: 0}
+  canvas: {fileID: 0}
+  backpack: {fileID: 0}
+  isOpen: 0
+  backpackRectTransform: {fileID: 0}
+--- !u!114 &8667429524613491808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4446419450577938910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 210a91e26a88f40458363f8e64b9df7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canDamage: 0
 --- !u!1 &5103359430112115205
 GameObject:
   m_ObjectHideFlags: 0
