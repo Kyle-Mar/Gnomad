@@ -112,6 +112,9 @@ namespace PlayerInventory
             numColumns = tmp;
         }
 
+        /// <summary>
+        /// Outputs a txt file to the ScriptAssemblies folder (Not Ideal)
+        /// </summary>
         public void OutputTXT()
         {
             string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -172,16 +175,23 @@ namespace PlayerInventory
             return false;
         }
 
+        /// <summary>
+        /// Used for foreach loops
+        /// </summary>
+        /// <returns>Grid IEnumerator</returns>
         public IEnumerator<GridTuple> GetEnumerator()
         {
             return new GridEnumerator(this.matrix, this.numColumns, this.numRows);
         }
 
+        /// <summary>
+        /// generic thing idk what its used for.
+        /// </summary>
+        /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return new GridEnumerator(this.matrix, this.numColumns, this.numRows);
         }
-
 
         public class GridEnumerator : IEnumerator<GridTuple>
         {
@@ -196,6 +206,7 @@ namespace PlayerInventory
             GridTuple IEnumerator<GridTuple>.Current => Current;
 
 
+            // initializes the values with the grid's values
             public GridEnumerator(int[] matrix, int numColumns, int numRows)
             {
                 this.matrix = matrix;
@@ -208,6 +219,7 @@ namespace PlayerInventory
 
             }
 
+            // goes to the next item in the grid.
             public bool MoveNext()
             {
                 if (idx > matrix.Length - 1)
@@ -221,6 +233,7 @@ namespace PlayerInventory
                 return true;
             }
 
+            // resets the values
             public void Reset()
             {
                 this.curCol = 0;
