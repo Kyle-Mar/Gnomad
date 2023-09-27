@@ -287,7 +287,7 @@ public class PlayerStateMachine : StateMachine
     public void ReloadScene(InputAction.CallbackContext cxt)
     {
         // Load Scene Stuff Here
-        StartCoroutine(LevelManager.LoadSceneAsync("reloadScene"));
+        //StartCoroutine(LevelManager.LoadSceneAsync("reloadScene"));
     }
 
     private void InstantiateStates()

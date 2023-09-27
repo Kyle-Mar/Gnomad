@@ -11,7 +11,7 @@ namespace PlayerInventory{
     [CreateAssetMenu(menuName = "Items/Create New Item", order = 1)]
     public class BaseItem : ScriptableObject
     {
-        
+        // The grid that represents where the item is and is not.
         public Grid grid = new(1,1,0);
         public Texture2D itemTexture;
         //unset value flag but not nullable because that's weird with 0's
@@ -64,14 +64,18 @@ namespace PlayerInventory{
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
-            //EditorGUILayout.PropertyField(grid);
             var item = target as BaseItem;
+
+            // Labels and Floats for the properties of the grid.
             EditorGUILayout.LabelField("NumColumns");
             EditorGUILayout.FloatField(item.grid.NumColumns);
             EditorGUILayout.LabelField("NumRows");
             EditorGUILayout.FloatField(item.grid.NumRows);
+            
+            // if the row button is clicked
             if (GUILayout.Button("Add Row"))
             {
+                // add a row, make a new grid and set the grid to the new grid.
                 for(int i = 0; i < item.grid.NumColumns; i++)
                 {
                     values.Add(0);
@@ -83,6 +87,7 @@ namespace PlayerInventory{
             }
             if (GUILayout.Button("Remove Row"))
             {
+                // remove a row, make a new grid and set the grid to the new grid.
                 for (int i = 0; i < item.grid.NumColumns; i++)
                 {
                     values.RemoveAt(values.Count - 1);
@@ -94,6 +99,7 @@ namespace PlayerInventory{
             }
             if (GUILayout.Button("Add Column"))
             {
+                // add a column, make a new grid and set the grid to the new grid.
                 for (int i = 0; i < item.grid.NumRows; i++)
                 {
                     values.Add(0);
@@ -105,6 +111,7 @@ namespace PlayerInventory{
             }
             if (GUILayout.Button("Remove Column"))
             {
+                // remove a column, make a new grid and set the grid to the new grid.
                 for (int i = 0; i < item.grid.NumRows; i++)
                 {
                     values.RemoveAt(values.Count -1);
@@ -114,19 +121,25 @@ namespace PlayerInventory{
                 System.Array.Copy(item.grid.matrix, arr, (item.grid.NumRows) * item.grid.NumColumns);
                 item.grid.matrix = arr;
             }
+
+            // update the properties of the object.
+            // this updates the properties of the BaseItem we're editing.
             serializedObject.Update();
 
-
+            // draw the rows and columns of the grid.
             EditorGUILayout.BeginHorizontal();
             for (int i = 0, j = 0; i < values.Count; i++, j++)
             {
+                // new line if we're exceeding numcolumns
                 if (j >= item.grid.NumColumns)
                 {
                     EditorGUILayout.EndHorizontal();
                     EditorGUILayout.BeginHorizontal();
                     j = 0;
                 }
+                // then make a field for each number and set the displayed value to the grid value.
                 var num = EditorGUILayout.IntField(item.grid.matrix[i], GUILayout.Width(50f));
+                // make sure the value is either 0 or the item id, anything else should be considered invalid and set to the item id.
                 if(num == item.ItemID)
                 {
                     values[i] = item.ItemID;
@@ -141,41 +154,15 @@ namespace PlayerInventory{
                 }
             }
             EditorGUILayout.EndHorizontal();
+            // set the values.
             for(int i = 0; i<item.grid.matrix.Length; i++)
             {
                 item.grid.matrix[i] = values[i];
             }
+            // update Baseitem
             serializedObject.Update();
 
         }
-    }
-
-
-    [CustomEditor(typeof(Grid))]
-    public class GridEditor : UnityEditor.Editor
-    {
-        SerializedProperty matrix;
-        private void OnEnable()
-        {
-            // link the property.
-            matrix = serializedObject.FindProperty("matrix");
-        }
-
-        public override void OnInspectorGUI()
-        {
-            Debug.Log(matrix.type);
-            DrawDefaultInspector();
-            
-            //Load the values from the object.
-            serializedObject.Update();
-
-            for(int i =0; i < matrix.arraySize; i++)
-            {
-                EditorGUILayout.IntField(matrix.GetArrayElementAtIndex(i).intValue);
-            }
-            serializedObject.ApplyModifiedProperties();
-        }
-
     }
     #endif
 }

@@ -8,6 +8,9 @@ using UnityEngine;
 namespace PlayerInventory
 {
 
+    /// <summary>
+    /// return type for Enumerables (used in foreach statements)
+    /// </summary>
     public struct GridTuple
     {
         public int value;
@@ -20,18 +23,28 @@ namespace PlayerInventory
     {
         int numColumns;
         int numRows;
+        // a flattened array because 2d arrays are hard to serialize.
         public int[] matrix;
 
+        // at some point it may be worth it to write bodies in here to automatically rebuild the grid when the value is changed. For right now, we don't do that.
         public int NumColumns { get { return numColumns; } set { numColumns = value; } }
         public int NumRows { get { return numRows; } set { numRows = value; } }
 
-
+        /// <summary>
+        /// Determines the status of the InventoryCell. Cells may also be > 1 if they are occupied by an item instead.
+        /// </summary>
         public enum CellStatus
         {
             Locked = -1,
             Empty = 0,
         }
-
+        
+        /// <summary>
+        /// Initializes a Grid with r by c cells
+        /// </summary>
+        /// <param name="r">number of rows</param>
+        /// <param name="c">number of columns</param>
+        /// <param name="defaultValue">the value that the grid should be initialized to</param>
         public Grid(int r, int c, int defaultValue)
         {
             numRows = r;
@@ -44,6 +57,12 @@ namespace PlayerInventory
             }
         }
 
+        /// <summary>
+        /// to do use Grid[r,c] and return the value from the matrix flattened array
+        /// </summary>
+        /// <param name="r">Row Number</param>
+        /// <param name="c">Column Number</param>
+        /// <returns></returns>
         public int this[int r, int c]
         {
             get
@@ -56,6 +75,9 @@ namespace PlayerInventory
             }
         }
 
+        /// <summary>
+        /// Reverses the columns in the grid. Cannot be converted to IEnumerable because we have to go halfway throught the array only
+        /// </summary>
         public void ReverseColumns()
         {
             for (int r = 0; r < numRows; r++)
@@ -68,6 +90,10 @@ namespace PlayerInventory
                 }
             }
         }
+
+        /// <summary>
+        /// Transposes the grid as if it were a matrix.
+        /// </summary>
         public void Transpose()
         {
             var newArray = new int[numColumns * numRows];
@@ -86,6 +112,9 @@ namespace PlayerInventory
             numColumns = tmp;
         }
 
+        /// <summary>
+        /// Outputs a txt file to the ScriptAssemblies folder (Not Ideal)
+        /// </summary>
         public void OutputTXT()
         {
             string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -146,16 +175,23 @@ namespace PlayerInventory
             return false;
         }
 
+        /// <summary>
+        /// Used for foreach loops
+        /// </summary>
+        /// <returns>Grid IEnumerator</returns>
         public IEnumerator<GridTuple> GetEnumerator()
         {
             return new GridEnumerator(this.matrix, this.numColumns, this.numRows);
         }
 
+        /// <summary>
+        /// generic thing idk what its used for.
+        /// </summary>
+        /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return new GridEnumerator(this.matrix, this.numColumns, this.numRows);
         }
-
 
         public class GridEnumerator : IEnumerator<GridTuple>
         {
@@ -170,6 +206,7 @@ namespace PlayerInventory
             GridTuple IEnumerator<GridTuple>.Current => Current;
 
 
+            // initializes the values with the grid's values
             public GridEnumerator(int[] matrix, int numColumns, int numRows)
             {
                 this.matrix = matrix;
@@ -182,6 +219,7 @@ namespace PlayerInventory
 
             }
 
+            // goes to the next item in the grid.
             public bool MoveNext()
             {
                 if (idx > matrix.Length - 1)
@@ -195,6 +233,7 @@ namespace PlayerInventory
                 return true;
             }
 
+            // resets the values
             public void Reset()
             {
                 this.curCol = 0;
