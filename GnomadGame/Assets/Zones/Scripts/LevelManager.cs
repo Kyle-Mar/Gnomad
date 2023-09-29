@@ -60,8 +60,17 @@ public static class LevelManager
         }
     }
 
-    public static IEnumerator LoadSceneAsync(string sceneName)
+    public static IEnumerator LoadSceneAsync(SceneInfo sceneInfo)
     {
+        var sceneName = sceneInfo.name;
+        
+        int idx = sceneInfo.adjacentScenes.FindIndex(0, x => x.name == sceneName);
+        if (idx == -1)
+        {
+            yield return null;
+        }
+        
+        var doorPos = sceneInfo.DoorPositions[idx];
         if (sceneName == "reloadScene")
         {
             sceneName = SceneManager.GetActiveScene().name;
@@ -73,6 +82,12 @@ public static class LevelManager
         {
             yield return null;
         }
+        Scene loadedScene = SceneManager.GetSceneByName(sceneName);
+        GameObject[] gameObjects = loadedScene.GetRootGameObjects();
+        CompositeCollider2D col = new();
+
+        Vector3 doorPosition = doorPos.transform.position;
+        Vector3 curRoomCenter = Vector3.zero;
     }
 
     public static IEnumerator UnloadSceneAsync(string sceneName)

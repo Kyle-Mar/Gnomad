@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using Gnomad.Utils;
 
 public class SceneLoader : MonoBehaviour
 {
     public SceneInfo sceneInfo;
-
     public List<GameObject> DoorPositions = new(); // this is related in order to the sceneInfo's adjacent scene list
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -80,7 +80,7 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadScene(SceneInfo scene)
     {
-        StartCoroutine(LevelManager.LoadSceneAsync(scene.name));
+        StartCoroutine(LevelManager.LoadSceneAsync(sceneInfo));
         scene.isLoaded = true;
         return;
     }

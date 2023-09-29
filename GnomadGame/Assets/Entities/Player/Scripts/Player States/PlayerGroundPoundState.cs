@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Gnomad.Utils;
 
 public class PlayerGroundPoundState : PlayerBaseState
 {

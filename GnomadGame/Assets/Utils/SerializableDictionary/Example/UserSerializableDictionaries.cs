@@ -16,6 +16,9 @@ public class ColorArrayStorage : SerializableDictionary.Storage<Color[]> {}
 public class StringColorArrayDictionary : SerializableDictionary<string, Color[], ColorArrayStorage> {}
 
 [Serializable]
+public class IntIntDictionary : SerializableDictionary<int, int> { }
+
+[Serializable]
 public class MyClass
 {
     public int i;

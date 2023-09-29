@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using Eflatun.SceneReference;
+using Gnomad.Utils;
+using System;
 
 
 
@@ -15,6 +17,15 @@ using UnityEngine.SceneManagement;
 [CreateAssetMenu(menuName = "SceneInfo/New", order = 1)]
 public class SceneInfo : ScriptableObject
 {
+
+    public SceneReference scene;
+    public IDictionary<int, int> IntIntDictionary
+    {
+        get { return DoorConnections; }
+        set { DoorConnections.CopyFrom(value); }
+    }
     public List<SceneInfo> adjacentScenes;
     public bool isLoaded { get; set; }
+    public List<GameObject> DoorPositions; // this is related in order to the sceneInfo's adjacent scene list
+    public IntIntDictionary DoorConnections = new IntIntDictionary{ { 0,0 } };
 }
