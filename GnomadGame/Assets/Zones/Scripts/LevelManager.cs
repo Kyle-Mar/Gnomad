@@ -9,6 +9,7 @@ public static class LevelManager
     [SerializeField] static List<SceneInfo> loadedScenes = new List<SceneInfo>();
     [SerializeField] static float timeTillNextUpdate = 0f;
     const float NextUpdateOffset = 1f;
+    public static SceneInfo OccupiedScene;
 
     /// <summary>
     /// Updates the loaded scenes.
@@ -35,6 +36,7 @@ public static class LevelManager
                 loader.LoadScene(occupiedScene);
             }
         }
+        OccupiedScene = occupiedScene;
         foreach (SceneInfo scene in loadedScenes)
         {
             if (!connectedScenes.Contains(scene) && scene != occupiedScene)
@@ -60,17 +62,9 @@ public static class LevelManager
         }
     }
 
-    public static IEnumerator LoadSceneAsync(SceneInfo sceneInfo)
+    public static IEnumerator LoadSceneAsync(string sceneName)
     {
-        var sceneName = sceneInfo.name;
         
-        int idx = sceneInfo.adjacentScenes.FindIndex(0, x => x.name == sceneName);
-        if (idx == -1)
-        {
-            yield return null;
-        }
-        
-        var doorPos = sceneInfo.DoorPositions[idx];
         if (sceneName == "reloadScene")
         {
             sceneName = SceneManager.GetActiveScene().name;
@@ -82,12 +76,6 @@ public static class LevelManager
         {
             yield return null;
         }
-        Scene loadedScene = SceneManager.GetSceneByName(sceneName);
-        GameObject[] gameObjects = loadedScene.GetRootGameObjects();
-        CompositeCollider2D col = new();
-
-        Vector3 doorPosition = doorPos.transform.position;
-        Vector3 curRoomCenter = Vector3.zero;
     }
 
     public static IEnumerator UnloadSceneAsync(string sceneName)

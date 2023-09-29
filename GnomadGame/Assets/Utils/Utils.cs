@@ -15,5 +15,10 @@ namespace Gnomad.Utils
         {
             return new Vector3(Mathf.Sign(vec.x), Mathf.Sign(vec.y), Mathf.Sign(vec.z));
         }
+
+        public static Vector3Int Vector3ToVector3Int(Vector3 vec)
+        {
+            return new Vector3Int((int)vec.x, (int)vec.y, (int)vec.z);
+        }
     }
 }
