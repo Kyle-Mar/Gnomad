@@ -30,7 +30,7 @@ public class PlayerJumpState : PlayerBaseState
             SwitchState(context.GroundPoundState);
             return;
         }
-        if(maxJumpTime < 0)
+        if(maxJumpTime < 0 || !context.Controls.Player.Jump.IsPressed())
         {
             SwitchState(context.FallState);
         }
