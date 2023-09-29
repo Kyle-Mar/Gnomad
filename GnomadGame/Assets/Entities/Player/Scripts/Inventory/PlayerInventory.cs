@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using System.Linq;
 
 namespace PlayerInventory {
@@ -27,6 +28,8 @@ namespace PlayerInventory {
         Vector2Int cursorPosition;
         Grid grid;
         Dictionary<BaseItem, Vector2Int> itemPositions = new();
+        [SerializeField] GraphicRaycaster graphicRaycaster;
+        [SerializeField] EventSystem eventSystem;
 
         int this[int i, int j]
         {
@@ -47,8 +50,8 @@ namespace PlayerInventory {
             cellList = new();
             itemList = new();
             //itemPositions.Add(jasonItem, new(0, 0));
-            //backpackRectTransform = backpack.GetComponent<RectTransform>();
-            /*if(TryPlaceItem(jasonItem, new(0, 0)))
+            backpackRectTransform = backpack.GetComponent<RectTransform>();
+            if(TryPlaceItem(jasonItem, new(0, 0)))
             {
                 Debug.Log("HELLO WORLD");
             }
@@ -60,17 +63,18 @@ namespace PlayerInventory {
 
             // Initialize the inventory
             //RedrawInventoryToCanvas();
-            CloseInventory();*/
+            CloseInventory();
         }
 
         private void Start()
         {
-            //controls = GetComponent<PlayerStateMachine>().Controls;
+            eventSystem = FindObjectOfType(typeof(EventSystem)) as EventSystem;
+            controls = GetComponent<PlayerStateMachine>().Controls;
         }
 
         private void Update()
         {
-            /*if(!isOpen && controls.Inventory.OpenClose.WasPressedThisFrame())
+            if(!isOpen && controls.Inventory.OpenClose.WasPressedThisFrame())
             {
                 isOpen = true;
                 OpenInventory();
@@ -115,8 +119,23 @@ namespace PlayerInventory {
                     }
 
                 }
+
+
+                if (controls.Inventory.PickupPlace.WasPressedThisFrame())
+                {
+                    PointerEventData pointerEventData = new(eventSystem);
+                    pointerEventData.position = cursor.transform.position;
+                    List<RaycastResult> results = new();
+                    graphicRaycaster.Raycast(pointerEventData, results);
+
+                    foreach(var x in results)
+                    {
+                        //if(TryGetComponent<>)
+                        //Debug.Log(x.gameObject.name);
+                    }
+                }
                 UpdateInventoryAlreadyOnCanvas();
-            }*/
+            }
         }
 
         //If marked dirty, we'll need to do a full refresh?
