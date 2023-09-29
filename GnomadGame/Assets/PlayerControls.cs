@@ -838,6 +838,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PickupPlace"",
+                    ""type"": ""Button"",
+                    ""id"": ""24a086e4-cee5-470b-9b40-d41b86d6dfdf"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1016,6 +1025,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""MoveCursorY"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""66628f8c-a5ca-4c5b-9b51-db10ca9bd7e7"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PickupPlace"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3ffcc702-9366-4c28-9029-ebd2a7e87220"",
+                    ""path"": ""<XInputController>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PickupPlace"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1109,6 +1140,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Inventory_OpenClose = m_Inventory.FindAction("OpenClose", throwIfNotFound: true);
         m_Inventory_MoveCursorX = m_Inventory.FindAction("MoveCursorX", throwIfNotFound: true);
         m_Inventory_MoveCursorY = m_Inventory.FindAction("MoveCursorY", throwIfNotFound: true);
+        m_Inventory_PickupPlace = m_Inventory.FindAction("PickupPlace", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1385,6 +1417,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Inventory_OpenClose;
     private readonly InputAction m_Inventory_MoveCursorX;
     private readonly InputAction m_Inventory_MoveCursorY;
+    private readonly InputAction m_Inventory_PickupPlace;
     public struct InventoryActions
     {
         private @PlayerControls m_Wrapper;
@@ -1392,6 +1425,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @OpenClose => m_Wrapper.m_Inventory_OpenClose;
         public InputAction @MoveCursorX => m_Wrapper.m_Inventory_MoveCursorX;
         public InputAction @MoveCursorY => m_Wrapper.m_Inventory_MoveCursorY;
+        public InputAction @PickupPlace => m_Wrapper.m_Inventory_PickupPlace;
         public InputActionMap Get() { return m_Wrapper.m_Inventory; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1410,6 +1444,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @MoveCursorY.started += instance.OnMoveCursorY;
             @MoveCursorY.performed += instance.OnMoveCursorY;
             @MoveCursorY.canceled += instance.OnMoveCursorY;
+            @PickupPlace.started += instance.OnPickupPlace;
+            @PickupPlace.performed += instance.OnPickupPlace;
+            @PickupPlace.canceled += instance.OnPickupPlace;
         }
 
         private void UnregisterCallbacks(IInventoryActions instance)
@@ -1423,6 +1460,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @MoveCursorY.started -= instance.OnMoveCursorY;
             @MoveCursorY.performed -= instance.OnMoveCursorY;
             @MoveCursorY.canceled -= instance.OnMoveCursorY;
+            @PickupPlace.started -= instance.OnPickupPlace;
+            @PickupPlace.performed -= instance.OnPickupPlace;
+            @PickupPlace.canceled -= instance.OnPickupPlace;
         }
 
         public void RemoveCallbacks(IInventoryActions instance)
@@ -1513,5 +1553,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnOpenClose(InputAction.CallbackContext context);
         void OnMoveCursorX(InputAction.CallbackContext context);
         void OnMoveCursorY(InputAction.CallbackContext context);
+        void OnPickupPlace(InputAction.CallbackContext context);
     }
 }

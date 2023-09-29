@@ -816,6 +816,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "PickupPlace",
+                    "type": "Button",
+                    "id": "24a086e4-cee5-470b-9b40-d41b86d6dfdf",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -992,6 +1001,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "MoveCursorY",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "66628f8c-a5ca-4c5b-9b51-db10ca9bd7e7",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PickupPlace",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3ffcc702-9366-4c28-9029-ebd2a7e87220",
+                    "path": "<XInputController>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PickupPlace",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
