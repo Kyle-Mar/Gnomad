@@ -8,7 +8,7 @@ public class InitialSceneLoad : MonoBehaviour
     
     void Start()
     {
-        //StartCoroutine(LevelManager.LoadSceneAsync("TestScene1"));
+        StartCoroutine(LevelManager.LoadSceneAsync("TestScene1"));
     }
 
     // Update is called once per frame

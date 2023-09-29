@@ -26,6 +26,6 @@ public class SceneInfo : ScriptableObject
     }
     public List<SceneInfo> adjacentScenes;
     public bool isLoaded { get; set; }
-    public List<GameObject> DoorPositions; // this is related in order to the sceneInfo's adjacent scene list
+    public List<Vector3> DoorPositions = new(); // this is related in order to the sceneInfo's adjacent scene list
     public IntIntDictionary DoorConnections = new IntIntDictionary{ { 0,0 } };
 }
