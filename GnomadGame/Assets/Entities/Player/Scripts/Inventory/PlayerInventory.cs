@@ -12,24 +12,37 @@ namespace PlayerInventory {
     [RequireComponent(typeof(PlayerStateMachine))]
     public class PlayerInventory : MonoBehaviour
     {
+        #region IconPrefabs
         [SerializeField] Object lockedCellPrefab;
         [SerializeField] Object emptyCellPrefab;
         [SerializeField] Object itemPrefab;
         [SerializeField] Object selectedCellIcon;
-        [SerializeField] BaseItem jasonItem;
-        [SerializeField] Canvas canvas;
-        [SerializeField] GameObject backpack;
-        [SerializeField] bool isOpen;
-        [SerializeField] RectTransform backpackRectTransform;
-        PlayerControls controls;
-        List<GameObject> cellList;
-        List<GameObject> itemList;
-        GameObject cursor;
-        Vector2Int cursorPosition;
-        Grid grid;
-        Dictionary<BaseItem, Vector2Int> itemPositions = new();
+        #endregion
+        #region UIRaycasting
         [SerializeField] GraphicRaycaster graphicRaycaster;
         [SerializeField] EventSystem eventSystem;
+        #endregion
+        #region PlayerInput
+        PlayerControls controls;
+        GameObject cursor;
+        Vector2Int cursorPosition;
+        #endregion
+        #region Canvas Stuff
+        [SerializeField] RectTransform backpackRectTransform;
+        [SerializeField] GameObject backpack;
+        [SerializeField] Canvas canvas;
+        #endregion
+        
+        [SerializeField] BaseItem jasonItem;//temporary. we will get it from the other part of the inventory soon.
+
+        [SerializeField] bool isOpen;
+        List<GameObject> cellList;
+        List<GameObject> itemList;
+        Grid grid;
+        Dictionary<BaseItem, Vector2Int> itemPositions = new();
+
+        public bool IsOpen => isOpen;
+
 
         int this[int i, int j]
         {
@@ -42,14 +55,12 @@ namespace PlayerInventory {
 
         private void Awake()
         {
-            //var testObject = gameObject.AddComponent<TestItem>();
             grid = new(3, 3, (int)Grid.CellStatus.Locked);
             this[0, 0] = (int)Grid.CellStatus.Empty;
             this[1, 0] = (int)Grid.CellStatus.Empty;
             this[1, 1] = (int)Grid.CellStatus.Empty;
             cellList = new();
             itemList = new();
-            //itemPositions.Add(jasonItem, new(0, 0));
             backpackRectTransform = backpack.GetComponent<RectTransform>();
             if(TryPlaceItem(jasonItem, new(0, 0)))
             {
@@ -74,70 +85,80 @@ namespace PlayerInventory {
 
         private void Update()
         {
-            if(!isOpen && controls.Inventory.OpenClose.WasPressedThisFrame())
+            OpenCloseInput();
+            if (isOpen)
+            {
+                CursorMoveInput();
+                PickupPlaceInput();
+                UpdateInventoryAlreadyOnCanvas();
+            }
+        }
+        
+        void OpenCloseInput()
+        {
+            if (!isOpen && controls.Inventory.OpenClose.WasPressedThisFrame())
             {
                 isOpen = true;
                 OpenInventory();
-                
+
             }
-            else if(isOpen && controls.Inventory.OpenClose.WasPressedThisFrame())
+            else if (isOpen && controls.Inventory.OpenClose.WasPressedThisFrame())
             {
                 isOpen = false;
                 CloseInventory();
             }
+        }
 
-            if (isOpen)
+        void CursorMoveInput()
+        {
+            // I have no idea why this is so reversed but it is so deal with it.
+            if (controls.Inventory.MoveCursorX.WasPressedThisFrame())
             {
-                //Vector2 invMoveVector = controls.Player.Move.ReadValue<Vector2>();
-
-                // I have no idea why this is so reversed but it is so deal with it.
-                if (controls.Inventory.MoveCursorX.WasPressedThisFrame())
+                float inputX = controls.Inventory.MoveCursorX.ReadValue<Vector2>().x;
+                Debug.Log(inputX);
+                if (inputX > 0)
                 {
-                    float inputX = controls.Inventory.MoveCursorX.ReadValue<Vector2>().x;
-                    Debug.Log(inputX);
-                    if (inputX > 0)
-                    {
-                        cursorPosition.x = Mathf.Clamp(cursorPosition.x + 1, 0, grid.NumColumns-1);
-                    }
-                    else if (inputX < 0)
-                    {
-                        cursorPosition.x = Mathf.Clamp(cursorPosition.x - 1, 0, grid.NumColumns-1);
-                    }
-                    
+                    cursorPosition.x = Mathf.Clamp(cursorPosition.x + 1, 0, grid.NumColumns - 1);
                 }
-                if (controls.Inventory.MoveCursorY.WasPressedThisFrame())
+                else if (inputX < 0)
                 {
-                    float inputY = controls.Inventory.MoveCursorY.ReadValue<Vector2>().y;
-                    Debug.Log(inputY);
-                    if (inputY > 0)
-                    {
-                        cursorPosition.y = Mathf.Clamp(cursorPosition.y - 1, 0, grid.NumColumns - 1);
-                    }
-                    else if (inputY < 0)
-                    {
-                        cursorPosition.y = Mathf.Clamp(cursorPosition.y + 1, 0, grid.NumColumns - 1);
-                    }
-
+                    cursorPosition.x = Mathf.Clamp(cursorPosition.x - 1, 0, grid.NumColumns - 1);
                 }
 
-
-                if (controls.Inventory.PickupPlace.WasPressedThisFrame())
+            }
+            if (controls.Inventory.MoveCursorY.WasPressedThisFrame())
+            {
+                float inputY = controls.Inventory.MoveCursorY.ReadValue<Vector2>().y;
+                Debug.Log(inputY);
+                if (inputY > 0)
                 {
-                    PointerEventData pointerEventData = new(eventSystem);
-                    pointerEventData.position = cursor.transform.position;
-                    List<RaycastResult> results = new();
-                    graphicRaycaster.Raycast(pointerEventData, results);
-
-                    foreach(var x in results)
-                    {
-                        //if(TryGetComponent<>)
-                        //Debug.Log(x.gameObject.name);
-                    }
+                    cursorPosition.y = Mathf.Clamp(cursorPosition.y - 1, 0, grid.NumColumns - 1);
                 }
-                UpdateInventoryAlreadyOnCanvas();
+                else if (inputY < 0)
+                {
+                    cursorPosition.y = Mathf.Clamp(cursorPosition.y + 1, 0, grid.NumColumns - 1);
+                }
+
             }
         }
 
+        void PickupPlaceInput()
+        {
+            if (controls.Inventory.PickupPlace.WasPressedThisFrame())
+            {
+                PointerEventData pointerEventData = new(eventSystem);
+                pointerEventData.position = cursor.transform.position;
+                List<RaycastResult> results = new();
+                graphicRaycaster.Raycast(pointerEventData, results);
+
+                foreach (var x in results)
+                {
+                    //if(TryGetComponent<>)
+                    //Debug.Log(x.gameObject.name);
+                }
+            }
+        }
+        
         //If marked dirty, we'll need to do a full refresh?
         void UpdateInventoryAlreadyOnCanvas()
         {
@@ -224,6 +245,14 @@ namespace PlayerInventory {
             cursor = cur;
         }
 
+        /*
+        This is inefficent: 
+        it could be done like this:
+        -Canvas
+            -CellGroup : Call setactive here.
+                -All the cells
+         
+        */
         void CloseInventory()
         {
             foreach (var x in cellList)
@@ -247,7 +276,6 @@ namespace PlayerInventory {
                 x.SetActive(true);
             }
         }
-
 
         public bool TryPlaceItem(BaseItem item, Vector2Int desiredPos)
         {
