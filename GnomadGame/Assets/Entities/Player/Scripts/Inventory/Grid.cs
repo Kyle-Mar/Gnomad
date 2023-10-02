@@ -135,6 +135,12 @@ namespace PlayerInventory
             writer.Close();
         }
 
+        public bool IsInvalidCell(Grid grid, int r, int c)
+        {
+             Debug.Log(grid[r, c]);
+             return (grid[r, c] != (int)CellStatus.Empty);
+        }
+
         /// <summary>
         /// Compares two grids for collisions
         /// </summary>
@@ -146,25 +152,25 @@ namespace PlayerInventory
 
             // Will placing this grid on top of the other grid place the grid outside of the larger grid?
             // Or: Does it fit?
-            if (collGrid.numRows + desiredPos.x > numRows || desiredPos.x < 0)
-            {
-                Debug.Log("too big rows");
-                return true;
-            }
-            if (collGrid.numColumns + desiredPos.y > numRows || desiredPos.y < 0)
+            if (collGrid.numColumns + desiredPos.x > NumColumns || desiredPos.x < 0)
             {
                 Debug.Log("too big columns");
                 return true;
             }
+            if (collGrid.numRows + desiredPos.y > numRows || desiredPos.y < 0)
+            {
+                Debug.Log("too big rows");
+                return true;
+            }
 
             // Is there something else in the way currently?
-            for (int i = desiredPos.x; i < collGrid.numRows + desiredPos.x; i++)
+
+            for (int r = desiredPos.y; r < collGrid.NumRows + desiredPos.y; r++)
             {
-                for (int j = desiredPos.y; j < collGrid.numColumns + desiredPos.y; j++)
+                for (int c = desiredPos.x; c < collGrid.numColumns + desiredPos.x; c++)
                 {
                     // Would the cell be need to become occupied and is it already occupied?
-                    if (collGrid[i - desiredPos.x, j - desiredPos.y] != (int)CellStatus.Empty
-                        && this[i, j] != (int)CellStatus.Empty)
+                    if (IsInvalidCell(collGrid, r - desiredPos.y, c - desiredPos.x) && IsInvalidCell(this, r, c))
                     {
                         Debug.Log("something in the way.");
                         return true;

@@ -39,6 +39,7 @@ namespace PlayerInventory {
         List<GameObject> cellList;
         List<GameObject> itemList;
         Grid grid;
+        GameObject? currentItem = null;
         Dictionary<BaseItem, Vector2Int> itemPositions = new();
 
         public bool IsOpen => isOpen;
@@ -69,7 +70,7 @@ namespace PlayerInventory {
 
             foreach (var x in grid)
             {
-                Debug.Log(x.value + " " + x.row + " " + x.col);
+                //Debug.Log(x.value + " " + x.row + " " + x.col);
             }
 
             // Initialize the inventory
@@ -146,6 +147,22 @@ namespace PlayerInventory {
         {
             if (controls.Inventory.PickupPlace.WasPressedThisFrame())
             {
+                Vector2Int itemPosition = new(cursorPosition.x, cursorPosition.y);
+                if (currentItem is not null)
+                {
+                    Debug.Log(currentItem.name);
+                    BaseItem item = currentItem.GetComponent<InventoryItem>().Item;
+                    Debug.Log(CheckPlaceItem(item, itemPosition));
+                    if(CheckPlaceItem(item, itemPosition))
+                    {
+                        Debug.Log(itemPosition);
+                        TryPlaceItem(item, itemPosition);
+                        currentItem = null;
+                        RedrawInventoryToCanvas();
+                    }
+                    return;
+                }
+
                 PointerEventData pointerEventData = new(eventSystem);
                 pointerEventData.position = cursor.transform.position;
                 List<RaycastResult> results = new();
@@ -153,8 +170,18 @@ namespace PlayerInventory {
 
                 foreach (var x in results)
                 {
-                    //if(TryGetComponent<>)
-                    //Debug.Log(x.gameObject.name);
+
+                    InventoryItem item;
+                    if(x.gameObject.TryGetComponent(out item))
+                    {
+                        TryRemoveItem(item.Item, itemPositions[item.Item]);
+                        itemPositions.Remove(item.Item);
+                        Debug.Log(cursorPosition);
+                        Debug.Log(itemPosition);
+                        x.gameObject.transform.localScale *= 1.2f;
+                        currentItem = x.gameObject;
+                        break;
+                    }
                 }
             }
         }
@@ -227,6 +254,7 @@ namespace PlayerInventory {
             {
                 var item = Instantiate(itemPrefab) as GameObject;
                 var baseItem = kvp.Key;
+                item.GetComponent<InventoryItem>().Initialize(baseItem);
                 item.GetComponent<Image>().sprite = Sprite.Create(baseItem.itemTexture, new(0, 0, baseItem.itemTexture.width , baseItem.itemTexture.height), new(.5f,.5f));
                 item.transform.SetParent(backpack.transform, false);
                 item.transform.localScale = new Vector3(panelWidth * baseItem.grid.NumColumns, panelHeight * baseItem.grid.NumRows, 1);
@@ -263,6 +291,7 @@ namespace PlayerInventory {
             {
                 x.SetActive(false);
             }
+            currentItem = null;
         }
 
         void OpenInventory()
@@ -277,25 +306,53 @@ namespace PlayerInventory {
             }
         }
 
+        public bool CheckPlaceItem(BaseItem item, Vector2Int desiredPos)
+        {
+            Grid collGrid = item.GetGrid();
+            return (!grid.CheckCollisionWithGrid(ref collGrid, desiredPos));
+        }
         public bool TryPlaceItem(BaseItem item, Vector2Int desiredPos)
         {
             Grid collGrid = item.GetGrid();
+            
+
             if (grid.CheckCollisionWithGrid(ref collGrid, desiredPos))
             {
                 return false;
             }
-            for (int i = desiredPos.x; i < collGrid.NumRows + desiredPos.x; i++)
+
+            for (int r = desiredPos.y; r < collGrid.NumRows + desiredPos.y; r++)
             {
-                for (int j = desiredPos.y; j < collGrid.NumColumns + desiredPos.y; j++)
+                for (int c = desiredPos.x; c < collGrid.NumColumns + desiredPos.x; c++)
                 {
-                    if (collGrid[i - desiredPos.x, j - desiredPos.y] != (int)Grid.CellStatus.Empty)
+                    if (collGrid[r - desiredPos.y, c - desiredPos.x] != (int)Grid.CellStatus.Empty)
                     {
-                        grid[i, j] = collGrid[i - desiredPos.x, j - desiredPos.y];
+                        grid[r,c] = collGrid[r - desiredPos.y, c - desiredPos.x];
                     }
                 }
             }
             itemPositions.Add(item, desiredPos);
             RedrawInventoryToCanvas();
+            return true;
+        }
+
+        public bool TryRemoveItem(BaseItem item, Vector2Int desiredPos)
+        {
+            Grid collGrid = item.GetGrid();
+            grid.OutputTXT();
+            collGrid.OutputTXT();
+            for (int r = desiredPos.y; r < collGrid.NumRows + desiredPos.y; r++)
+            {
+                for (int c = desiredPos.x; c < collGrid.NumRows + desiredPos.x; c++)
+                {
+                    if (collGrid[r - desiredPos.y, c - desiredPos.x] != (int)Grid.CellStatus.Empty)
+                    {
+                        grid[r, c] = (int)Grid.CellStatus.Empty;
+                        grid.OutputTXT();
+                    }
+                }
+            }
+            //grid.OutputTXT();
             return true;
         }
 

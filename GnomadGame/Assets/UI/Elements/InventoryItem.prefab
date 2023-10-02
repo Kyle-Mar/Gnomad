@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1491362556479459059}
   - component: {fileID: 1491362556479459068}
   - component: {fileID: 7115850831317517327}
-  - component: {fileID: 1087130232888159112}
+  - component: {fileID: -7173051452115841045}
   m_Layer: 5
   m_Name: InventoryItem
   m_TagString: Untagged
@@ -122,7 +122,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1087130232888159112}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: InventoryCell, Assembly-CSharp
         m_MethodName: DoOnClick
         m_Mode: 1
@@ -134,7 +134,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1087130232888159112
+--- !u!114 &-7173051452115841045
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,6 +143,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1491362556479459070}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa6dadcea7e1f434dab0b8aa9af10d0a, type: 3}
+  m_Script: {fileID: 11500000, guid: 2b2de5e714207494688b24aa0448ebad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  item: {fileID: 0}
