@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Used for changing to an empty substate.
-public class EnemyEmptyState : EnemyBaseState
+public class EnemyAttackState : EnemyBaseState
 {
-    public EnemyEmptyState(EnemyStateMachine esm) : base(esm)
+    public EnemyAttackState(EnemyStateMachine esm) : base(esm)
     {
     }
 

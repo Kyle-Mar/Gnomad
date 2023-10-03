@@ -4,10 +4,12 @@
     "\\GnomadGame",
     "\\GnomadGame\\Assets",
     "\\GnomadGame\\Assets\\Entities",
-    "\\GnomadGame\\Assets\\Entities\\Enemies",
     "\\GnomadGame\\Assets\\Entities\\Enemies\\Scripts",
-    "\\GnomadGame\\Assets\\Entities\\Enemies\\Scripts\\States"
+    "\\GnomadGame\\Assets\\Entities\\Enemies\\Scripts\\States",
+    "\\GnomadGame\\Assets\\Entities\\Player",
+    "\\GnomadGame\\Assets\\Entities\\Player\\Scripts",
+    "\\GnomadGame\\Assets\\Entities\\Player\\Scripts\\Player States"
   ],
-  "SelectedNode": "\\GnomadGame\\Assets\\Entities\\Enemies\\Scripts\\States\\EnemyEmptyState.cs",
+  "SelectedNode": "\\GnomadGame\\Assets\\Entities\\Player\\Scripts\\Player States\\PlayerGPBounceState.cs",
   "PreviewInSolutionExplorer": false
 }

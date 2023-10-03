@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.InputSystem;
+using UnityEngine.AI;
 
 public class EnemyStateMachine : StateMachine
 {
@@ -13,6 +13,11 @@ public class EnemyStateMachine : StateMachine
     [Header("States")]
 
     //declare states here
+    public EnemyEmptyState EmptyState;
+    public EnemyGroundedState GroundedState;
+    public EnemyMoveState MoveState;
+    public EnemyIdleState IdleState;
+    public EnemyAttackState AttackState;
 
 
     LayerMask groundLayerMask;
@@ -32,6 +37,10 @@ public class EnemyStateMachine : StateMachine
     public Collider2D col;
     public Rigidbody2D rb;
     public SpriteRenderer SpriteRenderer;
+    public NavMeshAgent navMeshAgent;
+    public Transform[] movePoints;
+    public GameObject targetObject;
+    public int currentMovePointIndex;
 
     //public ParticleSystem WalkParticles;
     //public ParticleSystem JumpCloudParticles;
@@ -46,6 +55,7 @@ public class EnemyStateMachine : StateMachine
     private void OnEnable()
     {
         //enable AI
+        
     }
     private void OnDisable()
     {
@@ -58,8 +68,15 @@ public class EnemyStateMachine : StateMachine
         col = GetComponent<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
         currentMoveSpeed = MovementStats.moveSpeed;
+        currentMovePointIndex = 0;
 
         //do instantiate AI = new EnemyAI();
+
+        // Make sure there are at least two wandering points
+        Assert.IsTrue(movePoints.Length >= 2);
+
+        // Set One of the movePoints as the targetObject
+        targetObject = movePoints[currentMovePointIndex].gameObject;
 
         // this may need to be substituted with a sort of raycast+boxcast solution.
         floorContactFilter = new();
@@ -69,7 +86,7 @@ public class EnemyStateMachine : StateMachine
 
         InstantiateStates();
 
-        //currentState = GroundedState;
+        currentState = GroundedState;
         currentState.EnterState();
     }
 
@@ -86,6 +103,18 @@ public class EnemyStateMachine : StateMachine
 
     }
 
+    public void CheckIfGrounded()
+    {
+        if (ContextUtils.CheckIfGrounded(ref col, transform, ref floorContactFilter))
+        {
+            isGrounded = true;
+        }
+        else
+        {
+            isGrounded = false;
+        }
+    }
+
 
     public void SetMoveSpeed(float value)
     {
@@ -93,19 +122,9 @@ public class EnemyStateMachine : StateMachine
     }
 
     //this function will be totally changed when we figure out our AI model
-    private void UpdateMovementDirection(InputAction.CallbackContext cxt)
+    private void UpdateMovementDirection()
     {
-        Vector2 inputVector = cxt.ReadValue<Vector2>();
 
-        if (inputVector == Vector2.left)
-        {
-            lastMovementDirection = inputVector;
-        }
-        else if (inputVector == Vector2.right)
-        {
-            lastMovementDirection = inputVector;
-
-        }
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
@@ -127,6 +146,11 @@ public class EnemyStateMachine : StateMachine
     private void InstantiateStates()
     {
         //instance all states here
+        EmptyState = new EnemyEmptyState(this);
+        GroundedState = new EnemyGroundedState(this);
+        MoveState = new EnemyMoveState(this);
+        IdleState = new EnemyIdleState(this);
+        AttackState = new EnemyAttackState(this);
     }
 
     // Can probably be moved to a different script,
@@ -143,6 +167,5 @@ public class EnemyStateMachine : StateMachine
                 Debug.Log("Damaging Player");
             }
         }
-        
     }
 }
