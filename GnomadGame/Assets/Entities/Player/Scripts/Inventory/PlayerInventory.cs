@@ -63,7 +63,7 @@ namespace PlayerInventory {
             cellList = new();
             itemList = new();
             backpackRectTransform = backpack.GetComponent<RectTransform>();
-            if(TryPlaceItem(jasonItem, new(0, 1)))
+            if(TryPlaceItem(jasonItem, new(0, 0)))
             {
                 Debug.Log("HELLO WORLD");
             }
@@ -180,7 +180,7 @@ namespace PlayerInventory {
                         //Debug.Log(cursorPosition);
                         //cursorPosition = itemPosition;
                         //Debug.Log(itemPosition);
-                        x.gameObject.transform.localScale *= 1.2f;
+                        //x.gameObject.transform.localScale *= 1.2f;
                         currentItem = x.gameObject;
                         break;
                     }
@@ -200,7 +200,15 @@ namespace PlayerInventory {
                 if(currentItem.TryGetComponent(out item)){
                     item.Rotate90();
                 }
-                currentItem.transform.Rotate(new Vector3(0, 0, 90f));
+                var panelWidth = 1f / grid.NumColumns;
+                var panelHeight = 1f / grid.NumRows;
+
+                var backpackTopLeftCorner = GetBackpackTopLeftCorner();
+
+                var panelOffsetX = backpackRectTransform.rect.width / grid.NumColumns;
+                var panelOffsetY = backpackRectTransform.rect.height / grid.NumRows;
+                item.Initialize(item.Item, item.Grid, new(panelWidth, panelHeight), new(panelOffsetX, panelOffsetY), backpackRectTransform, backpack.transform, cursorPosition);
+                //currentItem.transform.Rotate(Vector3.forward * 90f);
             }
         }
         
@@ -337,6 +345,7 @@ namespace PlayerInventory {
             {
                 for (int c = desiredPos.x; c < collGrid.NumColumns + desiredPos.x; c++)
                 {
+                    Debug.Log("THIS THING IS A THING: " + r + " " + c);
                     if (collGrid[r - desiredPos.y, c - desiredPos.x] != (int)Grid.CellStatus.Empty)
                     {
                         grid[r,c] = collGrid[r - desiredPos.y, c - desiredPos.x];
@@ -356,8 +365,9 @@ namespace PlayerInventory {
             collGrid.OutputTXT();
             for (int r = desiredPos.y; r < collGrid.NumRows + desiredPos.y; r++)
             {
-                for (int c = desiredPos.x; c < collGrid.NumRows + desiredPos.x; c++)
+                for (int c = desiredPos.x; c < collGrid.NumColumns + desiredPos.x; c++)
                 {
+                    Debug.Log("REMOVE: " + r + " " + c);
                     if (collGrid[r - desiredPos.y, c - desiredPos.x] != (int)Grid.CellStatus.Empty)
                     {
                         grid[r, c] = (int)Grid.CellStatus.Empty;
