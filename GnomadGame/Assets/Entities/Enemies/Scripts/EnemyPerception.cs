@@ -78,7 +78,7 @@ public class EnemyPerception : MonoBehaviour
                         if (target.gameObject.CompareTag("Player") && target.gameObject.name != "Hat Pin")
                         {
                             // Switch Enemy SubState to Aggro
-                            Debug.Log("Collision Detected");
+                            //Debug.Log("Collision Detected");
 
                             // For Debugging
                             canSeeObject = true;

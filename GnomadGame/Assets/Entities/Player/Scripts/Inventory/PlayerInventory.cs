@@ -63,7 +63,7 @@ namespace PlayerInventory {
             cellList = new();
             itemList = new();
             backpackRectTransform = backpack.GetComponent<RectTransform>();
-            if(TryPlaceItem(jasonItem, new(0, 0)))
+            if(TryPlaceItem(jasonItem, new(0, 1)))
             {
                 Debug.Log("HELLO WORLD");
             }
@@ -142,6 +142,7 @@ namespace PlayerInventory {
                 }
 
             }
+            
         }
 
         void PickupPlaceInput()
@@ -159,7 +160,6 @@ namespace PlayerInventory {
                         Debug.Log(itemPosition);
                         TryPlaceItem(item, itemPosition);
                         currentItem = null;
-                        RedrawInventoryToCanvas();
                     }
                     return;
                 }
@@ -177,8 +177,9 @@ namespace PlayerInventory {
                     {
                         TryRemoveItem(item.Item, itemPositions[item.Item]);
                         itemPositions.Remove(item.Item);
-                        Debug.Log(cursorPosition);
-                        Debug.Log(itemPosition);
+                        //Debug.Log(cursorPosition);
+                        //cursorPosition = itemPosition;
+                        //Debug.Log(itemPosition);
                         x.gameObject.transform.localScale *= 1.2f;
                         currentItem = x.gameObject;
                         break;
@@ -261,7 +262,6 @@ namespace PlayerInventory {
                 InventoryCell ic;
                 if (cell.TryGetComponent(out ic))
                 {
-                    ic.OnCellClicked += DoAThing;
                     ic.UpdateTransform(new Vector3(panelWidth, panelHeight, 1), GetNewPanelLocalPosition(backpackTopLeftCorner, panelOffsetX, panelOffsetY, x.row, x.col));
                 }
                 cellList.Add(cell);
@@ -271,7 +271,7 @@ namespace PlayerInventory {
             {
                 var item = Instantiate(itemPrefab) as GameObject;
                 var baseItem = kvp.Key;
-                item.GetComponent<InventoryItem>().Initialize(baseItem, baseItem.grid, new Vector2(panelWidth, panelHeight), backpackRectTransform, backpack.transform, kvp.Value);
+                item.GetComponent<InventoryItem>().Initialize(baseItem, baseItem.grid, new Vector2(panelWidth, panelHeight), new Vector2(panelOffsetX, panelOffsetY), backpackRectTransform, backpack.transform, kvp.Value);
                 itemList.Add(item);
             }
 
@@ -332,7 +332,7 @@ namespace PlayerInventory {
             {
                 return false;
             }
-            Debug.Log("success");
+            //Debug.Log("success");
             for (int r = desiredPos.y; r < collGrid.NumRows + desiredPos.y; r++)
             {
                 for (int c = desiredPos.x; c < collGrid.NumColumns + desiredPos.x; c++)
@@ -343,6 +343,7 @@ namespace PlayerInventory {
                     }
                 }
             }
+            Debug.Log(desiredPos);
             itemPositions.Add(item, desiredPos);
             RedrawInventoryToCanvas();
             return true;
@@ -375,8 +376,9 @@ namespace PlayerInventory {
 
         public static Vector3 GetNewItemLocalPosition(Vector3 backpackTopLeftCorner, Vector2 itemSize, Vector2 cellSize, int row, int col)
         {
-            return new Vector3(backpackTopLeftCorner.x + cellSize.x * col + itemSize.x / 2, backpackTopLeftCorner.y - cellSize.y * row - itemSize.y / 2, 1);
-
+            Debug.Log(cellSize);
+            return new Vector3(backpackTopLeftCorner.x + cellSize.x * row + itemSize.x / 2, backpackTopLeftCorner.y - cellSize.y * col - itemSize.y / 2, 1);
+            //+cellSize.x * col + itemSize.x / 2
         }
 
         Vector3 GetBackpackTopLeftCorner()

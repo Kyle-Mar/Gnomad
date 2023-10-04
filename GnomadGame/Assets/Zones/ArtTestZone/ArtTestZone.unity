@@ -8724,6 +8724,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2863141800211592823, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4446419450577938882, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -8771,6 +8775,10 @@ PrefabInstance:
     - target: {fileID: 4446419450577938910, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 6876866453691021995, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
