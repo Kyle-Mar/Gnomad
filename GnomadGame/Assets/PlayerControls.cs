@@ -847,6 +847,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RotateRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""de277c24-b62b-4063-9d48-9a714a9a4a4a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1047,6 +1056,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""PickupPlace"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b9e99743-7af0-4ee1-baaf-a20488bf9ab2"",
+                    ""path"": ""<Keyboard>/v"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1141,6 +1161,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Inventory_MoveCursorX = m_Inventory.FindAction("MoveCursorX", throwIfNotFound: true);
         m_Inventory_MoveCursorY = m_Inventory.FindAction("MoveCursorY", throwIfNotFound: true);
         m_Inventory_PickupPlace = m_Inventory.FindAction("PickupPlace", throwIfNotFound: true);
+        m_Inventory_RotateRight = m_Inventory.FindAction("RotateRight", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1418,6 +1439,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Inventory_MoveCursorX;
     private readonly InputAction m_Inventory_MoveCursorY;
     private readonly InputAction m_Inventory_PickupPlace;
+    private readonly InputAction m_Inventory_RotateRight;
     public struct InventoryActions
     {
         private @PlayerControls m_Wrapper;
@@ -1426,6 +1448,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @MoveCursorX => m_Wrapper.m_Inventory_MoveCursorX;
         public InputAction @MoveCursorY => m_Wrapper.m_Inventory_MoveCursorY;
         public InputAction @PickupPlace => m_Wrapper.m_Inventory_PickupPlace;
+        public InputAction @RotateRight => m_Wrapper.m_Inventory_RotateRight;
         public InputActionMap Get() { return m_Wrapper.m_Inventory; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1447,6 +1470,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @PickupPlace.started += instance.OnPickupPlace;
             @PickupPlace.performed += instance.OnPickupPlace;
             @PickupPlace.canceled += instance.OnPickupPlace;
+            @RotateRight.started += instance.OnRotateRight;
+            @RotateRight.performed += instance.OnRotateRight;
+            @RotateRight.canceled += instance.OnRotateRight;
         }
 
         private void UnregisterCallbacks(IInventoryActions instance)
@@ -1463,6 +1489,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @PickupPlace.started -= instance.OnPickupPlace;
             @PickupPlace.performed -= instance.OnPickupPlace;
             @PickupPlace.canceled -= instance.OnPickupPlace;
+            @RotateRight.started -= instance.OnRotateRight;
+            @RotateRight.performed -= instance.OnRotateRight;
+            @RotateRight.canceled -= instance.OnRotateRight;
         }
 
         public void RemoveCallbacks(IInventoryActions instance)
@@ -1554,5 +1583,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnMoveCursorX(InputAction.CallbackContext context);
         void OnMoveCursorY(InputAction.CallbackContext context);
         void OnPickupPlace(InputAction.CallbackContext context);
+        void OnRotateRight(InputAction.CallbackContext context);
     }
 }

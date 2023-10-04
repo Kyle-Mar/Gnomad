@@ -825,6 +825,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "RotateRight",
+                    "type": "Button",
+                    "id": "de277c24-b62b-4063-9d48-9a714a9a4a4a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1023,6 +1032,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "PickupPlace",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b9e99743-7af0-4ee1-baaf-a20488bf9ab2",
+                    "path": "<Keyboard>/v",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateRight",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

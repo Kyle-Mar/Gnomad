@@ -28,5 +28,12 @@ namespace PlayerInventory
             transform.localPosition = PlayerInventory.GetNewItemLocalPosition(PlayerInventory.GetBackpackTopLeftCorner(backpackRectTransform), itemSize, panelSize, (int)itemPos.x, (int)itemPos.y);
 
         }
+
+        public void Rotate90()
+        {
+            grid.ReverseColumns();
+            grid.Transpose();
+            grid.OutputTXT();
+        }
     }
 }

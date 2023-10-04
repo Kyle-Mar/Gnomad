@@ -189,7 +189,18 @@ namespace PlayerInventory {
 
         void RotateInput()
         {
-
+            if (controls.Inventory.RotateRight.WasPressedThisFrame())
+            {
+                if(currentItem == null)
+                {
+                    return;
+                }
+                InventoryItem item;
+                if(currentItem.TryGetComponent(out item)){
+                    item.Rotate90();
+                }
+                currentItem.transform.Rotate(new Vector3(0, 0, 90f));
+            }
         }
         
         //If marked dirty, we'll need to do a full refresh?
@@ -309,18 +320,19 @@ namespace PlayerInventory {
         public bool CheckPlaceItem(BaseItem item, Vector2Int desiredPos)
         {
             Grid collGrid = item.GetGrid();
+            grid.OutputTXT();
             return (!grid.CheckCollisionWithGrid(ref collGrid, desiredPos));
         }
         public bool TryPlaceItem(BaseItem item, Vector2Int desiredPos)
         {
             Grid collGrid = item.GetGrid();
-            
 
+            grid.OutputTXT();
             if (grid.CheckCollisionWithGrid(ref collGrid, desiredPos))
             {
                 return false;
             }
-
+            Debug.Log("success");
             for (int r = desiredPos.y; r < collGrid.NumRows + desiredPos.y; r++)
             {
                 for (int c = desiredPos.x; c < collGrid.NumColumns + desiredPos.x; c++)
