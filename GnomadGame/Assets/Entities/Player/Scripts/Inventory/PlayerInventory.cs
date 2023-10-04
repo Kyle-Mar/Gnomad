@@ -91,6 +91,7 @@ namespace PlayerInventory {
             {
                 CursorMoveInput();
                 PickupPlaceInput();
+                RotateInput();
                 UpdateInventoryAlreadyOnCanvas();
             }
         }
@@ -185,6 +186,11 @@ namespace PlayerInventory {
                 }
             }
         }
+
+        void RotateInput()
+        {
+
+        }
         
         //If marked dirty, we'll need to do a full refresh?
         void UpdateInventoryAlreadyOnCanvas()
@@ -254,13 +260,7 @@ namespace PlayerInventory {
             {
                 var item = Instantiate(itemPrefab) as GameObject;
                 var baseItem = kvp.Key;
-                item.GetComponent<InventoryItem>().Initialize(baseItem);
-                item.GetComponent<Image>().sprite = Sprite.Create(baseItem.itemTexture, new(0, 0, baseItem.itemTexture.width , baseItem.itemTexture.height), new(.5f,.5f));
-                item.transform.SetParent(backpack.transform, false);
-                item.transform.localScale = new Vector3(panelWidth * baseItem.grid.NumColumns, panelHeight * baseItem.grid.NumRows, 1);
-                var itemOffsetX = backpackRectTransform.rect.width * item.transform.localScale.x;
-                var itemOffsetY = backpackRectTransform.rect.height * item.transform.localScale.y;
-                item.transform.localPosition = GetNewItemLocalPosition(backpackTopLeftCorner, itemOffsetX, itemOffsetY, panelOffsetX, panelOffsetY,kvp.Value.x, kvp.Value.y);
+                item.GetComponent<InventoryItem>().Initialize(baseItem, baseItem.grid, new Vector2(panelWidth, panelHeight), backpackRectTransform, backpack.transform, kvp.Value);
                 itemList.Add(item);
             }
 
@@ -361,9 +361,9 @@ namespace PlayerInventory {
             return new Vector3(backpackTopLeftCorner.x + panelOffsetX * col + panelOffsetX / 2, backpackTopLeftCorner.y - panelOffsetY * row - panelOffsetY / 2, 1);
         }
 
-        Vector3 GetNewItemLocalPosition(Vector3 backpackTopLeftCorner, float itemSizeX, float itemSizeY, float cellSizeX, float cellSizeY, int row, int col)
+        public static Vector3 GetNewItemLocalPosition(Vector3 backpackTopLeftCorner, Vector2 itemSize, Vector2 cellSize, int row, int col)
         {
-            return new Vector3(backpackTopLeftCorner.x + cellSizeX * col + itemSizeX / 2, backpackTopLeftCorner.y - cellSizeY * row - itemSizeY / 2, 1);
+            return new Vector3(backpackTopLeftCorner.x + cellSize.x * col + itemSize.x / 2, backpackTopLeftCorner.y - cellSize.y * row - itemSize.y / 2, 1);
 
         }
 
@@ -371,6 +371,13 @@ namespace PlayerInventory {
         {
             Vector3[] arr = new Vector3[4];
             backpackRectTransform.GetLocalCorners(arr);
+            return arr[1];
+        }
+
+        public static Vector3 GetBackpackTopLeftCorner(RectTransform rectT)
+        {
+            Vector3[] arr = new Vector3[4];
+            rectT.GetLocalCorners(arr);
             return arr[1];
         }
 
