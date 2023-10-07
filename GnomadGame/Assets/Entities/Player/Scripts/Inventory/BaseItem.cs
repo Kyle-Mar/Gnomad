@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 
 
-namespace PlayerInventory{
+namespace Entities.Player.Inventory{
 
     
 

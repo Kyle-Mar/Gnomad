@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 using System.Linq;
 using Gnomad.Utils;
 
-namespace PlayerInventory {
+namespace Entities.Player.Inventory {
 
     [RequireComponent(typeof(PlayerStateMachine))]
     public class PlayerInventory : MonoBehaviour
@@ -33,49 +33,35 @@ namespace PlayerInventory {
         [SerializeField] GameObject backpack;
         [SerializeField] Canvas canvas;
         #endregion
-        
-        [SerializeField] BaseItem jasonItem;//temporary. we will get it from the other part of the inventory soon.
-
         [SerializeField] bool isOpen;
+        [SerializeField] BaseItem jasonItem;
         List<GameObject> cellList;
         List<GameObject> itemList;
-        Grid grid;
-        GameObject? currentItem = null;
-        Dictionary<BaseItem, Vector2Int> itemPositions = new();
+        public bool IsOpen { get; private set; }
 
-        public bool IsOpen => isOpen;
-
-
-        int this[int i, int j]
-        {
-            get => grid[i, j];
-            set
-            {
-                grid[i, j] = value;
-            }
-        }
+        InventoryData data; 
 
         private void Awake()
         {
-            grid = new(3, 3, (int)Grid.CellStatus.Locked);
-            this[0, 0] = (int)Grid.CellStatus.Empty;
-            this[1, 0] = (int)Grid.CellStatus.Empty;
-            this[1, 1] = (int)Grid.CellStatus.Empty;
+            data = new InventoryData(new(3, 3, (int)Grid.CellStatus.Locked)).SetJasonItem(jasonItem);
             cellList = new();
             itemList = new();
+            data[0, 0] = (int)Grid.CellStatus.Empty;
+            data[1, 0] = (int)Grid.CellStatus.Empty;
+            data[1, 1] = (int)Grid.CellStatus.Empty;
             backpackRectTransform = backpack.GetComponent<RectTransform>();
-            if(TryPlaceItem(jasonItem, new(0, 1)))
+            if(data.PlaceItem(jasonItem, new(0, 0)))
             {
                 Debug.Log("HELLO WORLD");
             }
-
-            foreach (var x in grid)
+            else
             {
-                //Debug.Log(x.value + " " + x.row + " " + x.col);
+                Debug.Log(jasonItem);
             }
 
+
             // Initialize the inventory
-            //RedrawInventoryToCanvas();
+            RedrawInventoryToCanvas();
             CloseInventory();
         }
 
@@ -121,11 +107,11 @@ namespace PlayerInventory {
                 Debug.Log(inputX);
                 if (inputX > 0)
                 {
-                    cursorPosition.x = Mathf.Clamp(cursorPosition.x + 1, 0, grid.NumColumns - 1);
+                    cursorPosition.x = Mathf.Clamp(cursorPosition.x + 1, 0, data.NumColumns - 1);
                 }
                 else if (inputX < 0)
                 {
-                    cursorPosition.x = Mathf.Clamp(cursorPosition.x - 1, 0, grid.NumColumns - 1);
+                    cursorPosition.x = Mathf.Clamp(cursorPosition.x - 1, 0, data.NumColumns - 1);
                 }
 
             }
@@ -135,11 +121,11 @@ namespace PlayerInventory {
                 Debug.Log(inputY);
                 if (inputY > 0)
                 {
-                    cursorPosition.y = Mathf.Clamp(cursorPosition.y - 1, 0, grid.NumColumns - 1);
+                    cursorPosition.y = Mathf.Clamp(cursorPosition.y - 1, 0, data.NumColumns - 1);
                 }
                 else if (inputY < 0)
                 {
-                    cursorPosition.y = Mathf.Clamp(cursorPosition.y + 1, 0, grid.NumColumns - 1);
+                    cursorPosition.y = Mathf.Clamp(cursorPosition.y + 1, 0, data.NumColumns - 1);
                 }
 
             }
@@ -151,16 +137,17 @@ namespace PlayerInventory {
             if (controls.Inventory.PickupPlace.WasPressedThisFrame())
             {
                 Vector2Int itemPosition = new(cursorPosition.x, cursorPosition.y);
-                if (currentItem is not null)
+                if (data.CurrentItem is not null)
                 {
-                    Debug.Log(currentItem.name);
-                    BaseItem item = currentItem.GetComponent<InventoryItem>().Item;
-                    Debug.Log(CheckPlaceItem(item, itemPosition));
-                    if(CheckPlaceItem(item, itemPosition))
+                    Debug.Log(data.CurrentItem.name);
+                    InventoryItem invItem = data.CurrentItem.GetComponent<InventoryItem>();
+                    BaseItem item = invItem.Item;
+                    if(data.PlaceItem(item, itemPosition))
                     {
-                        Debug.Log(itemPosition);
-                        TryPlaceItem(item, itemPosition);
-                        currentItem = null;
+                        var panelOffsetX = backpackRectTransform.rect.width / data.NumColumns;
+                        var panelOffsetY = backpackRectTransform.rect.height / data.NumRows;
+                        invItem.UpdateIMG(item, new(panelOffsetX, panelOffsetY), cursorPosition, backpackRectTransform);
+                        data.SetCurrentItem(null);
                     }
                     return;
                 }
@@ -176,13 +163,13 @@ namespace PlayerInventory {
                     InventoryItem item;
                     if(x.gameObject.TryGetComponent(out item))
                     {
-                        TryRemoveItem(item.Item, itemPositions[item.Item]);
-                        itemPositions.Remove(item.Item);
+                        data.TryRemoveItem(item.Item, data.ItemPositions[item.Item]);
+                        data.ItemPositions.Remove(item.Item);
                         //Debug.Log(cursorPosition);
                         //cursorPosition = itemPosition;
                         //Debug.Log(itemPosition);
                         //x.gameObject.transform.localScale *= 1.2f;
-                        currentItem = x.gameObject;
+                        data.SetCurrentItem(x.gameObject);
                         break;
                     }
                 }
@@ -193,25 +180,25 @@ namespace PlayerInventory {
         {
             if (controls.Inventory.RotateRight.WasPressedThisFrame())
             {
-                if(currentItem == null)
+                if(data.CurrentItem == null)
                 {
                     return;
                 }
                 InventoryItem item;
-                if(currentItem.TryGetComponent(out item)){
+                if(data.CurrentItem.TryGetComponent(out item)){
                     item.Rotate90();
                 }
-                var panelWidth = 1f / grid.NumColumns;
-                var panelHeight = 1f / grid.NumRows;
+                var panelWidth = 1f / data.NumColumns;
+                var panelHeight = 1f / data.NumRows;
 
                 var backpackTopLeftCorner = GetBackpackTopLeftCorner();
 
-                var panelOffsetX = backpackRectTransform.rect.width / grid.NumColumns;
-                var panelOffsetY = backpackRectTransform.rect.height / grid.NumRows;
+                var panelOffsetX = backpackRectTransform.rect.width / data.NumColumns;
+                var panelOffsetY = backpackRectTransform.rect.height / data.NumRows;
                 //cursorPosition = cursorPosition.Rotate(90f);
-                //item.UpdateIMG( item.Item, new(panelOffsetX, panelOffsetY), cursorPosition, backpackRectTransform);
                 
-                currentItem.transform.Rotate(Vector3.forward * -90f);
+                
+                data.CurrentItem.transform.Rotate(Vector3.forward * -90f);
 
             }
         }
@@ -219,20 +206,19 @@ namespace PlayerInventory {
         //If marked dirty, we'll need to do a full refresh?
         void UpdateInventoryAlreadyOnCanvas()
         {
-            var panelWidth = 1f / grid.NumColumns;
-            var panelHeight = 1f / grid.NumRows;
-            var panelOffsetX = backpackRectTransform.rect.height / grid.NumColumns;
-            var panelOffsetY = backpackRectTransform.rect.height / grid.NumRows;
+            var panelWidth = 1f / data.NumColumns;
+            var panelHeight = 1f / data.NumRows;
+            var panelOffsetX = backpackRectTransform.rect.height / data.NumColumns;
+            var panelOffsetY = backpackRectTransform.rect.height / data.NumRows;
             var backpackTopLeftCorner = GetBackpackTopLeftCorner();
 
-            foreach (var x in grid)
+            foreach (var x in data.Grid)
             {
                 var panel = cellList[GetIndex(x.row, x.col)];
                 panel.transform.localScale = new Vector3(panelWidth, panelHeight, 1);
                 panel.transform.localPosition = GetNewPanelLocalPosition(backpackTopLeftCorner, panelOffsetX, panelOffsetY, x.row, x.col);
             }
             cursor.transform.localPosition = GetNewPanelLocalPosition(backpackTopLeftCorner, panelOffsetX, panelOffsetY, cursorPosition.y, cursorPosition.x);
-
         }
 
         public void RedrawInventoryToCanvas()
@@ -248,19 +234,19 @@ namespace PlayerInventory {
             cellList.Clear();
             itemList.Clear();
 
-            var panelWidth = 1f / grid.NumColumns;
-            var panelHeight = 1f / grid.NumRows;
+            var panelWidth = 1f / data.NumColumns;
+            var panelHeight = 1f / data.NumRows;
 
             var backpackTopLeftCorner = GetBackpackTopLeftCorner();
 
-            var panelOffsetX = backpackRectTransform.rect.width / grid.NumColumns;
-            var panelOffsetY = backpackRectTransform.rect.height / grid.NumRows;
+            var panelOffsetX = backpackRectTransform.rect.width / data.NumColumns;
+            var panelOffsetY = backpackRectTransform.rect.height / data.NumRows;
 
-            foreach (var x in grid)
+            foreach (var x in data.Grid)
             {
                 // Instantiate the correct cell ui element based off of the value in the grid.
                 GameObject cell;
-                if (this[x.row, x.col] == (int)Grid.CellStatus.Locked)
+                if (data[x.row, x.col] == (int)Grid.CellStatus.Locked)
                 {
                     cell = Instantiate(lockedCellPrefab) as GameObject;
                 }
@@ -279,7 +265,7 @@ namespace PlayerInventory {
                 cellList.Add(cell);
             }
 
-            foreach(var kvp in itemPositions)
+            foreach(var kvp in data.ItemPositions)
             {
                 var item = Instantiate(itemPrefab) as GameObject;
                 var baseItem = kvp.Key;
@@ -314,7 +300,7 @@ namespace PlayerInventory {
             {
                 x.SetActive(false);
             }
-            currentItem = null;
+            data.SetCurrentItem(null);
         }
 
         void OpenInventory()
@@ -327,60 +313,6 @@ namespace PlayerInventory {
             {
                 x.SetActive(true);
             }
-        }
-
-        public bool CheckPlaceItem(BaseItem item, Vector2Int desiredPos)
-        {
-            Grid collGrid = item.GetGrid();
-            grid.OutputTXT();
-            return (!grid.CheckCollisionWithGrid(ref collGrid, desiredPos));
-        }
-        public bool TryPlaceItem(BaseItem item, Vector2Int desiredPos)
-        {
-            Grid collGrid = item.GetGrid();
-
-            grid.OutputTXT();
-            if (grid.CheckCollisionWithGrid(ref collGrid, desiredPos))
-            {
-                return false;
-            }
-            //Debug.Log("success");
-            for (int r = desiredPos.y; r < collGrid.NumRows + desiredPos.y; r++)
-            {
-                for (int c = desiredPos.x; c < collGrid.NumColumns + desiredPos.x; c++)
-                {
-                    Debug.Log("THIS THING IS A THING: " + r + " " + c);
-                    if (collGrid[r - desiredPos.y, c - desiredPos.x] != (int)Grid.CellStatus.Empty)
-                    {
-                        grid[r,c] = collGrid[r - desiredPos.y, c - desiredPos.x];
-                    }
-                }
-            }
-            Debug.Log(desiredPos);
-            itemPositions.Add(item, desiredPos);
-            RedrawInventoryToCanvas();
-            return true;
-        }
-
-        public bool TryRemoveItem(BaseItem item, Vector2Int desiredPos)
-        {
-            Grid collGrid = item.GetGrid();
-            grid.OutputTXT();
-            collGrid.OutputTXT();
-            for (int r = desiredPos.y; r < collGrid.NumRows + desiredPos.y; r++)
-            {
-                for (int c = desiredPos.x; c < collGrid.NumColumns + desiredPos.x; c++)
-                {
-                    Debug.Log("REMOVE: " + r + " " + c);
-                    if (collGrid[r - desiredPos.y, c - desiredPos.x] != (int)Grid.CellStatus.Empty)
-                    {
-                        grid[r, c] = (int)Grid.CellStatus.Empty;
-                        grid.OutputTXT();
-                    }
-                }
-            }
-            //grid.OutputTXT();
-            return true;
         }
 
         Vector3 GetNewPanelLocalPosition(Vector3 backpackTopLeftCorner, float panelOffsetX, float panelOffsetY, int row, int col)
@@ -412,14 +344,14 @@ namespace PlayerInventory {
         // put in middle of grid.
         Vector2Int GetCursorIndexOnGrid()
         {
-            int r = grid.NumColumns / 2;
-            int c = grid.NumRows / 2;
+            int r = data.NumColumns / 2;
+            int c = data.NumRows / 2;
 
             return new(r, c);
         }
         int GetIndex(int r, int c)
         {
-            return r * grid.NumColumns + c;
+            return r * data.NumColumns + c;
         }
         public void DoAThing(InventoryCell cell)
         {

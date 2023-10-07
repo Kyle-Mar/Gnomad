@@ -102,14 +102,14 @@ public class ItemIDManager : UnityEditor.AssetModificationProcessor
         //Debug.Log("HELLO WORLD");
 
         int itemID;
-        if (AssetDatabase.GetMainAssetTypeAtPath(path) != typeof(PlayerInventory.BaseItem))
+        if (AssetDatabase.GetMainAssetTypeAtPath(path) != typeof(Entities.Player.Inventory.BaseItem))
         {
             return AssetDeleteResult.DidNotDelete;
         }
 
         UsedItemIDs = GetItemIdListFromTXT();
 
-        var obj = AssetDatabase.LoadMainAssetAtPath(path) as PlayerInventory.BaseItem;
+        var obj = AssetDatabase.LoadMainAssetAtPath(path) as Entities.Player.Inventory.BaseItem;
         itemID = obj.ItemID;
 
 
@@ -187,11 +187,11 @@ public class ItemCreationListener : UnityEditor.AssetPostprocessor
     {
         foreach(var x in importedAssets)
         {
-            if(AssetDatabase.GetMainAssetTypeAtPath(x) != typeof(PlayerInventory.BaseItem))
+            if(AssetDatabase.GetMainAssetTypeAtPath(x) != typeof(Entities.Player.Inventory.BaseItem))
             {
                 continue;
             }
-            var item = AssetDatabase.LoadAssetAtPath<PlayerInventory.BaseItem>(x) as PlayerInventory.BaseItem;
+            var item = AssetDatabase.LoadAssetAtPath<Entities.Player.Inventory.BaseItem>(x) as Entities.Player.Inventory.BaseItem;
             if (item.ItemID == -0xBEEF)
             {
                 item.ItemID = ItemIDManager.GetNextAvailableID();

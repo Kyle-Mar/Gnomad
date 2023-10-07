@@ -5,7 +5,7 @@ using System.Reflection;
 using UnityEngine;
 
 
-namespace PlayerInventory
+namespace Entities.Player.Inventory
 {
 
     /// <summary>
