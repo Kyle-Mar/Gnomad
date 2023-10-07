@@ -17,7 +17,7 @@ namespace PlayerInventory
         {
             this.item = item;
             this.grid = grid;
-            
+
             transform.SetParent(backpackGOTransform, false);
             
             transform.localScale = new Vector3(panelSize.x * grid.NumColumns, panelSize.y * grid.NumRows, 1);
@@ -26,8 +26,11 @@ namespace PlayerInventory
             
             Vector2 itemSize = new(backpackRectTransform.rect.width * transform.localScale.x, backpackRectTransform.rect.height * transform.localScale.y);
             //Debug.Log(itemPos);
-            transform.localPosition = PlayerInventory.GetNewItemLocalPosition(PlayerInventory.GetBackpackTopLeftCorner(backpackRectTransform), itemSize, panelOffset, itemPos.x, itemPos.y);
-            //Debug.Log(PlayerInventory.GetNewItemLocalPosition(PlayerInventory.GetBackpackTopLeftCorner(backpackRectTransform), itemSize, panelSize, itemPos.x, itemPos.y));
+            RectTransform itemTransform = transform as RectTransform;
+            itemTransform.pivot = new(1.0f / grid.NumColumns / 2, 1.0f / item.grid.NumRows / 2);
+            Debug.Log(itemTransform.pivot);
+            itemTransform.localPosition = PlayerInventory.GetNewItemLocalPosition(PlayerInventory.GetBackpackTopLeftCorner(backpackRectTransform), itemSize, panelOffset, itemTransform.pivot, itemPos.x, itemPos.y);
+
             //Debug.Log(PlayerInventory.GetNewItemLocalPosition(PlayerInventory.GetBackpackTopLeftCorner(backpackRectTransform), itemSize, panelSize, 0, 0));
         }
 
@@ -35,7 +38,14 @@ namespace PlayerInventory
         {
             grid.ReverseColumns();
             grid.Transpose();
-            grid.OutputTXT();
+            //grid.OutputTXT();
+        }
+
+        public void UpdateIMG(BaseItem item, Vector2 panelOffset, Vector2Int itemPos, RectTransform backpackRectTransform)
+        {
+            Vector2 itemSize = new(backpackRectTransform.rect.width * transform.localScale.x, backpackRectTransform.rect.height * transform.localScale.y);
+            //gameObject.GetComponent<Image>().sprite = Sprite.Create(item.itemTexture, new(0, 0, item.itemTexture.width, item.itemTexture.height), new(.5f, .5f));
+            //transform.localPosition = PlayerInventory.GetNewItemLocalPosition(PlayerInventory.GetBackpackTopLeftCorner(backpackRectTransform), itemSize, panelOffset,  itemPos.x, itemPos.y);
         }
     }
 }

@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Linq;
+using Gnomad.Utils;
 
 namespace PlayerInventory {
 
@@ -63,7 +64,7 @@ namespace PlayerInventory {
             cellList = new();
             itemList = new();
             backpackRectTransform = backpack.GetComponent<RectTransform>();
-            if(TryPlaceItem(jasonItem, new(0, 0)))
+            if(TryPlaceItem(jasonItem, new(0, 1)))
             {
                 Debug.Log("HELLO WORLD");
             }
@@ -207,8 +208,11 @@ namespace PlayerInventory {
 
                 var panelOffsetX = backpackRectTransform.rect.width / grid.NumColumns;
                 var panelOffsetY = backpackRectTransform.rect.height / grid.NumRows;
-                item.Initialize(item.Item, item.Grid, new(panelWidth, panelHeight), new(panelOffsetX, panelOffsetY), backpackRectTransform, backpack.transform, cursorPosition);
-                //currentItem.transform.Rotate(Vector3.forward * 90f);
+                //cursorPosition = cursorPosition.Rotate(90f);
+                //item.UpdateIMG( item.Item, new(panelOffsetX, panelOffsetY), cursorPosition, backpackRectTransform);
+                
+                currentItem.transform.Rotate(Vector3.forward * -90f);
+
             }
         }
         
@@ -384,10 +388,10 @@ namespace PlayerInventory {
             return new Vector3(backpackTopLeftCorner.x + panelOffsetX * col + panelOffsetX / 2, backpackTopLeftCorner.y - panelOffsetY * row - panelOffsetY / 2, 1);
         }
 
-        public static Vector3 GetNewItemLocalPosition(Vector3 backpackTopLeftCorner, Vector2 itemSize, Vector2 cellSize, int row, int col)
+        public static Vector3 GetNewItemLocalPosition(Vector3 backpackTopLeftCorner, Vector2 itemSize, Vector2 cellSize, Vector2 pivot, int row, int col)
         {
-            Debug.Log(cellSize);
-            return new Vector3(backpackTopLeftCorner.x + cellSize.x * row + itemSize.x / 2, backpackTopLeftCorner.y - cellSize.y * col - itemSize.y / 2, 1);
+            Debug.Log((backpackTopLeftCorner.x + cellSize.x * row) + " + " + (backpackTopLeftCorner.y - cellSize.y * col - itemSize.y, 1));
+            return new Vector3(backpackTopLeftCorner.x + (cellSize.x * row) + (itemSize.x * pivot.x), backpackTopLeftCorner.y - (cellSize.y * col) - (itemSize.y * pivot.y), 1);
             //+cellSize.x * col + itemSize.x / 2
         }
 
