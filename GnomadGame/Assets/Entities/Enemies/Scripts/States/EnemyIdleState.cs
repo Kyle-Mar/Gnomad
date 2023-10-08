@@ -39,7 +39,7 @@ public class EnemyIdleState : EnemyBaseState
         else
         {
             float dist = Vector2.Distance(context.gameObject.transform.position, context.targetObject.transform.position);
-            Debug.Log(dist);
+            //Debug.Log(dist);
             if ( dist < 1.7f)
             {
                 SetSubState(context.AttackState);

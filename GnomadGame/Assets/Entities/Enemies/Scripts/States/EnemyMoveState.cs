@@ -30,15 +30,21 @@ public class EnemyMoveState : EnemyBaseState
         if (isGrounded)
         {
             // If enemy is grounded
-
+            
             //  And is not Aggro
 
             if (!context.IsAggro)
             {
                 // If enemy is close enough to targeted move point, switch to idle
+                if (context.targetObject == null) 
+                { 
+                    context.targetObject = context.movePoints[context.currentMovePointIndex].gameObject;
+                }
 
                 if (Vector2.Distance(context.gameObject.transform.position, context.targetObject.transform.position) < 0.4f)
                 {
+                    // if distance is less than this, set velocity to zero
+                    // States for Idle and movement will be changed based on velocity
                     SwitchState(context.IdleState);
                 }
             }
@@ -49,16 +55,20 @@ public class EnemyMoveState : EnemyBaseState
             {
                 float dist = Vector2.Distance(context.gameObject.transform.position, context.targetObject.transform.position);
                 //Debug.Log(dist);
-                if (dist < 1.7f && !context.IsAttackOnCooldown)
+
+                // If the enemy is close enough
+                //  and the enemy's attack isn't on cooldown
+                if (dist < 2f && !context.IsAttackOnCooldown)
                 {
-                    Debug.Log("Entering Attack");
+                    //Debug.Log("Entering Attack");
                     if (currentSubState != context.AttackState)
                     {
                         SetSubState(context.AttackState);
                     }
                 }
-                else
+                else if (!context.IsAttacking)
                 {
+                    Debug.Log("Enemy Is Not Attacking");
                     SetSubState(context.NotAttackState);
                 }
             }
@@ -92,7 +102,15 @@ public class EnemyMoveState : EnemyBaseState
     {
         //throw new System.NotImplementedException();
         
-        SetSubState(context.NotAttackState);
+        //SetSubState(context.NotAttackState);
+        if (context.IsAttacking)
+        {
+            SetSubState(context.AttackState);
+        }
+        else
+        {
+            SetSubState(context.NotAttackState);
+        }
     }
 
     public override void UpdateState()
