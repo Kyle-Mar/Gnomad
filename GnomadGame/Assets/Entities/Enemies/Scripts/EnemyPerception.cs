@@ -41,6 +41,7 @@ public class EnemyPerception : MonoBehaviour
             // This is here so it doesn't get called every frame
             // and tank performance
             yield return new WaitForSeconds(1f);
+
             CheckForFOVCollisions();
         }
     }
@@ -53,12 +54,13 @@ public class EnemyPerception : MonoBehaviour
         // Get all collisions on the targetLayer within the enemy's viewRadius
         Collider2D[] rangeCheck = Physics2D.OverlapCircleAll(transform.position, viewRadius, targetLayer);
 
+        // For debugging
+        colliders = rangeCheck;
+
         // If there are collisions, or if the rangeCheck array isn't empty
         if (rangeCheck.Length > 0)
         {
-            // For debugging
-            colliders = rangeCheck;
-
+       
             // Go through each collider that was found
             foreach (Collider2D collider in rangeCheck)
             {
@@ -77,8 +79,10 @@ public class EnemyPerception : MonoBehaviour
                         // If the object is the player and not the player's hat
                         if (target.gameObject.CompareTag("Player") && target.gameObject.name != "Hat Pin")
                         {
-                            // Switch Enemy SubState to Aggro
-                            //Debug.Log("Collision Detected");
+                            // Switch Enemy Move or Idle SubState to Aggro
+                            Debug.Log("Collision Detected");
+                            esm.IsAggro = true;
+                            esm.targetObject = target.gameObject;
 
                             // For Debugging
                             canSeeObject = true;
@@ -121,8 +125,10 @@ public class EnemyPerception : MonoBehaviour
             {
                 //Debug.LogWarning("Line Being Drawn to Object");
                 Gizmos.DrawLine(transform.position, colliders[i].transform.position);
+                
             }
         }
+
     }
 
     #endif

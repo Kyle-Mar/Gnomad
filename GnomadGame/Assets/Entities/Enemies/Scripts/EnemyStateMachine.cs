@@ -18,6 +18,7 @@ public class EnemyStateMachine : StateMachine
     public EnemyMoveState MoveState;
     public EnemyIdleState IdleState;
     public EnemyAttackState AttackState;
+    public EnemyNotAttackState NotAttackState;
 
 
     LayerMask groundLayerMask;
@@ -28,23 +29,42 @@ public class EnemyStateMachine : StateMachine
 
     [SerializeField] bool isGrounded = false;
 
+    [SerializeField] bool attackOnCooldown = false;
+
     [SerializeField] Vector2 lastMovementDirection = new(0, 0);
 
     [SerializeField] float currentMoveSpeed = MovementStats.moveSpeed;
+
+    [SerializeField] bool isAttacking = false;
+
+    [SerializeField] private const float ATTACK_COOLDOWN_MAX = 1f;
+
+    // When the enemy can see the player, it becomes aggro
+    // And when the player is far enough away or can't reach the player,
+    //  it gets set back to false
+    [SerializeField] bool isAggro = false;
+
+    [SerializeField] private float attackCooldownTimer = 0f;
 
     [Header("Components")]
 
     public Collider2D col;
     public Rigidbody2D rb;
     public SpriteRenderer SpriteRenderer;
-    public NavMeshAgent navMeshAgent;
     public Transform[] movePoints;
     public GameObject targetObject;
+    public GameObject EnemyAttackObj;
     public int currentMovePointIndex;
 
     //public ParticleSystem WalkParticles;
     //public ParticleSystem JumpCloudParticles;
     //public ParticleSystem LandParticles;
+
+    public bool IsAttacking { get { return isAttacking; } set { isAttacking = value; } }
+
+    public bool IsAggro { get { return isAggro; } set { isAggro = value; } }
+
+    public bool IsAttackOnCooldown { get { return attackOnCooldown; } set { attackOnCooldown = value; } }
 
     public bool IsGrounded => isGrounded;
     public Vector2 LastMovementDirection => lastMovementDirection;
@@ -100,7 +120,23 @@ public class EnemyStateMachine : StateMachine
     {
         isGrounded = ContextUtils.CheckIfGrounded(ref col, transform, ref floorContactFilter);
         currentState.UpdateStates();
+        if (IsAttackOnCooldown)
+        {
+            attackCooldownTimer -= Time.deltaTime;
+            if (attackCooldownTimer <= 0f)
+            {
+                IsAttackOnCooldown = false;
+            }
+        }
+        
+    }
 
+    // Could pass in a parameter to change cooldown for specific attacks
+    public void StartAttackCooldown()
+    {
+        IsAttacking = false;
+        IsAttackOnCooldown = true;
+        attackCooldownTimer = ATTACK_COOLDOWN_MAX;
     }
 
     public void CheckIfGrounded()
@@ -151,15 +187,16 @@ public class EnemyStateMachine : StateMachine
         MoveState = new EnemyMoveState(this);
         IdleState = new EnemyIdleState(this);
         AttackState = new EnemyAttackState(this);
+        NotAttackState = new EnemyNotAttackState(this);
     }
 
     // Can probably be moved to a different script,
     // This is just here temporarily
-    public void OnCollisionEnter2D(Collision collision)
+    public void OnTriggerEnter2D(Collider2D collision)
     {
         IDamageable damageable = null;
         
-        if (collision.gameObject.tag == "player")
+        if (collision.gameObject.tag == "Player")
         {
             if (collision.gameObject.TryGetComponent<IDamageable>(out damageable))
             {

@@ -1353,7 +1353,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3697590201540995734}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!114 &3229880349750332785
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1662,13 +1662,13 @@ MonoBehaviour:
   emptyCellPrefab: {fileID: 1491362556479459070, guid: dcf6b3e867d2bca499537ff9319d7a06, type: 3}
   itemPrefab: {fileID: 1491362556479459070, guid: 922500a090e6e06458f7ba672aaf9399, type: 3}
   selectedCellIcon: {fileID: 1491362556479459070, guid: 036edde840d9002409632209cfffdf84, type: 3}
-  jasonItem: {fileID: 11400000, guid: b4da248e18cb8d944a56f6e9c62221d0, type: 2}
-  canvas: {fileID: 555818488}
-  backpack: {fileID: 2066853357}
-  isOpen: 0
-  backpackRectTransform: {fileID: 0}
   graphicRaycaster: {fileID: 555818486}
   eventSystem: {fileID: 0}
+  backpackRectTransform: {fileID: 0}
+  backpack: {fileID: 2066853357}
+  canvas: {fileID: 555818488}
+  jasonItem: {fileID: 11400000, guid: b4da248e18cb8d944a56f6e9c62221d0, type: 2}
+  isOpen: 0
 --- !u!114 &8667429524613491808
 MonoBehaviour:
   m_ObjectHideFlags: 0

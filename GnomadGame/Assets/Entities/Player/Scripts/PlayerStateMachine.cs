@@ -183,7 +183,7 @@ public class PlayerStateMachine : StateMachine
     private void UpdateMovementDirection(InputAction.CallbackContext cxt)
     {
        Vector2 inputVector = cxt.ReadValue<Vector2>();
-        Debug.Log(inputVector);
+        //Debug.Log(inputVector);
 
         if (inputVector == Vector2.left)
         {
@@ -275,8 +275,7 @@ public class PlayerStateMachine : StateMachine
 
         //deathParts.GetComponent<SortingLayer>().sod
 
-        // I don't know if you'd want me to exit out of the previous state
-        // I don't think it would even matter since the player is dead
+        
         if (currentState != DeathState)
         {
             currentState = DeathState;
