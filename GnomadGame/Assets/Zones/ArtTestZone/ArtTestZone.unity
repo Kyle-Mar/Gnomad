@@ -3830,7 +3830,7 @@ GameObject:
   - component: {fileID: 319147169}
   m_Layer: 0
   m_Name: Transform1
-  m_TagString: Untagged
+  m_TagString: MovePoint
   m_Icon: {fileID: 2488908585195742037, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18043,7 +18043,7 @@ GameObject:
   - component: {fileID: 752263643}
   m_Layer: 0
   m_Name: Transform2
-  m_TagString: Untagged
+  m_TagString: MovePoint
   m_Icon: {fileID: 2488908585195742037, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -44851,6 +44851,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2562125435300594260, guid: 222199a8351d25943b93056627597db2, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 17.32
+      objectReference: {fileID: 0}
     - target: {fileID: 2562125435300594263, guid: 222199a8351d25943b93056627597db2, type: 3}
       propertyPath: m_TagString
       value: Enemy
@@ -44915,6 +44919,10 @@ PrefabInstance:
       propertyPath: movePoints.Array.data[1]
       value: 
       objectReference: {fileID: 752263643}
+    - target: {fileID: 5926855147947196789, guid: 222199a8351d25943b93056627597db2, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6414006958247665628, guid: 222199a8351d25943b93056627597db2, type: 3}
       propertyPath: m_BodyType
       value: 0

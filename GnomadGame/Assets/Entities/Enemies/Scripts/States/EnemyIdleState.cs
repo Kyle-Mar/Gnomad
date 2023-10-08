@@ -14,24 +14,49 @@ public class EnemyIdleState : EnemyBaseState
     public override void CheckSwitchStates()
     {
         //throw new System.NotImplementedException();
-        if (timerChangeState <= 0.0f)
+
+        // If enemy is not aggro
+        if (!context.IsAggro)
         {
-            if (context.currentMovePointIndex >= context.movePoints.Length - 1)
+            // Wait for timer to be done
+            if (timerChangeState <= 0.0f)
             {
-                context.currentMovePointIndex = 0;
+                // Move to the next move point
+                if (context.currentMovePointIndex >= context.movePoints.Length - 1)
+                {
+                    context.currentMovePointIndex = 0;
+                }
+                else
+                {
+                    context.currentMovePointIndex++;
+                }
+                context.targetObject = context.movePoints[context.currentMovePointIndex].gameObject;
+                SwitchState(context.MoveState);
+            }
+        }
+
+        // If enemy is aggro
+        else
+        {
+            float dist = Vector2.Distance(context.gameObject.transform.position, context.targetObject.transform.position);
+            Debug.Log(dist);
+            if ( dist < 1.7f)
+            {
+                SetSubState(context.AttackState);
             }
             else
             {
-                context.currentMovePointIndex++;
+                SetSubState(context.NotAttackState);
             }
-            context.targetObject = context.movePoints[context.currentMovePointIndex].gameObject;
-            SwitchState(context.MoveState);
         }
+        
+        
     }
 
     public override void EnterState()
     {
         //throw new System.NotImplementedException();
+        InitializeSubState();
         timerChangeState = TimerChangeStateMax;
     }
 
@@ -49,6 +74,8 @@ public class EnemyIdleState : EnemyBaseState
     public override void InitializeSubState()
     {
         //throw new System.NotImplementedException();
+        SetSubState(context.NotAttackState);
+
     }
 
     public override void UpdateState()
@@ -57,6 +84,8 @@ public class EnemyIdleState : EnemyBaseState
 
         CheckSwitchStates();
         
+        
+
         timerChangeState -= Time.deltaTime;
     }
 

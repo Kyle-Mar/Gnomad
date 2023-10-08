@@ -35,7 +35,7 @@ public class EnemyGroundedState : EnemyBaseState
     {
         //throw new System.NotImplementedException();
     }
-
+    
     public override void FixedUpdateState()
     {
         //throw new System.NotImplementedException();
@@ -44,14 +44,16 @@ public class EnemyGroundedState : EnemyBaseState
     public override void InitializeSubState()
     {
         // Check the enemy movement vector to see if they are moving
+
+        // Right now, it is just static behavior
+        // Tells the enemy to move towards Move Point
         if (context.targetObject != null)
         {
             SetSubState(context.MoveState);
-            //SetSubState(context.MoveState);
         }
         else
         {
-            SetSubState(context.EmptyState);
+            SetSubState(context.IdleState);
         }
     }
 
