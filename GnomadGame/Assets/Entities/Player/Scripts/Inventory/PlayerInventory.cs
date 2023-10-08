@@ -50,7 +50,7 @@ namespace Entities.Player.Inventory {
             data[1, 0] = (int)Grid.CellStatus.Empty;
             data[1, 1] = (int)Grid.CellStatus.Empty;
             backpackRectTransform = backpack.GetComponent<RectTransform>();
-            if(data.PlaceItem(jasonItem, new(0, 0)))
+            if(data.PlaceItem(jasonItem, new(0, 1)))
             {
                 Debug.Log("HELLO WORLD");
             }
@@ -186,7 +186,7 @@ namespace Entities.Player.Inventory {
                 }
                 InventoryItem item;
                 if(data.CurrentItem.TryGetComponent(out item)){
-                    item.Rotate90();
+                    item.Rotate90(graphicRaycaster, eventSystem);
                 }
                 var panelWidth = 1f / data.NumColumns;
                 var panelHeight = 1f / data.NumRows;
@@ -260,6 +260,8 @@ namespace Entities.Player.Inventory {
                 InventoryCell ic;
                 if (cell.TryGetComponent(out ic))
                 {
+                    ic.r = x.row;
+                    ic.c = x.col;
                     ic.UpdateTransform(new Vector3(panelWidth, panelHeight, 1), GetNewPanelLocalPosition(backpackTopLeftCorner, panelOffsetX, panelOffsetY, x.row, x.col));
                 }
                 cellList.Add(cell);
@@ -323,7 +325,7 @@ namespace Entities.Player.Inventory {
         public static Vector3 GetNewItemLocalPosition(Vector3 backpackTopLeftCorner, Vector2 itemSize, Vector2 cellSize, Vector2 pivot, int row, int col)
         {
             Debug.Log((backpackTopLeftCorner.x + cellSize.x * row) + " + " + (backpackTopLeftCorner.y - cellSize.y * col - itemSize.y, 1));
-            return new Vector3(backpackTopLeftCorner.x + (cellSize.x * row) + (itemSize.x * pivot.x), backpackTopLeftCorner.y - (cellSize.y * col) - (itemSize.y * pivot.y), 1);
+            return new Vector3(backpackTopLeftCorner.x + (cellSize.x * row) + (itemSize.x * pivot.x), backpackTopLeftCorner.y - (cellSize.y * col) + (itemSize.y * pivot.y ) - itemSize.y, 1);
             //+cellSize.x * col + itemSize.x / 2
         }
 

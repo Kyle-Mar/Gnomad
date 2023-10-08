@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Gnomad.Utils;
 
 namespace Entities.Player.Inventory
 {
@@ -12,6 +14,8 @@ namespace Entities.Player.Inventory
         [SerializeField] Grid grid;
         public BaseItem Item => item;
         public Grid Grid => grid;
+        Vector3 pvt;
+        int rot;
 
         public void Initialize(BaseItem item, Grid grid, Vector2 panelSize, Vector2 panelOffset, RectTransform backpackRectTransform, Transform backpackGOTransform, Vector2Int itemPos)
         {
@@ -29,15 +33,41 @@ namespace Entities.Player.Inventory
             RectTransform itemTransform = transform as RectTransform;
             itemTransform.pivot = new(1.0f / grid.NumColumns / 2, 1.0f / grid.NumRows / 2);
             itemTransform.localPosition = PlayerInventory.GetNewItemLocalPosition(PlayerInventory.GetBackpackTopLeftCorner(backpackRectTransform), itemSize, panelOffset, itemTransform.pivot, itemPos.x, itemPos.y);
-
+            Vector3[] arr = new Vector3[4];
+            itemTransform.GetWorldCorners(arr);
+            pvt = arr[1];
+            rot = 1;
             //Debug.Log(PlayerInventory.GetNewItemLocalPosition(PlayerInventory.GetBackpackTopLeftCorner(backpackRectTransform), itemSize, panelSize, 0, 0));
         }
 
-        public void Rotate90()
+        public void Rotate90(GraphicRaycaster graphicRaycaster, EventSystem eventSystem)
         {
             grid.ReverseColumns();
             grid.Transpose();
-            //grid.OutputTXT();
+            RectTransform rectTransform = transform as RectTransform;
+            PointerEventData pointerEventData = new(eventSystem);
+            Vector3[] arr = new Vector3[4];
+            rectTransform.GetWorldCorners(arr);
+            pointerEventData.position = arr[1];
+
+
+            
+            List<RaycastResult> results = new();
+            graphicRaycaster.Raycast(pointerEventData, results);
+            Debug.DrawRay(arr[rot], Vector3.right * 100f, Color.red, 10f);
+            rot -= 1;
+            if (rot < 0)
+            {
+                rot = 3;
+            }
+            foreach (var x in results)
+            {
+                InventoryCell cell;
+                if (x.gameObject.TryGetComponent(out cell))
+                {
+                    Debug.Log(cell.r + " " + cell.c);
+                }
+            }
         }
 
         public void UpdateIMG(BaseItem item, Vector2 panelOffset, Vector2Int itemPos, RectTransform backpackRectTransform)
