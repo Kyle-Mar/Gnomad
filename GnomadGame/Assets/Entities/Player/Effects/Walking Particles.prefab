@@ -1540,7 +1540,7 @@ ParticleSystem:
     uvChannelMask: -1
     rowMode: 1
     sprites:
-    - sprite: {fileID: 1038450291, guid: 6d96ae8ac6f25b74f8c342c02dd52ed1, type: 3}
+    - sprite: {fileID: 2060492627, guid: 6d96ae8ac6f25b74f8c342c02dd52ed1, type: 3}
     flipU: 0
     flipV: 0
   VelocityModule:
@@ -4843,8 +4843,8 @@ ParticleSystemRenderer:
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
-  m_MinParticleSize: 0.035
-  m_MaxParticleSize: 0.035
+  m_MinParticleSize: 0.022
+  m_MaxParticleSize: 0.022
   m_CameraVelocityScale: 0
   m_VelocityScale: 0
   m_LengthScale: 2
