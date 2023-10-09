@@ -7,6 +7,8 @@ TagManager:
   - Enemy
   - Ground
   - MovePoint
+  - Breakable
+  - PlayerAttack
   layers:
   - Default
   - TransparentFX
