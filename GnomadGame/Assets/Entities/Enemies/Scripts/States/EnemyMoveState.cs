@@ -35,12 +35,15 @@ public class EnemyMoveState : EnemyBaseState
 
             if (!context.IsAggro)
             {
-                // If enemy is close enough to targeted move point, switch to idle
+                // If the target doesn't exist switch to idle.
+                //TODO: SWITCH HERE TO IDLE. Rethink the order and nesting of this. 
                 if (context.targetObject == null) 
                 { 
+                    
                     context.targetObject = context.movePoints[context.currentMovePointIndex].gameObject;
                 }
 
+                // If enemy is close enough to targeted move point, switch to idle
                 if (Vector2.Distance(context.gameObject.transform.position, context.targetObject.transform.position) < 0.4f)
                 {
                     // if distance is less than this, set velocity to zero
@@ -136,7 +139,6 @@ public class EnemyMoveState : EnemyBaseState
                 context.rb.velocity = GetMovementVectorToTargetObject();
             }
         }
-
         else
         {
             SwitchState(context.IdleState);

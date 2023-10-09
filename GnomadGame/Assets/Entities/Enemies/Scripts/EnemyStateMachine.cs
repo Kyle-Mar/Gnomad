@@ -70,8 +70,6 @@ public class EnemyStateMachine : StateMachine
     public Vector2 LastMovementDirection => lastMovementDirection;
     public float CurrentMoveSpeed => currentMoveSpeed;
 
-
-
     private void OnEnable()
     {
         //enable AI
@@ -201,6 +199,8 @@ public class EnemyStateMachine : StateMachine
     // This is just here temporarily
     public void OnTriggerEnter2D(Collider2D collision)
     {
+
+        Debug.Log(collision.tag);
         IDamageable damageable = null;
         
         if (collision.gameObject.tag == "Player")
@@ -208,8 +208,13 @@ public class EnemyStateMachine : StateMachine
             if (collision.gameObject.TryGetComponent<IDamageable>(out damageable))
             {
                 damageable.Damage(10f);
-                Debug.Log("Damaging Player");
+                Debug.Log("Damaging Player" + damageable.Health);
             }
         }
+    }
+
+    public void Die()
+    {
+        Debug.Log("Do a thing");
     }
 }
