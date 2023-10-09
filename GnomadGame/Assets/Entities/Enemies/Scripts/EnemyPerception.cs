@@ -15,6 +15,14 @@ public class EnemyPerception : MonoBehaviour
     [Range(0, 360)] public float viewAngle;
 
 
+    // When a targetObject has been set, this will be true. And when the enemy can't see the set target object
+    //  After a period of time, it will be set back to false.
+    // This bool makes sure that the the logic doesn't keep setting the enemy's target object to null
+    [SerializeField] private bool lookingForTargetObject = false;
+
+    [SerializeField] private float timeSinceLastSeen = 0f;
+
+
     // The layer the enemy looks for targets on
     public LayerMask targetLayer;
 
@@ -25,16 +33,37 @@ public class EnemyPerception : MonoBehaviour
     private Collider2D[] colliders = null;
     private bool canSeeObject = false;
 
+
+    // If the enemy can't see the target object
+    //  Then this is set to false and will start the timeSinceLastSeen timer
+    private bool canSeeTargetObject = false;
+
     // Start is called before the first frame update
     void Start()
     {
         StartCoroutine(CheckFOV());
     }
 
+    private void Update()
+    {
+        if (!canSeeTargetObject && lookingForTargetObject)
+        {
+            timeSinceLastSeen += Time.deltaTime;
+            if (timeSinceLastSeen > 5f)
+            {
+                esm.IsAggro = false;
+                esm.targetObject = null;
+                timeSinceLastSeen = 0f;
+                lookingForTargetObject = false;
+            }
+        }
+    }
+
     private IEnumerator CheckFOV()
     {
         while (true)
         {
+            
             // Doesn't execute CheckForFOVCollisions() until the 
             // time put in to WaitForSeconds passes
 
@@ -51,6 +80,8 @@ public class EnemyPerception : MonoBehaviour
     /// </summary>
     private void CheckForFOVCollisions()
     {
+        canSeeTargetObject = false;
+        canSeeObject = false;
         // Get all collisions on the targetLayer within the enemy's viewRadius
         Collider2D[] rangeCheck = Physics2D.OverlapCircleAll(transform.position, viewRadius, targetLayer);
 
@@ -79,19 +110,27 @@ public class EnemyPerception : MonoBehaviour
                         // If the object is the player and not the player's hat
                         if (target.gameObject.CompareTag("Player") && target.gameObject.name != "Hat Pin")
                         {
-                            // Switch Enemy Move or Idle SubState to Aggro
-                            Debug.Log("Collision Detected");
+                            
+                            Debug.Log("Player Detected");
                             esm.IsAggro = true;
                             esm.targetObject = target.gameObject;
+                            lookingForTargetObject = true;
 
                             // For Debugging
                             canSeeObject = true;
                         }
+                        if (target.gameObject == esm.targetObject)
+                        {
+                            canSeeTargetObject |= true;
+                        }
+                        
                     }
                     continue;
                 }
             }
+
         }
+        
     }
 
     // Functions Below Are For Unity Editor

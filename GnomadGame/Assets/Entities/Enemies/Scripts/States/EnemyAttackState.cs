@@ -19,12 +19,6 @@ public class EnemyAttackState : EnemyBaseState
     {
         //throw new System.NotImplementedException();
 
-        if (context.IsAttackOnCooldown)
-        {
-            context.IsAttacking = false;
-            SwitchState(context.NotAttackState);
-        }
-
         if (attackTimer <= 0f)
         {
             context.IsAttacking = false;
@@ -38,6 +32,7 @@ public class EnemyAttackState : EnemyBaseState
         //throw new System.NotImplementedException();
 
         context.EnemyAttackObj.SetActive(true);
+        context.IsAttacking = true;
         attackTimer = ATTACK_TIMER_MAX;
         Debug.Log("Enemy Attacking");
     }

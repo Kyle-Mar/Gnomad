@@ -119,6 +119,7 @@ public class EnemyStateMachine : StateMachine
     void Update()
     {
         isGrounded = ContextUtils.CheckIfGrounded(ref col, transform, ref floorContactFilter);
+        UpdateMovementDirection();
         currentState.UpdateStates();
         if (IsAttackOnCooldown)
         {
@@ -160,7 +161,13 @@ public class EnemyStateMachine : StateMachine
     //this function will be totally changed when we figure out our AI model
     private void UpdateMovementDirection()
     {
-
+        // Probably use this for non aggro movement, and switch states based on its movement vector
+        //  Instead of only using its Idle behavior as a timer
+        
+        if (rb.velocity.x <= -0.001 && SpriteRenderer.flipX)
+        { FlipComponents(); }
+        else if (rb.velocity.x >= 0.001 && !SpriteRenderer.flipX)
+        { FlipComponents(); }
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
