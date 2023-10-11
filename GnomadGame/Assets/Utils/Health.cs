@@ -5,40 +5,55 @@ using UnityEngine;
 
 public class Health : MonoBehaviour, IDamageable
 {
-    public float MAX_HEALTH { get; set; } = 100f;
-    public float health { get; set; }
-    public float damageCooldown = 1.0f;
-    public bool canTakeDamage = true;
+    public delegate void OnDeath();
+    public OnDeath onDeath;
+
+    #region Health Properties
+    [Header("Health")] // I don't know why this doesn't show up.
+    [SerializeField] const float MAX_HEALTH = 100f;
+    [SerializeField] float health = 100f;
+    [SerializeField] bool canTakeDamage = true;
+    [SerializeField] float cooldownTime = 1.0f;
+    #endregion
+
+    #region Health Fields
+    public float MaxHealth { get => MAX_HEALTH; }
+    float IDamageable.Health { get => health; set => health = value; }
+    public bool CanTakeDamage { get => canTakeDamage; set => canTakeDamage = value; }
+    public float CooldownTime { get => cooldownTime; set => cooldownTime = value; }
+    #endregion
     public virtual void Damage(float amount)
     {
-        if (!canTakeDamage)
+        if (canTakeDamage)
         {
-            return;
-        }
-        StartCoroutine(DoCooldownTimer());
-
-        health -= amount;
-        //Debug.Log(health);
-        if (health <= 0)
-        {
-            Die();
+            HealthUtil.Damage(this, amount);
+            StartCoroutine(DoCooldownTimer());
         }
     }
     
     void Awake()
     {
-        health = MAX_HEALTH;
+        health = MaxHealth;
+    }
+
+    public void Update()
+    {
     }
 
     public virtual void Die()
     {
+        if(onDeath.GetInvocationList().Length > 0)
+        {
+            onDeath?.Invoke();
+            return;
+        }
         Destroy(gameObject);
     }
 
     IEnumerator DoCooldownTimer()
     {
         canTakeDamage = false;
-        yield return new WaitForSeconds(damageCooldown);
+        yield return new WaitForSeconds(CooldownTime);
         canTakeDamage = true;
     }
 }

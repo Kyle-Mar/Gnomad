@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: JasonItem
   m_EditorClassIdentifier: 
   grid:
-    matrix: 00000000
+    numColumns: 2
+    numRows: 2
+    matrix: 01000000000000000100000001000000
   itemTexture: {fileID: 2800000, guid: 29a788d2ff77c5d41ae0c3713f417539, type: 3}
   ItemID: 1

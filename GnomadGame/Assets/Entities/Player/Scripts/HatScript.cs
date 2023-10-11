@@ -30,7 +30,7 @@ public class HatScript : MonoBehaviour
         // To collide with specific colliders on the enemy
 
         // Checks to see what tag the collider has
-        if (collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Breakable")
         {
             // Tries to get the 'IDamageable' component off of the supposed 'Enemy'
             // If it gets it successfully, then it will cause damage to the 'Enemy'

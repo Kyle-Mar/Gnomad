@@ -77,16 +77,17 @@ public class PlayerStateMachine : StateMachine
     public float CurrentMoveSpeed => currentMoveSpeed;
 
 
-
     private void OnEnable()
     {
         Controls.Player.Move.performed += UpdateMovementDirection;
         Controls.Player.Die.performed += Die;
         Controls.Player.Respawn.performed += ReloadScene;
+        GetComponent<Health>().onDeath += DieHealth;
         Controls.Enable();
     }
     private void OnDisable()
     {
+        GetComponent<Health>().onDeath += DieHealth;
         Controls.Disable();
     }
 
@@ -307,6 +308,12 @@ public class PlayerStateMachine : StateMachine
         GPBounceState = new PlayerGPBounceState(this);
     }
 
-    
-
+    void DieHealth()
+    {
+        if (CurrentState != DeathState)
+        {
+            CurrentState = DeathState;
+            CurrentState.EnterState();
+        }
+    }
 }

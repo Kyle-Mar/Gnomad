@@ -20,7 +20,7 @@ namespace Entities.Player.Inventory
         public void Initialize(BaseItem item, Grid grid, Vector2 panelSize, Vector2 panelOffset, RectTransform backpackRectTransform, Transform backpackGOTransform, Vector2Int itemPos)
         {
             this.item = item;
-            this.grid = grid;
+            this.grid = (Grid)grid.Clone();
 
             transform.SetParent(backpackGOTransform, false);
             

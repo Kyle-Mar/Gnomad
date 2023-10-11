@@ -50,7 +50,7 @@ namespace Entities.Player.Inventory {
             data[1, 0] = (int)Grid.CellStatus.Empty;
             data[1, 1] = (int)Grid.CellStatus.Empty;
             backpackRectTransform = backpack.GetComponent<RectTransform>();
-            if(data.PlaceItem(jasonItem, new(0, 1)))
+            if(data.PlaceItem(jasonItem, new(0, 0)))
             {
                 Debug.Log("HELLO WORLD");
             }

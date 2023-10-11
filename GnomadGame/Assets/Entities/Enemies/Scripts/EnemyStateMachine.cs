@@ -75,8 +75,6 @@ public class EnemyStateMachine : StateMachine
     //public Vector2 LastMovementDirection { get { return lastMovementDirection; } set { lastMovementDirection = value; } }
     public float CurrentMoveSpeed => currentMoveSpeed;
 
-
-
     private void OnEnable()
     {
         //enable AI
