@@ -109,9 +109,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 2368
-        width: 1769
-        height: 1184
+        y: 2460
+        width: 1915
+        height: 1230
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -129,10 +129,10 @@ TextureImporter:
       name: TrollSwing_1
       rect:
         serializedVersion: 2
-        x: 1769
-        y: 2368
-        width: 1769
-        height: 1184
+        x: 1915
+        y: 2460
+        width: 1915
+        height: 1230
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -150,10 +150,10 @@ TextureImporter:
       name: TrollSwing_2
       rect:
         serializedVersion: 2
-        x: 3538
-        y: 2368
-        width: 1769
-        height: 1184
+        x: 3830
+        y: 2460
+        width: 1915
+        height: 1230
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -171,10 +171,10 @@ TextureImporter:
       name: TrollSwing_3
       rect:
         serializedVersion: 2
-        x: 5307
-        y: 2368
-        width: 1769
-        height: 1184
+        x: 5745
+        y: 2460
+        width: 1915
+        height: 1230
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -193,9 +193,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 1184
-        width: 1769
-        height: 1184
+        y: 1230
+        width: 1915
+        height: 1230
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -213,10 +213,10 @@ TextureImporter:
       name: TrollSwing_5
       rect:
         serializedVersion: 2
-        x: 1769
-        y: 1184
-        width: 1769
-        height: 1184
+        x: 1915
+        y: 1230
+        width: 1915
+        height: 1230
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -234,10 +234,10 @@ TextureImporter:
       name: TrollSwing_6
       rect:
         serializedVersion: 2
-        x: 3538
-        y: 1184
-        width: 1769
-        height: 1184
+        x: 3830
+        y: 1230
+        width: 1915
+        height: 1230
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -255,10 +255,10 @@ TextureImporter:
       name: TrollSwing_7
       rect:
         serializedVersion: 2
-        x: 5307
-        y: 1184
-        width: 1769
-        height: 1184
+        x: 5745
+        y: 1230
+        width: 1915
+        height: 1230
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -278,8 +278,8 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1769
-        height: 1184
+        width: 1915
+        height: 1230
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -297,10 +297,10 @@ TextureImporter:
       name: TrollSwing_9
       rect:
         serializedVersion: 2
-        x: 1769
+        x: 1915
         y: 0
-        width: 1769
-        height: 1184
+        width: 1915
+        height: 1230
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -318,10 +318,10 @@ TextureImporter:
       name: TrollSwing_10
       rect:
         serializedVersion: 2
-        x: 3538
+        x: 3830
         y: 0
-        width: 1769
-        height: 1184
+        width: 1915
+        height: 1230
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -331,27 +331,6 @@ TextureImporter:
       bones: []
       spriteID: dcef734914ec0e843b1964f3c1f831ed
       internalID: -10467229
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TrollSwing_11
-      rect:
-        serializedVersion: 2
-        x: 5307
-        y: 0
-        width: 1769
-        height: 1184
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ac6350ec1cccefb48bd89e7548941fa1
-      internalID: 1830737943
       vertices: []
       indices: 
       edges: []
@@ -370,7 +349,6 @@ TextureImporter:
       TrollSwing_0: -1353431737
       TrollSwing_1: 1437621611
       TrollSwing_10: -10467229
-      TrollSwing_11: 1830737943
       TrollSwing_2: -814620862
       TrollSwing_3: 1404512108
       TrollSwing_4: -1059365423
