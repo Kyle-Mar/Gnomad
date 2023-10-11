@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -19,7 +20,7 @@ namespace Entities.Player.Inventory
     }
     //row first grid.
     [System.Serializable]
-    public class Grid : IEnumerable<GridTuple>
+    public class Grid : IEnumerable<GridTuple>, ICloneable
     {
         [SerializeField]
         int numColumns;
@@ -57,6 +58,13 @@ namespace Entities.Player.Inventory
             {
                 this[x.row,x.col] = defaultValue;
             }
+        }
+
+        public Grid(Grid grid)
+        {
+            numRows = grid.NumRows;
+            numColumns = grid.numColumns;
+            matrix = (int[])grid.matrix.Clone();
         }
 
         /// <summary>
@@ -199,6 +207,11 @@ namespace Entities.Player.Inventory
         IEnumerator IEnumerable.GetEnumerator()
         {
             return new GridEnumerator(this.matrix, this.numColumns, this.numRows);
+        }
+
+        public object Clone()
+        {
+            return new Grid(this);
         }
 
         public class GridEnumerator : IEnumerator<GridTuple>
