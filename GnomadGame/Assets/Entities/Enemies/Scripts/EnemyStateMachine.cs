@@ -23,7 +23,6 @@ public class EnemyStateMachine : StateMachine
 
     LayerMask groundLayerMask;
     ContactFilter2D floorContactFilter;
-    ContactFilter2D wallContactFilter;
 
     [Header("Movement")]
 
@@ -39,6 +38,8 @@ public class EnemyStateMachine : StateMachine
 
     [SerializeField] private const float ATTACK_COOLDOWN_MAX = 1f;
 
+    [SerializeField] bool isTargetOutOfSight = false;
+
     // When the enemy can see the player, it becomes aggro
     // And when the player is far enough away or can't reach the player,
     //  it gets set back to false
@@ -51,6 +52,7 @@ public class EnemyStateMachine : StateMachine
     public Collider2D col;
     public Rigidbody2D rb;
     public SpriteRenderer SpriteRenderer;
+    public Animator animator;
     public Transform[] movePoints;
     public GameObject targetObject;
     public GameObject EnemyAttackObj;
@@ -66,8 +68,11 @@ public class EnemyStateMachine : StateMachine
 
     public bool IsAttackOnCooldown { get { return attackOnCooldown; } set { attackOnCooldown = value; } }
 
+    public bool IsTargetOutOfSight { get { return isTargetOutOfSight; } set { isTargetOutOfSight = value; } }
+
     public bool IsGrounded => isGrounded;
-    public Vector2 LastMovementDirection => lastMovementDirection;
+
+    //public Vector2 LastMovementDirection { get { return lastMovementDirection; } set { lastMovementDirection = value; } }
     public float CurrentMoveSpeed => currentMoveSpeed;
 
 
@@ -87,7 +92,7 @@ public class EnemyStateMachine : StateMachine
         groundLayerMask = LayerMask.GetMask("Ground");
         col = GetComponent<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
-        currentMoveSpeed = MovementStats.moveSpeed;
+        currentMoveSpeed = 5f;
         currentMovePointIndex = 0;
 
         //do instantiate AI = new EnemyAI();
@@ -102,7 +107,6 @@ public class EnemyStateMachine : StateMachine
         floorContactFilter = new();
         floorContactFilter.SetLayerMask(groundLayerMask);
         floorContactFilter.SetNormalAngle(85, 95);
-
 
         InstantiateStates();
 
@@ -145,10 +149,12 @@ public class EnemyStateMachine : StateMachine
         if (ContextUtils.CheckIfGrounded(ref col, transform, ref floorContactFilter))
         {
             isGrounded = true;
+            animator.SetBool("InAir", false);
         }
         else
         {
             isGrounded = false;
+            animator.SetBool("InAir", true);
         }
     }
 
@@ -164,6 +170,9 @@ public class EnemyStateMachine : StateMachine
         // Probably use this for non aggro movement, and switch states based on its movement vector
         //  Instead of only using its Idle behavior as a timer
         
+        animator.SetFloat("Velocity", Mathf.Abs(rb.velocity.x));
+
+
         if (rb.velocity.x <= -0.001 && SpriteRenderer.flipX)
         { FlipComponents(); }
         else if (rb.velocity.x >= 0.001 && !SpriteRenderer.flipX)
@@ -172,15 +181,10 @@ public class EnemyStateMachine : StateMachine
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
-        /*
-        if (collision.gameObject.TryGetComponent<IDamagable.IDamagable>(out damagable))
-        {
-            // Apply Damage to Player
-            damagable.damage(10f);
-        }
-        */
+        
     }
 
+    
     public void FlipComponents()
     {
         SpriteRenderer.flipX = !SpriteRenderer.flipX;
@@ -197,14 +201,12 @@ public class EnemyStateMachine : StateMachine
         NotAttackState = new EnemyNotAttackState(this);
     }
 
-    // Can probably be moved to a different script,
-    // This is just here temporarily
+
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        IDamageable damageable = null;
-        
-        if (collision.gameObject.tag == "Player")
+        if (collision.transform.tag == "Player" && IsAttacking)
         {
+            IDamageable damageable = null;
             if (collision.gameObject.TryGetComponent<IDamageable>(out damageable))
             {
                 damageable.Damage(10f);

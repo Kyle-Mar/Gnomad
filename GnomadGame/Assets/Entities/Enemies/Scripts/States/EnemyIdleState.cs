@@ -38,15 +38,9 @@ public class EnemyIdleState : EnemyBaseState
         // If enemy is aggro
         else
         {
-            float dist = Vector2.Distance(context.gameObject.transform.position, context.targetObject.transform.position);
-            //Debug.Log(dist);
-            if ( dist < 1.7f)
+            if (Vector2.Distance(context.transform.position, context.targetObject.transform.position) > 0.4f)
             {
-                SetSubState(context.AttackState);
-            }
-            else
-            {
-                SetSubState(context.NotAttackState);
+                SwitchState(context.MoveState);
             }
         }
         
@@ -58,6 +52,7 @@ public class EnemyIdleState : EnemyBaseState
         //throw new System.NotImplementedException();
         InitializeSubState();
         timerChangeState = TimerChangeStateMax;
+        context.rb.Sleep();
     }
 
     public override void ExitState()
@@ -83,8 +78,8 @@ public class EnemyIdleState : EnemyBaseState
         //throw new System.NotImplementedException();
 
         CheckSwitchStates();
-        
-        
+
+        //Debug.Log(context.targetObject.name);
 
         timerChangeState -= Time.deltaTime;
     }

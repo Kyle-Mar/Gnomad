@@ -12,13 +12,32 @@ public class EnemyNotAttackState : EnemyBaseState
     public override void CheckSwitchStates()
     {
         //throw new System.NotImplementedException();
-        if (context.IsAttacking)
+
+        // If there is a targetObject
+        if (context.targetObject)
         {
-            if (!context.IsAttackOnCooldown)
+            // And the enemy is Aggro'd
+            if (context.IsAggro)
             {
-                SwitchState(context.AttackState);
+                // Get the distance between the two objects
+                float dist = Vector2.Distance(context.gameObject.transform.position, context.targetObject.transform.position);
+                //Debug.Log(dist);
+
+                // If the enemy is close enough
+                //  and the enemy's attack isn't on cooldown
+                if (dist < 2f && !context.IsAttackOnCooldown)
+                {
+                    // Switch to Attack State if it isn't already
+                    if (currentSubState != context.AttackState)
+                    {
+                        SwitchState(context.AttackState);
+                    }
+                }
             }
+            
         }
+        
+        
     }
 
     public override void EnterState()

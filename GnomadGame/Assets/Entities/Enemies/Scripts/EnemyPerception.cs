@@ -69,7 +69,7 @@ public class EnemyPerception : MonoBehaviour
 
             // This is here so it doesn't get called every frame
             // and tank performance
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.3f);
 
             CheckForFOVCollisions();
         }
@@ -122,6 +122,7 @@ public class EnemyPerception : MonoBehaviour
                         if (target.gameObject == esm.targetObject)
                         {
                             canSeeTargetObject |= true;
+                            esm.IsTargetOutOfSight = false;
                         }
                         
                     }
@@ -129,6 +130,11 @@ public class EnemyPerception : MonoBehaviour
                 }
             }
 
+        }
+
+        if (!canSeeTargetObject)
+        {
+            esm.IsTargetOutOfSight = true;
         }
         
     }
