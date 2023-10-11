@@ -21,7 +21,9 @@ namespace Entities.Player.Inventory
     [System.Serializable]
     public class Grid : IEnumerable<GridTuple>
     {
+        [SerializeField]
         int numColumns;
+        [SerializeField]
         int numRows;
         // a flattened array because 2d arrays are hard to serialize.
         public int[] matrix;

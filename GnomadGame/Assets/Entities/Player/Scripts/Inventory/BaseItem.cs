@@ -16,8 +16,12 @@ namespace Entities.Player.Inventory{
         public Texture2D itemTexture;
         //unset value flag but not nullable because that's weird with 0's
         public int ItemID = -0xBEEF;
-        
+
         //Image at somepoint
+
+        public void OnEnable()
+        {
+        }
 
         private void Awake()
         {
@@ -161,7 +165,7 @@ namespace Entities.Player.Inventory{
             }
             // update Baseitem
             serializedObject.Update();
-
+            EditorUtility.SetDirty(item);
         }
     }
     #endif
