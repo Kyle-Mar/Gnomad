@@ -126,6 +126,7 @@ public class EnemyStateMachine : StateMachine
     void Update()
     {
         isGrounded = ContextUtils.CheckIfGrounded(ref col, transform, ref floorContactFilter);
+        //animator.SetBool("InAir", isGrounded);
         UpdateMovementDirection();
         currentState.UpdateStates();
         if (IsAttackOnCooldown)
@@ -146,7 +147,7 @@ public class EnemyStateMachine : StateMachine
         IsAttackOnCooldown = true;
         attackCooldownTimer = ATTACK_COOLDOWN_MAX;
     }
-
+/*
     public void CheckIfGrounded()
     {
         if (ContextUtils.CheckIfGrounded(ref col, transform, ref floorContactFilter))
@@ -159,7 +160,7 @@ public class EnemyStateMachine : StateMachine
             isGrounded = false;
             animator.SetBool("InAir", true);
         }
-    }
+    }*/
 
 
     public void SetMoveSpeed(float value)

@@ -43,12 +43,13 @@ namespace Entities.Player.Inventory {
 
         private void Awake()
         {
-            data = new InventoryData(new(3, 3, (int)Grid.CellStatus.Locked)).SetJasonItem(jasonItem);
+            data = new InventoryData(new(3, 3, (int)Grid.CellStatus.Empty)).SetJasonItem(jasonItem);
             cellList = new();
             itemList = new();
-            data[0, 0] = (int)Grid.CellStatus.Empty;
+/*            data[0, 0] = (int)Grid.CellStatus.Empty;
             data[1, 0] = (int)Grid.CellStatus.Empty;
-            data[1, 1] = (int)Grid.CellStatus.Empty;
+            data[1, 1] = (int)Grid.CellStatus.Empty;*/
+
             backpackRectTransform = backpack.GetComponent<RectTransform>();
             if(data.PlaceItem(jasonItem, new(0, 0)))
             {
@@ -303,6 +304,8 @@ namespace Entities.Player.Inventory {
                 x.SetActive(false);
             }
             data.SetCurrentItem(null);
+            cursor.SetActive(false);
+            cursorPosition = GetCursorIndexOnGrid();
         }
 
         void OpenInventory()
@@ -315,6 +318,7 @@ namespace Entities.Player.Inventory {
             {
                 x.SetActive(true);
             }
+            cursor.SetActive(true);
         }
 
         Vector3 GetNewPanelLocalPosition(Vector3 backpackTopLeftCorner, float panelOffsetX, float panelOffsetY, int row, int col)

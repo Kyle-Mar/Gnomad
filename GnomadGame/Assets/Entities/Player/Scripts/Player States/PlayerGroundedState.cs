@@ -70,6 +70,7 @@ public class PlayerGroundedState : PlayerBaseState
 
     public override void UpdateState()
     {
+        Debug.Log("HELLO WORLD");
         CheckSwitchStates();
     }
 

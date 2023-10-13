@@ -133,7 +133,8 @@ public class PlayerStateMachine : StateMachine
 
     void Update()
     {
-        //Debug.Log("Current Player State = " + currentState);
+        InputAction.CallbackContext callbackContext = new();
+        PrintDebugInfo(callbackContext);
         CheckIfGrounded();
         DoJumpBuffer();
         currentState.UpdateStates();
