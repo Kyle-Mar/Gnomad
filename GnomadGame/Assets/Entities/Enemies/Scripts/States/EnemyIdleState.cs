@@ -40,7 +40,17 @@ public class EnemyIdleState : EnemyBaseState
         {
             if (Vector2.Distance(context.transform.position, context.targetObject.transform.position) > 0.4f)
             {
-                SwitchState(context.MoveState);
+                if (context.IsAttackOnCooldown)
+                {
+                    if (timerChangeState <= 0.0f)
+                    {
+                        SwitchState(context.MoveState);
+                    }
+                }
+                else
+                {
+                        SwitchState(context.MoveState);
+                }
             }
         }
         

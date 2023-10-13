@@ -25,7 +25,7 @@ public class EnemyNotAttackState : EnemyBaseState
 
                 // If the enemy is close enough
                 //  and the enemy's attack isn't on cooldown
-                if (dist < 2f && !context.IsAttackOnCooldown)
+                if (dist < 10f && !context.IsAttackOnCooldown && !context.IsTargetOutOfSight)
                 {
                     // Switch to Attack State if it isn't already
                     if (currentSubState != context.AttackState)
@@ -44,7 +44,7 @@ public class EnemyNotAttackState : EnemyBaseState
     {
         //throw new System.NotImplementedException();
         context.IsAttacking = false;
-
+        context.JustAttacked = true;
         CheckSwitchStates();
     }
 

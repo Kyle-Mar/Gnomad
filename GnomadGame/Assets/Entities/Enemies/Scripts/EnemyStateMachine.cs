@@ -17,7 +17,8 @@ public class EnemyStateMachine : StateMachine
     public EnemyGroundedState GroundedState;
     public EnemyMoveState MoveState;
     public EnemyIdleState IdleState;
-    public EnemyAttackState AttackState;
+
+    public GorbChargeAttackState AttackState;
     public EnemyNotAttackState NotAttackState;
 
 
@@ -30,13 +31,13 @@ public class EnemyStateMachine : StateMachine
 
     [SerializeField] bool attackOnCooldown = false;
 
-    [SerializeField] Vector2 lastMovementDirection = new(0, 0);
+    [SerializeField] float currentMoveSpeed = 10f;
 
-    [SerializeField] float currentMoveSpeed = MovementStats.moveSpeed;
+    [SerializeField] const float WALKING_MOVEMENT_SPEED = 10f;
 
     [SerializeField] bool isAttacking = false;
 
-    [SerializeField] private const float ATTACK_COOLDOWN_MAX = 1f;
+    [SerializeField] private const float ATTACK_COOLDOWN_MAX = 4.5f;
 
     [SerializeField] bool isTargetOutOfSight = false;
 
@@ -44,6 +45,8 @@ public class EnemyStateMachine : StateMachine
     // And when the player is far enough away or can't reach the player,
     //  it gets set back to false
     [SerializeField] bool isAggro = false;
+
+    [SerializeField] bool justAttacked = false;
 
     [SerializeField] private float attackCooldownTimer = 0f;
 
@@ -69,6 +72,8 @@ public class EnemyStateMachine : StateMachine
     public bool IsAttackOnCooldown { get { return attackOnCooldown; } set { attackOnCooldown = value; } }
 
     public bool IsTargetOutOfSight { get { return isTargetOutOfSight; } set { isTargetOutOfSight = value; } }
+
+    public bool JustAttacked { get { return justAttacked; } set { justAttacked = value; } }
 
     public bool IsGrounded => isGrounded;
 
@@ -195,7 +200,7 @@ public class EnemyStateMachine : StateMachine
         GroundedState = new EnemyGroundedState(this);
         MoveState = new EnemyMoveState(this);
         IdleState = new EnemyIdleState(this);
-        AttackState = new EnemyAttackState(this);
+        AttackState = new GorbChargeAttackState(this);
         NotAttackState = new EnemyNotAttackState(this);
     }
 

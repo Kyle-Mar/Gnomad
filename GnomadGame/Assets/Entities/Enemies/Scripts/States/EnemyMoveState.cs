@@ -7,6 +7,8 @@ using UnityEngine;
 public class EnemyMoveState : EnemyBaseState
 {
 
+    Vector2 currentMoveDirection = Vector2.zero;
+    Vector2 lastPosition = Vector2.zero;
 
     public EnemyMoveState(EnemyStateMachine esm) : base(esm)
     {
@@ -18,36 +20,58 @@ public class EnemyMoveState : EnemyBaseState
         Vector2 newVelocity = Vector2.zero;
         float x = context.targetObject.transform.position.x - context.gameObject.transform.position.x;
 
-        if (x < -0.5)
+
+        if (!context.IsAttacking)
         {
-            newVelocity.x = -1 * context.CurrentMoveSpeed;
-
-            /*
-            if (CheckIfCollidingWithWall(ref context.col, newVelocity, context.transform, ref context.wallContactFilter))
+            if (x < -0.5)
             {
-                //Debug.DrawLine(context.gameObject.transform.position, hitInfo.collider.gameObject.transform.position);
+                newVelocity.x = -1 * context.CurrentMoveSpeed;
+                currentMoveDirection = newVelocity.normalized;
+                /*
+                if (CheckIfCollidingWithWall(ref context.col, newVelocity, context.transform, ref context.wallContactFilter))
+                {
+                    //Debug.DrawLine(context.gameObject.transform.position, hitInfo.collider.gameObject.transform.position);
 
+                    SwitchState(context.IdleState);
+                }
+                */
+
+            }
+            else if (x > 0.5)
+            {
+                newVelocity.x = 1 * context.CurrentMoveSpeed;
+                currentMoveDirection = newVelocity.normalized;
+
+                /*
+                if (CheckIfCollidingWithWall(ref context.col, newVelocity, context.transform, ref context.wallContactFilter))
+                {
+                    //Debug.DrawLine(context.gameObject.transform.position, hitInfo.collider.gameObject.transform.position);
+                    SwitchState(context.IdleState);
+                }
+                */
+            }
+
+            else
+            {
                 SwitchState(context.IdleState);
             }
-            */
-
-        }
-        else if (x > 0.5)
-        {
-            newVelocity.x = 1 * context.CurrentMoveSpeed;
-
-            /*
-            if (CheckIfCollidingWithWall(ref context.col, newVelocity, context.transform, ref context.wallContactFilter))
-            {
-                //Debug.DrawLine(context.gameObject.transform.position, hitInfo.collider.gameObject.transform.position);
-                SwitchState(context.IdleState);
-            }
-            */
         }
 
         else
         {
-            SwitchState(context.IdleState);
+            // Charging Logic
+
+            newVelocity = currentMoveDirection * context.CurrentMoveSpeed;
+
+            // In case it is just running into a wall
+            if (Vector2.Distance(lastPosition, context.transform.position) < 0.001f)
+            {
+                SetSubState(context.NotAttackState);
+                SwitchState(context.IdleState);
+            }
+
+            lastPosition = context.transform.position;
+
         }
 
 
@@ -65,15 +89,18 @@ public class EnemyMoveState : EnemyBaseState
         //throw new System.NotImplementedException();
 
         // If there is no target object
-        if (context.targetObject == null)
+        if (context.targetObject == null || context.JustAttacked)
         {
+            context.JustAttacked = false;
             SwitchState(context.IdleState);
         }
 
-        if (context.IsTargetOutOfSight && context.IsAggro)
+        if (context.IsTargetOutOfSight && context.IsAggro && !context.IsAttacking)
         {
             SwitchState(context.IdleState);
         }
+        
+
 
         bool isGrounded = context.IsGrounded;
         if (isGrounded)
@@ -101,6 +128,10 @@ public class EnemyMoveState : EnemyBaseState
     public override void EnterState()
     {
         //throw new System.NotImplementedException();
+
+        // Setting currentMoveDirection here so if the enemy starts attacking
+        // in Idle state, it will be gaurenteed to be charging in the right direction
+        currentMoveDirection = new Vector2(context.targetObject.transform.position.x - context.gameObject.transform.position.x, 0).normalized;
         InitializeSubState();
     }
 
