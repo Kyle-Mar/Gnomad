@@ -15,11 +15,20 @@ public class PlayerJumpState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        if (context.DoWallSlide())
+        //allows the player to wall jump while assending
+        if (context.DoWallSlide() && 
+            (context.JumpBufferTime > 0 || context.Controls.Player.Jump.WasPressedThisFrame()))
         {
-            //SwitchState(factory.WallSlide());
-        }
 
+            context.ConsumeJumpBuffer();
+            SwitchState(context.WallJumpState);
+            return;
+        }
+        if (context.Controls.Player.Dash.WasPressedThisFrame())
+        {
+            SwitchState(context.DashState);
+            return;
+        }
         if (context.Controls.Player.Slide.WasPressedThisFrame())
         {
             SwitchState(context.SlideState);

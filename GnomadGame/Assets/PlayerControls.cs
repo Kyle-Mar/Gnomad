@@ -89,6 +89,24 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PrintStateTree"",
+                    ""type"": ""Button"",
+                    ""id"": ""037b6b48-583c-438d-8211-d32f8419f445"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Dash"",
+                    ""type"": ""Button"",
+                    ""id"": ""a7b7686a-ceb9-4feb-be01-29c8a0bce8e4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -287,6 +305,39 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Respawn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a09a3d89-4b61-4a14-b78b-c1e30401f0f9"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PrintStateTree"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e4ca8f36-4c7f-4375-aec0-a9ea568ca2b0"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""34fee639-6b61-4b50-af54-31877d9454f8"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1143,6 +1194,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_Die = m_Player.FindAction("Die", throwIfNotFound: true);
         m_Player_Slash = m_Player.FindAction("Slash", throwIfNotFound: true);
         m_Player_Respawn = m_Player.FindAction("Respawn", throwIfNotFound: true);
+        m_Player_PrintStateTree = m_Player.FindAction("PrintStateTree", throwIfNotFound: true);
+        m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1230,6 +1283,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Die;
     private readonly InputAction m_Player_Slash;
     private readonly InputAction m_Player_Respawn;
+    private readonly InputAction m_Player_PrintStateTree;
+    private readonly InputAction m_Player_Dash;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -1241,6 +1296,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @Die => m_Wrapper.m_Player_Die;
         public InputAction @Slash => m_Wrapper.m_Player_Slash;
         public InputAction @Respawn => m_Wrapper.m_Player_Respawn;
+        public InputAction @PrintStateTree => m_Wrapper.m_Player_PrintStateTree;
+        public InputAction @Dash => m_Wrapper.m_Player_Dash;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1271,6 +1328,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Respawn.started += instance.OnRespawn;
             @Respawn.performed += instance.OnRespawn;
             @Respawn.canceled += instance.OnRespawn;
+            @PrintStateTree.started += instance.OnPrintStateTree;
+            @PrintStateTree.performed += instance.OnPrintStateTree;
+            @PrintStateTree.canceled += instance.OnPrintStateTree;
+            @Dash.started += instance.OnDash;
+            @Dash.performed += instance.OnDash;
+            @Dash.canceled += instance.OnDash;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1296,6 +1359,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Respawn.started -= instance.OnRespawn;
             @Respawn.performed -= instance.OnRespawn;
             @Respawn.canceled -= instance.OnRespawn;
+            @PrintStateTree.started -= instance.OnPrintStateTree;
+            @PrintStateTree.performed -= instance.OnPrintStateTree;
+            @PrintStateTree.canceled -= instance.OnPrintStateTree;
+            @Dash.started -= instance.OnDash;
+            @Dash.performed -= instance.OnDash;
+            @Dash.canceled -= instance.OnDash;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1563,6 +1632,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnDie(InputAction.CallbackContext context);
         void OnSlash(InputAction.CallbackContext context);
         void OnRespawn(InputAction.CallbackContext context);
+        void OnPrintStateTree(InputAction.CallbackContext context);
+        void OnDash(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

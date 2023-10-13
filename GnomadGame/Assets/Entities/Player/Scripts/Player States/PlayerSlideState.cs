@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using UnityEditor.Rendering.LookDev;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class PlayerSlideState : PlayerBaseState
 {
     Vector2 initialMovementDir;
     float slideEndTime;
     bool sliding = true;
+    float verticalBounceEndTime;
 
     public PlayerSlideState(PlayerStateMachine psm) : base(psm)
     {
@@ -17,6 +19,12 @@ public class PlayerSlideState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
+        if (context.IsGrounded && (context.Controls.Player.Jump.WasPressedThisFrame() || context.JumpBufferTime > 0))
+        {
+            //and holding back
+            context.ConsumeJumpBuffer();
+            SwitchState(context.BackflipState);
+        }
         if (DidBonk())
         {
             context.CheckIfGrounded();
@@ -28,7 +36,8 @@ public class PlayerSlideState : PlayerBaseState
             {
                 SwitchState(context.GroundedState);
             }
-        }else if (!sliding)
+        }
+        else if (!sliding)
         {
             if (!context.IsGrounded)
             {
@@ -41,6 +50,7 @@ public class PlayerSlideState : PlayerBaseState
         }
     }
 
+
     public override void EnterState()
     {
         InitializeSubState();
@@ -52,7 +62,8 @@ public class PlayerSlideState : PlayerBaseState
         context.SlideCollider.gameObject.SetActive(true);
 
         slideEndTime = Time.time + MovementStats.slideDuration;
-        context.rb.velocity = new Vector2(MovementStats.slideSpeedX * initialMovementDir.x, MovementStats.fallSpeed/5);
+        verticalBounceEndTime = Time.time + MovementStats.slideVerticalBounceDuration;
+        context.rb.velocity = new Vector2(MovementStats.slideSpeedX * initialMovementDir.x, MovementStats.slideVerticalBounce);
     }
 
     public override void ExitState()
@@ -70,9 +81,14 @@ public class PlayerSlideState : PlayerBaseState
         {
             sliding = false;
         }
-        else
+        else if (Time.time > verticalBounceEndTime)
         {
             context.rb.velocity = new Vector2(MovementStats.slideSpeedX * initialMovementDir.x, MovementStats.slideFallSpeed);
+        }
+        else
+        {
+            Debug.Log("SlideBounceStillActive");
+            context.rb.velocity = new Vector2(MovementStats.slideSpeedX * initialMovementDir.x, MovementStats.slideVerticalBounce);
         }
     }
 

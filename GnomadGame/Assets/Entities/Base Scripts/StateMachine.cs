@@ -5,7 +5,7 @@ using UnityEngine.Assertions;
 public class StateMachine : MonoBehaviour
 {
 
-    protected BaseState currentState;
+    [SerializeField]protected BaseState currentState;
     public virtual BaseState CurrentState { get { return currentState; } set { currentState = value; } }
 
     private void Awake()

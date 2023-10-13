@@ -19,7 +19,11 @@ public class PlayerGPBounceState : PlayerBaseState
         {
             //SwitchState(factory.WallSlide());
         }
-
+        if (context.Controls.Player.Dash.WasPressedThisFrame())
+        {
+            SwitchState(context.DashState);
+            return;
+        }
         if (context.Controls.Player.Slide.WasPressedThisFrame())
         {
             SwitchState(context.SlideState);

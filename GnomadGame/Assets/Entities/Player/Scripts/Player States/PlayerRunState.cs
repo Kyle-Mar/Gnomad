@@ -58,7 +58,6 @@ public class PlayerRunState : PlayerBaseState
 
     public override void UpdateState()
     { 
-        CheckSwitchStates();
         inputVec = context.Controls.Player.Move.ReadValue<Vector2>();
 
         if (inputVec.x <= -0.001 && context.SpriteRenderer.flipX)
@@ -74,6 +73,7 @@ public class PlayerRunState : PlayerBaseState
         {
             ParticleSystem run_particle_object = Object.Instantiate(context.WalkParticles, context.Feet.position, Quaternion.identity);
         }
+        CheckSwitchStates();
         
     }
 
