@@ -49,7 +49,7 @@ public class EnemyPerception : MonoBehaviour
         if (!canSeeTargetObject && lookingForTargetObject)
         {
             timeSinceLastSeen += Time.deltaTime;
-            if (timeSinceLastSeen > 5f)
+            if (timeSinceLastSeen > 3f)
             {
                 esm.IsAggro = false;
                 esm.targetObject = null;
