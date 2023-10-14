@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.AI;
+using System;
 
 public class EnemyStateMachine : StateMachine
 {
@@ -11,6 +12,9 @@ public class EnemyStateMachine : StateMachine
     //health, etc
 
     [Header("States")]
+
+    [Header("Combat Stats")]
+    [SerializeField] int attackDamage = 1;
 
     //declare states here
     public EnemyEmptyState EmptyState;
@@ -24,6 +28,8 @@ public class EnemyStateMachine : StateMachine
 
     LayerMask groundLayerMask;
     ContactFilter2D floorContactFilter;
+
+
 
     [Header("Movement")]
 
@@ -208,13 +214,13 @@ public class EnemyStateMachine : StateMachine
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.transform.tag == "Player" && IsAttacking)
+        if (collision.transform.CompareTag("Player") && IsAttacking)
         {
             IDamageable damageable = null;
             if (collision.gameObject.TryGetComponent<IDamageable>(out damageable))
             {
-                damageable.Damage(10f);
-                Debug.Log("Damaging Player");
+                damageable.Damage((Single)attackDamage);
+                Debug.Log(this.name + " is Damaging the Player for " + attackDamage);
             }
         }
     }

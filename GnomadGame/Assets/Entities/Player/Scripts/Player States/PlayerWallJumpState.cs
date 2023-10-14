@@ -89,7 +89,6 @@ public class PlayerWallJumpState : PlayerBaseState
 
     public override void UpdateState()
     {
-        Debug.Log("Dodingus "+currentSubState);
         if (arrestMovementTimer <= 0 && currentSubState == null)
         {
             if (context.Controls.Player.Move.ReadValue<Vector2>().x != 0)

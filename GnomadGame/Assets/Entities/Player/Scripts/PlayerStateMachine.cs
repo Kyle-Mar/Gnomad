@@ -134,7 +134,7 @@ public class PlayerStateMachine : StateMachine
     void Update()
     {
         InputAction.CallbackContext callbackContext = new();
-        PrintDebugInfo(callbackContext);
+        //PrintDebugInfo(callbackContext);
         CheckIfGrounded();
         DoJumpBuffer();
         currentState.UpdateStates();
@@ -326,5 +326,6 @@ public class PlayerStateMachine : StateMachine
     {
         CurrentState.PrintStateTree();
         //Debug.Log(currentMoveSpeed);
+        GetComponent<Health>().Damage(2);
     }
 }

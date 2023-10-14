@@ -13,6 +13,11 @@ public interface IDamageable
     {
         HealthUtil.Damage(this, amount);
     }
+    public void Heal(float amount)
+    {
+        HealthUtil.Heal(this, amount);
+    }
+
     public void Die();
 }
 
@@ -29,6 +34,11 @@ public static class HealthUtil
         {
             dmg.Die();
         }
+    }
+
+    public static void Heal(this IDamageable dmg, float amount)
+    {
+        dmg.Health = Mathf.Min(dmg.Health+amount, dmg.MaxHealth);
     }
 
     public static void Die(this IDamageable dmg)
