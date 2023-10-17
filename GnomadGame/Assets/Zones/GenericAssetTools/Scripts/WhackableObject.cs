@@ -9,6 +9,7 @@ public class WhackableObject : MonoBehaviour
     [SerializeField] protected AudioClip HitSound;
     [SerializeField] protected ParticleSystem HitParticles;
     [SerializeField] protected bool IsBounceable;
+    [SerializeField] protected SpriteRenderer[] sprites;
     protected AudioSource AudioPlayer;
 
     private void Awake()
@@ -35,7 +36,7 @@ public class WhackableObject : MonoBehaviour
     {
         if (HitParticles != null)
         {
-            Instantiate(HitParticles, transform.position, Quaternion.identity);
+            HitParticles.Play();
         }
         if (HitSound != null)
         {

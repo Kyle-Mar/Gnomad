@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e997813291397d447b4696137b8c0e96, type: 3}
+  m_Name: Shaft
+  m_EditorClassIdentifier: 
+  scene:
+    asset: {fileID: 102900000, guid: 14a0b408e751d8642a35854c4269db3c, type: 3}
+    guid: 14a0b408e751d8642a35854c4269db3c
+  adjacentScenes:
+  - {fileID: 11400000, guid: f8de8ea3a8fede346b8fa099d17262b8, type: 2}
+  DoorPositions:
+  - {x: 116, y: -27, z: 0}
+  DoorConnections:
+    m_keys: 00000000
+    m_values: 00000000
