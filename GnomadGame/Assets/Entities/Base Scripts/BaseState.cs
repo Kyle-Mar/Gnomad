@@ -52,7 +52,7 @@ public abstract class BaseState
         }
         else {
             //newState.SetSuperState(currentSuperState);
-            Debug.Log(currentSuperState.ToString() + this.ToString());
+            //Debug.Log(currentSuperState.ToString() + this.ToString());
             currentSuperState.SetSubState(newState);
         }
        
