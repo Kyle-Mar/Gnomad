@@ -17,7 +17,7 @@ using System;
 [CreateAssetMenu(menuName = "SceneInfo/New", order = 1)]
 public class SceneInfo : ScriptableObject
 {
-
+    // For this to be put in the inspector it must be in the build settings.
     public SceneReference scene;
     public IDictionary<int, int> IntIntDictionary
     {
@@ -27,5 +27,5 @@ public class SceneInfo : ScriptableObject
     public List<SceneInfo> adjacentScenes;
     public bool isLoaded { get; set; }
     public List<Vector3> DoorPositions = new(); // this is related in order to the sceneInfo's adjacent scene list
-    public IntIntDictionary DoorConnections = new IntIntDictionary{ { 0,0 } };
+    public IntIntDictionary DoorConnections = new IntIntDictionary{ { 0,0 } }; // Key = idx of our adjacent scenes, Value = other adjacent scenes idx.
 }

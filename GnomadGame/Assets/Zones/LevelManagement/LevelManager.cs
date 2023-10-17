@@ -18,11 +18,14 @@ public static class LevelManager
     /// <param name="occupiedScene">The scene the player is presently in.</param>
     public static void UpdateLoadedScenes(List<SceneInfo> connectedScenes, SceneInfo occupiedScene, SceneLoader loader)
     {
+        // list of scenes we plan to remove.
         List<SceneInfo> removeScenes = new List<SceneInfo>();
         if (timeTillNextUpdate > 0f)
         {
             return;
         }
+        // check to see if the occupied scene is loaded already.
+        // if not load it.
         if (SceneManager.GetSceneByName(occupiedScene.name).isLoaded)
         {
             loader.sceneInfo.isLoaded = true;
@@ -36,7 +39,10 @@ public static class LevelManager
                 loader.LoadScene(occupiedScene);
             }
         }
+        // set the LevelManager's occupied scene to the paramter.
         OccupiedScene = occupiedScene;
+        // unload each scene that isn't in the occupied scene's list
+        // and is currently a loaded scene
         foreach (SceneInfo scene in loadedScenes)
         {
             if (!connectedScenes.Contains(scene) && scene != occupiedScene)
@@ -45,7 +51,7 @@ public static class LevelManager
                 removeScenes.Add(scene);
             }
         }
-
+        //load each scene that isn't loaded already and add it to the loaded scenes list
         foreach (SceneInfo scene in connectedScenes)
         {
             if (!loadedScenes.Contains(scene))
@@ -55,7 +61,7 @@ public static class LevelManager
                 loader.LoadScene(scene);
             }
         }
-
+        // remove each scene from loaded scenes that we unloaded.
         foreach (SceneInfo scene in removeScenes)
         {
             loadedScenes.Remove(scene);
