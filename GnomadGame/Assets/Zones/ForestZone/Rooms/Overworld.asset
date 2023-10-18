@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Overworld
   m_EditorClassIdentifier: 
   scene:
-    asset: {fileID: 102900000, guid: a1e06de27215fba4ab709c3c113ee178, type: 3}
-    guid: a1e06de27215fba4ab709c3c113ee178
+    asset: {fileID: 102900000, guid: 232c9654b94d3d242b49953b8ccd5542, type: 3}
+    guid: 232c9654b94d3d242b49953b8ccd5542
   adjacentScenes:
   - {fileID: 11400000, guid: 2dea0e836f39b5b43a9ac6a92b74d99d, type: 2}
   - {fileID: 11400000, guid: 03e272d51f70d9246b8a3c1b3fd30db1, type: 2}
@@ -23,4 +23,4 @@ MonoBehaviour:
   - {x: -18, y: -5, z: 0}
   DoorConnections:
     m_keys: 0000000001000000
-    m_values: 0000000001000000
+    m_values: 0000000000000000

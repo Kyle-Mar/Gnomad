@@ -226,6 +226,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneInfo: {fileID: 11400000, guid: 03e272d51f70d9246b8a3c1b3fd30db1, type: 2}
+  tilemapCollider: {fileID: 1319422816}
 --- !u!1001 &1319422815
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1499,3 +1500,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d4992b2994b77644a6c7455cc37fd32, type: 3}
+--- !u!66 &1319422816 stripped
+CompositeCollider2D:
+  m_CorrespondingSourceObject: {fileID: 7571094279790386238, guid: 0d4992b2994b77644a6c7455cc37fd32, type: 3}
+  m_PrefabInstance: {fileID: 1319422815}
+  m_PrefabAsset: {fileID: 0}

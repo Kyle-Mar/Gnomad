@@ -20,5 +20,5 @@ MonoBehaviour:
   DoorPositions:
   - {x: 12, y: -6, z: 0}
   DoorConnections:
-    m_keys: 01000000
+    m_keys: 00000000
     m_values: 01000000
