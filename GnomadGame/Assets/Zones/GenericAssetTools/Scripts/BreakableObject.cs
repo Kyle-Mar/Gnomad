@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
+using static UnityEngine.ParticleSystem;
 
 public class BreakableObject : WhackableObject
 {
@@ -9,10 +10,20 @@ public class BreakableObject : WhackableObject
     [SerializeField] protected AudioClip BreakSound;
     [SerializeField] protected ParticleSystem BreakParticles;
     [SerializeField] protected bool PlayHitNoiseOnBreak;
-
+    SpriteRenderer sprite;
     // This should take a loot table, but they are not implemented yet
     // See DoBreak for use of this var
     //[SerializeField] protected GameObject LootTable;
+
+    private void Start()
+    {
+        sprite = GetComponent<SpriteRenderer>();
+        // https://forum.unity.com/threads/do-particle-systems-render-sprites-at-a-different-scale.896513/
+        var main = BreakParticles.main;
+        //main.startSize = new ParticleSystem.MinMaxCurve(sprite.sprite.rect.width / sprite.sprite.pixelsPerUnit);
+        main.startSize = new ParticleSystem.MinMaxCurve(100f/282f);
+
+    }
 
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
@@ -38,7 +49,15 @@ public class BreakableObject : WhackableObject
     {
         if (BreakParticles != null)
         {
-            Instantiate(BreakParticles, transform.position, Quaternion.identity);
+            //ParticleSystem breakParticles = Instantiate(BreakParticles);
+            //breakParticles.Play();
+            foreach (SpriteRenderer s in sprites)
+            {
+                Destroy(s);
+            }
+            sprite.enabled = false;
+            Destroy(GetComponent<GroundPoundBouncer>());
+            BreakParticles.Play();
         }
         if (BreakSound != null)
         {
@@ -46,8 +65,13 @@ public class BreakableObject : WhackableObject
         }
 
         //create loot from loot table
+        Invoke("Die", 5);
 
+
+    }
+
+    protected void Die()
+    {
         Destroy(gameObject);
-
     }
 }

@@ -11,6 +11,9 @@ public class SceneLoader : MonoBehaviour
 {
     //The relevant data about the room.
     public SceneInfo sceneInfo;
+    [SerializeField] CompositeCollider2D tilemapCollider;
+    public CompositeCollider2D TilemapCollider { get => tilemapCollider; set => tilemapCollider = value; }
+
     //When the player enters a new room, update the currently loaded scenes.
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -63,34 +66,33 @@ public class SceneLoader : MonoBehaviour
         // the size of the tilemap and not the tilemap collider for some reason.
         Vector3 curRoomCenter = Vector3.zero;
         var otherObjectsList = SceneManager.GetSceneByName(scene.name).GetRootGameObjects();
+        Debug.Log(sceneInfo.scene.Name);
         var thisObjectsList = SceneManager.GetSceneByName(sceneInfo.scene.Name).GetRootGameObjects();
 
-        CompositeCollider2D otherCol = new();
-        CompositeCollider2D thisCol = new();
-
+        CompositeCollider2D? otherTilemapCollider = null;
+        SceneLoader? sceneLoader = null;
 
         foreach (var x in otherObjectsList)
         {
-            Grid grid;
-            if (x.TryGetComponent(out grid))
+            if (x.TryGetComponent(out sceneLoader))
             {
-                otherCol = x.GetComponentInChildren<CompositeCollider2D>();
-                break;
+                Debug.Log(sceneLoader.name);
+                otherTilemapCollider = sceneLoader.TilemapCollider;
+                Debug.Log(otherTilemapCollider.name);
+                break;  
             }
         }
-
-        foreach (var x in thisObjectsList)
+        if(sceneLoader == null)
         {
-            Grid grid;
-            if (x.TryGetComponent(out grid))
-            {
-                thisCol = x.GetComponentInChildren<CompositeCollider2D>();
-                break;
-            }
+            Debug.LogError($"[SceneLoader.cs] There is no GameObject in the top level of the {scene.name} Hierarchy with a SceneLoader component.");
+        }
+        if(otherTilemapCollider == null)
+        {
+            Debug.LogError($"[SceneLoader.cs] The CompositeCollider2D of {scene.name} is not attached.");
         }
 
         // This Room's center based on the collider.    Top Left + half extents = center
-        curRoomCenter = thisCol.gameObject.transform.position + thisCol.bounds.extents;
+        curRoomCenter = tilemapCollider.gameObject.transform.position + tilemapCollider.bounds.extents;
         #endregion
         #region CalculateOffset
 
@@ -104,14 +106,15 @@ public class SceneLoader : MonoBehaviour
         // Same consequence as above. Door position idx must match adjacent scene idx and doorposition value.
         var otherDoorPosition = adjacentScene.DoorPositions[otherDoorIdx];
         
-        //Debug.DrawRay(Utils.Vector3ToVector3Int(curRoomCenter + doorPosition + (-otherDoorPosition)), Vector3.up, Color.green, 10f);
+        Debug.DrawRay(Utils.Vector3ToVector3Int(curRoomCenter + doorPosition - otherDoorPosition - tilemapCollider.bounds.center), Vector3.up, Color.green, 10f);
 #endregion
 
         //Scene starts at 0,0,0
         // move every GO by the center of the current room + the current rooms door position - the other room door's position.
         foreach (var x in otherObjectsList)
         {
-            x.transform.position += Utils.Vector3ToVector3Int(curRoomCenter + doorPosition + (-otherDoorPosition));
+            //x.transform.position += curRoomCenter + doorPosition;
+            x.transform.position += Utils.Vector3ToVector3Int(curRoomCenter + doorPosition - otherDoorPosition - tilemapCollider.bounds.extents);
         }
     }
 

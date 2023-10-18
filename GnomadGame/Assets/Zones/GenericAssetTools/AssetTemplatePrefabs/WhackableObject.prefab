@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5644793990667534553}
   - component: {fileID: 3531773665104647119}
   - component: {fileID: 3727591902589807977}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WhackableObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50,6 +50,7 @@ MonoBehaviour:
   HitSound: {fileID: 0}
   HitParticles: {fileID: 0}
   IsBounceable: 0
+  sprites: []
 --- !u!212 &3531773665104647119
 SpriteRenderer:
   m_ObjectHideFlags: 0
