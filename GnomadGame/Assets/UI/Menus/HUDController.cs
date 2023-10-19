@@ -22,10 +22,15 @@ public class HUDController : MonoBehaviour
     {
         Assert.IsNotNull(player); 
         playerHealth = player.GetComponent<Health>();
-        playerHealth.onDamage += UIRemoveHealth;
-        playerHealth.onHeal += UIAddHealth;
         PopulateUIHearts();
     }
+
+    private void onEnable()
+    {
+        playerHealth.onDamage += UIRemoveHealth;
+        playerHealth.onHeal += UIAddHealth;
+    }
+
     private void PopulateUIHearts()
     {
         int playerCurrentHealth = (int)playerHealth.health;
@@ -64,11 +69,12 @@ public class HUDController : MonoBehaviour
     private void UpdateUIHealth()
     {
         int playerCurrentHealth = (int)playerHealth.health;
+        //int playerMaxHealth = (int)playerHealth.MaxHealth;
 
         for (int i = 0; i < hearts.Length; i++)
         {
             if (i > playerHealth.MaxHealth) { return; }
-            if (i <= playerCurrentHealth) { hearts[i].sprite = fullHeartSprite; }
+            if (i <= playerCurrentHealth) { hearts[i].sprite = emptyHeartSprite; }
             else{ hearts[i].sprite = emptyHeartSprite; }
         }
     }

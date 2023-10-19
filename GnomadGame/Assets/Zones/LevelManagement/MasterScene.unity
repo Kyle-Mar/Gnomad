@@ -923,11 +923,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4446419450577938882, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 115
       objectReference: {fileID: 0}
     - target: {fileID: 4446419450577938882, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -5.5
+      value: -27.9
       objectReference: {fileID: 0}
     - target: {fileID: 4446419450577938882, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3244,7 +3244,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 255
+    m_Bits: 511
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -3276,7 +3276,7 @@ MonoBehaviour:
   m_RendererIndex: -1
   m_VolumeLayerMask:
     serializedVersion: 2
-    m_Bits: 255
+    m_Bits: 511
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 1

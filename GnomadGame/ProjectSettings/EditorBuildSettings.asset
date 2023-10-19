@@ -44,5 +44,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Zones/ForestZone/Rooms/Backroom.unity
     guid: 54b464b8c0622484091cc407ffcf2993
+  - enabled: 1
+    path: Assets/Zones/ForestZone/Rooms/PlatformRoom.unity
+    guid: 2f439e8b2b781064193d9eb4452eebc9
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 685aaf994ef330e47aa6563784fdfb36, type: 2}
