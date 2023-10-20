@@ -84,12 +84,13 @@ public class PlayerStateMachine : StateMachine
         Controls.Player.Die.performed += Die;
         Controls.Player.PrintStateTree.performed += PrintDebugInfo;
         Controls.Player.Respawn.performed += ReloadScene;
-        GetComponent<Health>().onDeath += DieHealth;
+        GetComponentInChildren<Health>().onDeath += DieHealth;
+        GetComponentInChildren<Health>().onDamage += OnDamage;
         Controls.Enable();
     }
     private void OnDisable()
     {
-        GetComponent<Health>().onDeath += DieHealth;
+        GetComponentInChildren<Health>().onDeath += DieHealth;
         Controls.Disable();
     }
 
@@ -322,10 +323,16 @@ public class PlayerStateMachine : StateMachine
             CurrentState.EnterState();
         }
     }
+
+    void OnDamage()
+    {
+        Debug.Log("Player is reacting to damage");
+    }
+
     void PrintDebugInfo(InputAction.CallbackContext cxt)
     {
         CurrentState.PrintStateTree();
         //Debug.Log(currentMoveSpeed);
-        GetComponent<Health>().Damage(2);
+        GetComponentInChildren<Health>().Damage(2);
     }
 }

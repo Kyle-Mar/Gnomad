@@ -16,7 +16,8 @@ public class DeathScreenController : MonoBehaviour
     private void OnEnable()
     {
         Assert.IsNotNull(deathScreenPopup);
-        player.GetComponent<Health>().onDeath += ActivateDeathScreen;
+        // Moved Player Health Component into a new GameObject
+        player.GetComponentInChildren<Health>().onDeath += ActivateDeathScreen;
     }
 
     private void ActivateDeathScreen()

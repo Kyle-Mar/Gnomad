@@ -37,7 +37,7 @@ public class HatScript : MonoBehaviour
             // If it can't, it will error
             if (collision.gameObject.TryGetComponent<IDamageable>(out damageable))
             {
-                damageable.Damage(10f);
+                damageable.Damage(20f);
                 Debug.Log("Damaging Enemy");
             }
         }

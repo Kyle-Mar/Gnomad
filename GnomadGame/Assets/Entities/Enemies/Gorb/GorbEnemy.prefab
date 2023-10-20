@@ -167,7 +167,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2, y: 2.25}
+  m_Size: {x: 2, y: 2}
   m_EdgeRadius: 0
 --- !u!1 &6578426276248700624
 GameObject:
@@ -264,9 +264,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd641dd00fe97a84fbb83e4819f9beb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MAX_HEALTH: 100
   health: 100
   canTakeDamage: 1
-  cooldownTime: 1
+  cooldownTime: 0
 --- !u!114 &1960499130926194949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -326,7 +327,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2, y: 2.25}
+  m_Size: {x: 2, y: 2}
   m_EdgeRadius: 0
 --- !u!50 &7339741108203295407
 Rigidbody2D:
@@ -463,7 +464,7 @@ SpriteRenderer:
   m_Size: {x: 1.67, y: 3.17}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!95 &3209980095533021705

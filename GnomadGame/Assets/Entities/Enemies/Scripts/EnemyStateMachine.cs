@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.AI;
+using System;
 
 public class EnemyStateMachine : StateMachine
 {
@@ -87,18 +88,20 @@ public class EnemyStateMachine : StateMachine
     public float JumpMoveSpeed => GorbStats.jumpMoveSpeed;
     public float FallSpeed => GorbStats.fallSpeed;
     public float MaxJumpHeight => GorbStats.maxJumpHeight;
-    public int AttackDamage => GorbStats.attackDamage;
+    public float AttackDamage => GorbStats.attackDamage;
     public float AttackCooldown => GorbStats.attackCooldown;
     public float AttackDuration => GorbStats.attackDuration;
 
     private void OnEnable()
     {
         //enable AI
-        
+        GetComponentInChildren<Health>().onDeath += DieHealth;
+        GetComponentInChildren<Health>().onDamage += OnDamage;
     }
     private void OnDisable()
     {
         //enable AI
+        GetComponentInChildren<Health>().onDeath += DieHealth;
     }
 
     private void Awake()
@@ -112,7 +115,7 @@ public class EnemyStateMachine : StateMachine
         //do instantiate AI = new EnemyAI();
 
         // Make sure there are at least two wandering points
-        Assert.IsTrue(movePoints.Length >= 2);
+        Assert.IsTrue(movePoints.Length >= 1);
 
         // Set One of the movePoints as the targetObject
         targetObject = movePoints[currentMovePointIndex].gameObject;
@@ -325,16 +328,26 @@ public class EnemyStateMachine : StateMachine
         }
     }
 
+    void DieHealth()
+    {
+        Destroy(this.gameObject);
+    }
+
+    void OnDamage()
+    {
+        Debug.Log("Player is reacting to damage");
+    }
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.transform.tag == "Player")
+        if (collision.CompareTag("PlayerHitBox"))
         {
             IDamageable damageable = null;
             if (collision.gameObject.TryGetComponent<IDamageable>(out damageable))
             {
-                damageable.Damage((Single)attackDamage);
-                Debug.Log(this.name + " is Damaging the Player for " + attackDamage);
+                //Debug.LogWarning(damageable);
+                damageable.Damage(AttackDamage);
+                Debug.Log(this.name + " is Damaging the Player for " + AttackDamage);
             }
         }
     }

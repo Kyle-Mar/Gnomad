@@ -9,6 +9,7 @@ TagManager:
   - MovePoint
   - Breakable
   - PlayerAttack
+  - PlayerHitBox
   layers:
   - Default
   - TransparentFX
