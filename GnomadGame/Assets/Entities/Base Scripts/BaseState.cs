@@ -47,9 +47,12 @@ public abstract class BaseState
         newState.EnterState();
         if (isRootState)
         {
+            newState.SetSubState(context.CurrentState.currentSubState);
             context.CurrentState = newState;
         }
         else {
+            //newState.SetSuperState(currentSuperState);
+            //Debug.Log(currentSuperState.ToString() + this.ToString());
             currentSuperState.SetSubState(newState);
         }
        
@@ -60,6 +63,7 @@ public abstract class BaseState
     }
     protected void SetSubState(BaseState newSubState)
     {
+        //Debug.Log(this);
         if(newSubState != currentSubState)
         {
             if(newSubState != null)
@@ -72,7 +76,7 @@ public abstract class BaseState
             }
         }
         currentSubState = newSubState;
-        //Debug.Log($"{newSubState} {currentSuperState}");
+        //Debug.Log($"{newSubState} {this}");
         
         if(newSubState != null)
         {
@@ -82,5 +86,23 @@ public abstract class BaseState
     public string CurrentSubState()
     {
         return currentSubState.ToString();
+    }
+
+    public void PrintStateTree()
+    {
+        string output = this.ToString();
+        output += " -> ";
+        BaseState nextStateDown = currentSubState;
+        while(nextStateDown!=null)
+        {
+            output += nextStateDown.ToString();
+            if(nextStateDown.currentSubState != null)
+            {
+                output += nextStateDown.currentSuperState.ToString();
+                output += " -> ";
+            }
+            nextStateDown = nextStateDown.currentSubState;
+        }
+       // Debug.Log(output);
     }
 }

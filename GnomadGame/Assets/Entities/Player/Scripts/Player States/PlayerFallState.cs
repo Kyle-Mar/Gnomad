@@ -11,25 +11,33 @@ public class PlayerFallState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        context.CheckIfGrounded();
         if (context.IsGrounded)
         {
             SwitchState(context.GroundedState);
+            return;
         }
 
         if (context.DoWallSlide())
         {
             SwitchState(context.WallSlideState);
+            return;
         }
-
+        if (context.Controls.Player.Dash.WasPressedThisFrame())
+        {
+            SwitchState(context.DashState);
+            return;
+        }
         if (context.Controls.Player.Slide.WasPressedThisFrame())
         {
             SwitchState(context.SlideState);
+            return;
         }
         if (context.Controls.Player.GroundPound.WasPressedThisFrame())
         {
             SwitchState(context.GroundPoundState);
+            return;
         }
+
     }
 
     public override void EnterState()
@@ -68,6 +76,10 @@ public class PlayerFallState : PlayerBaseState
 
         
         Physics2D.gravity = new(0, MovementStats.fallSpeed);
+        //clamp fall speed
+        context.rb.velocity = new Vector2(context.rb.velocity.x,
+            Mathf.Max(context.rb.velocity.y, -MovementStats.maxFallSpeed));
+
         CheckSwitchStates();
 
         //context.rb.velocity = Vector2.Lerp(context.rb.velocity, new Vector2(context.rb.velocity.x, MovementStats.fallSpeed), Utils.GetInterpolant(10f));

@@ -111,7 +111,7 @@ public class GorbPerception : MonoBehaviour
                         if (target.gameObject.CompareTag("Player") && target.gameObject.name != "Hat Pin")
                         {
                             
-                            Debug.Log("Player Detected");
+                            //Debug.Log("Player Detected");
                             esm.IsAggro = true;
                             esm.targetObject = target.gameObject;
                             lookingForTargetObject = true;

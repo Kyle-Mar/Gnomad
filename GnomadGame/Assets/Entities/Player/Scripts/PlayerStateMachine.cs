@@ -23,7 +23,8 @@ public class PlayerStateMachine : StateMachine
     public PlayerNotAttackingState NotAttackState;
     public PlayerDeathState DeathState;
     public PlayerGPBounceState GPBounceState;
-
+    public PlayerDashState DashState;
+    public PlayerBackflipState BackflipState;
     public PlayerControls Controls;
 
     LayerMask groundLayerMask;
@@ -81,6 +82,7 @@ public class PlayerStateMachine : StateMachine
     {
         Controls.Player.Move.performed += UpdateMovementDirection;
         Controls.Player.Die.performed += Die;
+        Controls.Player.PrintStateTree.performed += PrintDebugInfo;
         Controls.Player.Respawn.performed += ReloadScene;
         GetComponent<Health>().onDeath += DieHealth;
         Controls.Enable();
@@ -131,6 +133,8 @@ public class PlayerStateMachine : StateMachine
 
     void Update()
     {
+        InputAction.CallbackContext callbackContext = new();
+        //PrintDebugInfo(callbackContext);
         CheckIfGrounded();
         DoJumpBuffer();
         currentState.UpdateStates();
@@ -306,6 +310,8 @@ public class PlayerStateMachine : StateMachine
         NotAttackState = new PlayerNotAttackingState(this);
         DeathState = new PlayerDeathState(this);
         GPBounceState = new PlayerGPBounceState(this);
+        DashState = new PlayerDashState(this);
+        BackflipState = new PlayerBackflipState(this);
     }
 
     void DieHealth()
@@ -315,5 +321,11 @@ public class PlayerStateMachine : StateMachine
             CurrentState = DeathState;
             CurrentState.EnterState();
         }
+    }
+    void PrintDebugInfo(InputAction.CallbackContext cxt)
+    {
+        CurrentState.PrintStateTree();
+        //Debug.Log(currentMoveSpeed);
+        GetComponent<Health>().Damage(2);
     }
 }

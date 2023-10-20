@@ -1,0 +1,1869 @@
+fileFormatVersion: 2
+guid: ba1c7914314913f43ab12624efdfb128
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 128
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: CapsNStuff_0
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 2077
+        width: 2182
+        height: 219
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d6e93a8eb1e8ce841892f3188f8f1351
+      internalID: 30599703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_1
+      rect:
+        serializedVersion: 2
+        x: 2443
+        y: 2116
+        width: 129
+        height: 129
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 536b9abfb6d138542ae9bb4d0febd6b8
+      internalID: -131181952
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_2
+      rect:
+        serializedVersion: 2
+        x: 2692
+        y: 1463
+        width: 572
+        height: 835
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 949ef35cbcc6a6f4aa3ff7d050572c72
+      internalID: -1163585319
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_3
+      rect:
+        serializedVersion: 2
+        x: 3297
+        y: 1617
+        width: 465
+        height: 687
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 707425e9e3f74664d93e9e9d5c4708ec
+      internalID: -1826605751
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_4
+      rect:
+        serializedVersion: 2
+        x: 3807
+        y: 1953
+        width: 592
+        height: 296
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ed533945b0bccd84eaf81d6700ac3120
+      internalID: 2146447515
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_5
+      rect:
+        serializedVersion: 2
+        x: 4606
+        y: 1907
+        width: 561
+        height: 371
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 334488db949074b459c0489744af47ad
+      internalID: -639260173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_6
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 1713
+        width: 897
+        height: 340
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c061c29e39f0854a9d0d8f372585879
+      internalID: -750223410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_7
+      rect:
+        serializedVersion: 2
+        x: 1085
+        y: 1723
+        width: 1584
+        height: 331
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 294189d158ab83444aec5e9ea935361f
+      internalID: -1908160191
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_8
+      rect:
+        serializedVersion: 2
+        x: 3794
+        y: 1364
+        width: 777
+        height: 501
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e2595185e2a652640801e27ad662e9d3
+      internalID: -955905579
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_9
+      rect:
+        serializedVersion: 2
+        x: 4598
+        y: 1413
+        width: 551
+        height: 379
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 65f54588ab7e0bf4b95e4de7ec1237b1
+      internalID: 918877581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_10
+      rect:
+        serializedVersion: 2
+        x: 172
+        y: 1434
+        width: 285
+        height: 203
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6c8484fcdaff5234fa79159de8404691
+      internalID: 1753921734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_11
+      rect:
+        serializedVersion: 2
+        x: 522
+        y: 1449
+        width: 230
+        height: 188
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b8a3411762901cf409fb46f56edc14e5
+      internalID: 268484263
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_12
+      rect:
+        serializedVersion: 2
+        x: 859
+        y: 1411
+        width: 520
+        height: 253
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cefea09bd94ff5543b6223e3aca1764d
+      internalID: -193728884
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_13
+      rect:
+        serializedVersion: 2
+        x: 1426
+        y: 1417
+        width: 333
+        height: 298
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8df8405ce22cdd046abbdf7062a5b5d7
+      internalID: -165984962
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_14
+      rect:
+        serializedVersion: 2
+        x: 1860
+        y: 1457
+        width: 592
+        height: 208
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4660454842393d428bfd0b8ec05b5d0
+      internalID: -950820691
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_15
+      rect:
+        serializedVersion: 2
+        x: 456
+        y: 873
+        width: 948
+        height: 517
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf61a3770dd39fb478f4048ae7ffdbc2
+      internalID: 784719889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_16
+      rect:
+        serializedVersion: 2
+        x: 1434
+        y: 827
+        width: 889
+        height: 573
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee6571ea1248d374e9167141b845e225
+      internalID: -1239179302
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_17
+      rect:
+        serializedVersion: 2
+        x: 2504
+        y: 1263
+        width: 1012
+        height: 105
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e07a521a618a16e45a12542457ec5b4d
+      internalID: -1774729932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_18
+      rect:
+        serializedVersion: 2
+        x: 3575
+        y: 1171
+        width: 847
+        height: 169
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 83ebd28bf3c39104497085f757bbf80e
+      internalID: -1803647210
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_19
+      rect:
+        serializedVersion: 2
+        x: 4484
+        y: 1218
+        width: 272
+        height: 76
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 918fb109f7ac8344caa124230028ea4f
+      internalID: 1310153798
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_20
+      rect:
+        serializedVersion: 2
+        x: 4804
+        y: 1205
+        width: 280
+        height: 99
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 79033caf892bdcd45997cee06a3914a0
+      internalID: -1551317828
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_21
+      rect:
+        serializedVersion: 2
+        x: 2497
+        y: 1135
+        width: 987
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 81ca9bd8135111742acb6c326ec6a9e6
+      internalID: 1698038541
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_24
+      rect:
+        serializedVersion: 2
+        x: 2595
+        y: 969
+        width: 319
+        height: 106
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba9cef097c53373478d3fde73a571574
+      internalID: 858799136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_25
+      rect:
+        serializedVersion: 2
+        x: 3083
+        y: 902
+        width: 356
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e102a9b6b42ab6f42807227437bf817a
+      internalID: 217751964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_26
+      rect:
+        serializedVersion: 2
+        x: 3599
+        y: 991
+        width: 878
+        height: 160
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46ccefd8faaa40944b16269e479f06bf
+      internalID: 2100562491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_27
+      rect:
+        serializedVersion: 2
+        x: 4548
+        y: 1074
+        width: 199
+        height: 91
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d0c5a44fe6007645ab5095b53e339fc
+      internalID: -366211743
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_28
+      rect:
+        serializedVersion: 2
+        x: 4881
+        y: 1036
+        width: 245
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d5436c8d68ac7e64eb672ff5e04cd131
+      internalID: 537540263
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_29
+      rect:
+        serializedVersion: 2
+        x: 2386
+        y: 28
+        width: 121
+        height: 1014
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20cbaa9413f23f4439ece2ed76f4f236
+      internalID: 82597483
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_34
+      rect:
+        serializedVersion: 2
+        x: 2591
+        y: 862
+        width: 336
+        height: 73
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 058656d0735aa2642810f179c3703e38
+      internalID: -374338279
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_35
+      rect:
+        serializedVersion: 2
+        x: 3599
+        y: 868
+        width: 102
+        height: 69
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c7fab57e12a29ca46a4b4f002edde11e
+      internalID: 536145025
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_36
+      rect:
+        serializedVersion: 2
+        x: 3740
+        y: 867
+        width: 51
+        height: 33
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a7a8dd6151224743a08ca2e1f6336d5
+      internalID: 249230490
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_37
+      rect:
+        serializedVersion: 2
+        x: 3873
+        y: 864
+        width: 24
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: abf86014dfa2f5c4998666ee28d30761
+      internalID: 547946512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_38
+      rect:
+        serializedVersion: 2
+        x: 4171
+        y: 751
+        width: 87
+        height: 120
+      alignment: 9
+      pivot: {x: 0.45347857, y: 0.04887492}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e53b7ec1944a65e489a4b713ea05b296
+      internalID: -1707969359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_39
+      rect:
+        serializedVersion: 2
+        x: 4322
+        y: 842
+        width: 320
+        height: 131
+      alignment: 9
+      pivot: {x: 0.4696106, y: -0.028869163}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e64d9951d90dab34f8be0d036c248735
+      internalID: 1654206534
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_40
+      rect:
+        serializedVersion: 2
+        x: 4780
+        y: 817
+        width: 336
+        height: 121
+      alignment: 9
+      pivot: {x: 0.49999708, y: -0.012306402}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a6bf062a769a6194a97ab9cdc9be26bc
+      internalID: -440940413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_41
+      rect:
+        serializedVersion: 2
+        x: 275
+        y: 33
+        width: 979
+        height: 790
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a4c38e2327a808c49be901eb768a0305
+      internalID: 1819802450
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_42
+      rect:
+        serializedVersion: 2
+        x: 2599
+        y: 36
+        width: 135
+        height: 742
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cdf6f41a482b35a4297f009ba60e7b78
+      internalID: 1927824696
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_43
+      rect:
+        serializedVersion: 2
+        x: 2778
+        y: 49
+        width: 347
+        height: 705
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 479816b2b0cfe144abd885a94906b2a3
+      internalID: 533939537
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_44
+      rect:
+        serializedVersion: 2
+        x: 3198
+        y: 567
+        width: 392
+        height: 272
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d60e424aca7822478bafbcaf8476ad5
+      internalID: 1779781798
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_45
+      rect:
+        serializedVersion: 2
+        x: 3954
+        y: 752
+        width: 92
+        height: 89
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 742097a90ab33bf43aa441a14b1a93a1
+      internalID: -27428584
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_46
+      rect:
+        serializedVersion: 2
+        x: 4075
+        y: 752
+        width: 90
+        height: 101
+      alignment: 9
+      pivot: {x: 0.112117514, y: 0.05918597}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 62ec7b34a8a281a45a63ebe732cfc803
+      internalID: 751160670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_47
+      rect:
+        serializedVersion: 2
+        x: 4323
+        y: 726
+        width: 80
+        height: 68
+      alignment: 9
+      pivot: {x: 0.18093261, y: 0.053134695}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 77dd509a86bb7c94a8e33773be4cba23
+      internalID: 871563842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_48
+      rect:
+        serializedVersion: 2
+        x: 1290
+        y: 55
+        width: 744
+        height: 657
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa49153c60173f042902a2ba63918bb2
+      internalID: -1827859423
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_49
+      rect:
+        serializedVersion: 2
+        x: 2074
+        y: 62
+        width: 196
+        height: 675
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b8f6112fe24b8bd47820ca1495d14b83
+      internalID: -1800022149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_50
+      rect:
+        serializedVersion: 2
+        x: 3819
+        y: 604
+        width: 35
+        height: 70
+      alignment: 9
+      pivot: {x: 0.843471, y: 0.059469167}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1dc73f448de72ce439ee449217fb4563
+      internalID: 185765787
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_51
+      rect:
+        serializedVersion: 2
+        x: 3857
+        y: 608
+        width: 25
+        height: 61
+      alignment: 9
+      pivot: {x: 0.5418164, y: 0.037314493}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5c967be20a48a6c4eb26f9b6c3c5e497
+      internalID: 1542396619
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_52
+      rect:
+        serializedVersion: 2
+        x: 3889
+        y: 609
+        width: 38
+        height: 87
+      alignment: 9
+      pivot: {x: 0.1561472, y: 0.049427953}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f01e97474a7578d4db45f51b0f557c32
+      internalID: -1835445954
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_53
+      rect:
+        serializedVersion: 2
+        x: 4019
+        y: 630
+        width: 58
+        height: 97
+      alignment: 9
+      pivot: {x: 0.37787917, y: 0.04622375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 427fa7c61d0a0d84696516b0c55e3656
+      internalID: 260838583
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_54
+      rect:
+        serializedVersion: 2
+        x: 4111
+        y: 626
+        width: 47
+        height: 75
+      alignment: 9
+      pivot: {x: 0.47847408, y: 0.061523438}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7badb5aea4bee574f9dc23d5c34662f2
+      internalID: 1447404886
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_55
+      rect:
+        serializedVersion: 2
+        x: 4185
+        y: 625
+        width: 44
+        height: 62
+      alignment: 9
+      pivot: {x: 0.4885032, y: 0.06750783}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b8611df6e0a99e941831b44f8d8daad4
+      internalID: -949704252
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_56
+      rect:
+        serializedVersion: 2
+        x: 4341
+        y: 528
+        width: 62
+        height: 109
+      alignment: 9
+      pivot: {x: 0.6517452, y: 0.03967285}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d376b0493e1ec6f4ca7c19d1287273b5
+      internalID: 868186244
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_57
+      rect:
+        serializedVersion: 2
+        x: 4448
+        y: 533
+        width: 167
+        height: 140
+      alignment: 9
+      pivot: {x: 0.5, y: 0.022136142}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dfb625b8265d4964d8c4a1cb274bf870
+      internalID: -814725064
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_58
+      rect:
+        serializedVersion: 2
+        x: 4706
+        y: 519
+        width: 162
+        height: 167
+      alignment: 9
+      pivot: {x: 0.73874843, y: 0.05870924}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e00db9e660877a4d88f18a5d92101bc
+      internalID: 1546005754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_59
+      rect:
+        serializedVersion: 2
+        x: 5011
+        y: 530
+        width: 131
+        height: 134
+      alignment: 9
+      pivot: {x: 0.26859197, y: 0.024142137}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e4c40b1158079b43bcb3b55d66365e2
+      internalID: -344485203
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_60
+      rect:
+        serializedVersion: 2
+        x: 3184
+        y: 45
+        width: 631
+        height: 513
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c64e2fd2925a254c84b6f446ee79445
+      internalID: 629038143
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_61
+      rect:
+        serializedVersion: 2
+        x: 3845
+        y: 486
+        width: 38
+        height: 81
+      alignment: 9
+      pivot: {x: 0.8988808, y: 0.07412682}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c622cceb64f7ba40b46d5f211cc98d7
+      internalID: -1754811910
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_62
+      rect:
+        serializedVersion: 2
+        x: 3887
+        y: 487
+        width: 35
+        height: 79
+      alignment: 9
+      pivot: {x: 0.11173967, y: 0.056729086}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 55d04cc5e673dad4fa12d9ba4d3124f7
+      internalID: 113724472
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_63
+      rect:
+        serializedVersion: 2
+        x: 3950
+        y: 527
+        width: 32
+        height: 91
+      alignment: 9
+      pivot: {x: 0.20600891, y: 0.052003294}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f12d7fff829820e4ba10ae59c4b21147
+      internalID: -101018488
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_64
+      rect:
+        serializedVersion: 2
+        x: 4018
+        y: 513
+        width: 19
+        height: 100
+      alignment: 9
+      pivot: {x: 0.5550216, y: 0.0139227295}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa8374fc194ead44da76d3b26a201dca
+      internalID: 814025117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_65
+      rect:
+        serializedVersion: 2
+        x: 4075
+        y: 513
+        width: 21
+        height: 76
+      alignment: 9
+      pivot: {x: 0.5000116, y: 0.032354254}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 63ac9289470e6814996edcbab40d3ec1
+      internalID: -695337004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_66
+      rect:
+        serializedVersion: 2
+        x: 4160
+        y: 517
+        width: 18
+        height: 49
+      alignment: 9
+      pivot: {x: 0.41289604, y: 0.073336855}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dce16c7e3969100448755f26b0d78d20
+      internalID: -1205149131
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_67
+      rect:
+        serializedVersion: 2
+        x: 4231
+        y: 518
+        width: 18
+        height: 40
+      alignment: 9
+      pivot: {x: 0.5, y: 0.055735778}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e3a3d1959a4f3c4b815e0259d1335b7
+      internalID: -1834535725
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_69
+      rect:
+        serializedVersion: 2
+        x: 4912
+        y: 531
+        width: 62
+        height: 93
+      alignment: 9
+      pivot: {x: 0.15436776, y: 0.02791735}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 78fd898ec6a9f8d458576536112f2c08
+      internalID: 622528359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_70
+      rect:
+        serializedVersion: 2
+        x: 3980
+        y: 367
+        width: 75
+        height: 121
+      alignment: 9
+      pivot: {x: 0.6602865, y: 0.04212939}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eebdff24d97ba8d44a9d0c264e9efe6a
+      internalID: -244991925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_71
+      rect:
+        serializedVersion: 2
+        x: 4113
+        y: 365
+        width: 77
+        height: 88
+      alignment: 9
+      pivot: {x: 0.3778219, y: 0.0664274}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1585a3c9dba3e384284b9e29906d87b9
+      internalID: 34235059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_72
+      rect:
+        serializedVersion: 2
+        x: 4354
+        y: 356
+        width: 811
+        height: 79
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e2a68bd7c80ddf54aa7a7d9335302fda
+      internalID: -1200542197
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_73
+      rect:
+        serializedVersion: 2
+        x: 3973
+        y: 243
+        width: 68
+        height: 111
+      alignment: 9
+      pivot: {x: 0.41545194, y: 0.029132053}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9bb3e50eacf751c428aef64598a21842
+      internalID: -1613908764
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_74
+      rect:
+        serializedVersion: 2
+        x: 4088
+        y: 245
+        width: 45
+        height: 80
+      alignment: 9
+      pivot: {x: 0.41869575, y: 0.07533703}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0bd80053c8841104892addcc55b066b7
+      internalID: -409333615
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_75
+      rect:
+        serializedVersion: 2
+        x: 4141
+        y: 246
+        width: 44
+        height: 72
+      alignment: 9
+      pivot: {x: 0.3812145, y: 0.07896551}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 26cbff9a44711484cb9fdf2a3a8a126f
+      internalID: 450402289
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_76
+      rect:
+        serializedVersion: 2
+        x: 4224
+        y: 244
+        width: 88
+        height: 63
+      alignment: 9
+      pivot: {x: 0.49406293, y: 0.11007666}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb85a519a415fc844b528237d62f3bec
+      internalID: -1630953168
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_77
+      rect:
+        serializedVersion: 2
+        x: 4427
+        y: 236
+        width: 265
+        height: 88
+      alignment: 9
+      pivot: {x: 0.49427512, y: 0.043180466}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2828e09fbe8a0c247bb7d0afd0c9b5a8
+      internalID: 73206543
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_78
+      rect:
+        serializedVersion: 2
+        x: 4750
+        y: 235
+        width: 399
+        height: 63
+      alignment: 9
+      pivot: {x: 0.49239555, y: 0.030456785}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a7a78527552854246a90ce94e9c5a3ce
+      internalID: -1617918617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_79
+      rect:
+        serializedVersion: 2
+        x: 3965
+        y: 126
+        width: 42
+        height: 66
+      alignment: 9
+      pivot: {x: 0.74888974, y: 0.04860988}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 26cff5d5200882e4ca5bf03d87521c75
+      internalID: -1923022884
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_80
+      rect:
+        serializedVersion: 2
+        x: 4010
+        y: 127
+        width: 37
+        height: 44
+      alignment: 9
+      pivot: {x: 0.27398518, y: 0.024852753}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a7fa9ede393789145b3600e6258e1b74
+      internalID: 1491645546
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_81
+      rect:
+        serializedVersion: 2
+        x: 4056
+        y: 121
+        width: 115
+        height: 101
+      alignment: 9
+      pivot: {x: 0.5136379, y: 0.013560455}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cfabc122ed83d064285519096de68290
+      internalID: -342050402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_83
+      rect:
+        serializedVersion: 2
+        x: 4175
+        y: 129
+        width: 117
+        height: 77
+      alignment: 9
+      pivot: {x: 0.51787025, y: 0.06557831}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8cafb5e97f02ddb45990d18dad462e88
+      internalID: -1028575148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_84
+      rect:
+        serializedVersion: 2
+        x: 4471
+        y: 15
+        width: 686
+        height: 142
+      alignment: 9
+      pivot: {x: 0.4977885, y: 0.0032406861}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba6fd2b3fcebcfa44a1a88c4db7f824a
+      internalID: -1458607287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_85
+      rect:
+        serializedVersion: 2
+        x: 3963
+        y: 15
+        width: 51
+        height: 92
+      alignment: 9
+      pivot: {x: 0.68446976, y: 0.045509607}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 895fad0c23cf9fd47bca02c320ca8ce7
+      internalID: 805602995
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapsNStuff_86
+      rect:
+        serializedVersion: 2
+        x: 4053
+        y: 3
+        width: 42
+        height: 83
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6aceb25791acaf54e86b1f47298a03e5
+      internalID: 1372065875
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      CapsNStuff_0: 30599703
+      CapsNStuff_1: -131181952
+      CapsNStuff_10: 1753921734
+      CapsNStuff_11: 268484263
+      CapsNStuff_12: -193728884
+      CapsNStuff_13: -165984962
+      CapsNStuff_14: -950820691
+      CapsNStuff_15: 784719889
+      CapsNStuff_16: -1239179302
+      CapsNStuff_17: -1774729932
+      CapsNStuff_18: -1803647210
+      CapsNStuff_19: 1310153798
+      CapsNStuff_2: -1163585319
+      CapsNStuff_20: -1551317828
+      CapsNStuff_21: 1698038541
+      CapsNStuff_22: -66027262
+      CapsNStuff_23: -1499738450
+      CapsNStuff_24: 858799136
+      CapsNStuff_25: 217751964
+      CapsNStuff_26: 2100562491
+      CapsNStuff_27: -366211743
+      CapsNStuff_28: 537540263
+      CapsNStuff_29: 82597483
+      CapsNStuff_3: -1826605751
+      CapsNStuff_30: 2933487
+      CapsNStuff_31: 828220709
+      CapsNStuff_32: 1736545486
+      CapsNStuff_33: 299909116
+      CapsNStuff_34: -374338279
+      CapsNStuff_35: 536145025
+      CapsNStuff_36: 249230490
+      CapsNStuff_37: 547946512
+      CapsNStuff_38: -1707969359
+      CapsNStuff_39: 1654206534
+      CapsNStuff_4: 2146447515
+      CapsNStuff_40: -440940413
+      CapsNStuff_41: 1819802450
+      CapsNStuff_42: 1927824696
+      CapsNStuff_43: 533939537
+      CapsNStuff_44: 1779781798
+      CapsNStuff_45: -27428584
+      CapsNStuff_46: 751160670
+      CapsNStuff_47: 871563842
+      CapsNStuff_48: -1827859423
+      CapsNStuff_49: -1800022149
+      CapsNStuff_5: -639260173
+      CapsNStuff_50: 185765787
+      CapsNStuff_51: 1542396619
+      CapsNStuff_52: -1835445954
+      CapsNStuff_53: 260838583
+      CapsNStuff_54: 1447404886
+      CapsNStuff_55: -949704252
+      CapsNStuff_56: 868186244
+      CapsNStuff_57: -814725064
+      CapsNStuff_58: 1546005754
+      CapsNStuff_59: -344485203
+      CapsNStuff_6: -750223410
+      CapsNStuff_60: 629038143
+      CapsNStuff_61: -1754811910
+      CapsNStuff_62: 113724472
+      CapsNStuff_63: -101018488
+      CapsNStuff_64: 814025117
+      CapsNStuff_65: -695337004
+      CapsNStuff_66: -1205149131
+      CapsNStuff_67: -1834535725
+      CapsNStuff_68: -1494768613
+      CapsNStuff_69: 622528359
+      CapsNStuff_7: -1908160191
+      CapsNStuff_70: -244991925
+      CapsNStuff_71: 34235059
+      CapsNStuff_72: -1200542197
+      CapsNStuff_73: -1613908764
+      CapsNStuff_74: -409333615
+      CapsNStuff_75: 450402289
+      CapsNStuff_76: -1630953168
+      CapsNStuff_77: 73206543
+      CapsNStuff_78: -1617918617
+      CapsNStuff_79: -1923022884
+      CapsNStuff_8: -955905579
+      CapsNStuff_80: 1491645546
+      CapsNStuff_81: -342050402
+      CapsNStuff_82: -630402235
+      CapsNStuff_83: -1028575148
+      CapsNStuff_84: -1458607287
+      CapsNStuff_85: 805602995
+      CapsNStuff_86: 1372065875
+      CapsNStuff_9: 918877581
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

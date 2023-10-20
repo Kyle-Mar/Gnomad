@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Gnomad.Utils;
+using Unity.VisualScripting.FullSerializer;
 
 public class PlayerWallJumpState : PlayerBaseState
 {
     float startJumpTime;
     float jumpTimer;
+    float arrestMovementTimer;
     Vector2 initialMovementDir;
     public PlayerWallJumpState(PlayerStateMachine psm) : base(psm)
     {
@@ -19,35 +21,46 @@ public class PlayerWallJumpState : PlayerBaseState
         if (context.IsGrounded)
         {
             SwitchState(context.GroundedState);
+            return;
         }
-        if(!context.Controls.Player.Jump.IsPressed() || jumpTimer <= 0)
+        if(jumpTimer <= 0)
         {
             SwitchState(context.FallState);
+            return;
         }
         if (context.Controls.Player.Slide.WasPressedThisFrame())
         {
             SwitchState(context.SlideState);
+            return;
+        }
+        if (context.Controls.Player.Dash.WasPressedThisFrame())
+        {
+            SwitchState(context.DashState);
+            return;
         }
         if (context.Controls.Player.GroundPound.WasPressedThisFrame())
         {
             SwitchState(context.GroundPoundState);
+            return;
         }
-        
+
     }
 
     public override void EnterState()
     {
         InitializeSubState();
+        arrestMovementTimer = MovementStats.WallJumpArrestMovementTimer;
         startJumpTime = 0;
         initialMovementDir = context.LastMovementDirection;
-
+        //context.FlipComponents();// this is potentially suspect. We may need to do other logic to complete the flip
         // default direction based on which wall you're touching instead?
 
-        jumpTimer = startJumpTime + MovementStats.maxWallJumpHeight;
+        jumpTimer = startJumpTime + MovementStats.WallJumpDuration;
 
-        context.SetMoveSpeed(MovementStats.moveSpeedReduced);
+        //context.SetMoveSpeed(MovementStats.moveSpeedReduced);
         
-        context.rb.AddForce(new Vector2(MovementStats.moveSpeed * -initialMovementDir.x, MovementStats.jumpSpeed), ForceMode2D.Impulse);
+        context.rb.AddForce(new Vector2(MovementStats.maxWallJumpHorizontalForce * -initialMovementDir.x,
+                            MovementStats.maxWallJumpVerticalForce), ForceMode2D.Impulse);
 
         Object.Instantiate(context.JumpCloudParticles, context.transform.position, Quaternion.identity);
 
@@ -55,11 +68,14 @@ public class PlayerWallJumpState : PlayerBaseState
 
     public override void ExitState()
     {
-        context.SetMoveSpeed(MovementStats.moveSpeed);
+        //cSetSubState(context.IdleState);
+        //context.SetMoveSpeed(MovementStats.moveSpeed);
     }
 
     public override void InitializeSubState()
     {
+        SetSubState(null);
+        /*
         if (context.Controls.Player.Move.ReadValue<Vector2>().x != 0)
         {
             SetSubState(context.RunState);
@@ -68,20 +84,32 @@ public class PlayerWallJumpState : PlayerBaseState
         {
             SetSubState(context.IdleState);
         }
+        */
     }
 
     public override void UpdateState()
     {
+        if (arrestMovementTimer <= 0 && currentSubState == null)
+        {
+            if (context.Controls.Player.Move.ReadValue<Vector2>().x != 0)
+            {
+                SetSubState(context.RunState);
+            }
+            else
+            {
+                SetSubState(context.IdleState);
+            }
+        }
         CheckSwitchStates();
 
         jumpTimer -= Time.deltaTime;
+        arrestMovementTimer -= Time.deltaTime;
 
-        context.SetMoveSpeed( Mathf.Lerp(context.CurrentMoveSpeed, MovementStats.moveSpeed, Utils.GetInterpolant(100f)));
+        //context.SetMoveSpeed( Mathf.Lerp(context.CurrentMoveSpeed, MovementStats.moveSpeed, Utils.GetInterpolant(100f)));
 
-        if (context.Controls.Player.Jump.IsPressed() && jumpTimer > 0)
-        {
-            context.rb.velocity = new Vector2(MovementStats.moveSpeed * -initialMovementDir.x, MovementStats.jumpSpeed);
-        }
+        ///if (context.Controls.Player.Jump.IsPressed() && jumpTimer > 0)
+        context.rb.velocity = new Vector2(MovementStats.moveSpeed * -initialMovementDir.x, MovementStats.jumpSpeed);
+
     }
 
     // Start is called before the first frame update

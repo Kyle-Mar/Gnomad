@@ -19,8 +19,9 @@ public class PlayerWallSlideState : PlayerBaseState
         {
             SwitchState(context.GroundedState);
         }
-        if (context.Controls.Player.Jump.IsPressed())
+        if (context.Controls.Player.Jump.WasPressedThisFrame() || context.JumpBufferTime > 0)
         {
+            context.ConsumeJumpBuffer();
             SwitchState(context.WallJumpState);
         }
         if(timer <= 0)

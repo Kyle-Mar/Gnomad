@@ -17,17 +17,24 @@ public class PlayerGroundedState : PlayerBaseState
         {
             context.ConsumeJumpBuffer();
             SwitchState(context.JumpState);
+            return;
         }
-
+        if (context.Controls.Player.Dash.WasPressedThisFrame())
+        {
+            SwitchState(context.DashState);
+            return;
+        }
         if (context.Controls.Player.Slide.WasPressedThisFrame())
         {
             SwitchState(context.SlideState);
+            return;
         }
 
         context.CheckIfGrounded();
         if (!context.IsGrounded)
         {
             SwitchState(context.FallState);
+            return;
         }
     }
 
@@ -63,6 +70,7 @@ public class PlayerGroundedState : PlayerBaseState
 
     public override void UpdateState()
     {
+        //Debug.Log("HELLO WORLD");
         CheckSwitchStates();
     }
 

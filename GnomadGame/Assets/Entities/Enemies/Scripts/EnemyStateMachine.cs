@@ -27,6 +27,8 @@ public class EnemyStateMachine : StateMachine
     LayerMask groundLayerMask;
     ContactFilter2D floorContactFilter;
 
+
+
     [Header("Movement")]
 
     [SerializeField] bool isGrounded = false;
@@ -331,8 +333,8 @@ public class EnemyStateMachine : StateMachine
             IDamageable damageable = null;
             if (collision.gameObject.TryGetComponent<IDamageable>(out damageable))
             {
-                damageable.Damage(AttackDamage);
-                Debug.Log("Damaging Player");
+                damageable.Damage((Single)attackDamage);
+                Debug.Log(this.name + " is Damaging the Player for " + attackDamage);
             }
         }
     }
