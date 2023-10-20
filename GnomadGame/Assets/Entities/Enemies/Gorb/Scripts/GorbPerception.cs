@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-public class GorbPerception : MonoBehaviour
+public class EnemyPerception : MonoBehaviour
 {
 
     public EnemyStateMachine esm;

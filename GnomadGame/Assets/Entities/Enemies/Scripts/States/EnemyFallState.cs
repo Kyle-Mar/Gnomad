@@ -2,38 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyGroundedState : EnemyBaseState
+public class EnemyFallState : EnemyBaseState
 {
-    public EnemyGroundedState(EnemyStateMachine esm) : base(esm)
+    public EnemyFallState(EnemyStateMachine esm) : base(esm)
     {
         isRootState = true;
     }
 
     public override void CheckSwitchStates()
     {
-        // Check for switch to jump state
-
         context.CheckIfGrounded();
-        if (!context.IsGrounded)
+        if (context.IsGrounded)
         {
-            SwitchState(context.FallState);
+            SwitchState(context.GroundedState);
         }
     }
 
     public override void EnterState()
     {
+        Debug.Log("HELLO I AM FALLING");
+        //throw new System.NotImplementedException();
+        context.animator.SetBool("InAir", true);
         InitializeSubState();
-        context.animator.SetBool("InAir", false);
-        Debug.Log("HELLO WORLD ENEMY AM GROUNDED!");
-        //context.rb.velocity = new(context.rb.velocity.x, 0);
-        //Object.Instantiate(context.LandParticles, context.Feet.position, Quaternion.identity);
     }
 
     public override void ExitState()
     {
+        context.animator.SetBool("InAir", false);
+        Physics2D.gravity = new(0, -9.8f);
         //throw new System.NotImplementedException();
     }
-    
+
     public override void FixedUpdateState()
     {
         //throw new System.NotImplementedException();
@@ -41,13 +40,12 @@ public class EnemyGroundedState : EnemyBaseState
 
     public override void InitializeSubState()
     {
-        // Check the enemy movement vector to see if they are moving
-
-        // Right now, it is just static behavior
-        // Tells the enemy to move towards Move Point
-        if (context.targetObject != null)
+        //SetSubState(context.MoveState);
+        if (Mathf.Abs(context.rb.velocity.x) >= 0.5)
         {
             SetSubState(context.MoveState);
+            //SetSubState(context.IdleState);
+
         }
         else
         {
@@ -57,7 +55,13 @@ public class EnemyGroundedState : EnemyBaseState
 
     public override void UpdateState()
     {
+        //Debug.Log("HELLO WORLD");
+
+        //Debug.Log(context.animator.GetBool("InAir"));
+        Physics2D.gravity = new(0, context.FallSpeed);
         CheckSwitchStates();
+
+        //context.rb.velocity = Vector2.Lerp(context.rb.velocity, new Vector2(context.rb.velocity.x, MovementStats.fallSpeed), Utils.GetInterpolant(10f));
     }
 
     // Start is called before the first frame update
@@ -71,5 +75,4 @@ public class EnemyGroundedState : EnemyBaseState
     {
 
     }
-    
 }

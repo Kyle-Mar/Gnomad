@@ -10,11 +10,6 @@ public class GorbChargeAttackState : EnemyBaseState
     }
     
     private float attackTimer;
-    private const float ATTACK_TIMER_MAX = 1.5f;
-
-    const float CHARGING_MOVEMENT_SPEED = 12.5f;
-    const float WALKING_MOVEMENT_SPEED = 5f;
-
 
 
     public override void CheckSwitchStates()
@@ -31,17 +26,17 @@ public class GorbChargeAttackState : EnemyBaseState
     public override void EnterState()
     {
         //throw new System.NotImplementedException();
-        context.SetMoveSpeed(CHARGING_MOVEMENT_SPEED);
+        context.SetMoveSpeed(context.ChargeSpeed);
         context.animator.SetBool("Charging", true);
         context.IsAttacking = true;
-        attackTimer = ATTACK_TIMER_MAX;
+        attackTimer = context.AttackDuration;
         Debug.Log("Enemy Attacking");
     }
 
     public override void ExitState()
     {
         //throw new System.NotImplementedException();
-        context.SetMoveSpeed(WALKING_MOVEMENT_SPEED);
+        context.SetMoveSpeed(context.MoveSpeed);
         context.StartAttackCooldown();
         context.EnemyAttackObj.SetActive(false);
         context.animator.SetBool("Charging", false);
