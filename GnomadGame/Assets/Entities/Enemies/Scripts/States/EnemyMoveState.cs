@@ -20,63 +20,71 @@ public class EnemyMoveState : EnemyBaseState
         Vector2 newVelocity = Vector2.zero;
         float x = context.targetObject.transform.position.x - context.gameObject.transform.position.x;
 
-
-        if (!context.IsAttacking)
+        if (context.IsGrounded)
         {
-            if (x < -0.5)
-            {
-                newVelocity.x = -1 * context.CurrentMoveSpeed;
-                currentMoveDirection = newVelocity.normalized;
-                /*
-                if (CheckIfCollidingWithWall(ref context.col, newVelocity, context.transform, ref context.wallContactFilter))
-                {
-                    //Debug.DrawLine(context.gameObject.transform.position, hitInfo.collider.gameObject.transform.position);
 
+            if (!context.IsAttacking)
+            {
+                if (x < -0.5)
+                {
+                    newVelocity.x = -1 * context.CurrentMoveSpeed;
+                    currentMoveDirection = newVelocity.normalized;
+                    /*
+                    if (CheckIfCollidingWithWall(ref context.col, newVelocity, context.transform, ref context.wallContactFilter))
+                    {
+                        //Debug.DrawLine(context.gameObject.transform.position, hitInfo.collider.gameObject.transform.position);
+
+                        SwitchState(context.IdleState);
+                    }
+                    */
+
+                }
+                else if (x > 0.5)
+                {
+                    newVelocity.x = 1 * context.CurrentMoveSpeed;
+                    currentMoveDirection = newVelocity.normalized;
+
+                    /*
+                    if (CheckIfCollidingWithWall(ref context.col, newVelocity, context.transform, ref context.wallContactFilter))
+                    {
+                        //Debug.DrawLine(context.gameObject.transform.position, hitInfo.collider.gameObject.transform.position);
+                        SwitchState(context.IdleState);
+                    }
+                    */
+                }
+
+                else
+                {
+                    currentMoveDirection = Vector2.zero;
                     SwitchState(context.IdleState);
                 }
-                */
-
-            }
-            else if (x > 0.5)
-            {
-                newVelocity.x = 1 * context.CurrentMoveSpeed;
-                currentMoveDirection = newVelocity.normalized;
-
-                /*
-                if (CheckIfCollidingWithWall(ref context.col, newVelocity, context.transform, ref context.wallContactFilter))
-                {
-                    //Debug.DrawLine(context.gameObject.transform.position, hitInfo.collider.gameObject.transform.position);
-                    SwitchState(context.IdleState);
-                }
-                */
             }
 
             else
             {
-                SwitchState(context.IdleState);
+                // Charging Logic
+
+                newVelocity = currentMoveDirection * context.CurrentMoveSpeed;
+
+                // In case it is just running into a wall
+                if (Vector2.Distance(lastPosition, context.transform.position) < 0.001f)
+                {
+                    SetSubState(context.NotAttackState);
+                    SwitchState(context.IdleState);
+                }
+
+                lastPosition = context.transform.position;
+
             }
         }
-
         else
         {
-            // Charging Logic
-
-            newVelocity = currentMoveDirection * context.CurrentMoveSpeed;
-
-            // In case it is just running into a wall
-            if (Vector2.Distance(lastPosition, context.transform.position) < 0.001f)
-            {
-                SetSubState(context.NotAttackState);
-                SwitchState(context.IdleState);
-            }
-
-            lastPosition = context.transform.position;
-
+            context.rb.velocity = new Vector2((currentMoveDirection * context.CurrentMoveSpeed).x,context.rb.velocity.y);
         }
 
 
 
-        context.rb.velocity = newVelocity;
+        context.rb.velocity = new Vector2(newVelocity.x, context.rb.velocity.y);
 
         //context.LastMovementDirection = newVelocity.normalized;
         // Could create a movemnt stats script that stores this
@@ -123,6 +131,10 @@ public class EnemyMoveState : EnemyBaseState
             }
 
         }
+        else
+        {
+            //SwitchState(context.IdleState);
+        }
     }
 
     public override void EnterState()
@@ -130,7 +142,7 @@ public class EnemyMoveState : EnemyBaseState
         //throw new System.NotImplementedException();
 
         // Setting currentMoveDirection here so if the enemy starts attacking
-        // in Idle state, it will be gaurenteed to be charging in the right direction
+        // in Idle state, it will be gaurenteed to be charging in the correct direction
         currentMoveDirection = new Vector2(context.targetObject.transform.position.x - context.gameObject.transform.position.x, 0).normalized;
         InitializeSubState();
     }
@@ -138,6 +150,7 @@ public class EnemyMoveState : EnemyBaseState
     public override void ExitState()
     {
         //throw new System.NotImplementedException();
+
     }
 
     public override void FixedUpdateState()

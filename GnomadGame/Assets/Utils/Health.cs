@@ -32,7 +32,6 @@ public class Health : MonoBehaviour, IDamageable
         {
             HealthUtil.Damage(this, amount);
             StartCoroutine(DoCooldownTimer());
-
             if (onDamage.GetInvocationList().Length > 0)
             {
                 onDamage?.Invoke();
@@ -59,6 +58,10 @@ public class Health : MonoBehaviour, IDamageable
 
     public void Update()
     {
+        if (this.transform.tag == "Enemy" && health <= 0f)
+        {
+            Die();
+        }
     }
 
     public virtual void Die()

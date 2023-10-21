@@ -6,8 +6,6 @@ public class EnemyAttackState : EnemyBaseState
 {
 
     [SerializeField] private float attackTimer;
-    [SerializeField] private const float ATTACK_TIMER_MAX = 0.5f;
-    
 
     public EnemyAttackState(EnemyStateMachine esm) : base(esm)
     {
@@ -33,7 +31,7 @@ public class EnemyAttackState : EnemyBaseState
 
         context.EnemyAttackObj.SetActive(true);
         context.IsAttacking = true;
-        attackTimer = ATTACK_TIMER_MAX;
+        attackTimer = context.AttackDuration;
         Debug.Log("Enemy Attacking");
     }
 

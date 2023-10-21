@@ -13,17 +13,16 @@ public class EnemyStateMachine : StateMachine
 
     [Header("States")]
 
-    [Header("Combat Stats")]
-    [SerializeField] int attackDamage = 1;
-
     //declare states here
     public EnemyEmptyState EmptyState;
-    public EnemyGroundedState GroundedState;
-    public EnemyMoveState MoveState;
-    public EnemyIdleState IdleState;
+    public BaseState GroundedState;
+    public BaseState FallState;
 
-    public GorbChargeAttackState AttackState;
-    public EnemyNotAttackState NotAttackState;
+    public BaseState MoveState;
+    public BaseState IdleState;
+    
+    public BaseState AttackState;
+    public BaseState NotAttackState;
 
 
     LayerMask groundLayerMask;
@@ -39,11 +38,7 @@ public class EnemyStateMachine : StateMachine
 
     [SerializeField] float currentMoveSpeed = 10f;
 
-    [SerializeField] const float WALKING_MOVEMENT_SPEED = 10f;
-
     [SerializeField] bool isAttacking = false;
-
-    [SerializeField] private const float ATTACK_COOLDOWN_MAX = 4.5f;
 
     [SerializeField] bool isTargetOutOfSight = false;
 
@@ -66,6 +61,7 @@ public class EnemyStateMachine : StateMachine
     public GameObject targetObject;
     public GameObject EnemyAttackObj;
     public int currentMovePointIndex;
+    public EnemyMovementStats EnemyStats;
 
     //public ParticleSystem WalkParticles;
     //public ParticleSystem JumpCloudParticles;
@@ -86,14 +82,26 @@ public class EnemyStateMachine : StateMachine
     //public Vector2 LastMovementDirection { get { return lastMovementDirection; } set { lastMovementDirection = value; } }
     public float CurrentMoveSpeed => currentMoveSpeed;
 
+    public float MoveSpeed => GorbStats.moveSpeed;
+    public float MoveSpeedReduced => GorbStats.moveSpeedReduced;
+    public float ChargeSpeed => GorbStats.chargeSpeed;
+    public float JumpMoveSpeed => GorbStats.jumpMoveSpeed;
+    public float FallSpeed => GorbStats.fallSpeed;
+    public float MaxJumpHeight => GorbStats.maxJumpHeight;
+    public float AttackDamage => GorbStats.attackDamage;
+    public float AttackCooldown => GorbStats.attackCooldown;
+    public float AttackDuration => GorbStats.attackDuration;
+
     private void OnEnable()
     {
         //enable AI
-        
+        GetComponentInChildren<Health>().onDeath += DieHealth;
+        GetComponentInChildren<Health>().onDamage += OnDamage;
     }
     private void OnDisable()
     {
         //enable AI
+        GetComponentInChildren<Health>().onDeath += DieHealth;
     }
 
     private void Awake()
@@ -101,13 +109,13 @@ public class EnemyStateMachine : StateMachine
         groundLayerMask = LayerMask.GetMask("Ground");
         col = GetComponent<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
-        currentMoveSpeed = 5f;
+        currentMoveSpeed = GorbStats.moveSpeed;
         currentMovePointIndex = 0;
 
         //do instantiate AI = new EnemyAI();
 
         // Make sure there are at least two wandering points
-        Assert.IsTrue(movePoints.Length >= 2);
+        Assert.IsTrue(movePoints.Length >= 1);
 
         // Set One of the movePoints as the targetObject
         targetObject = movePoints[currentMovePointIndex].gameObject;
@@ -132,9 +140,9 @@ public class EnemyStateMachine : StateMachine
     void Update()
     {
         isGrounded = ContextUtils.CheckIfGrounded(ref col, transform, ref floorContactFilter);
-        //animator.SetBool("InAir", isGrounded);
         UpdateMovementDirection();
         currentState.UpdateStates();
+        Debug.Log(currentState.ToString());
         if (IsAttackOnCooldown)
         {
             attackCooldownTimer -= Time.deltaTime;
@@ -146,14 +154,101 @@ public class EnemyStateMachine : StateMachine
         
     }
 
+    // Builder Functions
+
+    public EnemyStateMachine BuildAttackState(BaseState newState)
+    {
+        if (newState == null)
+        {
+            AttackState = new EnemyAttackState(this);
+        }
+        else
+        {
+            AttackState = newState;
+        }
+
+        return this;
+    }
+
+    public EnemyStateMachine BuildMoveState(BaseState newState)
+    {
+        if (newState == null)
+        {
+            MoveState = new EnemyMoveState(this);
+        }
+        else
+        {
+            MoveState = newState;
+        }
+
+        return this;
+    }
+
+    public EnemyStateMachine BuildIdleState(BaseState newState)
+    {
+        if (newState == null)
+        {
+            IdleState = new EnemyIdleState(this);
+        }
+        else
+        {
+            IdleState = newState;
+        }
+
+        return this;
+    }
+
+    public EnemyStateMachine BuildNotAttackState(BaseState newState)
+    {
+        if (newState == null)
+        {
+            NotAttackState = new EnemyNotAttackState(this);
+        }
+        else
+        {
+            NotAttackState = newState;
+        }
+
+        return this;
+    }
+
+    public EnemyStateMachine BuildGroundedState(BaseState newState = null)
+    {
+        if (newState == null)
+        {
+            GroundedState = new EnemyGroundedState(this);
+        }
+        else
+        {
+            GroundedState = newState;
+        }
+
+        return this;
+    }
+
+    public EnemyStateMachine BuildFallState(BaseState newState = null)
+    {
+        if (newState == null)
+        {
+            FallState = new EnemyFallState(this);
+        }
+        else
+        {
+            FallState = newState;   
+        }
+
+        return this;
+    }
+
+
     // Could pass in a parameter to change cooldown for specific attacks
     public void StartAttackCooldown()
     {
         IsAttacking = false;
         IsAttackOnCooldown = true;
-        attackCooldownTimer = ATTACK_COOLDOWN_MAX;
+        attackCooldownTimer = AttackCooldown;
     }
-/*
+
     public void CheckIfGrounded()
     {
         if (ContextUtils.CheckIfGrounded(ref col, transform, ref floorContactFilter))
@@ -166,7 +261,7 @@ public class EnemyStateMachine : StateMachine
             isGrounded = false;
             animator.SetBool("InAir", true);
         }
-    }*/
+    }
 
 
     public void SetMoveSpeed(float value)
@@ -203,24 +298,56 @@ public class EnemyStateMachine : StateMachine
     private void InstantiateStates()
     {
         //instance all states here
-        EmptyState = new EnemyEmptyState(this);
-        GroundedState = new EnemyGroundedState(this);
-        MoveState = new EnemyMoveState(this);
-        IdleState = new EnemyIdleState(this);
-        AttackState = new GorbChargeAttackState(this);
-        NotAttackState = new EnemyNotAttackState(this);
+        if (EmptyState == null)
+        {
+            EmptyState = new EnemyEmptyState(this);
+        }
+        if (GroundedState == null)
+        {
+            GroundedState = new EnemyGroundedState(this);
+        }
+        if (MoveState == null)
+        {
+            MoveState = new EnemyMoveState(this);
+        }
+        if (IdleState == null)
+        {
+            IdleState = new EnemyIdleState(this);
+        }
+        if (AttackState == null)
+        {
+            AttackState = new GorbChargeAttackState(this);
+        }
+        if (NotAttackState == null)
+        {
+            NotAttackState = new EnemyNotAttackState(this);
+        }
+        if (EnemyStats == null)
+        {
+
+        }
     }
 
+    void DieHealth()
+    {
+        Destroy(this.gameObject);
+    }
+
+    void OnDamage()
+    {
+        Debug.Log("Player is reacting to damage");
+    }
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.transform.CompareTag("Player") && IsAttacking)
+        if (collision.CompareTag("PlayerHitBox"))
         {
             IDamageable damageable = null;
             if (collision.gameObject.TryGetComponent<IDamageable>(out damageable))
             {
-                damageable.Damage((Single)attackDamage);
-                Debug.Log(this.name + " is Damaging the Player for " + attackDamage);
+                //Debug.LogWarning(damageable);
+                damageable.Damage(AttackDamage);
+                Debug.Log(this.name + " is Damaging the Player for " + AttackDamage);
             }
         }
     }
