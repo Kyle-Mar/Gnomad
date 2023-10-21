@@ -93,6 +93,7 @@ public class SceneLoader : MonoBehaviour
 
         // This Room's center based on the collider.    Top Left + half extents = center
         curRoomCenter = tilemapCollider.gameObject.transform.position + tilemapCollider.bounds.extents;
+        var otherRoomCenter = otherTilemapCollider.bounds.center;
         #endregion
         #region CalculateOffset
 
@@ -107,14 +108,16 @@ public class SceneLoader : MonoBehaviour
         var otherDoorPosition = adjacentScene.DoorPositions[otherDoorIdx];
         
         Debug.DrawRay(Utils.Vector3ToVector3Int(curRoomCenter + doorPosition - otherDoorPosition - tilemapCollider.bounds.center), Vector3.up, Color.green, 10f);
-#endregion
+        #endregion
 
         //Scene starts at 0,0,0
         // move every GO by the center of the current room + the current rooms door position - the other room door's position.
+        Debug.Log($"{scene.name}: Other Center : {otherRoomCenter}, Other Door: {otherDoorPosition - otherRoomCenter}, This Door: {doorPosition}");
+
         foreach (var x in otherObjectsList)
         {
             //x.transform.position += curRoomCenter + doorPosition;
-            x.transform.position += Utils.Vector3ToVector3Int(curRoomCenter + doorPosition - otherDoorPosition - tilemapCollider.bounds.extents);
+            x.transform.position += Utils.Vector3ToVector3Int(-otherRoomCenter -(otherDoorPosition - otherRoomCenter) + doorPosition);
         }
     }
 
