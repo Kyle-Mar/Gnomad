@@ -12,6 +12,8 @@ public class SceneLoader : MonoBehaviour
     //The relevant data about the room.
     public SceneInfo sceneInfo;
     [SerializeField] CompositeCollider2D tilemapCollider;
+    // THIS PROBABLY SHOULDN'T BE HERE BUT I CAN'T FIGURE OUT A BETTER WAY.
+    [SerializeField] CompositeCollider2D boundingCollider;
     public CompositeCollider2D TilemapCollider { get => tilemapCollider; set => tilemapCollider = value; }
 
     //When the player enters a new room, update the currently loaded scenes.
@@ -119,6 +121,7 @@ public class SceneLoader : MonoBehaviour
             //x.transform.position += curRoomCenter + doorPosition;
             x.transform.position += Utils.Vector3ToVector3Int(-otherRoomCenter -(otherDoorPosition - otherRoomCenter) + doorPosition);
         }
+        LevelManager.onEnterNewRoom?.Invoke(boundingCollider);
     }
 
     public void LoadScene(SceneInfo scene)

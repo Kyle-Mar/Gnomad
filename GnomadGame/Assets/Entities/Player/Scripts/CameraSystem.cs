@@ -16,6 +16,18 @@ public class CameraSystem : MonoBehaviour
     [SerializeField] float offsetY;
     [SerializeField] Vector3 desiredPosition;
     [SerializeField] Vector3 currentAnticipation;
+    [SerializeField] CompositeCollider2D boundingCollider;
+
+    Vector3 bottomLeft;
+    Vector3 bottomRight;
+    Vector3 topLeft;
+    Vector3 topRight;
+    Vector3 middleBottom;
+    Vector3 middleTop;
+    Vector3 middleLeft;
+    Vector3 middleRight;
+    Camera mainCamera;
+
     void Start()
     {
         Assert.IsNotNull(playerTransform);
@@ -23,6 +35,18 @@ public class CameraSystem : MonoBehaviour
         desiredPosition = GetCameraPosFromPlayerPos();
         currentAnticipation = GetAnticipationVector();
         originalPosition = transform.position;
+        mainCamera = GetComponent<Camera>();
+        CalculateCollisionPoints();
+    }
+
+    private void OnEnable()
+    {
+        LevelManager.onEnterNewRoom += OnEnterNewRoom;
+    }
+
+    private void OnDisable()
+    {
+        LevelManager.onEnterNewRoom -= OnEnterNewRoom;
     }
 
     // Update is called once per frame
@@ -40,6 +64,8 @@ public class CameraSystem : MonoBehaviour
 
     void Update()
     {
+        if(boundingCollider)
+        Debug.Log(boundingCollider.OverlapPoint(GetPointBoundsAligned(middleBottom)));
     }
 
     Vector3 GetCameraPosFromPlayerPos()
@@ -57,5 +83,30 @@ public class CameraSystem : MonoBehaviour
         }
         Debug.Log(anticipationVector);
         return anticipationVector;
+    }
+    void CalculateCollisionPoints()
+    {
+        bottomLeft = mainCamera.ViewportToWorldPoint(new Vector3(0, 0, mainCamera.farClipPlane));
+        bottomRight = mainCamera.ViewportToWorldPoint(new Vector3(1, 0, mainCamera.farClipPlane));
+        topLeft = mainCamera.ViewportToWorldPoint(new Vector3(0, 1, mainCamera.farClipPlane));
+        topRight = mainCamera.ViewportToWorldPoint(new Vector3(1, 1, mainCamera.farClipPlane));
+
+        // Calculate vectors for the four edges (midpoints of the corners)
+        middleBottom = Vector3.Lerp(bottomLeft, bottomRight, 0.5f);
+        middleTop = Vector3.Lerp(topLeft, topRight, 0.5f);
+        middleLeft = Vector3.Lerp(bottomLeft, topLeft, 0.5f);
+        middleRight = Vector3.Lerp(bottomRight, topRight, 0.5f);
+    }
+
+    Vector3 GetPointBoundsAligned(Vector3 point)
+    {
+        mainCamera.ViewportToWorldPoint(point);
+        point.z = boundingCollider.transform.position.z;
+        return point;
+    }
+    
+    public void OnEnterNewRoom(CompositeCollider2D boundingCollider)
+    {
+        Debug.Log("Hello from Camera System");
     }
 }

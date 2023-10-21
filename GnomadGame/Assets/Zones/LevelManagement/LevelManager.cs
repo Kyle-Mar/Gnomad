@@ -11,11 +11,16 @@ public static class LevelManager
     const float NextUpdateOffset = 1f;
     public static SceneInfo OccupiedScene;
 
+    public delegate void OnEnterNewRoom(CompositeCollider2D collider);
+    public static OnEnterNewRoom onEnterNewRoom;
+    
+
     /// <summary>
     /// Updates the loaded scenes.
     /// </summary>
     /// <param name="connectedScenes">All the connected scenes (rooms) to the root room.</param>
     /// <param name="occupiedScene">The scene the player is presently in.</param>
+    
     public static void UpdateLoadedScenes(List<SceneInfo> connectedScenes, SceneInfo occupiedScene, SceneLoader loader)
     {
         // list of scenes we plan to remove.
@@ -26,7 +31,8 @@ public static class LevelManager
         }
         // check to see if the occupied scene is loaded already.
         // if not load it.
-        if (SceneManager.GetSceneByName(occupiedScene.name).isLoaded)
+        Scene newScene = SceneManager.GetSceneByName(occupiedScene.name);
+        if (newScene.isLoaded)
         {
             loader.sceneInfo.isLoaded = true;
             loadedScenes.Add(loader.sceneInfo);
