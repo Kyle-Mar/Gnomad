@@ -64,8 +64,18 @@ public class CameraSystem : MonoBehaviour
 
     void Update()
     {
-        if(boundingCollider)
-        Debug.Log(boundingCollider.OverlapPoint(GetPointBoundsAligned(middleBottom)));
+        if (boundingCollider)
+        {
+            CalculateCollisionPoints();
+            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleBottom))}");
+            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleTop))}");
+            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleRight))}");
+            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleLeft))}");
+            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(topRight))}");
+            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(topLeft))}");
+            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(bottomLeft))}");
+            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(bottomRight))}");
+        }
     }
 
     Vector3 GetCameraPosFromPlayerPos()
@@ -81,15 +91,16 @@ public class CameraSystem : MonoBehaviour
             anticipationVector.Normalize();
             anticipationVector = Vector3.Scale(anticipationVector, new Vector3(horizontalAnticipation, verticalAnticipation, 0));
         }
-        Debug.Log(anticipationVector);
+        //Debug.Log(anticipationVector);
         return anticipationVector;
     }
     void CalculateCollisionPoints()
     {
-        bottomLeft = mainCamera.ViewportToWorldPoint(new Vector3(0, 0, mainCamera.farClipPlane));
-        bottomRight = mainCamera.ViewportToWorldPoint(new Vector3(1, 0, mainCamera.farClipPlane));
-        topLeft = mainCamera.ViewportToWorldPoint(new Vector3(0, 1, mainCamera.farClipPlane));
-        topRight = mainCamera.ViewportToWorldPoint(new Vector3(1, 1, mainCamera.farClipPlane));
+        var zPos = Mathf.Abs(mainCamera.transform.position.z - boundingCollider.transform.position.z);
+        bottomLeft = mainCamera.ViewportToWorldPoint(new Vector3(0, 0, zPos));
+        bottomRight = mainCamera.ViewportToWorldPoint(new Vector3(1, 0, zPos));
+        topLeft = mainCamera.ViewportToWorldPoint(new Vector3(0, 1, zPos));
+        topRight = mainCamera.ViewportToWorldPoint(new Vector3(1, 1, zPos));
 
         // Calculate vectors for the four edges (midpoints of the corners)
         middleBottom = Vector3.Lerp(bottomLeft, bottomRight, 0.5f);
@@ -100,13 +111,16 @@ public class CameraSystem : MonoBehaviour
 
     Vector3 GetPointBoundsAligned(Vector3 point)
     {
-        mainCamera.ViewportToWorldPoint(point);
-        point.z = boundingCollider.transform.position.z;
+        
+        /*point.z = boundingCollider.transform.position.z;*/
+        /*var go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        go.transform.position = point;*/
         return point;
     }
     
     public void OnEnterNewRoom(CompositeCollider2D boundingCollider)
     {
+        this.boundingCollider = boundingCollider;
         Debug.Log("Hello from Camera System");
     }
 }
