@@ -117,9 +117,13 @@ public class CameraSystem : MonoBehaviour
         go.transform.position = point;*/
         return point;
     }
-    
+
     public void OnEnterNewRoom(CompositeCollider2D boundingCollider)
     {
+        if (!boundingCollider)
+        {
+            return;
+        }
         this.boundingCollider = boundingCollider;
         Debug.Log("Hello from Camera System");
     }
