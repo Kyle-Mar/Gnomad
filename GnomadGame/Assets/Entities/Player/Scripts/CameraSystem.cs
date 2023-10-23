@@ -164,22 +164,6 @@ public class CameraSystem : MonoBehaviour
             allowedAmountNegX = 0;
             allowedAmountNegY = 0;
             CalculateCollisionPoints();
-            if (boundingCollider.OverlapPoint(GetPointBoundsAligned(middleBottom)))
-            {
-                allowedAmountNegY += (1f / 3);
-            }
-            if (boundingCollider.OverlapPoint(GetPointBoundsAligned(middleTop)))
-            {
-                allowedAmountPosY += (1f / 3);
-            }
-            if (boundingCollider.OverlapPoint(GetPointBoundsAligned(middleRight)))
-            {
-                allowedAmountPosX += (1f / 3);
-            }
-            if (boundingCollider.OverlapPoint(GetPointBoundsAligned(middleLeft)))
-            {
-                allowedAmountNegX += (1f / 3);
-            }
             if (boundingCollider.OverlapPoint(GetPointBoundsAligned(topRight)))
             {
                 allowedAmountPosY += (1f / 3);
@@ -200,6 +184,44 @@ public class CameraSystem : MonoBehaviour
                 allowedAmountPosX += (1f / 3);
                 allowedAmountNegY += (1f / 3);
             }
+            if (boundingCollider.OverlapPoint(GetPointBoundsAligned(middleBottom)))
+            {
+
+                allowedAmountNegY = 1;
+            }
+            else if(Mathf.Approximately(allowedAmountNegY, 1f / 3))
+            {
+                allowedAmountNegY = 0;
+            }
+            if (boundingCollider.OverlapPoint(GetPointBoundsAligned(middleTop)))
+            {
+                allowedAmountPosY = 1;
+            }
+            else if (Mathf.Approximately(allowedAmountPosY, 1f / 3))
+            {
+                allowedAmountPosY = 0;
+            }
+            if (boundingCollider.OverlapPoint(GetPointBoundsAligned(middleRight)))
+            {
+                allowedAmountPosX = 1;
+            }
+            else if (Mathf.Approximately(allowedAmountPosX, 1f / 3))
+            {
+                allowedAmountPosX = 0;
+            }
+            if (boundingCollider.OverlapPoint(GetPointBoundsAligned(middleLeft)))
+            {
+                allowedAmountNegX = 1;
+            }
+            else if (Mathf.Approximately(allowedAmountNegX, 1f / 3))
+            {
+                allowedAmountNegX = 0;
+            }
+        }
+        desiredDelta.z *= 0;
+        if (allowedAmountNegX == 0 && allowedAmountNegY == 0 && allowedAmountPosX ==0 && allowedAmountPosY == 0)
+        {
+            return desiredDelta;
         }
         if (desiredDelta.x > 0)
         {
@@ -217,7 +239,6 @@ public class CameraSystem : MonoBehaviour
         {
             desiredDelta.y *= allowedAmountNegY;
         }
-        desiredDelta.z *= 0;
         Debug.Log(desiredDelta);
         return desiredDelta;
     }
