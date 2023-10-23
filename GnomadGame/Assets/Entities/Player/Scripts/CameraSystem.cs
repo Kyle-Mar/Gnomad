@@ -12,9 +12,9 @@ public class CameraSystem : MonoBehaviour
     [SerializeField] Transform playerTransform;
     [SerializeField] PlayerStateMachine psm;
     [SerializeField] Rigidbody2D playerRB;
-    [SerializeField] Camera camera;
     [SerializeField] CompositeCollider2D boundingArea;
     [Header("Camera Details")]
+    [SerializeField] Camera camera;
     [SerializeField] Vector3 originalPosition;
     [SerializeField] Vector3 desiredPosition;
     [SerializeField] Vector3 currentAnticipation;
