@@ -9,11 +9,14 @@ public class CameraSystem : MonoBehaviour
     [SerializeField] Transform playerTransform;
     [SerializeField] PlayerStateMachine psm;
     [SerializeField] Rigidbody2D playerRB;
+    [SerializeField] Camera camera;
+    [SerializeField] CompositeCollider2D boundingArea;
     [SerializeField] float smoothingFactor;
     [SerializeField] float horizontalAnticipation;
     [SerializeField] float verticalAnticipation;
     [SerializeField] Vector3 originalPosition;
     [SerializeField] float offsetY;
+    [SerializeField] Vector2 yDeadzone;
     [SerializeField] Vector3 desiredPosition;
     [SerializeField] Vector3 currentAnticipation;
     [SerializeField] CompositeCollider2D boundingCollider;
@@ -54,7 +57,7 @@ public class CameraSystem : MonoBehaviour
     {
         if (psm.CurrentState != psm.GroundedState)
         {
-            originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
+            //originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
         }
         currentAnticipation = Vector3.Lerp(currentAnticipation, GetAnticipationVector(), Utils.GetInterpolant(smoothingFactor));
         desiredPosition = GetCameraPosFromPlayerPos() + currentAnticipation;
@@ -64,17 +67,28 @@ public class CameraSystem : MonoBehaviour
 
     void Update()
     {
+        UpdateYPos();
+    }
+
+    void UpdateYPos()
+    {
+        Vector3 playerPos = camera.WorldToViewportPoint(playerTransform.position);
+        if (playerPos.y > yDeadzone.x && playerPos.y < yDeadzone.y)
+        {
+            return;
+        }
+        originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
         if (boundingCollider)
         {
             CalculateCollisionPoints();
-            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleBottom))}");
-            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleTop))}");
-            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleRight))}");
-            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleLeft))}");
-            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(topRight))}");
-            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(topLeft))}");
-            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(bottomLeft))}");
-            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(bottomRight))}");
+            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleBottom))}");
+            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleTop))}");
+            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleRight))}");
+            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleLeft))}");
+            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(topRight))}");
+            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(topLeft))}");
+            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(bottomLeft))}");
+            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(bottomRight))}");
         }
     }
 
@@ -117,9 +131,13 @@ public class CameraSystem : MonoBehaviour
         go.transform.position = point;*/
         return point;
     }
-    
+
     public void OnEnterNewRoom(CompositeCollider2D boundingCollider)
     {
+        if (!boundingCollider)
+        {
+            return;
+        }
         this.boundingCollider = boundingCollider;
         Debug.Log("Hello from Camera System");
     }

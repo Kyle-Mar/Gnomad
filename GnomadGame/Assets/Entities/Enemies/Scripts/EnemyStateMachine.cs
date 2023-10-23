@@ -57,7 +57,7 @@ public class EnemyStateMachine : StateMachine
     public Rigidbody2D rb;
     public SpriteRenderer SpriteRenderer;
     public Animator animator;
-    public Transform[] movePoints;
+    public List<Transform> movePoints = new();
     public GameObject targetObject;
     public GameObject EnemyAttackObj;
     public int currentMovePointIndex;
@@ -115,7 +115,21 @@ public class EnemyStateMachine : StateMachine
         //do instantiate AI = new EnemyAI();
 
         // Make sure there are at least two wandering points
-        Assert.IsTrue(movePoints.Length >= 1);
+
+        if (movePoints.Count <= 0)
+        {
+            // If there aren't create them at a good common offset
+            Debug.Log("TEST");
+            var mp = new GameObject("MovePoint0");
+            mp.transform.parent = gameObject.transform.parent;
+            mp.transform.position = new(transform.position.x + 5, transform.position.y, transform.position.z);
+            var mp1 = new GameObject("MovePoint1");
+            mp1.transform.parent = gameObject.transform.parent;
+            mp1.transform.position = new(transform.position.x - 5, transform.position.y, transform.position.z);
+            movePoints.Add(mp.transform);
+            movePoints.Add(mp1.transform);
+
+        }
 
         // Set One of the movePoints as the targetObject
         targetObject = movePoints[currentMovePointIndex].gameObject;
