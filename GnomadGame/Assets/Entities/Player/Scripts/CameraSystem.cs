@@ -9,11 +9,14 @@ public class CameraSystem : MonoBehaviour
     [SerializeField] Transform playerTransform;
     [SerializeField] PlayerStateMachine psm;
     [SerializeField] Rigidbody2D playerRB;
+    [SerializeField] Camera camera;
+    [SerializeField] CompositeCollider2D boundingArea;
     [SerializeField] float smoothingFactor;
     [SerializeField] float horizontalAnticipation;
     [SerializeField] float verticalAnticipation;
     [SerializeField] Vector3 originalPosition;
     [SerializeField] float offsetY;
+    [SerializeField] Vector2 yDeadzone;
     [SerializeField] Vector3 desiredPosition;
     [SerializeField] Vector3 currentAnticipation;
     void Start()
@@ -30,7 +33,7 @@ public class CameraSystem : MonoBehaviour
     {
         if (psm.CurrentState != psm.GroundedState)
         {
-            originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
+            //originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
         }
         currentAnticipation = Vector3.Lerp(currentAnticipation, GetAnticipationVector(), Utils.GetInterpolant(smoothingFactor));
         desiredPosition = GetCameraPosFromPlayerPos() + currentAnticipation;
@@ -40,6 +43,17 @@ public class CameraSystem : MonoBehaviour
 
     void Update()
     {
+        UpdateYPos();
+    }
+
+    void UpdateYPos()
+    {
+        Vector3 playerPos = camera.WorldToViewportPoint(playerTransform.position);
+        if (playerPos.y > yDeadzone.x && playerPos.y < yDeadzone.y)
+        {
+            return;
+        }
+        originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
     }
 
     Vector3 GetCameraPosFromPlayerPos()
