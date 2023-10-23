@@ -6,19 +6,25 @@ using Gnomad.Utils;
 
 public class CameraSystem : MonoBehaviour
 {
+    [Header("Toggles")]
+    [SerializeField] bool doRenderSpheres;
+    [Header("Player Info")]
     [SerializeField] Transform playerTransform;
     [SerializeField] PlayerStateMachine psm;
     [SerializeField] Rigidbody2D playerRB;
     [SerializeField] Camera camera;
     [SerializeField] CompositeCollider2D boundingArea;
+    [Header("Camera Details")]
+    [SerializeField] Vector3 originalPosition;
+    [SerializeField] Vector3 desiredPosition;
+    [SerializeField] Vector3 currentAnticipation;
+    [Header("Camera Settings")]
+    [SerializeField] Vector2 yDeadzone;
     [SerializeField] float smoothingFactor;
     [SerializeField] float horizontalAnticipation;
     [SerializeField] float verticalAnticipation;
-    [SerializeField] Vector3 originalPosition;
     [SerializeField] float offsetY;
-    [SerializeField] Vector2 yDeadzone;
-    [SerializeField] Vector3 desiredPosition;
-    [SerializeField] Vector3 currentAnticipation;
+    [Header("Current Bounding Collider")]
     [SerializeField] CompositeCollider2D boundingCollider;
 
     Vector3 bottomLeft;
@@ -67,6 +73,18 @@ public class CameraSystem : MonoBehaviour
 
     void Update()
     {
+        if (boundingCollider)
+        {
+            CalculateCollisionPoints();
+            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleBottom))}");
+            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleTop))}");
+            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleRight))}");
+            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleLeft))}");
+            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(topRight))}");
+            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(topLeft))}");
+            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(bottomLeft))}");
+            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(bottomRight))}");
+        }
         UpdateYPos();
     }
 
@@ -78,18 +96,7 @@ public class CameraSystem : MonoBehaviour
             return;
         }
         originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
-        if (boundingCollider)
-        {
-            CalculateCollisionPoints();
-            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleBottom))}");
-            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleTop))}");
-            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleRight))}");
-            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleLeft))}");
-            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(topRight))}");
-            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(topLeft))}");
-            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(bottomLeft))}");
-            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(bottomRight))}");
-        }
+        
     }
 
     Vector3 GetCameraPosFromPlayerPos()
@@ -125,10 +132,12 @@ public class CameraSystem : MonoBehaviour
 
     Vector3 GetPointBoundsAligned(Vector3 point)
     {
-        
-        /*point.z = boundingCollider.transform.position.z;*/
-        /*var go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        go.transform.position = point;*/
+        if (doRenderSpheres)
+        {
+            point.z = boundingCollider.transform.position.z;
+            var go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            go.transform.position = point;
+        }
         return point;
     }
 
