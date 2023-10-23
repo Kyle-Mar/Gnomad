@@ -322,10 +322,6 @@ public class EnemyStateMachine : StateMachine
         {
             NotAttackState = new EnemyNotAttackState(this);
         }
-        if (EnemyStats == null)
-        {
-
-        }
     }
 
     void DieHealth()
@@ -338,6 +334,11 @@ public class EnemyStateMachine : StateMachine
         Debug.Log("Player is reacting to damage");
     }
 
+    public void knockbackFunc(Collider2D col)
+    {
+        
+    }
+
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("PlayerHitBox"))
@@ -348,6 +349,8 @@ public class EnemyStateMachine : StateMachine
                 //Debug.LogWarning(damageable);
                 damageable.Damage(AttackDamage);
                 Debug.Log(this.name + " is Damaging the Player for " + AttackDamage);
+                ContactPoint2D[] contacts;
+                
             }
         }
     }
