@@ -112,14 +112,20 @@ public class SceneLoader : MonoBehaviour
         Debug.DrawRay(Utils.Vector3ToVector3Int(curRoomCenter + doorPosition - otherDoorPosition - tilemapCollider.bounds.center), Vector3.up, Color.green, 10f);
         #endregion
 
+        //-orc - (odp - orc) + dp + objPos + odp + (oDP - oRC)
+        //-otherRoomCenter -(otherDoorPosition - otherRoomCenter) + (doorPosition)
+        //var offset = -3 * otherRoomCenter + otherDoorPosition + doorPosition + tilemapCollider.transform.parent.parent.transform.position;
+        //var offset = -otherRoomCenter - (otherDoorPosition - otherRoomCenter) + doorPosition + tilemapCollider.transform.parent.parent.transform.position + otherDoorPosition + (otherDoorPosition - otherRoomCenter);
+        var offset = -otherRoomCenter - (otherDoorPosition - otherRoomCenter) + doorPosition + tilemapCollider.transform.parent.parent.transform.position;
         //Scene starts at 0,0,0
+        //Debug.Log(tilemapCollider.transform.parent.parent.transform.position);
         // move every GO by the center of the current room + the current rooms door position - the other room door's position.
-        Debug.Log($"{scene.name}: Other Center : {otherRoomCenter}, Other Door: {otherDoorPosition - otherRoomCenter}, This Door: {doorPosition}");
+        Debug.Log($"{scene.name}: Other Center : {otherRoomCenter}, Other Door: {otherDoorPosition - otherRoomCenter}, This Door: {doorPosition}, This Pos: {tilemapCollider.transform.parent.parent.transform.position}");
 
         foreach (var x in otherObjectsList)
         {
             //x.transform.position += curRoomCenter + doorPosition;
-            x.transform.position += Utils.Vector3ToVector3Int(-otherRoomCenter -(otherDoorPosition - otherRoomCenter) + doorPosition);
+            x.transform.position += Utils.Vector3ToVector3Int(offset);
         }
         LevelManager.onEnterNewRoom?.Invoke(boundingCollider);
     }

@@ -28,6 +28,11 @@ public class SpriteSeeder : MonoBehaviour
         }
         else
         {
+            if (spriteRenderer == null)
+            {
+                Debug.LogWarning("Sprite Renderer for Sprite Seeder is Null");
+                return;
+            }
             spriteRenderer.sprite = spritePool[index % spritePool.Length];
         }
     }
