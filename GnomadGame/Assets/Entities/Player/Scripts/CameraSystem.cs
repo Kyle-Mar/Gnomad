@@ -14,10 +14,11 @@ public class CameraSystem : MonoBehaviour
     [SerializeField] Rigidbody2D playerRB;
     [SerializeField] CompositeCollider2D boundingArea;
     [Header("Camera Details")]
-    [SerializeField] Camera camera;
+    [SerializeField] Camera mainCamera;
     [SerializeField] Vector3 originalPosition;
     [SerializeField] Vector3 desiredPosition;
     [SerializeField] Vector3 currentAnticipation;
+    [SerializeField] Vector3 desiredDelta;
     [Header("Camera Settings")]
     [SerializeField] Vector2 yDeadzone;
     [SerializeField] float smoothingFactor;
@@ -35,7 +36,10 @@ public class CameraSystem : MonoBehaviour
     Vector3 middleTop;
     Vector3 middleLeft;
     Vector3 middleRight;
-    Camera mainCamera;
+    public float allowedAmountPosX;
+    public float allowedAmountPosY;
+    public float allowedAmountNegX;
+    public float allowedAmountNegY;
 
     void Start()
     {
@@ -44,7 +48,6 @@ public class CameraSystem : MonoBehaviour
         desiredPosition = GetCameraPosFromPlayerPos();
         currentAnticipation = GetAnticipationVector();
         originalPosition = transform.position;
-        mainCamera = GetComponent<Camera>();
         CalculateCollisionPoints();
     }
 
@@ -68,29 +71,30 @@ public class CameraSystem : MonoBehaviour
         currentAnticipation = Vector3.Lerp(currentAnticipation, GetAnticipationVector(), Utils.GetInterpolant(smoothingFactor));
         desiredPosition = GetCameraPosFromPlayerPos() + currentAnticipation;
         desiredPosition.z = originalPosition.z;
-        transform.position = Vector3.Lerp(transform.position, desiredPosition, Utils.GetInterpolant(smoothingFactor));
+        desiredDelta = Vector3.Lerp(transform.position, desiredPosition, Utils.GetInterpolant(smoothingFactor)) - transform.position;
+        //Debug.Log(desiredDelta);
+        transform.position += GetAllowedDelta(desiredDelta);
     }
 
     void Update()
     {
-        if (boundingCollider)
-        {
-            CalculateCollisionPoints();
-            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleBottom))}");
-            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleTop))}");
-            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleRight))}");
-            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleLeft))}");
-            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(topRight))}");
-            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(topLeft))}");
-            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(bottomLeft))}");
-            Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(bottomRight))}");
-        }
         UpdateYPos();
+        
+
+
+            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleBottom))}");
+            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleRight))}");
+            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleLeft))}");
+            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(topRight))}");
+            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(topLeft))}");
+            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(bottomLeft))}");
+            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(bottomRight))}");
+        
     }
 
     void UpdateYPos()
     {
-        Vector3 playerPos = camera.WorldToViewportPoint(playerTransform.position);
+        Vector3 playerPos = GetComponent<Camera>().WorldToViewportPoint(playerTransform.position);
         if (playerPos.y > yDeadzone.x && playerPos.y < yDeadzone.y)
         {
             return;
@@ -149,5 +153,72 @@ public class CameraSystem : MonoBehaviour
         }
         this.boundingCollider = boundingCollider;
         Debug.Log("Hello from Camera System");
+    }
+
+    Vector3 GetAllowedDelta(Vector3 desiredDelta)
+    {
+        if (boundingCollider)
+        {
+            allowedAmountPosX = 0;
+            allowedAmountPosY = 0;
+            allowedAmountNegX = 0;
+            allowedAmountNegY = 0;
+            CalculateCollisionPoints();
+            if (boundingCollider.OverlapPoint(GetPointBoundsAligned(middleBottom)))
+            {
+                allowedAmountNegY += (1f / 3);
+            }
+            if (boundingCollider.OverlapPoint(GetPointBoundsAligned(middleTop)))
+            {
+                allowedAmountPosY += (1f / 3);
+            }
+            if (boundingCollider.OverlapPoint(GetPointBoundsAligned(middleRight)))
+            {
+                allowedAmountPosX += (1f / 3);
+            }
+            if (boundingCollider.OverlapPoint(GetPointBoundsAligned(middleLeft)))
+            {
+                allowedAmountNegX += (1f / 3);
+            }
+            if (boundingCollider.OverlapPoint(GetPointBoundsAligned(topRight)))
+            {
+                allowedAmountPosY += (1f / 3);
+                allowedAmountPosX += (1f / 3);
+            }
+            if (boundingCollider.OverlapPoint(GetPointBoundsAligned(topLeft)))
+            {
+                allowedAmountNegX += (1f / 3);
+                allowedAmountPosY += (1f / 3);
+            }
+            if (boundingCollider.OverlapPoint(GetPointBoundsAligned(bottomLeft)))
+            {
+                allowedAmountNegX += (1f / 3);
+                allowedAmountNegY += (1f / 3);
+            }
+            if (boundingCollider.OverlapPoint(GetPointBoundsAligned(bottomRight)))
+            {
+                allowedAmountPosX += (1f / 3);
+                allowedAmountNegY += (1f / 3);
+            }
+        }
+        if (desiredDelta.x > 0)
+        {
+            desiredDelta.x *= allowedAmountPosX;
+        }
+        else
+        {
+            desiredDelta.x *= allowedAmountNegX;
+        }
+        if (desiredDelta.y > 0)
+        {
+            desiredDelta.y *= allowedAmountPosY;
+        }
+        else
+        {
+            desiredDelta.y *= allowedAmountNegY;
+        }
+        desiredDelta.z *= 0;
+        Debug.Log(desiredDelta);
+        return desiredDelta;
     }
 }

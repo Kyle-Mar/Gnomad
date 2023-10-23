@@ -486,19 +486,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51e44b6c546c1954084293a6251ba9eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  doRenderSpheres: 0
   playerTransform: {fileID: 671944598}
   psm: {fileID: 671944604}
   playerRB: {fileID: 671944600}
-  camera: {fileID: 212300218}
   boundingArea: {fileID: 0}
+  mainCamera: {fileID: 212300218}
+  originalPosition: {x: 0, y: 0, z: 0}
+  desiredPosition: {x: 0, y: 0, z: 0}
+  currentAnticipation: {x: 0, y: 0, z: 0}
+  yDeadzone: {x: 0.25, y: 0.75}
   smoothingFactor: 60
   horizontalAnticipation: 5
   verticalAnticipation: 2
-  originalPosition: {x: 0, y: 0, z: 0}
   offsetY: 3
-  yDeadzone: {x: 0.25, y: 0.75}
-  desiredPosition: {x: 0, y: 0, z: 0}
-  currentAnticipation: {x: 0, y: 0, z: 0}
+  boundingCollider: {fileID: 0}
 --- !u!1 &310899491
 GameObject:
   m_ObjectHideFlags: 0
@@ -916,6 +918,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1324028807, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: m_ConnectedAnchor.x
+      value: -0.044
+      objectReference: {fileID: 0}
     - target: {fileID: 4446419450577938882, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_RootOrder
       value: 2
