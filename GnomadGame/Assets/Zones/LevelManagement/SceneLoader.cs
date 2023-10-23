@@ -119,7 +119,7 @@ public class SceneLoader : MonoBehaviour
         foreach (var x in otherObjectsList)
         {
             //x.transform.position += curRoomCenter + doorPosition;
-            x.transform.position += Utils.Vector3ToVector3Int(-otherRoomCenter -(otherDoorPosition - otherRoomCenter) + doorPosition);
+            x.transform.position += Utils.Vector3ToVector3Int(-otherRoomCenter -(otherDoorPosition - otherRoomCenter) + (doorPosition));
         }
         LevelManager.onEnterNewRoom?.Invoke(boundingCollider);
     }
