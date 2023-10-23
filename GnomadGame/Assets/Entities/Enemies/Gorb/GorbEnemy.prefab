@@ -222,6 +222,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83037cdfbf7ae9647b5483341cba1297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageDirection: 1
+  isDamaged: 0
   isGrounded: 0
   attackOnCooldown: 0
   currentMoveSpeed: 9.5
@@ -267,7 +269,7 @@ MonoBehaviour:
   MAX_HEALTH: 100
   health: 100
   canTakeDamage: 1
-  cooldownTime: 0
+  cooldownTime: 0.2
 --- !u!114 &1960499130926194949
 MonoBehaviour:
   m_ObjectHideFlags: 0
