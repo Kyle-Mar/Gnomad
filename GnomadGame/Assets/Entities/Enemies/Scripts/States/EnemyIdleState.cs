@@ -22,7 +22,7 @@ public class EnemyIdleState : EnemyBaseState
             if (timerChangeState <= 0.0f)
             {
                 // Move to the next move point
-                if (context.currentMovePointIndex >= context.movePoints.Length - 1)
+                if (context.currentMovePointIndex >= context.movePoints.Count - 1)
                 {
                     context.currentMovePointIndex = 0;
                 }

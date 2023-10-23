@@ -19,8 +19,9 @@ public class HUDController : MonoBehaviour
 
     private void Awake()
     {
-        Assert.IsNotNull(player); 
-        playerHealth = player.GetComponent<Health>();
+        Assert.IsNotNull(player);
+        // Moved Player Health Component into a new GameObject
+        playerHealth = player.GetComponentInChildren<Health>();
         PopulateUIHearts();
     }
 

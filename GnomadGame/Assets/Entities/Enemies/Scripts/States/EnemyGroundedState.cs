@@ -16,16 +16,14 @@ public class EnemyGroundedState : EnemyBaseState
 /*        context.CheckIfGrounded();*/
         if (!context.IsGrounded)
         {
-            // Uncomment once FallState is implemented
-
-
-            //SwitchState(context.FallState);
+            SwitchState(context.FallState);
         }
     }
 
     public override void EnterState()
     {
         InitializeSubState();
+        context.animator.SetBool("InAir", false);
         Debug.Log("HELLO WORLD ENEMY AM GROUNDED!");
         //context.rb.velocity = new(context.rb.velocity.x, 0);
         //Object.Instantiate(context.LandParticles, context.Feet.position, Quaternion.identity);

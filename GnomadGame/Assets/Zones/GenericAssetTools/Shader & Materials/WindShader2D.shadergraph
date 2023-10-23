@@ -23,6 +23,9 @@
         },
         {
             "m_Id": "aa6c460a7578422283141e68ede1e8f6"
+        },
+        {
+            "m_Id": "110ec10c381742e09787e6162cc02e43"
         }
     ],
     "m_Keywords": [],
@@ -1155,6 +1158,33 @@
         "e31": 0.0,
         "e32": 0.0,
         "e33": 1.0
+    }
+}
+
+{
+    "m_SGVersion": 1,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector3ShaderProperty",
+    "m_ObjectId": "110ec10c381742e09787e6162cc02e43",
+    "m_Guid": {
+        "m_GuidSerialized": "27e006cf-535a-4ae3-ac2c-3c1558107880"
+    },
+    "m_Name": "WindOffset",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "WindOffset",
+    "m_DefaultReferenceName": "_WindOffset",
+    "m_OverrideReferenceName": "",
+    "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_Value": {
+        "x": 58.7599983215332,
+        "y": 1.9500000476837159,
+        "z": 0.0,
+        "w": 0.0
     }
 }
 
@@ -2754,10 +2784,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -2676.0,
-            "y": -1171.333251953125,
-            "width": 209.33349609375,
-            "height": 318.6666259765625
+            "x": -3006.400146484375,
+            "y": -1300.800048828125,
+            "width": 208.000244140625,
+            "height": 312.79998779296877
         }
     },
     "m_Slots": [
@@ -3289,6 +3319,9 @@
         },
         {
             "m_Id": "aa6c460a7578422283141e68ede1e8f6"
+        },
+        {
+            "m_Id": "110ec10c381742e09787e6162cc02e43"
         }
     ]
 }

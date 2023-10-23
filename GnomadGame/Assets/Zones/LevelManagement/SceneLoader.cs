@@ -12,6 +12,8 @@ public class SceneLoader : MonoBehaviour
     //The relevant data about the room.
     public SceneInfo sceneInfo;
     [SerializeField] CompositeCollider2D tilemapCollider;
+    // THIS PROBABLY SHOULDN'T BE HERE BUT I CAN'T FIGURE OUT A BETTER WAY.
+    [SerializeField] CompositeCollider2D boundingCollider;
     public CompositeCollider2D TilemapCollider { get => tilemapCollider; set => tilemapCollider = value; }
 
     //When the player enters a new room, update the currently loaded scenes.
@@ -93,6 +95,7 @@ public class SceneLoader : MonoBehaviour
 
         // This Room's center based on the collider.    Top Left + half extents = center
         curRoomCenter = tilemapCollider.gameObject.transform.position + tilemapCollider.bounds.extents;
+        var otherRoomCenter = otherTilemapCollider.bounds.center;
         #endregion
         #region CalculateOffset
 
@@ -107,15 +110,24 @@ public class SceneLoader : MonoBehaviour
         var otherDoorPosition = adjacentScene.DoorPositions[otherDoorIdx];
         
         Debug.DrawRay(Utils.Vector3ToVector3Int(curRoomCenter + doorPosition - otherDoorPosition - tilemapCollider.bounds.center), Vector3.up, Color.green, 10f);
-#endregion
+        #endregion
 
+        //-orc - (odp - orc) + dp + objPos + odp + (oDP - oRC)
+        //-otherRoomCenter -(otherDoorPosition - otherRoomCenter) + (doorPosition)
+        //var offset = -3 * otherRoomCenter + otherDoorPosition + doorPosition + tilemapCollider.transform.parent.parent.transform.position;
+        //var offset = -otherRoomCenter - (otherDoorPosition - otherRoomCenter) + doorPosition + tilemapCollider.transform.parent.parent.transform.position + otherDoorPosition + (otherDoorPosition - otherRoomCenter);
+        var offset = -otherRoomCenter - (otherDoorPosition - otherRoomCenter) + doorPosition + tilemapCollider.transform.parent.parent.transform.position;
         //Scene starts at 0,0,0
+        //Debug.Log(tilemapCollider.transform.parent.parent.transform.position);
         // move every GO by the center of the current room + the current rooms door position - the other room door's position.
+        Debug.Log($"{scene.name}: Other Center : {otherRoomCenter}, Other Door: {otherDoorPosition - otherRoomCenter}, This Door: {doorPosition}, This Pos: {tilemapCollider.transform.parent.parent.transform.position}");
+
         foreach (var x in otherObjectsList)
         {
             //x.transform.position += curRoomCenter + doorPosition;
-            x.transform.position += Utils.Vector3ToVector3Int(curRoomCenter + doorPosition - otherDoorPosition - tilemapCollider.bounds.extents);
+            x.transform.position += Utils.Vector3ToVector3Int(offset);
         }
+        LevelManager.onEnterNewRoom?.Invoke(boundingCollider);
     }
 
     public void LoadScene(SceneInfo scene)
