@@ -495,12 +495,20 @@ MonoBehaviour:
   originalPosition: {x: 0, y: 0, z: 0}
   desiredPosition: {x: 0, y: 0, z: 0}
   currentAnticipation: {x: 0, y: 0, z: 0}
+  desiredDelta: {x: 0, y: 0, z: 0}
   yDeadzone: {x: 0.25, y: 0.75}
   smoothingFactor: 60
+  smoothingFactorAnticipationX: 60
+  smoothingFactorAnticipationY: 100
   horizontalAnticipation: 5
   verticalAnticipation: 2
+  fallingAnticipationMultiplier: 10.5
   offsetY: 3
   boundingCollider: {fileID: 0}
+  allowedAmountPosX: 0
+  allowedAmountPosY: 0
+  allowedAmountNegX: 0
+  allowedAmountNegY: 0
 --- !u!1 &310899491
 GameObject:
   m_ObjectHideFlags: 0

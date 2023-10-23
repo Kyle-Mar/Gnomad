@@ -22,8 +22,11 @@ public class CameraSystem : MonoBehaviour
     [Header("Camera Settings")]
     [SerializeField] Vector2 yDeadzone;
     [SerializeField] float smoothingFactor;
+    [SerializeField] float smoothingFactorAnticipationX;
+    [SerializeField] float smoothingFactorAnticipationY;
     [SerializeField] float horizontalAnticipation;
     [SerializeField] float verticalAnticipation;
+    [SerializeField] float fallingAnticipationMultiplier;
     [SerializeField] float offsetY;
     [Header("Current Bounding Collider")]
     [SerializeField] CompositeCollider2D boundingCollider;
@@ -68,7 +71,12 @@ public class CameraSystem : MonoBehaviour
         {
             //originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
         }
-        currentAnticipation = Vector3.Lerp(currentAnticipation, GetAnticipationVector(), Utils.GetInterpolant(smoothingFactor));
+        var nextAnticipation = GetAnticipationVector();
+        currentAnticipation = new Vector3(
+                                Mathf.Lerp(currentAnticipation.x, nextAnticipation.x, Utils.GetInterpolant(smoothingFactorAnticipationX)),
+                                Mathf.Lerp(currentAnticipation.y, nextAnticipation.y, Utils.GetInterpolant(smoothingFactorAnticipationY)),
+                                currentAnticipation.z
+                                );
         desiredPosition = GetCameraPosFromPlayerPos() + currentAnticipation;
         desiredPosition.z = originalPosition.z;
         desiredDelta = Vector3.Lerp(transform.position, desiredPosition, Utils.GetInterpolant(smoothingFactor)) - transform.position;
@@ -94,11 +102,11 @@ public class CameraSystem : MonoBehaviour
 
     void UpdateYPos()
     {
-        Vector3 playerPos = GetComponent<Camera>().WorldToViewportPoint(playerTransform.position);
-        if (playerPos.y > yDeadzone.x && playerPos.y < yDeadzone.y)
-        {
-            return;
-        }
+        //Vector3 playerPos = GetComponent<Camera>().WorldToViewportPoint(playerTransform.position);
+        //if (playerPos.y > yDeadzone.x && playerPos.y < yDeadzone.y)
+        //{
+        //   return;
+        //}
         originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
         
     }
@@ -114,7 +122,15 @@ public class CameraSystem : MonoBehaviour
         if (playerRB.velocity.magnitude > 1)
         {
             anticipationVector.Normalize();
-            anticipationVector = Vector3.Scale(anticipationVector, new Vector3(horizontalAnticipation, verticalAnticipation, 0));
+            if (playerRB.velocity.y < -45f)
+            {
+                anticipationVector = Vector3.Scale(anticipationVector, new Vector3(horizontalAnticipation, verticalAnticipation * fallingAnticipationMultiplier, 0));
+            }
+            else
+            {
+                anticipationVector = Vector3.Scale(anticipationVector, new Vector3(horizontalAnticipation, verticalAnticipation, 0));
+
+            }
         }
         //Debug.Log(anticipationVector);
         return anticipationVector;
