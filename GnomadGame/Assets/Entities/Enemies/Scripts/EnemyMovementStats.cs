@@ -14,7 +14,12 @@ public class EnemyMovementStats
     //Force Multiplier for jumping.
     public static float jumpSpeed = 17f;
     public static float fallSpeed = Physics.gravity.y * 15f;
-    public static float knockbackSpeed = 10f;
+
+    // Knockback stats
+    public static float knockbackTimer = 0.4f;
+    public static float knockbackSpeed = 1f;
+    public static float knockbackXConst = 5f;
+    public static float knockbackYConst = 1f;
 
     //Controls the time for how long the player can jump.
     public static float maxJumpHeight = 0.4f;

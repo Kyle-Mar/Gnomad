@@ -13,8 +13,12 @@ public class GorbStats : EnemyMovementStats
 
     //Force Multiplier for jumping.
     public new const float jumpSpeed = 10f;
-    public new static float fallSpeed = Physics.gravity.y * 15f;
-    public new static float knockbackSpeed = 1f;
+    public new static float fallSpeed = Physics.gravity.y * 10f;
+
+    // Knockback stats
+    public new static float knockbackSpeed = 50f;
+    public new static float knockbackXConst = 5f;
+    public new static float knockbackYConst = 2f;
 
     //Controls the time for how long the player can jump.
     public new const float maxJumpHeight = 0.4f;

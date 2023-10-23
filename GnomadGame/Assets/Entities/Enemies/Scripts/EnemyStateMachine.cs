@@ -17,12 +17,14 @@ public class EnemyStateMachine : StateMachine
     public EnemyEmptyState EmptyState;
     public BaseState GroundedState;
     public BaseState FallState;
+    public BaseState KnockbackState;
 
     public BaseState MoveState;
     public BaseState IdleState;
     
     public BaseState AttackState;
     public BaseState NotAttackState;
+    
 
 
     LayerMask groundLayerMask;
@@ -31,6 +33,13 @@ public class EnemyStateMachine : StateMachine
 
 
     [Header("Movement")]
+
+    // For knockback:
+        // 1 = right
+        // -1 = left
+    public int damageDirection = 1;
+
+    [SerializeField] bool isDamaged = false;
 
     [SerializeField] bool isGrounded = false;
 
@@ -79,6 +88,8 @@ public class EnemyStateMachine : StateMachine
 
     public bool IsGrounded => isGrounded;
 
+    public bool IsDamaged { get { return isDamaged; } set { isDamaged = value; } }
+
     //public Vector2 LastMovementDirection { get { return lastMovementDirection; } set { lastMovementDirection = value; } }
     public float CurrentMoveSpeed => currentMoveSpeed;
 
@@ -91,6 +102,11 @@ public class EnemyStateMachine : StateMachine
     public float AttackDamage => GorbStats.attackDamage;
     public float AttackCooldown => GorbStats.attackCooldown;
     public float AttackDuration => GorbStats.attackDuration;
+
+    public float KnockbackXConst => GorbStats.knockbackXConst;
+    public float KnockbackYConst => GorbStats.knockbackYConst;
+    public float KnockbackSpeed => GorbStats.knockbackSpeed;
+    public float KnockbackTimer => GorbStats.knockbackTimer;
 
     private void OnEnable()
     {
@@ -298,11 +314,6 @@ public class EnemyStateMachine : StateMachine
         { FlipComponents(); }
     }
 
-    public void OnCollisionEnter2D(Collision2D collision)
-    {
-        
-    }
-
     
     public void FlipComponents()
     {
@@ -336,6 +347,10 @@ public class EnemyStateMachine : StateMachine
         {
             NotAttackState = new EnemyNotAttackState(this);
         }
+        if (KnockbackState == null)
+        {
+            KnockbackState = new EnemyKnockbackState(this);
+        }
     }
 
     void DieHealth()
@@ -348,11 +363,6 @@ public class EnemyStateMachine : StateMachine
         Debug.Log("Player is reacting to damage");
     }
 
-    public void knockbackFunc(Collider2D col)
-    {
-        
-    }
-
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("PlayerHitBox"))
@@ -363,9 +373,24 @@ public class EnemyStateMachine : StateMachine
                 //Debug.LogWarning(damageable);
                 damageable.Damage(AttackDamage);
                 Debug.Log(this.name + " is Damaging the Player for " + AttackDamage);
-                ContactPoint2D[] contacts;
+                
+                
                 
             }
+        }
+
+        else if (collision.CompareTag("PlayerAttack"))
+        {
+            if (currentState != KnockbackState)
+            {
+                if (this.transform.position.x - collision.transform.position.x > 0f)
+                {
+                    damageDirection = 1;
+                }
+                else { damageDirection = -1; }
+                IsDamaged = true;
+            }
+
         }
     }
 }
