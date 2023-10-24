@@ -87,26 +87,23 @@ public class CameraSystem : MonoBehaviour
     void Update()
     {
         UpdateYPos();
-        
+        //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleBottom))}");
+        //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleRight))}");
+        //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleLeft))}");
+        //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(topRight))}");
+        //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(topLeft))}");
+        //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(bottomLeft))}");
+        //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(bottomRight))}");
 
-
-            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleBottom))}");
-            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleRight))}");
-            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(middleLeft))}");
-            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(topRight))}");
-            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(topLeft))}");
-            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(bottomLeft))}");
-            //Debug.Log($"AM I OUT?: {!boundingCollider.OverlapPoint(GetPointBoundsAligned(bottomRight))}");
-        
     }
 
     void UpdateYPos()
     {
-        //Vector3 playerPos = GetComponent<Camera>().WorldToViewportPoint(playerTransform.position);
-        //if (playerPos.y > yDeadzone.x && playerPos.y < yDeadzone.y)
-        //{
-        //   return;
-        //}
+        /*Vector3 playerPos = GetComponent<Camera>().WorldToViewportPoint(playerTransform.position);
+        if (playerPos.y > yDeadzone.x && playerPos.y < yDeadzone.y)
+        {
+           return;
+        }*/
         originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
         
     }

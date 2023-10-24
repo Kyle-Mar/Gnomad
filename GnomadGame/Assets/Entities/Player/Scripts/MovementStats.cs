@@ -17,7 +17,7 @@ public class MovementStats
     //Force Multiplier for jumping.
     public static float jumpSpeed = 22f;
     public static float fallSpeed = Physics.gravity.y * 12.5f;
-    public static float maxFallSpeed = 75f;
+    public static float maxFallSpeed = 50f;
     //Controls the time for how long the player can jump.
     public static float maxJumpHeight = 0.3f;
 
