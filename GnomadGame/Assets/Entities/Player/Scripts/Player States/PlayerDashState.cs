@@ -47,7 +47,7 @@ public class PlayerDashState : PlayerBaseState
         dashing = true;
         context.Animator.SetTrigger("DashTrigger");
         context.Animator.SetBool("Dashing", true);
-
+        context.CanDash = false;
 
         dashEndTime = Time.time + MovementStats.dashDuration;
         context.rb.velocity = new Vector2(MovementStats.dashSpeed * initialMovementDir.x, 0);
@@ -57,7 +57,8 @@ public class PlayerDashState : PlayerBaseState
     {
         context.rb.velocity = new Vector2(0, 0);
         context.Animator.SetBool("Dashing", false);
-
+        context.DoDashCooldownTimer();
+        context.UpdateComponentsDirection();
     }
 
     public override void FixedUpdateState()
@@ -89,6 +90,8 @@ public class PlayerDashState : PlayerBaseState
         return (context.IsTouchingWallRight && initialMovementDir.x > 0
             || context.IsTouchingWallLeft && initialMovementDir.x < 0);
     }
+
+
 
     // Start is called before the first frame update
     void Start()

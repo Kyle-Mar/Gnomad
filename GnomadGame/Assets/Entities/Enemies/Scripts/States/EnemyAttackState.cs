@@ -17,7 +17,13 @@ public class EnemyAttackState : EnemyBaseState
     {
         //throw new System.NotImplementedException();
 
+
         if (attackTimer <= 0f)
+        {
+            context.IsAttacking = false;
+            SwitchState(context.NotAttackState);
+        }
+        else if (context.IsDamaged)
         {
             context.IsAttacking = false;
             SwitchState(context.NotAttackState);
@@ -29,7 +35,7 @@ public class EnemyAttackState : EnemyBaseState
     {
         //throw new System.NotImplementedException();
 
-        context.EnemyAttackObj.SetActive(true);
+        //context.EnemyAttackObj.SetActive(true);
         context.IsAttacking = true;
         attackTimer = context.AttackDuration;
         Debug.Log("Enemy Attacking");
@@ -39,7 +45,7 @@ public class EnemyAttackState : EnemyBaseState
     {
         //throw new System.NotImplementedException();
         context.StartAttackCooldown();
-        context.EnemyAttackObj.SetActive(false);
+        //context.EnemyAttackObj.SetActive(false);
     }
 
     public override void FixedUpdateState()

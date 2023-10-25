@@ -33,6 +33,7 @@ public class PlayerSlashingState : PlayerBaseState
         context.IsSlashing = false;
         context.HatSpriteRenderer.enabled = true; //will be changed when animations are added
         context.SlashCollider.gameObject.SetActive(false);
+        context.UpdateComponentsDirection();
     }
 
     public override void FixedUpdateState()

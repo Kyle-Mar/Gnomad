@@ -28,12 +28,12 @@ public class PlayerWallJumpState : PlayerBaseState
             SwitchState(context.FallState);
             return;
         }
-        if (context.Controls.Player.Slide.WasPressedThisFrame())
+        if (context.Controls.Player.Slide.WasPressedThisFrame() && context.CanSlide)
         {
             SwitchState(context.SlideState);
             return;
         }
-        if (context.Controls.Player.Dash.WasPressedThisFrame())
+        if (context.Controls.Player.Dash.WasPressedThisFrame() && context.CanDash)
         {
             SwitchState(context.DashState);
             return;

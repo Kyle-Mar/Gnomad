@@ -10,6 +10,7 @@ public class PlayerSlideState : PlayerBaseState
     float slideEndTime;
     bool sliding = true;
     float verticalBounceEndTime;
+    public float TryingToTurn;
 
     public PlayerSlideState(PlayerStateMachine psm) : base(psm)
     {
@@ -18,9 +19,8 @@ public class PlayerSlideState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        if (context.IsGrounded && (context.Controls.Player.Jump.WasPressedThisFrame() || context.JumpBufferTime > 0))
+        if (context.CanJumpStandard())
         {
-            //and holding back
             context.ConsumeJumpBuffer();
             SwitchState(context.BackflipState);
         }
@@ -71,8 +71,9 @@ public class PlayerSlideState : PlayerBaseState
         context.SlideCollider.gameObject.SetActive(false);
         context.HatSpriteRenderer.enabled = true; //will be changed when animations are added
         context.rb.velocity = new Vector2(0, 0);
+        context.DoSlideCooldownTimer();
+        context.UpdateComponentsDirection();
     }
-
     public override void FixedUpdateState()
     {
         //Debug.Log("Time.Time: " + Time.time + " slideEndTime " + slideEndTime);
@@ -98,7 +99,6 @@ public class PlayerSlideState : PlayerBaseState
 
     public override void UpdateState()
     {
-
         CheckSwitchStates();
     }
 

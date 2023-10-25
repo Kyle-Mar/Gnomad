@@ -38,11 +38,16 @@ public class EnemyKnockbackState : EnemyBaseState
     {
         //throw new System.NotImplementedException();
         knockbackTimer = context.KnockbackTimer;
+        InitializeSubState();
+        context.rb.velocity = Vector2.zero;
+        SetSubState(null);
+        //context.rb.Sleep();
     }
 
     public override void ExitState()
     {
         //throw new System.NotImplementedException();
+        SetSubState(context.MoveState);
         context.IsDamaged = false;
     }
 
@@ -56,7 +61,7 @@ public class EnemyKnockbackState : EnemyBaseState
         //throw new System.NotImplementedException();
 
         // Initialize Idle State
-        //SetSubState(context.IdleState);
+        SetSubState(context.EmptyState);
     }
 
     public override void UpdateState()
@@ -74,13 +79,9 @@ public class EnemyKnockbackState : EnemyBaseState
 
         newVelocity.x *= context.damageDirection;
 
-        newVelocity *= context.KnockbackSpeed * knockbackTimer;
-        if (knockbackTimer <= 0.75f)
-        {
-            newVelocity *= 0.7f;
-        }
+        //newVelocity = newVelocity.normalized;
 
-        context.rb.AddForce(newVelocity);
+        context.rb.AddForce(newVelocity, ForceMode2D.Impulse);
 
         // apply gravity
         //Physics2D.gravity = new(0, context.FallSpeed);
