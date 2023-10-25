@@ -27,7 +27,8 @@ static public class StaticUIFunctions
     static public void ReloadCurrentScene() 
     {
         //StartCoroutine(LevelManager.LoadSceneAsync("reloadScene"));
-        throw new NotImplementedException();
+        Scene scene = SceneManager.GetActiveScene(); 
+        SceneManager.LoadScene(scene.name);
     }
 
     static public void LoadFromLastSave() 
