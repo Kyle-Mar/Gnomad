@@ -99,13 +99,22 @@ public class CameraSystem : MonoBehaviour
 
     void UpdateYPos()
     {
-        /*Vector3 playerPos = GetComponent<Camera>().WorldToViewportPoint(playerTransform.position);
-        if (playerPos.y > yDeadzone.x && playerPos.y < yDeadzone.y)
+        Vector3 playerPos = GetComponent<Camera>().WorldToViewportPoint(playerTransform.position);
+        if (playerRB.velocity.y < -15.5f)
+        {
+            originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
+            return;
+
+        }
+        if(playerPos.y < yDeadzone.x)
+        {
+            originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
+        }
+        if (playerPos.y < yDeadzone.y)
         {
            return;
-        }*/
+        }
         originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
-        
     }
 
     Vector3 GetCameraPosFromPlayerPos()
@@ -125,7 +134,7 @@ public class CameraSystem : MonoBehaviour
             }
             else
             {
-                anticipationVector = Vector3.Scale(anticipationVector, new Vector3(horizontalAnticipation, verticalAnticipation, 0));
+                anticipationVector = Vector3.Scale(anticipationVector, new Vector3(horizontalAnticipation, 0, 0));
 
             }
         }
