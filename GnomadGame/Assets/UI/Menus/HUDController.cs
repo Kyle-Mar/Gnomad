@@ -25,7 +25,7 @@ public class HUDController : MonoBehaviour
         PopulateUIHearts();
     }
 
-    private void onEnable()
+    private void OnEnable()
     {
         playerHealth.onDamage += UIRemoveHealth;
         playerHealth.onHeal += UIAddHealth;
@@ -45,6 +45,10 @@ public class HUDController : MonoBehaviour
     {
         GameObject imgObject = new GameObject();
         Image newImage = imgObject.AddComponent<Image>();
+        if(imgObject.TryGetComponent<RectTransform>(out RectTransform rect))
+        {
+            rect.sizeDelta = new Vector2(250, 250); 
+        }
         newImage.overrideSprite = fullHeartSprite;
         newImage.transform.SetParent(heartContainer.transform);
 
