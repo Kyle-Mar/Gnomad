@@ -26,6 +26,6 @@ public class GorbStats : EnemyMovementStats
     //Slashing Variabels
     public new const float attackDuration = 1.5f;
     public new const float attackCooldown = 2.5f;
-    public new const float attackDamage = 20f;
+    public new const float attackDamage = 1f;
 
 }

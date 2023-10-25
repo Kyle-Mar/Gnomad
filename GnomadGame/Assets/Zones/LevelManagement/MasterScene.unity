@@ -488,7 +488,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   doRenderSpheres: 0
   playerTransform: {fileID: 671944598}
-  psm: {fileID: 671944604}
+  playerCollider: {fileID: 671944608}
   playerRB: {fileID: 671944600}
   boundingArea: {fileID: 0}
   mainCamera: {fileID: 212300218}
@@ -496,14 +496,15 @@ MonoBehaviour:
   desiredPosition: {x: 0, y: 0, z: 0}
   currentAnticipation: {x: 0, y: 0, z: 0}
   desiredDelta: {x: 0, y: 0, z: 0}
-  yDeadzone: {x: 0.25, y: 0.75}
-  smoothingFactor: 60
+  yDeadzone: {x: 0.4, y: 0.75}
+  smoothingFactor: 6
   smoothingFactorAnticipationX: 60
   smoothingFactorAnticipationY: 100
-  horizontalAnticipation: 5
-  verticalAnticipation: 2
-  fallingAnticipationMultiplier: 10.5
-  offsetY: 3
+  horizontalAnticipation: 10.5
+  verticalAnticipation: 1
+  fallingAnticipationMultiplier: 35
+  offsetY: 0
+  ledgeOffsetY: -2
   boundingCollider: {fileID: 0}
   allowedAmountPosX: 0
   allowedAmountPosY: 0
@@ -962,6 +963,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4446419450577938880, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4446419450577938882, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -1010,6 +1015,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7458543973091233723, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: health
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7458543973091233723, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: MAX_HEALTH
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
 --- !u!4 &671944598 stripped
@@ -1027,17 +1040,11 @@ Rigidbody2D:
   m_CorrespondingSourceObject: {fileID: 4446419450577938911, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
   m_PrefabInstance: {fileID: 671944597}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &671944604 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4446419450577938884, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+--- !u!61 &671944608 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 4446419450577938880, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
   m_PrefabInstance: {fileID: 671944597}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 671944599}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbdf89626475f27448c6f542cff21b5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &688929556
 GameObject:
   m_ObjectHideFlags: 0
@@ -2009,8 +2016,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 960, y: -131.15381}
-  m_SizeDelta: {x: 1920, y: 262.3075}
+  m_AnchoredPosition: {x: 400, y: -250}
+  m_SizeDelta: {x: 750, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1102403180
 MonoBehaviour:
@@ -2068,9 +2075,9 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: -1117
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
+  m_Spacing: -75
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
