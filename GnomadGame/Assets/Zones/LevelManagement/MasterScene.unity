@@ -504,6 +504,7 @@ MonoBehaviour:
   verticalAnticipation: 1
   fallingAnticipationMultiplier: 35
   offsetY: 0
+  ledgeOffsetY: -2
   boundingCollider: {fileID: 0}
   allowedAmountPosX: 0
   allowedAmountPosY: 0
@@ -961,6 +962,10 @@ PrefabInstance:
     - target: {fileID: 3892010041494561358, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4446419450577938880, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4446419450577938882, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_RootOrder

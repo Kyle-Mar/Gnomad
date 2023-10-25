@@ -28,6 +28,7 @@ public class CameraSystem : MonoBehaviour
     [SerializeField] float verticalAnticipation;
     [SerializeField] float fallingAnticipationMultiplier;
     [SerializeField] float offsetY;
+    [SerializeField] float ledgeOffsetY;
     [Header("Current Collision Info")]
     [SerializeField] CompositeCollider2D boundingCollider;
     [SerializeField] float allowedAmountPosX;
@@ -44,6 +45,8 @@ public class CameraSystem : MonoBehaviour
     Vector3 middleLeft;
     Vector3 middleRight;
 
+    float curOffset;
+
     LayerMask groundLayerMask;
 
     void Start()
@@ -58,7 +61,7 @@ public class CameraSystem : MonoBehaviour
         CalculateCollisionPoints();
 
         groundLayerMask = LayerMask.GetMask("Ground");
-        
+        curOffset = offsetY;
         
     }
 
@@ -75,20 +78,27 @@ public class CameraSystem : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        /*var playerPos = playerTransform.position;
-        if(Physics2D.Raycast(
-            new Vector2(playerPos.x, playerPos.y - playerCollider.bounds.extents.y),
-            Vector2.down
+        var playerPos = playerTransform.position;
+        Vector3 extents = playerCollider.bounds.extents;
+        RaycastHit2D hitRight = Physics2D.Raycast(new Vector2(playerPos.x + extents.x, playerPos.y - extents.y),
+            Vector2.down,
             3f,
+            groundLayerMask);
+        RaycastHit2D hitLeft = Physics2D.Raycast(new Vector2(playerPos.x - extents.x, playerPos.y - extents.y),
+            Vector2.down,
+            3f,
+            groundLayerMask);
 
-            ))
+        if (hitRight && hitLeft)
         {
-            Debug.Log(hit.collider.tag);
+            curOffset = offsetY;
         }
         else
         {
-            Debug.DrawRay(new Vector3(playerPos.x, playerPos.y - playerCollider.bounds.extents.y, playerPos.z), Vector3.down, Color.blue, 10f);
-        }*/
+            curOffset = ledgeOffsetY;
+        }
+        
+        Debug.DrawRay(new Vector3(playerPos.x+playerCollider.bounds.extents.x, playerPos.y - playerCollider.bounds.extents.y, playerPos.z), Vector3.down, Color.blue, 10f);
         var nextAnticipation = GetAnticipationVector();
         currentAnticipation = new Vector3(
                                 Mathf.Lerp(currentAnticipation.x, nextAnticipation.x, Utils.GetInterpolant(smoothingFactorAnticipationX)),
@@ -137,7 +147,7 @@ public class CameraSystem : MonoBehaviour
 
     Vector3 GetCameraPosFromPlayerPos()
     {
-        return new Vector3(playerTransform.position.x, offsetY + originalPosition.y, transform.position.z);
+        return new Vector3(playerTransform.position.x, curOffset + originalPosition.y, transform.position.z);
     }
 
     Vector3 GetAnticipationVector()
@@ -161,6 +171,7 @@ public class CameraSystem : MonoBehaviour
     }
     void CalculateCollisionPoints()
     {
+        if (!boundingCollider) { return; }
         var zPos = Mathf.Abs(mainCamera.transform.position.z - boundingCollider.transform.position.z);
         bottomLeft = mainCamera.ViewportToWorldPoint(new Vector3(0, 0, zPos));
         bottomRight = mainCamera.ViewportToWorldPoint(new Vector3(1, 0, zPos));
