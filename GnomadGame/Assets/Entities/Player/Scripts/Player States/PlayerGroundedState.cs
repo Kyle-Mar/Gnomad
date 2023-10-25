@@ -13,18 +13,18 @@ public class PlayerGroundedState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        if (context.Controls.Player.Jump.WasPressedThisFrame() || context.JumpBufferTime > 0)
+        if (context.CanJumpStandard())
         {
             context.ConsumeJumpBuffer();
             SwitchState(context.JumpState);
             return;
         }
-        if (context.Controls.Player.Dash.WasPressedThisFrame())
+        if (context.Controls.Player.Dash.WasPressedThisFrame() && context.CanDash)
         {
             SwitchState(context.DashState);
             return;
         }
-        if (context.Controls.Player.Slide.WasPressedThisFrame())
+        if (context.Controls.Player.Slide.WasPressedThisFrame() && context.CanSlide)
         {
             SwitchState(context.SlideState);
             return;

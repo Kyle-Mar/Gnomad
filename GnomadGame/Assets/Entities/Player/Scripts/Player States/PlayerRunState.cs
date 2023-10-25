@@ -46,7 +46,7 @@ public class PlayerRunState : PlayerBaseState
 
     public override void InitializeSubState()
     {
-        if (context.Controls.Player.Slash.WasPressedThisFrame() || context.IsSlashing)
+        if ((context.Controls.Player.Slash.WasPressedThisFrame() || context.IsSlashing) && context.CheckCanSlash())
         {
             SetSubState(context.SlashState);
         }

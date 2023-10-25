@@ -35,7 +35,7 @@ public class PlayerIdleState : PlayerBaseState
 
     public override void InitializeSubState()
     {
-        if (context.Controls.Player.Slash.WasPressedThisFrame() || context.IsSlashing)
+        if ((context.Controls.Player.Slash.WasPressedThisFrame() || context.IsSlashing) && context.CheckCanSlash())
         {
             Debug.Log("SLASHING");
             SetSubState(context.SlashState);

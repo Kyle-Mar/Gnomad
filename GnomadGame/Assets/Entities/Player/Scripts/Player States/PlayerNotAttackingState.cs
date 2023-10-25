@@ -11,7 +11,7 @@ public class PlayerNotAttackingState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        if (context.Controls.Player.Slash.WasPressedThisFrame())
+        if (context.Controls.Player.Slash.WasPressedThisFrame() && context.CheckCanSlash())
         {
             SwitchState(context.SlashState);
         }

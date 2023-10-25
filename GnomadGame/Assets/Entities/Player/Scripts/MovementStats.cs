@@ -9,20 +9,21 @@ public class MovementStats
     public static float groundPoundXSpeed = 0f;
     public static float groundPoundYSpeed = Physics.gravity.y * 7;
 
-    public static float moveSpeed = 12f;
+    public static float moveSpeed =10f;
     public static float moveSpeedReduced = 0.5f;
 
     //intended to be able to change move speed in air.
+    public static float CoyoteTime = 0.08f;
     public static float jumpMoveSpeed = 1f;
     //Force Multiplier for jumping.
-    public static float jumpSpeed = 22f;
-    public static float fallSpeed = Physics.gravity.y * 12.5f;
-    public static float maxFallSpeed = 50f;
+    public static float jumpSpeed = 18f;
+    public static float fallSpeed = Physics.gravity.y * 10f;
+    public static float maxFallSpeed = 40f;
     //Controls the time for how long the player can jump.
     public static float maxJumpHeight = 0.3f;
 
     //backflip
-    public static float backflipVerticalSpeed = 20f;
+    public static float backflipVerticalSpeed = 17f;
     public static float backflipHorizontalSpeed = 12f;
     public static float maxBackflipHeight = 0.3f;
 
@@ -32,6 +33,7 @@ public class MovementStats
     public static float slideVerticalBounce = 18f;
     public static float slideVerticalBounceDuration = 0.1f;
     public static float slideFallSpeed = Physics.gravity.y * 2.5f;
+    public static float slideCooldowntimer = 0.04f;
 
 
     //Wall Slide Speed
@@ -51,6 +53,7 @@ public class MovementStats
     public static float WallJumpDuration = 0.2f;
 
     //Dash
-    public static float dashDuration = 0.23f;
+    public static float dashDuration = 0.35f;
     public static float dashSpeed = 30f;
+    public static float DashCooldown = 0.3f;
 }
