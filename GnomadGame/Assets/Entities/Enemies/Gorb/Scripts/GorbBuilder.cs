@@ -25,7 +25,12 @@ public class GorbBuilder : MonoBehaviour
         groundedState = new EnemyGroundedState(esm);
         fallState = new EnemyFallState(esm);
 
-        esm.BuildAttackState(attackState).BuildNotAttackState(notAttackState).BuildGroundedState(groundedState).BuildIdleState(idleState).BuildMoveState(moveState).BuildFallState(fallState);
+        esm.BuildAttackState(attackState)
+            .BuildNotAttackState(notAttackState)
+            .BuildGroundedState(groundedState)
+            .BuildIdleState(idleState)
+            .BuildMoveState(moveState)
+            .BuildFallState(fallState);
     
     }
 }
