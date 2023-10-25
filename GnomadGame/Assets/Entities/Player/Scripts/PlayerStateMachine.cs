@@ -148,7 +148,7 @@ public class PlayerStateMachine : StateMachine
     {
         if (ContextUtils.CheckIfGrounded(ref col, transform, ref floorContactFilter))
         {
-            isGrounded = true;
+            //isGrounded = true;
             wallSlideExpired = false;
         }
         else
@@ -240,7 +240,18 @@ public class PlayerStateMachine : StateMachine
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if(collision.transform.tag == "Ground")
+        if (ContextUtils.NewCheckIfGrounded(collision))
+        {
+            isGrounded = true;
+            wallSlideExpired = false;
+        }
+        else
+        {
+            isGrounded = false;
+        }
+        
+
+        if (collision.transform.tag == "Ground")
         {
             foreach (ContactPoint2D contact in collision.contacts)
             {
