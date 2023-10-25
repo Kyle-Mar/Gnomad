@@ -1,18 +1,46 @@
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using UnityEditor.UIElements;
+using UnityEditor.UI;
+using Unity.VisualScripting;
+using System.Drawing.Printing;
+using System.Linq;
+using System.Collections.Concurrent;
+using UnityEngine.UIElements;
 
-public class PrefabPopupMenu : EditorWindow
+public class EnvironmentEditor : EditorWindow
 {
-    private static string prefabFolderPath = "Assets/Zones/ForestZone/Environmental Assets/Elements/Foliage";
+    private static string prefabFolderPath = "Assets/Zones/ForestZone/Environmental Assets/Elements";
     private List<GameObject> prefabList = new List<GameObject>();
     private Vector2 scrollPosition;
-    private GameObject selectedPrefab;
+    private GameObject selectedBrush;
+    private GameObject lastBrush;
+    private GameObject lastPlacedPref;
+    private Stack<GameObject> prefabHistory;
+    private int currentLayer = 4;
+    private int prefabButtonSize = 128;
+    GUIContent currentLayerIcon;
+    private int CurrentLayer
+    {
+        get { return currentLayer; }
+        set
+        {
+            currentLayer = Mathf.Clamp(value, 0, layersList.Length - 1);
+            EditorUtility.SetDefaultParentObject(layersList[currentLayer]);
+        }
+    }
+    private GameObject[] layersList;
 
-    [MenuItem("Window/Prefab Popup Menu")]
+    //can be uncommented when it's update logic is fixed
+    //private bool mouseHeld;
+    private bool rotateMode;
+
+
+    [MenuItem("Window/Environment Editor")]
     static void Init()
     {
-        PrefabPopupMenu window = GetWindow<PrefabPopupMenu>();
+        EnvironmentEditor window = GetWindow<EnvironmentEditor>();
         window.minSize = new Vector2(200, 200);
         window.Show();
     }
@@ -20,6 +48,166 @@ public class PrefabPopupMenu : EditorWindow
     private void OnEnable()
     {
         GetPrefabs();
+        initializeLayers();
+        SceneView.duringSceneGui += OnSceneGUI;
+        rotateMode = false;
+        prefabHistory = new Stack<GameObject>();
+
+
+    }
+
+
+    private void OnGUI()
+    {
+
+        GUILayout.Label(
+            "Click a prop icon below to set the BRUSH\n" +
+            "Hold 'E' to ROTATE the last painted prop\n" +
+            "Press Ctrl+Z to DESTROY the last painted prop\n" +
+            "Press 'Z' To clear the current brush and leave edit mode\n" +
+            "Press 'X' to use the last brush\n" +
+            "Press '-' and '+' to go back and forth between layers\n" +
+            "Press '[' or ']' too change order within layer"
+            );
+        scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+        //ToDo
+        //
+        // alternative paint modes
+        //change prop size
+        //  on ctrl + or ctrl - clicked
+        //      check neighbor in prefab array for same name with different last letter
+        //add icon for current and last brushes
+        //dont draw when clicking to move a selected object
+        //add heirarchy for brush types
+        //after being placed, props should scoot until mouse up
+        //flip sprite hotkey
+
+        drawStateIcons();
+        DrawPrefabIconGrid(prefabList, prefabButtonSize, prefabButtonSize, (int)position.width / prefabButtonSize);
+
+        EditorGUILayout.EndScrollView();
+        Event e = Event.current;
+
+
+        if (GUILayout.Button("Clear Brush"))
+        {
+            ClearBrush();
+        }
+        checkInputCommon(e);
+    }
+
+    private void DrawPrefabIconGrid(List<GameObject> prefabList, int buttonWidth, int buttonHeight, int itemsPerRow)
+    {
+        GUILayout.BeginVertical();
+
+        for (int i = 0; i < prefabList.Count; i++)
+        {
+            if (i % itemsPerRow == 0)
+            {
+                GUILayout.BeginHorizontal();
+            }
+
+            GameObject prefab = prefabList[i];
+
+            if (prefab != null)
+            {
+                GUIContent content = new GUIContent();
+                Texture2D icon = AssetPreview.GetAssetPreview(prefab);
+
+                if (icon != null)
+                {
+                    content.image = icon;
+                    content.tooltip = prefab.name;
+                }
+
+                if (GUILayout.Button(content, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
+                {
+                    lastBrush = selectedBrush;
+                    selectedBrush = prefab;
+                    Debug.Log("Selected prefab is " + prefab.name);
+                }
+            }
+
+            if ((i + 1) % itemsPerRow == 0 || i == prefabList.Count - 1)
+            {
+                GUILayout.EndHorizontal();
+            }
+        }
+
+        GUILayout.EndVertical();
+    }
+
+    private void ClearBrush()
+    {
+        selectedBrush = null;
+    }
+
+    private void OnSceneGUI(SceneView sceneView)
+    {
+        Event e = Event.current;
+        //stamp
+        if (e.type == EventType.MouseDown && e.button == 0 && selectedBrush != null)
+        {
+            lastPlacedPref = PrefabUtility.InstantiatePrefab(selectedBrush) as GameObject;
+            lastPlacedPref.transform.position = GetMousePosition();
+            lastPlacedPref.transform.parent = layersList[CurrentLayer].transform.GetChild(0);
+            if (prefabHistory.Count > 40)
+            {//remove first item
+                prefabHistory.Reverse();
+                prefabHistory.Pop();
+                prefabHistory.Reverse();
+            }
+            prefabHistory.Push(lastPlacedPref);
+
+
+
+        }
+        UpdateEventStates(e);
+        //rotate
+        if (rotateMode == true && lastPlacedPref != null)
+        {
+            Vector3 mousePosition = GetMousePosition();
+            Vector3 objectPosition;
+            if (Selection.activeTransform)
+            {
+                objectPosition = Selection.activeTransform.position;
+            }
+            else
+            {
+                objectPosition = lastPlacedPref.transform.position;
+            }
+
+            // Calculate the angle in radians between the object and the mouse position
+            float angle = Mathf.Atan2(mousePosition.y - objectPosition.y, mousePosition.x - objectPosition.x);
+
+            // Convert the angle to degrees and create a rotation quaternion around the z-axis
+            Quaternion rotation = Quaternion.Euler(0, 0, angle * Mathf.Rad2Deg);
+            if (Selection.activeTransform == null)
+            {
+                lastPlacedPref.transform.rotation = rotation;
+            }
+            else { Selection.activeTransform.rotation = rotation; }
+
+        }
+
+        if (e.type == EventType.KeyDown && e.control && e.keyCode == KeyCode.Z)
+        {
+            if (lastPlacedPref != null)
+            {
+                DestroyImmediate(prefabHistory.Pop());
+                lastPlacedPref = null;
+                if (prefabHistory.Count > 0)
+                {
+                    lastPlacedPref = prefabHistory.Peek();
+                }
+            }
+            e.Use();
+        }
+
+        checkInputCommon(e);
+
+
+
     }
 
     private void GetPrefabs()
@@ -34,68 +222,100 @@ public class PrefabPopupMenu : EditorWindow
             if (prefab != null)
             {
                 prefabList.Add(prefab);
+
             }
         }
     }
 
-    private void OnGUI()
+    public Vector3 GetMousePosition()
     {
-        GUILayout.Label("Prefab Popup Menu");
-        scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+        Event e = Event.current;
 
-        foreach (GameObject prefab in prefabList)
+        Ray worldRay = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
+        float z = 0; // Set z to 0 for 2D games
+        return new Vector3(worldRay.origin.x, worldRay.origin.y, z);
+
+    }
+
+    private void UpdateEventStates(Event e)
+    {
+        if (e.type == EventType.KeyDown && e.keyCode == KeyCode.E) { rotateMode = true; }
+        else if (e.type == EventType.KeyUp && e.keyCode == KeyCode.E) { rotateMode = false; }
+
+    }
+
+    private void initializeLayers()
+    {   //might not work. Array is immuatable
+        layersList = GameObject.FindGameObjectsWithTag("ParalaxLayer");
+    }
+
+    private void checkInputCommon(Event e)
+    {//some input actions need to checked from both focuses
+        if (e.type == EventType.KeyDown && e.keyCode == KeyCode.Minus)
         {
-            DrawPrefabIcon(prefab);
+            CurrentLayer = CurrentLayer - 1;
+            Debug.Log(layersList[CurrentLayer].name);
+            drawStateIcons();
+        }
+        if (e.type == EventType.KeyDown && e.keyCode == KeyCode.Equals)
+        {
+            CurrentLayer = CurrentLayer + 1;
+            Debug.Log(layersList[CurrentLayer].name);
+            drawStateIcons();
         }
 
-        EditorGUILayout.EndScrollView();
-
-        if (GUILayout.Button("Clear Brush"))
+        if (e.type == EventType.KeyDown && e.keyCode == KeyCode.Z)
         {
             ClearBrush();
         }
-    }
-
-    private void DrawPrefabIcon(GameObject prefab)
-    {
-        if (prefab != null)
+        if (e.type == EventType.KeyDown && e.keyCode == KeyCode.LeftBracket)
         {
-            GUIContent content = new GUIContent();
-            Texture2D icon = AssetPreview.GetAssetPreview(prefab);
-
-            if (icon != null)
+            if (Selection.activeTransform != null)
             {
-                content.image = icon;
-                content.tooltip = prefab.name;
+                Selection.activeTransform.SetSiblingIndex(lastPlacedPref.transform.GetSiblingIndex() - 1);
             }
-
-            if (GUILayout.Button(content, GUILayout.Width(64), GUILayout.Height(64)))
+            else
             {
-                selectedPrefab = prefab;
+                lastPlacedPref.transform.SetSiblingIndex(lastPlacedPref.transform.GetSiblingIndex() - 1);
             }
+        }
+        if (e.type == EventType.KeyDown && e.keyCode == KeyCode.RightBracket)
+        {
+            if (Selection.activeTransform != null)
+            {
+                Selection.activeTransform.SetSiblingIndex(lastPlacedPref.transform.GetSiblingIndex() + 1);
+            }
+            else
+            {
+                lastPlacedPref.transform.SetSiblingIndex(lastPlacedPref.transform.GetSiblingIndex() + 1);
+            }
+        }
+        if (e.type == EventType.KeyDown && e.keyCode == KeyCode.X)
+        {
+            GameObject tmp = selectedBrush;
+            selectedBrush = lastBrush;
+            lastBrush = tmp;
         }
     }
 
-    private void ClearBrush()
+    //draws icons for current brush, current layer, etc
+    private void drawStateIcons()
     {
-        selectedPrefab = null;
+        int iconBoxWidth = 128;
+        int iconBoxHeight = 240;
+        GUILayout.BeginArea(new Rect(position.width - iconBoxWidth, 0, position.width, iconBoxHeight)); // Adjust the height (20) as needed
+
+        // Draw a label with the text icon
+        currentLayerIcon = new GUIContent("Current Layer\n" + layersList[CurrentLayer].name, "Selected paralax layer");
+        GUIStyle style = new GUIStyle(GUI.skin.box);
+        style.alignment = TextAnchor.MiddleCenter;
+        style.normal.textColor = Color.white;
+
+        GUILayout.Label(currentLayerIcon, style);
+
+        GUILayout.EndArea();
+        Repaint();
     }
 
-    private void OnSceneGUI()
-    {
-        Event currentEvent = Event.current;
 
-        if (selectedPrefab != null && currentEvent.type == EventType.MouseDown && currentEvent.button == 0)
-        {
-            Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit))
-            {
-                GameObject instantiatedPrefab = PrefabUtility.InstantiatePrefab(selectedPrefab) as GameObject;
-                instantiatedPrefab.transform.position = hit.point;
-                currentEvent.Use();
-            }
-        }
-    }
 }
