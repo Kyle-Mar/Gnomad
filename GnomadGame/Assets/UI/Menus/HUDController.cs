@@ -49,7 +49,7 @@ public class HUDController : MonoBehaviour
         {
             rect.sizeDelta = new Vector2(250, 250); 
         }
-        newImage.overrideSprite = fullHeartSprite;
+        newImage.sprite = fullHeartSprite;
         newImage.transform.SetParent(heartContainer.transform);
 
         if (heartFull) 
@@ -63,6 +63,8 @@ public class HUDController : MonoBehaviour
 
     public void UIRemoveHealth()
     {
+        Debug.Log("OUCH");
+
         UpdateUIHealth();
     }
     public void UIAddHealth()
