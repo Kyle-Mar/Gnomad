@@ -24,7 +24,7 @@ public class PlayerSlashingState : PlayerBaseState
         //Debug.Log("SLASHING ENTER");
         context.HatSpriteRenderer.enabled = false; //will be changed when animations are added
         slashEndTime = MovementStats.slashDuration;
-
+        context.Animator.SetTrigger("SlashTrigger");
         context.SlashCollider.gameObject.SetActive(true);
     }
 

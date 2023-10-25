@@ -19,8 +19,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2dea0e836f39b5b43a9ac6a92b74d99d, type: 2}
   - {fileID: 11400000, guid: 03e272d51f70d9246b8a3c1b3fd30db1, type: 2}
   DoorPositions:
-  - {x: 235, y: -138, z: 0}
-  - {x: -18, y: -5, z: 0}
+  - {x: 88, y: -137, z: 0}
+  - {x: -30, y: -4, z: 0}
   DoorConnections:
     m_keys: 0000000001000000
     m_values: 0000000000000000

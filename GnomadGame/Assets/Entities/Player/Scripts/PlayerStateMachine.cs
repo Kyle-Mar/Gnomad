@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
@@ -59,7 +60,7 @@ public class PlayerStateMachine : StateMachine
     public Collider2D SlashCollider;
     public Collider2D GroundPoundCollider;
     public Collider2D SlideCollider;
-
+    public Animator Animator;
     [Header("Zone Dependent Assets")]
     public ParticleSystem WalkParticles;
     public ParticleSystem JumpCloudParticles;
@@ -77,6 +78,7 @@ public class PlayerStateMachine : StateMachine
     public Vector2 LastMovementDirection => lastMovementDirection;
     public float CurrentMoveSpeed => currentMoveSpeed;
 
+    
 
     private void OnEnable()
     {
@@ -190,6 +192,10 @@ public class PlayerStateMachine : StateMachine
     {
        Vector2 inputVector = cxt.ReadValue<Vector2>();
         //Debug.Log(inputVector);
+        if (inputVector.x != 0 && inputVector.x != LastMovementDirection.x)
+        {
+            FlipComponents();
+        }
 
         if (inputVector == Vector2.left)
         {
@@ -264,8 +270,10 @@ public class PlayerStateMachine : StateMachine
         Vector2 sliderHitboxOffset = SlideCollider.GetComponent<BoxCollider2D>().offset;
         Vector2 slashHitboxOffset = SlashCollider.GetComponent<PolygonCollider2D>().offset;
 
-        SpriteRenderer.flipX = !SpriteRenderer.flipX;
-        HatSpriteRenderer.flipX = !HatSpriteRenderer.flipX;
+        //SpriteRenderer.flipX = !SpriteRenderer.flipX;
+        Vector3 tmp = SpriteRenderer.gameObject.transform.localScale;
+        SpriteRenderer.gameObject.transform.localScale = new Vector2(tmp.x * -1, tmp.y);
+        //HatSpriteRenderer.flipX = !HatSpriteRenderer.flipX;
         //SlideCollider.GetComponent<BoxCollider2D>().offset = new Vector2(-1 * sliderHitboxOffset.x, sliderHitboxOffset.y);
         SlideCollider.transform.localScale = new Vector2(SlideCollider.transform.localScale.x*-1, SlideCollider.transform.localScale.y);
         //SlashCollider.GetComponent<PolygonCollider2D>().offset = new Vector2(-1 * slashHitboxOffset.x, slashHitboxOffset.y);

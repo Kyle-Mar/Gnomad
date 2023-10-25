@@ -45,6 +45,8 @@ public class PlayerDashState : PlayerBaseState
         InitializeSubState();
         initialMovementDir = context.LastMovementDirection;
         dashing = true;
+        context.Animator.SetTrigger("DashTrigger");
+        context.Animator.SetBool("Dashing", true);
 
 
         dashEndTime = Time.time + MovementStats.dashDuration;
@@ -54,6 +56,8 @@ public class PlayerDashState : PlayerBaseState
     public override void ExitState()
     {
         context.rb.velocity = new Vector2(0, 0);
+        context.Animator.SetBool("Dashing", false);
+
     }
 
     public override void FixedUpdateState()

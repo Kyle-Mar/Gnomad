@@ -1017,6 +1017,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 31
       objectReference: {fileID: 0}
+    - target: {fileID: 1829496020548573349, guid: 7c08be1b153ff4d449392b7c9fbb4880, type: 3}
+      propertyPath: m_TagString
+      value: ParalaxLayer
+      objectReference: {fileID: 0}
     - target: {fileID: 1829496021053650120, guid: 7c08be1b153ff4d449392b7c9fbb4880, type: 3}
       propertyPath: m_Layer
       value: 31
@@ -1102,6 +1106,10 @@ PrefabInstance:
     - target: {fileID: 1829496020548573349, guid: 7c08be1b153ff4d449392b7c9fbb4880, type: 3}
       propertyPath: m_Layer
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1829496020548573349, guid: 7c08be1b153ff4d449392b7c9fbb4880, type: 3}
+      propertyPath: m_TagString
+      value: ParalaxLayer
       objectReference: {fileID: 0}
     - target: {fileID: 1829496021053650120, guid: 7c08be1b153ff4d449392b7c9fbb4880, type: 3}
       propertyPath: m_Layer
@@ -1189,6 +1197,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1829496020548573349, guid: 7c08be1b153ff4d449392b7c9fbb4880, type: 3}
+      propertyPath: m_TagString
+      value: ParalaxLayer
+      objectReference: {fileID: 0}
     - target: {fileID: 1829496021053650120, guid: 7c08be1b153ff4d449392b7c9fbb4880, type: 3}
       propertyPath: m_Layer
       value: 0
@@ -1274,6 +1286,10 @@ PrefabInstance:
     - target: {fileID: 1829496020548573349, guid: 7c08be1b153ff4d449392b7c9fbb4880, type: 3}
       propertyPath: m_Layer
       value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 1829496020548573349, guid: 7c08be1b153ff4d449392b7c9fbb4880, type: 3}
+      propertyPath: m_TagString
+      value: ParalaxLayer
       objectReference: {fileID: 0}
     - target: {fileID: 1829496021053650120, guid: 7c08be1b153ff4d449392b7c9fbb4880, type: 3}
       propertyPath: m_Layer
@@ -1361,6 +1377,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 31
       objectReference: {fileID: 0}
+    - target: {fileID: 1829496020548573349, guid: 7c08be1b153ff4d449392b7c9fbb4880, type: 3}
+      propertyPath: m_TagString
+      value: ParalaxLayer
+      objectReference: {fileID: 0}
     - target: {fileID: 1829496021053650120, guid: 7c08be1b153ff4d449392b7c9fbb4880, type: 3}
       propertyPath: m_Layer
       value: 31
@@ -1446,6 +1466,10 @@ PrefabInstance:
     - target: {fileID: 1829496020548573349, guid: 7c08be1b153ff4d449392b7c9fbb4880, type: 3}
       propertyPath: m_Layer
       value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1829496020548573349, guid: 7c08be1b153ff4d449392b7c9fbb4880, type: 3}
+      propertyPath: m_TagString
+      value: ParalaxLayer
       objectReference: {fileID: 0}
     - target: {fileID: 1829496021053650120, guid: 7c08be1b153ff4d449392b7c9fbb4880, type: 3}
       propertyPath: m_Layer
@@ -1533,6 +1557,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1829496020548573349, guid: 7c08be1b153ff4d449392b7c9fbb4880, type: 3}
+      propertyPath: m_TagString
+      value: ParalaxLayer
+      objectReference: {fileID: 0}
     - target: {fileID: 1829496021053650120, guid: 7c08be1b153ff4d449392b7c9fbb4880, type: 3}
       propertyPath: m_Layer
       value: 0
@@ -1619,6 +1647,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 30
       objectReference: {fileID: 0}
+    - target: {fileID: 1829496020548573349, guid: 7c08be1b153ff4d449392b7c9fbb4880, type: 3}
+      propertyPath: m_TagString
+      value: ParalaxLayer
+      objectReference: {fileID: 0}
     - target: {fileID: 1829496021053650120, guid: 7c08be1b153ff4d449392b7c9fbb4880, type: 3}
       propertyPath: m_Layer
       value: 30
@@ -1696,6 +1728,10 @@ PrefabInstance:
     - target: {fileID: 1829496020548573349, guid: 7c08be1b153ff4d449392b7c9fbb4880, type: 3}
       propertyPath: m_Layer
       value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 1829496020548573349, guid: 7c08be1b153ff4d449392b7c9fbb4880, type: 3}
+      propertyPath: m_TagString
+      value: ParalaxLayer
       objectReference: {fileID: 0}
     - target: {fileID: 1829496021053650120, guid: 7c08be1b153ff4d449392b7c9fbb4880, type: 3}
       propertyPath: m_Layer
