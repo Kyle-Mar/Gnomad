@@ -10,7 +10,7 @@ public class CameraSystem : MonoBehaviour
     [SerializeField] bool doRenderSpheres;
     [Header("Player Info")]
     [SerializeField] Transform playerTransform;
-    [SerializeField] PlayerStateMachine psm;
+    [SerializeField] BoxCollider2D playerCollider;
     [SerializeField] Rigidbody2D playerRB;
     [SerializeField] CompositeCollider2D boundingArea;
     [Header("Camera Details")]
@@ -28,8 +28,12 @@ public class CameraSystem : MonoBehaviour
     [SerializeField] float verticalAnticipation;
     [SerializeField] float fallingAnticipationMultiplier;
     [SerializeField] float offsetY;
-    [Header("Current Bounding Collider")]
+    [Header("Current Collision Info")]
     [SerializeField] CompositeCollider2D boundingCollider;
+    [SerializeField] float allowedAmountPosX;
+    [SerializeField] float allowedAmountPosY;
+    [SerializeField] float allowedAmountNegX;
+    [SerializeField] float allowedAmountNegY;
 
     Vector3 bottomLeft;
     Vector3 bottomRight;
@@ -39,19 +43,23 @@ public class CameraSystem : MonoBehaviour
     Vector3 middleTop;
     Vector3 middleLeft;
     Vector3 middleRight;
-    public float allowedAmountPosX;
-    public float allowedAmountPosY;
-    public float allowedAmountNegX;
-    public float allowedAmountNegY;
+
+    LayerMask groundLayerMask;
 
     void Start()
     {
+
         Assert.IsNotNull(playerTransform);
         Assert.IsNotNull(playerRB);
+        Assert.IsNotNull(playerCollider);
         desiredPosition = GetCameraPosFromPlayerPos();
         currentAnticipation = GetAnticipationVector();
         originalPosition = transform.position;
         CalculateCollisionPoints();
+
+        groundLayerMask = LayerMask.GetMask("Ground");
+        
+        
     }
 
     private void OnEnable()
@@ -67,10 +75,20 @@ public class CameraSystem : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (psm.CurrentState != psm.GroundedState)
+        /*var playerPos = playerTransform.position;
+        if(Physics2D.Raycast(
+            new Vector2(playerPos.x, playerPos.y - playerCollider.bounds.extents.y),
+            Vector2.down
+            3f,
+
+            ))
         {
-            //originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
+            Debug.Log(hit.collider.tag);
         }
+        else
+        {
+            Debug.DrawRay(new Vector3(playerPos.x, playerPos.y - playerCollider.bounds.extents.y, playerPos.z), Vector3.down, Color.blue, 10f);
+        }*/
         var nextAnticipation = GetAnticipationVector();
         currentAnticipation = new Vector3(
                                 Mathf.Lerp(currentAnticipation.x, nextAnticipation.x, Utils.GetInterpolant(smoothingFactorAnticipationX)),
@@ -261,7 +279,7 @@ public class CameraSystem : MonoBehaviour
         {
             desiredDelta.y *= allowedAmountNegY;
         }
-        Debug.Log(desiredDelta);
+        //Debug.Log(desiredDelta);
         return desiredDelta;
     }
 }
