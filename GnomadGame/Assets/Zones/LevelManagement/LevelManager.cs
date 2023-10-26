@@ -39,7 +39,7 @@ public static class LevelManager
         }
         else
         {
-            if (!occupiedScene.isLoaded)
+            if (!occupiedScene.isLoaded && !loadedScenes.Contains(occupiedScene))
             {
                 loadedScenes.Add(occupiedScene);
                 loader.LoadScene(occupiedScene);
@@ -62,10 +62,13 @@ public static class LevelManager
         {
             if (!loadedScenes.Contains(scene))
             {
-                Debug.Log(scene.name);
                 loadedScenes.Add(scene);
-                loader.LoadScene(scene);
+                if (!SceneManager.GetSceneByName(scene.scene.Name).isLoaded)
+                {
+                    loader.LoadScene(scene);
+                }
             }
+            
         }
         // remove each scene from loaded scenes that we unloaded.
         foreach (SceneInfo scene in removeScenes)

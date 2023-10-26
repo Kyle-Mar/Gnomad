@@ -19,17 +19,16 @@ public class PlayerJumpState : PlayerBaseState
         if (context.DoWallSlide() && 
             (context.JumpBufferTime > 0 || context.Controls.Player.Jump.WasPressedThisFrame()))
         {
-
             context.ConsumeJumpBuffer();
             SwitchState(context.WallJumpState);
             return;
         }
-        if (context.Controls.Player.Dash.WasPressedThisFrame())
+        if (context.Controls.Player.Dash.WasPressedThisFrame() && context.CanDash)
         {
             SwitchState(context.DashState);
             return;
         }
-        if (context.Controls.Player.Slide.WasPressedThisFrame())
+        if (context.Controls.Player.Slide.WasPressedThisFrame() && context.CanSlide)
         {
             SwitchState(context.SlideState);
             return;

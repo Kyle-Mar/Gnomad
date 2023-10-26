@@ -40,8 +40,12 @@ public class PlayerStateMachine : StateMachine
     [SerializeField] bool wallSlideExpired = false;
     [SerializeField] bool isSlashing = false;
     [SerializeField] bool isGPBounceQueued = false;
+    [SerializeField] bool canDash = true;
+    [SerializeField] bool canSlide = true;
+    [SerializeField] bool inCoyoteRange = false;
+    
 
-    [SerializeField] Vector2 lastMovementDirection = new(0,0);
+    [SerializeField] Vector2 lastMovementDirection;
 
     [SerializeField] float jumpBufferTime = 0f;
     [SerializeField] float currentMoveSpeed = MovementStats.moveSpeed;
@@ -71,14 +75,16 @@ public class PlayerStateMachine : StateMachine
     public bool IsTouchingWallLeft => isTouchingWallLeft;
     public bool IsTouchingWallRight => isTouchingWallRight;
     public bool IsGPBounceQueued { get { return isGPBounceQueued; } set { isGPBounceQueued = value; } }
-
+    public bool CanDash { get { return canDash; } set { canDash = value; } }
+    public bool CanSlide { get { return canSlide; } set { canSlide = value; } }
     public bool IsSlashing { get { return isSlashing; } set { isSlashing = value; } }
+    public bool InCoyoteRange { get { return inCoyoteRange; } set { inCoyoteRange = value; } }
+
     public bool IsTouchingWall => isTouchingWallLeft || isTouchingWallRight;
     public bool WallSlideExpired => wallSlideExpired;
     public Vector2 LastMovementDirection => lastMovementDirection;
     public float CurrentMoveSpeed => currentMoveSpeed;
 
-    
 
     private void OnEnable()
     {
@@ -128,6 +134,7 @@ public class PlayerStateMachine : StateMachine
             
         currentState = GroundedState;
         currentState.EnterState();
+        lastMovementDirection = new Vector2(1, 0);
     }
     void Start()
     {
@@ -148,11 +155,13 @@ public class PlayerStateMachine : StateMachine
     {
         if (ContextUtils.CheckIfGrounded(ref col, transform, ref floorContactFilter))
         {
-            isGrounded = true;
+            //isGrounded = true;
             wallSlideExpired = false;
+            canDash = true;
         }
         else
         {
+            if (isGrounded) { StartCoroutine(StartCoyoteTimer()); }
             isGrounded = false;
         }
     }
@@ -192,24 +201,18 @@ public class PlayerStateMachine : StateMachine
     {
        Vector2 inputVector = cxt.ReadValue<Vector2>();
         //Debug.Log(inputVector);
-        if (inputVector.x != 0 && inputVector.x != LastMovementDirection.x)
+        if (inputVector.x < -0.15)
         {
-            FlipComponents();
+            lastMovementDirection.x = -1;
         }
-
-        if (inputVector == Vector2.left)
+        else if (inputVector.x > 0.15)
         {
-            lastMovementDirection = inputVector;
+            lastMovementDirection.x = 1;
         }
-        else if (inputVector == Vector2.right)
-        {
-            lastMovementDirection = inputVector;
+        //all following code only happens if we turn the sprites
+        if (currentState == SlashState || currentState == DashState || currentState == SlideState) { return; }
 
-        }
-    }
-
-    private void DoSlash()
-    {
+        UpdateComponentsDirection();
 
     }
 
@@ -240,7 +243,18 @@ public class PlayerStateMachine : StateMachine
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if(collision.transform.tag == "Ground")
+        if (ContextUtils.NewCheckIfGrounded(collision))
+        {
+            isGrounded = true;
+            wallSlideExpired = false;
+        }
+        else
+        {
+            isGrounded = false;
+        }
+        
+
+        if (collision.transform.tag == "Ground")
         {
             foreach (ContactPoint2D contact in collision.contacts)
             {
@@ -255,6 +269,7 @@ public class PlayerStateMachine : StateMachine
                 //angle == 180f i am touching floor.
             }
         }
+        if (isTouchingWallLeft || isTouchingWallRight) { CanDash = true; }
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
@@ -265,19 +280,20 @@ public class PlayerStateMachine : StateMachine
         }
     }
 
-    public void FlipComponents()
+    public void UpdateComponentsDirection()
     {
         Vector2 sliderHitboxOffset = SlideCollider.GetComponent<BoxCollider2D>().offset;
         Vector2 slashHitboxOffset = SlashCollider.GetComponent<PolygonCollider2D>().offset;
 
         //SpriteRenderer.flipX = !SpriteRenderer.flipX;
+
         Vector3 tmp = SpriteRenderer.gameObject.transform.localScale;
-        SpriteRenderer.gameObject.transform.localScale = new Vector2(tmp.x * -1, tmp.y);
+        transform.localScale = new Vector2(LastMovementDirection.x, tmp.y);
         //HatSpriteRenderer.flipX = !HatSpriteRenderer.flipX;
         //SlideCollider.GetComponent<BoxCollider2D>().offset = new Vector2(-1 * sliderHitboxOffset.x, sliderHitboxOffset.y);
-        SlideCollider.transform.localScale = new Vector2(SlideCollider.transform.localScale.x*-1, SlideCollider.transform.localScale.y);
+        //SlideCollider.transform.localScale = new Vector2(SlideCollider.transform.localScale.x*-1, SlideCollider.transform.localScale.y);
         //SlashCollider.GetComponent<PolygonCollider2D>().offset = new Vector2(-1 * slashHitboxOffset.x, slashHitboxOffset.y);
-        SlashCollider.transform.localScale = new Vector2(SlashCollider.transform.localScale.x * -1, SlashCollider.transform.localScale.y);
+        //SlashCollider.transform.localScale = new Vector2(SlashCollider.transform.localScale.x * -1, SlashCollider.transform.localScale.y);
 
 
     }
@@ -342,5 +358,45 @@ public class PlayerStateMachine : StateMachine
         CurrentState.PrintStateTree();
         //Debug.Log(currentMoveSpeed);
         GetComponentInChildren<Health>().Damage(2);
+    }
+
+    public void DoDashCooldownTimer()
+    {
+        StartCoroutine(StartDashCooldownTimer());
+    }
+    public IEnumerator StartDashCooldownTimer()
+    {
+        canDash = false;
+        yield return new WaitForSeconds(MovementStats.DashCooldown);
+        CanDash = true;
+    }
+
+    public IEnumerator StartCoyoteTimer()
+    {
+        InCoyoteRange = true;
+        yield return new WaitForSeconds(MovementStats.CoyoteTime);
+        InCoyoteRange = false;
+    }
+
+    public void DoSlideCooldownTimer()
+    {
+        StartCoroutine(StartSlideTimer());
+    }
+
+    public IEnumerator StartSlideTimer()
+    {
+        CanSlide = false;
+        yield return new WaitForSeconds(MovementStats.slideCooldowntimer);
+        CanSlide = true;
+    }
+
+    public bool CanJumpStandard()
+    {
+        return (((JumpBufferTime > 0) ||  Controls.Player.Jump.WasPressedThisFrame()) && IsGrounded) || (Controls.Player.Jump.WasPressedThisFrame() && InCoyoteRange);
+    }
+
+    public bool CheckCanSlash()
+    {
+        return (currentState != DashState && currentState != SlideState);
     }
 }

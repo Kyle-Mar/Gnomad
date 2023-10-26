@@ -8,6 +8,7 @@ using System;
 
 public class EnemyStateMachine : StateMachine
 {
+    [SerializeField] public EnemyMovementStats Stats;
     [Header("Stats")]
     //health, etc
 
@@ -308,9 +309,9 @@ public class EnemyStateMachine : StateMachine
         animator.SetFloat("Velocity", Mathf.Abs(rb.velocity.x));
 
 
-        if (rb.velocity.x <= -0.001 && SpriteRenderer.flipX)
+        if (rb.velocity.x <= -0.001 && SpriteRenderer.flipX && !IsDamaged)
         { FlipComponents(); }
-        else if (rb.velocity.x >= 0.001 && !SpriteRenderer.flipX)
+        else if (rb.velocity.x >= 0.001 && !SpriteRenderer.flipX && !IsDamaged)
         { FlipComponents(); }
     }
 

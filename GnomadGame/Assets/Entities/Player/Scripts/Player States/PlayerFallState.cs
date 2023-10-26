@@ -11,23 +11,28 @@ public class PlayerFallState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
+        if (context.InCoyoteRange==true && context.Controls.Player.Jump.WasPressedThisFrame())
+        {
+            context.ConsumeJumpBuffer();
+            SwitchState(context.JumpState);
+            return;
+        }
         if (context.IsGrounded)
         {
             SwitchState(context.GroundedState);
             return;
         }
-
         if (context.DoWallSlide())
         {
             SwitchState(context.WallSlideState);
             return;
         }
-        if (context.Controls.Player.Dash.WasPressedThisFrame())
+        if (context.Controls.Player.Dash.WasPressedThisFrame() && context.CanDash)
         {
             SwitchState(context.DashState);
             return;
         }
-        if (context.Controls.Player.Slide.WasPressedThisFrame())
+        if (context.Controls.Player.Slide.WasPressedThisFrame() && context.CanSlide)
         {
             SwitchState(context.SlideState);
             return;
