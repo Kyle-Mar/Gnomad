@@ -41,6 +41,7 @@ public class MovementStats
 
     //Slashing Variabels
     public static float slashDuration = .10f;
+    public static float baseSlashDamage = 1f;
 
     //Bouncing
     public static float maxGPBounceHeight = 0.5f;
