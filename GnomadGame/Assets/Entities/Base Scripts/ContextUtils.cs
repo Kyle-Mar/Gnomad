@@ -39,9 +39,9 @@ public static class ContextUtils
         }
         foreach (var contact in contacts)
         {
-            float angle = Vector2.SignedAngle(Vector2.up, contact.normal);
+            float angle = Vector2.Angle(Vector2.up, contact.normal);
             angle = Mathf.RoundToInt(angle);
-            if (angle == 0f)
+            if (angle <= 45f)
             {
                 return true;
             }
