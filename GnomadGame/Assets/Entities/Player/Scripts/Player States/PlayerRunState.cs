@@ -23,11 +23,17 @@ public class PlayerRunState : PlayerBaseState
     public override void EnterState()
     {
         InitializeSubState();
+        if(context.IsGrounded)
+        {
+            context.Animator.SetBool("IsRunning", true);
+        }
     }
 
     public override void ExitState()
     {
         //throw new System.NotImplementedException();
+        context.Animator.SetBool("IsRunning", false);
+
     }
 
     public override void FixedUpdateState()
@@ -72,6 +78,14 @@ public class PlayerRunState : PlayerBaseState
         else if (context.IsGrounded)
         {
             ParticleSystem run_particle_object = Object.Instantiate(context.WalkParticles, context.Feet.position, Quaternion.identity);
+        }
+        if(!context.IsGrounded)
+        {
+            context.Animator.SetBool("IsRunning", false);
+        }
+        else
+        {
+            context.Animator.SetBool("IsRunning", true);
         }
         CheckSwitchStates();
         

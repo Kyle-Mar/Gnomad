@@ -959,6 +959,10 @@ PrefabInstance:
       propertyPath: m_ConnectedAnchor.y
       value: 0.769884
       objectReference: {fileID: 0}
+    - target: {fileID: 385279951182527587, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -82160126, guid: 1c49f19c60c96b748bc96c127b5fbfd5, type: 3}
     - target: {fileID: 3892010041494561358, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 0
@@ -1015,6 +1019,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6674868899765869031, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1247432284, guid: 1c49f19c60c96b748bc96c127b5fbfd5, type: 3}
     - target: {fileID: 7458543973091233723, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: health
       value: 3
