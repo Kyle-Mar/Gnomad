@@ -52,12 +52,15 @@ public class PlayerJumpState : PlayerBaseState
         maxJumpTime = startJumpTime + MovementStats.maxJumpHeight;
         context.rb.velocity = new Vector2(context.rb.velocity.x, MovementStats.jumpSpeed);
         Object.Instantiate(context.JumpCloudParticles, context.Feet.position, Quaternion.identity);
+        context.Animator.SetBool("IsJumping", true);
 
     }
 
     public override void ExitState()
     {
          context.rb.velocity = new(context.rb.velocity.x, context.rb.velocity.y / 3);
+        context.Animator.SetBool("IsJumping", false);
+
     }
 
     public override void InitializeSubState()

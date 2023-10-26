@@ -23,11 +23,14 @@ public class PlayerRunState : PlayerBaseState
     public override void EnterState()
     {
         InitializeSubState();
+        context.Animator.SetBool("IsRunning", true);
     }
 
     public override void ExitState()
     {
         //throw new System.NotImplementedException();
+        context.Animator.SetBool("IsRunning", false);
+
     }
 
     public override void FixedUpdateState()

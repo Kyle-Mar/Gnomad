@@ -45,12 +45,15 @@ public class PlayerFallState : PlayerBaseState
         //Debug.Log("HELLO I AM FALLING");
         //throw new System.NotImplementedException();
         InitializeSubState();
+        context.Animator.SetBool("IsFalling", true);
     }
 
     public override void ExitState()
     {
         Physics2D.gravity = new(0, -9.8f);
         //throw new System.NotImplementedException();
+        context.Animator.SetBool("IsFalling", false);
+
     }
 
     public override void FixedUpdateState()
