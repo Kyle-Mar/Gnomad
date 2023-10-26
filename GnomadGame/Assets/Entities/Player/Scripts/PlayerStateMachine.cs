@@ -228,7 +228,7 @@ public class PlayerStateMachine : StateMachine
     {
         if (ContextUtils.CheckIfGrounded(collision))
         {
-            Debug.Log("I AM GROUNDED PLAYER");
+            //Debug.Log("I AM GROUNDED PLAYER");
             isGrounded = true;
             wallSlideExpired = false;
             canDash = true;

@@ -14,6 +14,7 @@ public static class LevelManager
     public delegate void OnEnterNewRoom(CompositeCollider2D collider);
     public static OnEnterNewRoom onEnterNewRoom;
     
+    static object lockObj = new();
 
     /// <summary>
     /// Updates the loaded scenes.
@@ -24,57 +25,66 @@ public static class LevelManager
     public static void UpdateLoadedScenes(List<SceneInfo> connectedScenes, SceneInfo occupiedScene, SceneLoader loader)
     {
         // list of scenes we plan to remove.
-        List<SceneInfo> removeScenes = new List<SceneInfo>();
-        if (timeTillNextUpdate > 0f)
+        
+        lock (lockObj)
         {
-            return;
-        }
-        // check to see if the occupied scene is loaded already.
-        // if not load it.
-        Scene newScene = SceneManager.GetSceneByName(occupiedScene.name);
-        if (newScene.isLoaded)
-        {
-            loader.sceneInfo.isLoaded = true;
-            loadedScenes.Add(loader.sceneInfo);
-        }
-        else
-        {
-            if (!occupiedScene.isLoaded && !loadedScenes.Contains(occupiedScene))
+            List<SceneInfo> removeScenes = new List<SceneInfo>();
+            if (timeTillNextUpdate > 0f)
             {
-                loadedScenes.Add(occupiedScene);
-                loader.LoadScene(occupiedScene);
+                return;
             }
-        }
-        // set the LevelManager's occupied scene to the paramter.
-        OccupiedScene = occupiedScene;
-        // unload each scene that isn't in the occupied scene's list
-        // and is currently a loaded scene
-        foreach (SceneInfo scene in loadedScenes)
-        {
-            if (!connectedScenes.Contains(scene) && scene != occupiedScene)
+            // check to see if the occupied scene is loaded already.
+            // if not load it.
+            Scene newScene = SceneManager.GetSceneByName(occupiedScene.name);
+            if (newScene.isLoaded)
             {
-                loader.UnloadScene(scene);
-                removeScenes.Add(scene);
+                loader.sceneInfo.isLoaded = true;
+                loadedScenes.Add(loader.sceneInfo);
             }
-        }
-        //load each scene that isn't loaded already and add it to the loaded scenes list
-        foreach (SceneInfo scene in connectedScenes)
-        {
-            if (!loadedScenes.Contains(scene))
+            else
             {
-                loadedScenes.Add(scene);
-                if (!SceneManager.GetSceneByName(scene.scene.Name).isLoaded)
+                Debug.Log(newScene.name + " " + occupiedScene.scene.Name);
+                if (!occupiedScene.isLoaded && !loadedScenes.Contains(occupiedScene))
                 {
-                    loader.LoadScene(scene);
+                    loader.sceneInfo.isLoaded = true;
+                    loadedScenes.Add(occupiedScene);
+                    loader.LoadScene(occupiedScene);
                 }
             }
-            
+            // set the LevelManager's occupied scene to the paramter.
+            OccupiedScene = occupiedScene;
+            // unload each scene that isn't in the occupied scene's list
+            // and is currently a loaded scene
+            foreach (SceneInfo scene in loadedScenes)
+            {
+                if (!connectedScenes.Contains(scene) && scene != occupiedScene)
+                {
+                    loader.UnloadScene(scene);
+                    removeScenes.Add(scene);
+                }
+            }
+            //load each scene that isn't loaded already and add it to the loaded scenes list
+            foreach (SceneInfo scene in connectedScenes)
+            {
+                if (!loadedScenes.Contains(scene))
+                {
+
+                    Debug.Log(scene.scene.Name +" "+ occupiedScene.scene.Name);
+                    loadedScenes.Add(scene);
+                    if (!SceneManager.GetSceneByName(scene.scene.Name).isLoaded)
+                    {
+                        loader.LoadScene(scene);
+                    }
+                }
+
+            }
+            // remove each scene from loaded scenes that we unloaded.
+            foreach (SceneInfo scene in removeScenes)
+            {
+                loadedScenes.Remove(scene);
+            }
         }
-        // remove each scene from loaded scenes that we unloaded.
-        foreach (SceneInfo scene in removeScenes)
-        {
-            loadedScenes.Remove(scene);
-        }
+        
     }
 
     public static IEnumerator LoadSceneAsync(string sceneName)
@@ -84,7 +94,10 @@ public static class LevelManager
         {
             sceneName = SceneManager.GetActiveScene().name;
         }
-
+        if (SceneManager.GetSceneByName(sceneName).isLoaded)
+        {
+            yield break;
+        }
         AsyncOperation op = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
 
         while (!op.isDone)
@@ -92,6 +105,7 @@ public static class LevelManager
             yield return null;
         }
     }
+
 
     public static IEnumerator UnloadSceneAsync(string sceneName)
     {

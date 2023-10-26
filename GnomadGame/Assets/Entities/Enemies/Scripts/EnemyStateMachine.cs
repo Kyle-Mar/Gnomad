@@ -171,7 +171,7 @@ public class EnemyStateMachine : StateMachine
     {
         UpdateMovementDirection();
         currentState.UpdateStates();
-        Debug.Log(currentState.ToString());
+        //Debug.Log(currentState.ToString());
         if (IsAttackOnCooldown)
         {
             attackCooldownTimer -= Time.deltaTime;
