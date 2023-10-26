@@ -929,7 +929,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1324028802, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_TagString
-      value: PlayerAttack
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 1324028803, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_LocalScale.z
