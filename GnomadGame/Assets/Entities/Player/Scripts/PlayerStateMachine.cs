@@ -138,33 +138,17 @@ public class PlayerStateMachine : StateMachine
     }
     void Start()
     {
-        CheckIfGrounded();
     }
 
     void Update()
     {
         InputAction.CallbackContext callbackContext = new();
         //PrintDebugInfo(callbackContext);
-        CheckIfGrounded();
         DoJumpBuffer();
         currentState.UpdateStates();
 
     }
 
-    public void CheckIfGrounded()
-    {
-        if (ContextUtils.CheckIfGrounded(ref col, transform, ref floorContactFilter))
-        {
-            //isGrounded = true;
-            wallSlideExpired = false;
-            canDash = true;
-        }
-        else
-        {
-            if (isGrounded) { StartCoroutine(StartCoyoteTimer()); }
-            isGrounded = false;
-        }
-    }
 
     public void SetMoveSpeed(float value)
     {
@@ -218,7 +202,6 @@ public class PlayerStateMachine : StateMachine
 
     public bool DoWallSlide()
     {
-        CheckIfGrounded();
         if (IsGrounded)
         {
             return false;
@@ -243,13 +226,19 @@ public class PlayerStateMachine : StateMachine
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (ContextUtils.NewCheckIfGrounded(collision))
+        if (ContextUtils.CheckIfGrounded(collision))
         {
+            //Debug.Log("I AM GROUNDED PLAYER");
             isGrounded = true;
             wallSlideExpired = false;
+            canDash = true;
         }
         else
         {
+            if (isGrounded)
+            {
+                StartCoroutine(StartCoyoteTimer());
+            }
             isGrounded = false;
         }
         
@@ -277,6 +266,14 @@ public class PlayerStateMachine : StateMachine
         {
             isTouchingWallLeft = false;
             isTouchingWallRight = false;
+        }
+        if (!ContextUtils.CheckIfGrounded(collision))
+        {
+            if (isGrounded)
+            {
+                StartCoroutine(StartCoyoteTimer());
+            }
+            isGrounded = false;
         }
     }
 

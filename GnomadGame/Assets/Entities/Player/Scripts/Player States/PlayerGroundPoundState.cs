@@ -12,7 +12,6 @@ public class PlayerGroundPoundState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        context.CheckIfGrounded();
         if (context.IsGPBounceQueued)
         {
             SwitchState(context.GPBounceState);

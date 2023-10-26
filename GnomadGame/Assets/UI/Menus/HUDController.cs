@@ -15,7 +15,7 @@ public class HUDController : MonoBehaviour
 
 
     private Health playerHealth;
-    public Image[] hearts;//if this does not behave correctly, try UnityEngine.UIElements.Image
+    public List<GameObject> hearts = new();//if this does not behave correctly, try UnityEngine.UIElements.Image
 
     private void Awake()
     {
@@ -45,7 +45,7 @@ public class HUDController : MonoBehaviour
     {
         GameObject imgObject = new GameObject();
         Image newImage = imgObject.AddComponent<Image>();
-        if(imgObject.TryGetComponent<RectTransform>(out RectTransform rect))
+        if(imgObject.TryGetComponent(out RectTransform rect))
         {
             rect.sizeDelta = new Vector2(250, 250); 
         }
@@ -57,7 +57,7 @@ public class HUDController : MonoBehaviour
         else 
         { newImage.sprite = emptyHeartSprite; }
 
-        hearts.Append(newImage);
+        hearts.Add(imgObject);
     }
 
 
@@ -77,11 +77,16 @@ public class HUDController : MonoBehaviour
         int playerCurrentHealth = (int)playerHealth.health;
         //int playerMaxHealth = (int)playerHealth.MaxHealth;
 
-        for (int i = 0; i < hearts.Length; i++)
+        for (int i = 0; i < hearts.Count; i++)
         {
             if (i > playerHealth.MaxHealth) { return; }
-            if (i <= playerCurrentHealth) { hearts[i].sprite = emptyHeartSprite; }
-            else{ hearts[i].sprite = emptyHeartSprite; }
+            if (i >= playerCurrentHealth) { 
+                hearts[i].GetComponent<Image>().sprite = emptyHeartSprite;
+                hearts[i].name = "EMPTY";
+            }
+            else{ 
+                hearts[i].GetComponent<Image>().sprite = fullHeartSprite; 
+            }
         }
     }
 

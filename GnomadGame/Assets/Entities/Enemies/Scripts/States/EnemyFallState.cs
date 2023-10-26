@@ -11,7 +11,6 @@ public class EnemyFallState : EnemyBaseState
 
     public override void CheckSwitchStates()
     {
-        context.CheckIfGrounded();
         if (context.IsDamaged)
         {
             SwitchState(context.KnockbackState);

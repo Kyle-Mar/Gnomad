@@ -109,7 +109,14 @@ public class CameraSystem : MonoBehaviour
         desiredPosition.z = originalPosition.z;
         desiredDelta = Vector3.Lerp(transform.position, desiredPosition, Utils.GetInterpolant(smoothingFactor)) - transform.position;
         //Debug.Log(desiredDelta);
-        transform.position += GetAllowedDelta(desiredDelta);
+        if (boundingCollider)
+        {
+            transform.position += GetAllowedDelta(desiredDelta);
+        }
+        else
+        {
+            transform.position += desiredDelta;
+        }
     }
 
     void Update()
@@ -210,6 +217,8 @@ public class CameraSystem : MonoBehaviour
     {
         if (boundingCollider)
         {
+
+            
             allowedAmountPosX = 0;
             allowedAmountPosY = 0;
             allowedAmountNegX = 0;
@@ -268,6 +277,13 @@ public class CameraSystem : MonoBehaviour
             {
                 allowedAmountNegX = 0;
             }
+        }
+        if (!boundingCollider.OverlapPoint(GetPointBoundsAligned(playerTransform.position)))
+        {
+            allowedAmountPosX = 1;
+            allowedAmountPosY = 1;
+            allowedAmountNegX = 1;
+            allowedAmountNegY = 1;
         }
         desiredDelta.z *= 0;
         if (allowedAmountNegX == 0 && allowedAmountNegY == 0 && allowedAmountPosX ==0 && allowedAmountPosY == 0)

@@ -164,16 +164,14 @@ public class EnemyStateMachine : StateMachine
 
     void Start()
     {
-        isGrounded = ContextUtils.CheckIfGrounded(ref col, transform, ref floorContactFilter);
     }
 
 
     void Update()
     {
-        isGrounded = ContextUtils.CheckIfGrounded(ref col, transform, ref floorContactFilter);
         UpdateMovementDirection();
         currentState.UpdateStates();
-        Debug.Log(currentState.ToString());
+        //Debug.Log(currentState.ToString());
         if (IsAttackOnCooldown)
         {
             attackCooldownTimer -= Time.deltaTime;
@@ -280,20 +278,6 @@ public class EnemyStateMachine : StateMachine
         attackCooldownTimer = AttackCooldown;
     }
 
-    public void CheckIfGrounded()
-    {
-        if (ContextUtils.CheckIfGrounded(ref col, transform, ref floorContactFilter))
-        {
-            isGrounded = true;
-            animator.SetBool("InAir", false);
-        }
-        else
-        {
-            isGrounded = false;
-            animator.SetBool("InAir", true);
-        }
-    }
-
 
     public void SetMoveSpeed(float value)
     {
@@ -366,6 +350,8 @@ public class EnemyStateMachine : StateMachine
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
+        
+
         if (collision.CompareTag("PlayerHitBox"))
         {
             IDamageable damageable = null;
@@ -374,9 +360,6 @@ public class EnemyStateMachine : StateMachine
                 //Debug.LogWarning(damageable);
                 damageable.Damage(AttackDamage);
                 Debug.Log(this.name + " is Damaging the Player for " + AttackDamage);
-                
-                
-                
             }
         }
 
@@ -392,6 +375,28 @@ public class EnemyStateMachine : StateMachine
                 IsDamaged = true;
             }
 
+        }
+    }
+
+    public void OnCollisionStay2D(Collision2D collision)
+    {
+        if (ContextUtils.CheckIfGrounded(collision))
+        {
+            isGrounded = true;
+            animator.SetBool("InAir", false);
+        }
+        else
+        {
+            isGrounded = false;
+            animator.SetBool("InAir", true);
+        }
+    }
+    public void OnCollisionExit2D(Collision2D collision)
+    {
+        if (!ContextUtils.CheckIfGrounded(collision))
+        {
+            isGrounded = false;
+            animator.SetBool("InAir", true);
         }
     }
 }

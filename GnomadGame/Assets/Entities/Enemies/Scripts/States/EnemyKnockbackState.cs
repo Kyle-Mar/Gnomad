@@ -21,7 +21,6 @@ public class EnemyKnockbackState : EnemyBaseState
         // check if timer is done, then if grounded
         if (knockbackTimer <= 0f)
         {
-            context.CheckIfGrounded();
             if (context.IsGrounded)
             {
                 SwitchState(context.GroundedState);

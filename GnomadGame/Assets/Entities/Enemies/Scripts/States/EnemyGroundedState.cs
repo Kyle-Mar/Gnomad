@@ -13,7 +13,6 @@ public class EnemyGroundedState : EnemyBaseState
     {
         // Check for switch to jump state
 
-        context.CheckIfGrounded();
         if (context.IsDamaged)
         {
             SwitchState(context.KnockbackState);

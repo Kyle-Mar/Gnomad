@@ -14,7 +14,6 @@ public class PlayerWallSlideState : PlayerBaseState
     public override void CheckSwitchStates()
     {
         float inputX = context.Controls.Player.Move.ReadValue<Vector2>().x;
-        context.CheckIfGrounded();
         if (context.IsGrounded)
         {
             SwitchState(context.GroundedState);
