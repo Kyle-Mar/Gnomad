@@ -48,12 +48,13 @@ public class PlayerGPBounceState : PlayerBaseState
         startBounceTime = 0;
         maxBounceTime = startBounceTime + MovementStats.maxGPBounceHeight;
         context.rb.velocity = new Vector2(context.rb.velocity.x, MovementStats.bounceSpeed);
-
+        context.Animator.SetBool("IsJumping", true);
     }
 
     public override void ExitState()
     {
-         //context.rb.velocity = new(context.rb.velocity.x, context.rb.velocity.y / 3);
+        context.Animator.SetBool("IsJumping", false);
+        //context.rb.velocity = new(context.rb.velocity.x, context.rb.velocity.y / 3);
     }
 
     public override void InitializeSubState()
