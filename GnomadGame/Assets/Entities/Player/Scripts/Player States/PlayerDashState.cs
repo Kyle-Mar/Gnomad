@@ -18,7 +18,6 @@ public class PlayerDashState : PlayerBaseState
     {
         if (DidBonk())
         {
-            context.CheckIfGrounded();
             if (!context.IsGrounded)
             {
                 SwitchState(context.FallState);
