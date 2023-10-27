@@ -288,6 +288,7 @@ public class CameraSystem : MonoBehaviour
         desiredDelta.z *= 0;
         if (allowedAmountNegX == 0 && allowedAmountNegY == 0 && allowedAmountPosX ==0 && allowedAmountPosY == 0)
         {
+            Debug.LogWarning("[CameraSystem.cs] We lost the player. Are you missing something? We might be going too fast.");
             return desiredDelta;
         }
         if (desiredDelta.x > 0)

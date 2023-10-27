@@ -22,7 +22,6 @@ public class SceneLoader : MonoBehaviour
     {
         if (collision.tag == "Player")
         {
-            //Debug.Log(collision.name + sceneInfo.scene.Name);
 
             if (isEnteredByPlayer)
             {
@@ -108,11 +107,10 @@ public class SceneLoader : MonoBehaviour
             {
                 Debug.LogError($"[SceneLoader.cs] The CompositeCollider2D of {scene.name} is not attached.");
             }
-
             // This Room's center based on the collider.    Top Left + half extents = center
             if (!tilemapCollider)
             {
-                return;
+                Debug.LogError($"[SceneLoader.cs] The TilemapCollider of {scene.name} is not attached.");
             }
             curRoomCenter = tilemapCollider.gameObject.transform.position + tilemapCollider.bounds.extents;
             var otherRoomCenter = otherTilemapCollider.bounds.center;
@@ -151,6 +149,7 @@ public class SceneLoader : MonoBehaviour
             {
                 LevelManager.onEnterNewRoom?.Invoke(boundingCollider);
             }
+            Debug.LogWarning(sceneInfo.scene.Name + offset);
         }
     }
 
@@ -165,6 +164,10 @@ public class SceneLoader : MonoBehaviour
     {
         scene.isLoaded = false;
         if (!SceneManager.GetSceneByName(scene.name).isLoaded)
+        {
+            return;
+        }
+        if (scene.scene.Name == null)
         {
             return;
         }

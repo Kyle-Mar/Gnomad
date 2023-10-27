@@ -352,7 +352,7 @@ public class EnemyStateMachine : StateMachine
         Destroy(this.gameObject);
     }
 
-    void OnDamage()
+    void OnDamage(float amount, Vector3 dir)
     {
         Debug.Log("Player is reacting to damage");
     }
@@ -366,7 +366,8 @@ public class EnemyStateMachine : StateMachine
             if (collision.gameObject.TryGetComponent(out damageable))
             {
                 Debug.LogWarning(damageable);
-                damageable.Damage(AttackDamage);
+                var collisionPoint = collision.ClosestPoint(transform.position);
+                damageable.Damage(AttackDamage,  collisionPoint - new Vector2(transform.position.x, transform.position.y));
                 Debug.Log(this.name + " is Damaging the Player for " + AttackDamage);
             }
         }

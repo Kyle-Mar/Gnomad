@@ -47,7 +47,10 @@ public abstract class BaseState
         newState.EnterState();
         if (isRootState)
         {
-            newState.SetSubState(context.CurrentState.currentSubState);
+            if(context.CurrentState.currentSubState != null)
+            {
+                newState.SetSubState(context.CurrentState.currentSubState);
+            }
             context.CurrentState = newState;
         }
         else {
