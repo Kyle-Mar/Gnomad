@@ -345,7 +345,7 @@ public class EnemyStateMachine : StateMachine
         {
             if (ps != null)
             {//nullify the parent so the particles persist after death
-                UnityEngine.Object.Instantiate(ps, transform.position, Quaternion.identity).transform.parent = null;
+                Instantiate(ps, transform.position, Quaternion.identity).transform.parent = null;
 
             }
         }
@@ -359,14 +359,13 @@ public class EnemyStateMachine : StateMachine
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        
-
-        if (collision.CompareTag("PlayerHitBox"))
+        Debug.Log("HELLO WORLD" + collision.name);
+        if (collision.CompareTag("PlayerHurtBox"))
         {
-            IDamageable damageable = null;
-            if (collision.gameObject.TryGetComponent<IDamageable>(out damageable))
+            IDamageable damageable;
+            if (collision.gameObject.TryGetComponent(out damageable))
             {
-                //Debug.LogWarning(damageable);
+                Debug.LogWarning(damageable);
                 damageable.Damage(AttackDamage);
                 Debug.Log(this.name + " is Damaging the Player for " + AttackDamage);
             }
@@ -374,6 +373,7 @@ public class EnemyStateMachine : StateMachine
 
         else if (collision.CompareTag("PlayerAttack"))
         {
+            Debug.Log(collision.name);
             if (currentState != KnockbackState)
             {
                 if (this.transform.position.x - collision.transform.position.x > 0f)
@@ -386,32 +386,62 @@ public class EnemyStateMachine : StateMachine
                 {
                     if (ps != null)
                     {
-                        UnityEngine.Object.Instantiate(ps, transform.position, Quaternion.identity);
+                        Instantiate(ps, transform.position, Quaternion.identity);
                     }
                 }
             }
         }
     }
 
-    public void OnCollisionStay2D(Collision2D collision)
+    public void PickNextMovePoint()
     {
-        if (ContextUtils.CheckIfGrounded(collision))
+        // Move to the next move point
+        if (currentMovePointIndex >= movePoints.Count - 1)
         {
-            isGrounded = true;
-            animator.SetBool("InAir", false);
+            currentMovePointIndex = 0;
         }
         else
         {
-            isGrounded = false;
-            animator.SetBool("InAir", true);
+            currentMovePointIndex++;
+        }
+        targetObject = movePoints[currentMovePointIndex].gameObject;
+    }
+
+    public void OnCollisionStay2D(Collision2D collision)
+    {
+        
+
+        if(collision.gameObject.tag == "Ground")
+        {
+            if (ContextUtils.CheckIfGrounded(collision))
+            {
+                isGrounded = true;
+                animator.SetBool("InAir", false);
+            }
+            else
+            {
+                isGrounded = false;
+                animator.SetBool("InAir", true);
+            }
+        }
+    }
+
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag == "Enemy")
+        {
+            PickNextMovePoint();
         }
     }
     public void OnCollisionExit2D(Collision2D collision)
     {
-        if (!ContextUtils.CheckIfGrounded(collision))
+        if(collision.gameObject.tag == "Ground")
         {
-            isGrounded = false;
-            animator.SetBool("InAir", true);
+            if (!ContextUtils.CheckIfGrounded(collision))
+            {
+                isGrounded = false;
+                animator.SetBool("InAir", true);
+            }
         }
     }
 }
