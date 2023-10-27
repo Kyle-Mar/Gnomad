@@ -52,8 +52,8 @@ public class PlayerSlideState : PlayerBaseState
     public override void EnterState()
     {
         InitializeSubState();
-        context.SpriteRenderer.transform.rotation = Quaternion.Euler(0,0,90*context.LastMovementDirection.x*-1); //will be changed when animations are added
-        context.HatSpriteRenderer.enabled = false; //will be changed when animations are added
+        //context.SpriteRenderer.transform.rotation = Quaternion.Euler(0,0,90*context.LastMovementDirection.x*-1); //will be changed when animations are added
+        //context.HatSpriteRenderer.enabled = false; //will be changed when animations are added
         initialMovementDir = context.LastMovementDirection;
         sliding = true;
 
@@ -62,16 +62,19 @@ public class PlayerSlideState : PlayerBaseState
         slideEndTime = Time.time + MovementStats.slideDuration;
         verticalBounceEndTime = Time.time + MovementStats.slideVerticalBounceDuration;
         context.rb.velocity = new Vector2(MovementStats.slideSpeedX * initialMovementDir.x, MovementStats.slideVerticalBounce);
+        context.Animator.SetTrigger("SlideTrigger");
     }
 
     public override void ExitState()
     {
-        context.SpriteRenderer.transform.rotation = Quaternion.Euler(0, 0, 0); //will be changed when animations are added
+        //context.SpriteRenderer.transform.rotation = Quaternion.Euler(0, 0, 0); //will be changed when animations are added
         context.SlideCollider.gameObject.SetActive(false);
-        context.HatSpriteRenderer.enabled = true; //will be changed when animations are added
+        //context.HatSpriteRenderer.enabled = true; //will be changed when animations are added
         context.rb.velocity = new Vector2(0, 0);
         context.DoSlideCooldownTimer();
         context.UpdateComponentsDirection();
+        context.Animator.SetTrigger("StopSlideTrigger");
+
     }
     public override void FixedUpdateState()
     {

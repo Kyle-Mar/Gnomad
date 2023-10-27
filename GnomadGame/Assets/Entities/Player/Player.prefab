@@ -236,7 +236,7 @@ GameObject:
   - component: {fileID: 4668829882800693099}
   m_Layer: 6
   m_Name: Hat Pin
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -255,6 +255,7 @@ Transform:
   m_Children:
   - {fileID: 4849896907349682111}
   - {fileID: 5201028080782104754}
+  - {fileID: 7890304884697148668}
   m_Father: {fileID: 3892010041494561358}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -294,7 +295,7 @@ HingeJoint2D:
   m_BreakTorque: Infinity
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: -0.47}
-  m_ConnectedAnchor: {x: -0.033, y: 0.414}
+  m_ConnectedAnchor: {x: -0.033, y: 0.769884}
   m_UseMotor: 0
   m_Motor:
     m_MotorSpeed: 0
@@ -969,8 +970,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd641dd00fe97a84fbb83e4819f9beb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MAX_HEALTH: 100
-  health: 100
+  MAX_HEALTH: 10
+  health: 10
   canTakeDamage: 1
   cooldownTime: 1
 --- !u!1 &4125829958982476533
@@ -1190,6 +1191,9 @@ MonoBehaviour:
   WalkParticles: {fileID: 112438054345840056, guid: 1227be19308dc9a41829b5795ecb33be, type: 3}
   JumpCloudParticles: {fileID: 6970482471691421841, guid: 7b477171c9bb7bd43a1e8adabdc129d9, type: 3}
   LandParticles: {fileID: 6970482471691421841, guid: 7b477171c9bb7bd43a1e8adabdc129d9, type: 3}
+  HurtParticles:
+  - {fileID: 6970482471691421841, guid: 4210765f1d9406a42bc64cc15e21a4a4, type: 3}
+  - {fileID: 6970482471691421841, guid: 3e0ee47e2dab2d7478e497d22120e697, type: 3}
 --- !u!114 &8820136772556286469
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1281,7 +1285,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6127027261715314363}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.055, y: 0.426, z: 0}
+  m_LocalPosition: {x: 0.055, y: -0.157, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1365,7 +1369,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7353958679973697125}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.022, y: 0.401, z: 0}
+  m_LocalPosition: {x: 0.022, y: -0.18199995, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1483,6 +1487,37 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.6, y: 1.12}
   m_EdgeRadius: 0
+--- !u!1 &8573543962123263843
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7890304884697148668}
+  m_Layer: 6
+  m_Name: RedPointedCap
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7890304884697148668
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8573543962123263843}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1324028803}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9006604634928759521
 GameObject:
   m_ObjectHideFlags: 0

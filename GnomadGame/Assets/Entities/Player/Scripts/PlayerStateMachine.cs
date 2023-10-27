@@ -69,6 +69,8 @@ public class PlayerStateMachine : StateMachine
     public ParticleSystem WalkParticles;
     public ParticleSystem JumpCloudParticles;
     public ParticleSystem LandParticles;
+    public ParticleSystem[] HurtParticles;
+
 
     public bool IsGrounded => isGrounded;
     public float JumpBufferTime => jumpBufferTime;
@@ -347,7 +349,13 @@ public class PlayerStateMachine : StateMachine
 
     void OnDamage()
     {
-        Debug.Log("Player is reacting to damage");
+        foreach (ParticleSystem ps in HurtParticles)
+        {
+            if (ps != null)
+            {
+                Object.Instantiate(ps, transform.position, Quaternion.identity);
+            }
+        }
     }
 
     void PrintDebugInfo(InputAction.CallbackContext cxt)

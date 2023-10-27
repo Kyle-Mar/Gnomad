@@ -156,7 +156,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.018852234, y: 0.13195628}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -167,7 +167,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2, y: 2}
+  m_Size: {x: 1.2920456, y: 0.9988078}
   m_EdgeRadius: 0
 --- !u!1 &6578426276248700624
 GameObject:
@@ -236,12 +236,15 @@ MonoBehaviour:
   rb: {fileID: 7339741108203295407}
   SpriteRenderer: {fileID: 5179297393850050217}
   animator: {fileID: 3209980095533021705}
-  movePoints:
-  - {fileID: 0}
-  - {fileID: 0}
+  movePoints: []
   targetObject: {fileID: 0}
   EnemyAttackObj: {fileID: 4220220071636453635}
   currentMovePointIndex: 0
+  OnHitParticles:
+  - {fileID: 6970482471691421841, guid: 4210765f1d9406a42bc64cc15e21a4a4, type: 3}
+  - {fileID: 6970482471691421841, guid: 3e0ee47e2dab2d7478e497d22120e697, type: 3}
+  OnDeathParticles:
+  - {fileID: 6970482471691421841, guid: a9a8a7a62fd2fcd4484ccbf09a2e9495, type: 3}
 --- !u!114 &6578426276248700629
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -318,7 +321,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.026891708, y: -0.035296082}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -329,7 +332,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2, y: 2}
+  m_Size: {x: 1.3882027, y: 1.599977}
   m_EdgeRadius: 0
 --- !u!50 &7339741108203295407
 Rigidbody2D:
@@ -458,15 +461,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -646184241, guid: 14478a718996fd44a8a715a2cae52914, type: 3}
+  m_Sprite: {fileID: -386315521, guid: 14478a718996fd44a8a715a2cae52914, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.67, y: 3.17}
+  m_Size: {x: 1.6640625, y: 1.796875}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!95 &3209980095533021705

@@ -25,7 +25,6 @@ public class EnemyStateMachine : StateMachine
     
     public BaseState AttackState;
     public BaseState NotAttackState;
-    
 
 
     LayerMask groundLayerMask;
@@ -72,6 +71,8 @@ public class EnemyStateMachine : StateMachine
     public GameObject EnemyAttackObj;
     public int currentMovePointIndex;
     public EnemyMovementStats EnemyStats;
+    public ParticleSystem[] OnHitParticles;
+    public ParticleSystem[] OnDeathParticles;
 
     //public ParticleSystem WalkParticles;
     //public ParticleSystem JumpCloudParticles;
@@ -340,6 +341,14 @@ public class EnemyStateMachine : StateMachine
 
     void DieHealth()
     {
+        foreach (ParticleSystem ps in OnDeathParticles)
+        {
+            if (ps != null)
+            {//nullify the parent so the particles persist after death
+                UnityEngine.Object.Instantiate(ps, transform.position, Quaternion.identity).transform.parent = null;
+
+            }
+        }
         Destroy(this.gameObject);
     }
 
@@ -373,8 +382,14 @@ public class EnemyStateMachine : StateMachine
                 }
                 else { damageDirection = -1; }
                 IsDamaged = true;
+                foreach (ParticleSystem ps in OnHitParticles)
+                {
+                    if (ps != null)
+                    {
+                        UnityEngine.Object.Instantiate(ps, transform.position, Quaternion.identity);
+                    }
+                }
             }
-
         }
     }
 
