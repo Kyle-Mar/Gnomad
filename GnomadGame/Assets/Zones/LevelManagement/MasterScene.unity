@@ -991,6 +991,10 @@ PrefabInstance:
       propertyPath: m_FlipX
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 385279951182527587, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: m_SortingOrder
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 4446419450577938880, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -1063,6 +1067,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6674868899765869031, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: m_SortingOrder
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 7429131846331849822, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_Color.b
       value: 1
@@ -1074,6 +1082,7 @@ PrefabInstance:
     - target: {fileID: 7429131846331849822, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_Color.r
       value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7458543973091233723, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: health
       value: 100
