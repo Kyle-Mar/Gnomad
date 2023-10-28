@@ -1074,6 +1074,13 @@ PrefabInstance:
     - target: {fileID: 7429131846331849822, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_Color.r
       value: 1
+    - target: {fileID: 7458543973091233723, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: health
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7458543973091233723, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: MAX_HEALTH
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}

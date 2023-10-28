@@ -19,7 +19,7 @@ public class GorbStats : EnemyMovementStats
     public new static float knockbackSpeed = 1f;
     public new static float knockbackXConst = 0.85f;
     public new static float knockbackYConst = 0.5f;
-    public new static float knockbackTimer = 0.3f;
+    public new static float knockbackTimer = 0.9f;
 
     //Controls the time for how long the player can jump.
     public new const float maxJumpHeight = 0.4f;

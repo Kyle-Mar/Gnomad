@@ -63,6 +63,7 @@ public class PlayerFallState : PlayerBaseState
 
     public override void FixedUpdateState()
     {
+        context.rb.velocity = new(context.rb.velocity.x, context.rb.velocity.y + (MovementStats.fallSpeed * Time.fixedDeltaTime));
         //throw new System.NotImplementedException();
     }
 
@@ -83,7 +84,7 @@ public class PlayerFallState : PlayerBaseState
         //Debug.Log("HELLO WORLD");
 
         
-        Physics2D.gravity = new(0, MovementStats.fallSpeed);
+        //Physics2D.gravity = new(0, MovementStats.fallSpeed);
         //clamp fall speed
         context.rb.velocity = new Vector2(context.rb.velocity.x,
             Mathf.Max(context.rb.velocity.y, -MovementStats.maxFallSpeed));
