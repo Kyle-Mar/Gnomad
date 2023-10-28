@@ -46,12 +46,14 @@ public class PlayerWallSlideState : PlayerBaseState
     {
         InitializeSubState();
         timer = 0.5f;
+        context.Animator.SetTrigger("WallSlideTrigger");
     }
 
 
     public override void ExitState()
     {
         context.SetMoveSpeed(MovementStats.moveSpeed);
+        context.Animator.SetTrigger("StopWallSlideTrigger");
     }
 
     public override void FixedUpdateState()

@@ -42,6 +42,7 @@ public class PlayerKnockbackState : PlayerBaseState
         }
         Debug.Log("Initial Knockback Direction + " + initialKnockbackDirection);
         context.rb.velocity = initialKnockbackDirection * 40;
+        context.Animator.SetTrigger("KnockbackTrigger");
 
     }
 

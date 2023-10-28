@@ -314,6 +314,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: PlayerJump_10
+      rect:
+        serializedVersion: 2
+        x: 502
+        y: 0
+        width: 251
+        height: 275
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56652a7ca072854468bbf5368de8936e
+      internalID: -291756595
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -327,6 +348,7 @@ TextureImporter:
     nameFileIdTable:
       PlayerJump_0: -1635452556
       PlayerJump_1: 581029426
+      PlayerJump_10: -291756595
       PlayerJump_2: 2049633937
       PlayerJump_3: -1021943544
       PlayerJump_4: -579783881
