@@ -6,7 +6,8 @@ public class EnemyKnockbackState : EnemyBaseState
 {
 
     float knockbackTimer = 0f;
-
+    Vector3 initialKnockbackDirection = Vector3.zero;
+    Vector3 currentKnockbackVelocity = Vector3.zero;
     // add a timer, that when zero, enemy switches back to its normal states
 
     public EnemyKnockbackState(EnemyStateMachine esm) : base(esm)
@@ -19,48 +20,53 @@ public class EnemyKnockbackState : EnemyBaseState
         //throw new System.NotImplementedException();
 
         // check if timer is done, then if grounded
-        if (knockbackTimer <= 0f)
+        if (context.IsGrounded && knockbackTimer <= 0.9f * context.KnockbackTimer)
         {
-            if (context.IsGrounded)
-            {
-                SwitchState(context.GroundedState);
-            }
-            else
-            {
-                SwitchState(context.FallState);
-            }
+            SwitchState(context.GroundedState);
+            return;
         }
-
     }
 
     public override void EnterState()
     {
         //throw new System.NotImplementedException();
-        knockbackTimer = context.KnockbackTimer;
         InitializeSubState();
-        context.rb.velocity = Vector2.zero;
-        SetSubState(null);
+        knockbackTimer = context.KnockbackTimer;
+        initialKnockbackDirection = context.LastKBDirection.normalized;
+        if (initialKnockbackDirection.x < 0.5f && initialKnockbackDirection.x > -0.5f)
+        {
+            initialKnockbackDirection.x = 0.5f * Mathf.Sign(initialKnockbackDirection.x);
+        }
+        if (initialKnockbackDirection.y < 0.5f && initialKnockbackDirection.y > -0.5f)
+        {
+            initialKnockbackDirection.y = 0.5f * Mathf.Sign(initialKnockbackDirection.y);
+        }
+        Debug.Log("Initial Knockback Direction + " + initialKnockbackDirection);
+        context.rb.velocity = initialKnockbackDirection * 27.5f;
+        currentKnockbackVelocity = context.rb.velocity;
+
         //context.rb.Sleep();
     }
 
     public override void ExitState()
     {
         //throw new System.NotImplementedException();
+        knockbackTimer = 0f;
         SetSubState(context.MoveState);
         context.IsDamaged = false;
     }
 
     public override void FixedUpdateState()
     {
-        // throw new System.NotImplementedException();
+        context.rb.velocity = currentKnockbackVelocity + new Vector3(0,  (MovementStats.fallSpeed * Time.fixedDeltaTime));
+        currentKnockbackVelocity = context.rb.velocity;
     }
 
     public override void InitializeSubState()
     {
         //throw new System.NotImplementedException();
 
-        // Initialize Idle State
-        SetSubState(context.EmptyState);
+        SetSubState(null);
     }
 
     public override void UpdateState()
@@ -74,13 +80,12 @@ public class EnemyKnockbackState : EnemyBaseState
             // multiply by time left (or maybe something else)
             // set velocity equal to new velocity
 
-        Vector2 newVelocity = new(context.KnockbackXConst, context.KnockbackYConst);
+        //Vector2 newVelocity = new(context.KnockbackXConst, context.KnockbackYConst);
 
-        newVelocity.x *= context.damageDirection;
+        //newVelocity.x *= context.damageDirection;
 
         //newVelocity = newVelocity.normalized;
 
-        context.rb.AddForce(newVelocity, ForceMode2D.Impulse);
 
         // apply gravity
         //Physics2D.gravity = new(0, context.FallSpeed);

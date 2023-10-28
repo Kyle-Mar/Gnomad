@@ -110,6 +110,10 @@ public class EnemyStateMachine : StateMachine
     public float KnockbackSpeed => GorbStats.knockbackSpeed;
     public float KnockbackTimer => GorbStats.knockbackTimer;
 
+    public Vector3 LastKBDirection = Vector3.zero;
+    public delegate void OnDamageKB(float amt, Vector3 dir);
+    public OnDamageKB onDamageKB;
+
     private void OnEnable()
     {
         //enable AI
@@ -354,9 +358,20 @@ public class EnemyStateMachine : StateMachine
 
     void OnDamage(float amount, Vector3 dir)
     {
-        Debug.Log("Player is reacting to damage");
+        if (currentState != KnockbackState)
+        {
+            IsDamaged = true;
+            foreach (ParticleSystem ps in OnHitParticles)
+            {
+                if (ps != null)
+                {
+                    Instantiate(ps, transform.position, Quaternion.identity);
+                }
+            }
+        }
+        LastKBDirection = dir;
+        onDamageKB?.Invoke(amount,dir);
     }
-
     public void OnTriggerEnter2D(Collider2D collision)
     {
         Debug.Log("HELLO WORLD" + collision.name);
@@ -374,23 +389,7 @@ public class EnemyStateMachine : StateMachine
 
         else if (collision.CompareTag("PlayerAttack"))
         {
-            Debug.Log(collision.name);
-            if (currentState != KnockbackState)
-            {
-                if (this.transform.position.x - collision.transform.position.x > 0f)
-                {
-                    damageDirection = 1;
-                }
-                else { damageDirection = -1; }
-                IsDamaged = true;
-                foreach (ParticleSystem ps in OnHitParticles)
-                {
-                    if (ps != null)
-                    {
-                        Instantiate(ps, transform.position, Quaternion.identity);
-                    }
-                }
-            }
+
         }
     }
 
