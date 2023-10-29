@@ -26,6 +26,7 @@ public class CameraSystem : MonoBehaviour
     [SerializeField] float smoothingFactorAnticipationY;
     [SerializeField] float horizontalAnticipation;
     [SerializeField] float verticalAnticipation;
+    [SerializeField] float minFallingVelocity;
     [SerializeField] float fallingAnticipationMultiplier;
     [SerializeField] float offsetY;
     [SerializeField] float ledgeOffsetY;
@@ -163,7 +164,7 @@ public class CameraSystem : MonoBehaviour
         if (playerRB.velocity.magnitude > 1)
         {
             anticipationVector.Normalize();
-            if (playerRB.velocity.y < -45f)
+            if (playerRB.velocity.y < minFallingVelocity)
             {
                 anticipationVector = Vector3.Scale(anticipationVector, new Vector3(horizontalAnticipation, verticalAnticipation * fallingAnticipationMultiplier, 0));
             }

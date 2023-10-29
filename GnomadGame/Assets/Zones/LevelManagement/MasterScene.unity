@@ -496,13 +496,14 @@ MonoBehaviour:
   desiredPosition: {x: 0, y: 0, z: 0}
   currentAnticipation: {x: 0, y: 0, z: 0}
   desiredDelta: {x: 0, y: 0, z: 0}
-  yDeadzone: {x: 0.4, y: 0.75}
+  yDeadzone: {x: 0.4, y: 0.9}
   smoothingFactor: 6
   smoothingFactorAnticipationX: 60
   smoothingFactorAnticipationY: 100
-  horizontalAnticipation: 10.5
-  verticalAnticipation: 1
-  fallingAnticipationMultiplier: 35
+  horizontalAnticipation: 7.5
+  verticalAnticipation: 3
+  minFallingVelocity: -40
+  fallingAnticipationMultiplier: 9
   offsetY: 0
   ledgeOffsetY: -2
   boundingCollider: {fileID: 0}
