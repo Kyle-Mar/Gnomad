@@ -78,8 +78,10 @@ public class PlayerBackflipState : PlayerBaseState
 
     public override void FixedUpdateState()
     {
-        context.rb.velocity = new(-context.LastMovementDirection.x * MovementStats.backflipHorizontalSpeed,
-            MovementStats.backflipVerticalSpeed);
+        //context.rb.velocity = new(-context.LastMovementDirection.x * MovementStats.backflipHorizontalSpeed,
+        //    MovementStats.backflipVerticalSpeed);
+        context.rb.velocity = new(context.rb.velocity.x, context.rb.velocity.y + (MovementStats.fallSpeed * Time.fixedDeltaTime));
+
         CheckSwitchStates();
     }
 }

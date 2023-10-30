@@ -147,6 +147,7 @@ public class SceneLoader : MonoBehaviour
             }
             if (boundingCollider)
             {
+                Debug.Log("Found the bounding Collider");
                 LevelManager.onEnterNewRoom?.Invoke(boundingCollider);
             }
             Debug.LogWarning(sceneInfo.scene.Name + offset);

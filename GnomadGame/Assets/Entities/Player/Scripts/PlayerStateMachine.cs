@@ -281,15 +281,17 @@ public class PlayerStateMachine : StateMachine
         }
     }
 
-    public void UpdateComponentsDirection()
+    public void UpdateComponentsDirection(bool flipDirection=false)
     {
         Vector2 sliderHitboxOffset = SlideCollider.GetComponent<BoxCollider2D>().offset;
         Vector2 slashHitboxOffset = SlashCollider.GetComponent<PolygonCollider2D>().offset;
 
         //SpriteRenderer.flipX = !SpriteRenderer.flipX;
-
+        float facingDirection = LastMovementDirection.x;
         Vector3 tmp = SpriteRenderer.gameObject.transform.localScale;
-        transform.localScale = new Vector2(LastMovementDirection.x, tmp.y);
+        if (flipDirection) { facingDirection *= -1; }
+
+        transform.localScale = new Vector2(facingDirection, tmp.y);
         //HatSpriteRenderer.flipX = !HatSpriteRenderer.flipX;
         //SlideCollider.GetComponent<BoxCollider2D>().offset = new Vector2(-1 * sliderHitboxOffset.x, sliderHitboxOffset.y);
         //SlideCollider.transform.localScale = new Vector2(SlideCollider.transform.localScale.x*-1, SlideCollider.transform.localScale.y);
@@ -368,6 +370,13 @@ public class PlayerStateMachine : StateMachine
         CurrentState.PrintStateTree();
         //Debug.Log(currentMoveSpeed);
         //GetComponentInChildren<Health>().Damage(2);
+        Debug.Log("Screen Shot Take");
+        ScreenShot();
+    }
+
+    void ScreenShot()
+    {
+        ScreenCapture.CaptureScreenshot("SuperSpecialScreenShot.png", 1);
     }
 
     public void DoDashCooldownTimer()

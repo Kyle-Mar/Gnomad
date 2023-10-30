@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Zones/LevelManagement/MasterScene.unity
     guid: 9d840fa5d6fd49841ab51d4d4c48b1e3
   - enabled: 1
+    path: Assets/Zones/ForestZone/Rooms/SGC Tutorial/Start.unity
+    guid: 4ee9057b2ee63b34e922aa4eb7d0faa3
+  - enabled: 1
     path: Assets/Zones/ForestZone/Rooms/Overworld.unity
     guid: 232c9654b94d3d242b49953b8ccd5542
   - enabled: 1
@@ -47,5 +50,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Zones/ForestZone/Rooms/PlatformRoom.unity
     guid: 2f439e8b2b781064193d9eb4452eebc9
+  - enabled: 1
+    path: Assets/Zones/ForestZone/Rooms/SGC Tutorial/SGC1.unity
+    guid: 2a2618b519f93114bbddbecb0656f3df
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 685aaf994ef330e47aa6563784fdfb36, type: 2}

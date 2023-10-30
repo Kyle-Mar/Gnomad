@@ -23,7 +23,11 @@ public class PlayerWallSlideState : PlayerBaseState
             context.ConsumeJumpBuffer();
             SwitchState(context.WallJumpState);
         }
-        if(timer <= 0)
+        if (context.Controls.Player.Dash.WasPressedThisFrame())
+        {
+            SwitchState(context.DashState);
+        }
+        if (timer <= 0)
         {
             context.SetWallSlideExpired(true);
             SwitchState(context.FallState);
