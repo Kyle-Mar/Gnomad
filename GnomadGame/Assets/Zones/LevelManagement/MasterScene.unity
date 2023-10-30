@@ -475,7 +475,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &212300216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -954,7 +954,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &427990220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -983,6 +983,7 @@ MonoBehaviour:
   smoothingFactorAnticipationY: 100
   horizontalAnticipation: 10.5
   verticalAnticipation: 1
+  minFallingVelocity: 0
   fallingAnticipationMultiplier: 35
   offsetY: 0
   ledgeOffsetY: -2

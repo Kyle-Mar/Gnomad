@@ -6,7 +6,7 @@ using UnityEngine;
 
 [ExecuteInEditMode]
 public class TerrainBlockController : MonoBehaviour
-{
+{/*
     [Tooltip("Size given in 128x128 tiles")]
     [SerializeField] Vector2 size;
     private Vector2 previousSize;
@@ -38,7 +38,7 @@ public class TerrainBlockController : MonoBehaviour
     10x10
     10x5
 
-    */
+    *//*
     private void OnValidate()
     {
        if (previousSize == size) { return; }
@@ -126,7 +126,7 @@ public class TerrainBlockController : MonoBehaviour
             }
         }
     }
-
+    */
 
 }
 
