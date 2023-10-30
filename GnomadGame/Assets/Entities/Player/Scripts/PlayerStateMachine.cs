@@ -362,7 +362,14 @@ public class PlayerStateMachine : StateMachine
     {
         CurrentState.PrintStateTree();
         //Debug.Log(currentMoveSpeed);
-        GetComponentInChildren<Health>().Damage(2);
+        //GetComponentInChildren<Health>().Damage(2);
+        Debug.Log("Screen Shot Take");
+        ScreenShot();
+    }
+
+    void ScreenShot()
+    {
+        ScreenCapture.CaptureScreenshot("SuperSpecialScreenShot.png", 1);
     }
 
     public void DoDashCooldownTimer()

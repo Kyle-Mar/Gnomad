@@ -112,6 +112,7 @@ public class SceneLoader : MonoBehaviour
             // This Room's center based on the collider.    Top Left + half extents = center
             if (!tilemapCollider)
             {
+                Debug.Log("HELLO I AM MISSING");
                 return;
             }
             curRoomCenter = tilemapCollider.gameObject.transform.position + tilemapCollider.bounds.extents;
@@ -149,6 +150,7 @@ public class SceneLoader : MonoBehaviour
             }
             if (boundingCollider)
             {
+                Debug.Log("Found the bounding Collider");
                 LevelManager.onEnterNewRoom?.Invoke(boundingCollider);
             }
         }
