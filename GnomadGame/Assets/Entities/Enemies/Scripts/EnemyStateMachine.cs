@@ -60,6 +60,8 @@ public class EnemyStateMachine : StateMachine
 
     [SerializeField] private float attackCooldownTimer = 0f;
 
+    [SerializeField] public bool isSlidedInto = false;
+
     [Header("Components")]
 
     public Collider2D col;
@@ -92,6 +94,8 @@ public class EnemyStateMachine : StateMachine
 
     public bool IsDamaged { get { return isDamaged; } set { isDamaged = value; } }
 
+    public bool IsSlidedInto { get { return isSlidedInto; } set { isSlidedInto = value; } }
+
     //public Vector2 LastMovementDirection { get { return lastMovementDirection; } set { lastMovementDirection = value; } }
     public float CurrentMoveSpeed => currentMoveSpeed;
 
@@ -113,6 +117,8 @@ public class EnemyStateMachine : StateMachine
     public Vector3 LastKBDirection = Vector3.zero;
     public delegate void OnDamageKB(float amt, Vector3 dir);
     public OnDamageKB onDamageKB;
+
+    
 
     private void OnEnable()
     {
@@ -141,7 +147,6 @@ public class EnemyStateMachine : StateMachine
         if (movePoints.Count <= 0)
         {
             // If there aren't create them at a good common offset
-            Debug.Log("TEST");
             var mp = new GameObject("MovePoint0");
             mp.transform.parent = gameObject.transform.parent;
             mp.transform.position = new(transform.position.x + 5, transform.position.y, transform.position.z);
@@ -369,27 +374,26 @@ public class EnemyStateMachine : StateMachine
                 }
             }
         }
+        
         LastKBDirection = dir;
         onDamageKB?.Invoke(amount,dir);
     }
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("HELLO WORLD" + collision.name);
         if (collision.CompareTag("PlayerHurtBox"))
         {
             IDamageable damageable;
             if (collision.gameObject.TryGetComponent(out damageable))
             {
-                Debug.LogWarning(damageable);
                 var collisionPoint = collision.ClosestPoint(transform.position);
                 damageable.Damage(AttackDamage,  collisionPoint - new Vector2(transform.position.x, transform.position.y));
-                Debug.Log(this.name + " is Damaging the Player for " + AttackDamage);
             }
         }
 
-        else if (collision.CompareTag("PlayerAttack"))
+        // Temporary
+        else if (collision.name == "Slide Collider")
         {
-
+            IsSlidedInto = true;
         }
     }
 

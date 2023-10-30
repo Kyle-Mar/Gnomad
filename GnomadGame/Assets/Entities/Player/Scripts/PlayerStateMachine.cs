@@ -44,11 +44,10 @@ public class PlayerStateMachine : StateMachine
     [SerializeField] bool canDash = true;
     [SerializeField] bool canSlide = true;
     [SerializeField] bool inCoyoteRange = false;
-    
-
     [SerializeField] Vector2 lastMovementDirection;
-
     [SerializeField] float jumpBufferTime = 0f;
+    [SerializeField] float leftInputBufferTime = 0f;
+    [SerializeField] float rightInputBufferTime = 0f;
     [SerializeField] float currentMoveSpeed = MovementStats.moveSpeed;
 
     [Header("Components")]
@@ -152,6 +151,7 @@ public class PlayerStateMachine : StateMachine
         InputAction.CallbackContext callbackContext = new();
         //PrintDebugInfo(callbackContext);
         DoJumpBuffer();
+        DoInputBuffer();
         currentState.UpdateStates();
 
     }
@@ -176,6 +176,26 @@ public class PlayerStateMachine : StateMachine
         else if( jumpBufferTime >= 0)
         {
             jumpBufferTime -= Time.deltaTime;
+        }
+    }
+
+    private void DoInputBuffer()
+    {
+        if(Controls.Player.Move.ReadValue<Vector2>().x > 0)
+        {
+            rightInputBufferTime = .15f;
+        }
+        else if(rightInputBufferTime >= 0f)
+        {
+            rightInputBufferTime -= Time.deltaTime;
+        }
+        if(Controls.Player.Move.ReadValue<Vector2>().x < 0)
+        {
+            leftInputBufferTime = .15f;
+        }
+        else if(leftInputBufferTime >= 0)
+        {
+            leftInputBufferTime -= Time.deltaTime;
         }
     }
 
@@ -220,11 +240,11 @@ public class PlayerStateMachine : StateMachine
         }
 
         float inputX = Controls.Player.Move.ReadValue<Vector2>().x;
-        if (IsTouchingWallLeft && inputX < 0)
+        if (IsTouchingWallLeft && inputX < 0 || (IsTouchingWallLeft && leftInputBufferTime > 0f))
         {
             return true;
         }
-        if (IsTouchingWallRight && inputX > 0)
+        if (IsTouchingWallRight && inputX > 0 || (IsTouchingWallRight && leftInputBufferTime > 0f))
         {
             return true;
         }

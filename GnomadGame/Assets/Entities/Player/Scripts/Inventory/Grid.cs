@@ -147,7 +147,6 @@ namespace Entities.Player.Inventory
 
         public bool IsInvalidCell(Grid grid, int r, int c)
         {
-             Debug.Log(grid[r, c]);
              return (grid[r, c] != (int)CellStatus.Empty);
         }
 

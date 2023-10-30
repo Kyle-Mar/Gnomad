@@ -30,7 +30,6 @@ public class GorbChargeAttackState : EnemyBaseState
         context.animator.SetBool("Charging", true);
         context.IsAttacking = true;
         attackTimer = context.AttackDuration;
-        Debug.Log("Enemy Attacking");
     }
 
     public override void ExitState()

@@ -33,15 +33,17 @@ public class EnemyKnockbackState : EnemyBaseState
         InitializeSubState();
         knockbackTimer = context.KnockbackTimer;
         initialKnockbackDirection = context.LastKBDirection.normalized;
-        if (initialKnockbackDirection.x < 0.5f && initialKnockbackDirection.x > -0.5f)
+        if (!context.IsSlidedInto)
         {
-            initialKnockbackDirection.x = 0.5f * Mathf.Sign(initialKnockbackDirection.x);
+            if (initialKnockbackDirection.x < 0.5f && initialKnockbackDirection.x > -0.5f)
+            {
+                initialKnockbackDirection.x = 0.5f * Mathf.Sign(initialKnockbackDirection.x);
+            }
+            if (initialKnockbackDirection.y < 0.5f && initialKnockbackDirection.y > -0.5f)
+            {
+                initialKnockbackDirection.y = 0.5f * Mathf.Sign(initialKnockbackDirection.y);
+            }
         }
-        if (initialKnockbackDirection.y < 0.5f && initialKnockbackDirection.y > -0.5f)
-        {
-            initialKnockbackDirection.y = 0.5f * Mathf.Sign(initialKnockbackDirection.y);
-        }
-        Debug.Log("Initial Knockback Direction + " + initialKnockbackDirection);
         context.rb.velocity = initialKnockbackDirection * 27.5f;
         currentKnockbackVelocity = context.rb.velocity;
 
@@ -54,11 +56,19 @@ public class EnemyKnockbackState : EnemyBaseState
         knockbackTimer = 0f;
         SetSubState(context.MoveState);
         context.IsDamaged = false;
+        
     }
 
     public override void FixedUpdateState()
     {
-        context.rb.velocity = currentKnockbackVelocity + new Vector3(0,  (MovementStats.fallSpeed * Time.fixedDeltaTime));
+        if (!context.IsSlidedInto)
+        {
+            context.rb.velocity = currentKnockbackVelocity + new Vector3(0,  (MovementStats.fallSpeed * Time.fixedDeltaTime));
+        }
+        else
+        {
+            context.rb.velocity = currentKnockbackVelocity + new Vector3(0,  (MovementStats.fallSpeed * Time.fixedDeltaTime * 0.5f));
+        }
         currentKnockbackVelocity = context.rb.velocity;
     }
 

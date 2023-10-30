@@ -138,7 +138,6 @@ public class SceneLoader : MonoBehaviour
             //Scene starts at 0,0,0
             //Debug.Log(tilemapCollider.transform.parent.parent.transform.position);
             // move every GO by the center of the current room + the current rooms door position - the other room door's position.
-            Debug.Log($"{scene.name}: Other Center : {otherRoomCenter}, Other Door: {otherDoorPosition - otherRoomCenter}, This Door: {doorPosition}, This Pos: {tilemapCollider.transform.parent.parent.transform.position}");
 
             foreach (var x in otherObjectsList)
             {
@@ -147,7 +146,6 @@ public class SceneLoader : MonoBehaviour
             }
             if (boundingCollider)
             {
-                Debug.Log("Found the bounding Collider");
                 LevelManager.onEnterNewRoom?.Invoke(boundingCollider);
             }
             Debug.LogWarning(sceneInfo.scene.Name + offset);

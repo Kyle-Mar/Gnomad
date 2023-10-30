@@ -7,7 +7,16 @@ public class HatScript : MonoBehaviour
 
     [SerializeField] bool canDamage = false;
 
-   
+    bool sliding = false;
+
+    private void Start()
+    {
+        if (this.name == "Slide Collider")
+        {
+            Debug.LogWarning("Sliding");
+            sliding = true;
+        }
+    }
 
     /// <summary>
     /// This is the Player Hurt Box
@@ -38,7 +47,22 @@ public class HatScript : MonoBehaviour
             if (collision.gameObject.TryGetComponent<IDamageable>(out damageable))
             {
                 var collisionPoint = collision.ClosestPoint(transform.position);
-                damageable.Damage(MovementStats.baseSlashDamage, new Vector2(collisionPoint.x - transform.position.x, .5f));
+                
+                if (sliding)
+                {
+                    if (collisionPoint.x - transform.position.x < 0)
+                    {
+                        damageable.Damage(MovementStats.baseSlashDamage, new Vector2(0.25f * 1f, 3.5f));
+                    }
+                    else
+                    {
+                        damageable.Damage(MovementStats.baseSlashDamage, new Vector2(0.25f * -1f, 3.5f));
+                    }
+                }
+                else
+                {
+                    damageable.Damage(MovementStats.baseSlashDamage, new Vector2(collisionPoint.x - transform.position.x, 0.5f));
+                }
                 Debug.Log("Damaging Enemy");
             }
         }

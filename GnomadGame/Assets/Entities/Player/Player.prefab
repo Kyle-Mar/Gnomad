@@ -1174,6 +1174,8 @@ MonoBehaviour:
   inCoyoteRange: 0
   lastMovementDirection: {x: 0, y: 0}
   jumpBufferTime: 0
+  leftInputBufferTime: 0
+  rightInputBufferTime: 0
   currentMoveSpeed: 9.5
   col: {fileID: 0}
   rb: {fileID: 0}
@@ -1241,10 +1243,10 @@ MonoBehaviour:
   emptyCellPrefab: {fileID: 1491362556479459070, guid: dcf6b3e867d2bca499537ff9319d7a06, type: 3}
   itemPrefab: {fileID: 1491362556479459070, guid: 922500a090e6e06458f7ba672aaf9399, type: 3}
   selectedCellIcon: {fileID: 1491362556479459070, guid: 036edde840d9002409632209cfffdf84, type: 3}
-  graphicRaycaster: {fileID: 0}
+  graphicRaycaster: {fileID: 1209577016892264312}
   eventSystem: {fileID: 0}
   backpackRectTransform: {fileID: 0}
-  backpack: {fileID: 0}
+  backpack: {fileID: 1209577016253726563}
   canvas: {fileID: 0}
   isOpen: 0
   jasonItem: {fileID: 11400000, guid: b4da248e18cb8d944a56f6e9c62221d0, type: 2}
@@ -1745,8 +1747,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eda28a2c191018249b8baa38c4cbff99, type: 3}
+--- !u!1 &1209577016253726563 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4428942495922704742, guid: eda28a2c191018249b8baa38c4cbff99, type: 3}
+  m_PrefabInstance: {fileID: 3296498996727344645}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1209577016892264311 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4428942497163141490, guid: eda28a2c191018249b8baa38c4cbff99, type: 3}
   m_PrefabInstance: {fileID: 3296498996727344645}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1209577016892264312 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4428942497163141501, guid: eda28a2c191018249b8baa38c4cbff99, type: 3}
+  m_PrefabInstance: {fileID: 3296498996727344645}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
