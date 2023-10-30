@@ -29,7 +29,7 @@ public static class HealthUtil
         {
             return;
         }
-        dmg.Health -= amount;
+        dmg.Health = Mathf.Clamp(dmg.Health - amount, 0, dmg.MaxHealth);
         if (dmg.Health <= 0)
         {
             dmg.Die();

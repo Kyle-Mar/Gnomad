@@ -1478,11 +1478,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7458543973091233723, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: health
-      value: 100
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7458543973091233723, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: MAX_HEALTH
-      value: 100
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
@@ -1517,6 +1517,21 @@ BoxCollider2D:
   m_CorrespondingSourceObject: {fileID: 4446419450577938880, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
   m_PrefabInstance: {fileID: 671944597}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &671944611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 671944599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f2025a4434b5d9418588c16eb47272c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flaskLevel: 3
+  psm: {fileID: 671944601}
+  playerHealth: {fileID: 1734069586}
 --- !u!1 &688929556
 GameObject:
   m_ObjectHideFlags: 0
@@ -2700,6 +2715,12 @@ MonoBehaviour:
   fullHeartSprite: {fileID: 21300000, guid: 04072cadc2e32b044bc6123f13907346, type: 3}
   emptyHeartSprite: {fileID: 21300000, guid: ce96fb7a6a3a218478201f4fb21b2179, type: 3}
   heartContainer: {fileID: 1102403177}
+  flaskLevels:
+  - {fileID: 21300000, guid: cf199c09340b8bc408148674b6565942, type: 3}
+  - {fileID: 21300000, guid: 1226e3a0a8d3f99478de5a0efe8a0aed, type: 3}
+  - {fileID: 21300000, guid: 74ee0e75e1c113d44a34db1a0f072ee1, type: 3}
+  - {fileID: 21300000, guid: 71efcfdd023f0ce4b9d93c59f216ab65, type: 3}
+  flaskContainer: {fileID: 1461082921}
   hearts: []
 --- !u!114 &1335319247
 MonoBehaviour:
@@ -2775,6 +2796,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1102403178}
+  - {fileID: 1461082922}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3051,6 +3073,42 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1420522468}
   m_CullTransparentMesh: 1
+--- !u!1 &1461082921
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1461082922}
+  m_Layer: 5
+  m_Name: Flask Container
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1461082922
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1461082921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1335319250}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 268, y: -519}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1507713118
 GameObject:
   m_ObjectHideFlags: 0
@@ -3369,6 +3427,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1703833079}
   m_CullTransparentMesh: 1
+--- !u!114 &1734069586 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7458543973091233723, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+  m_PrefabInstance: {fileID: 671944597}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd641dd00fe97a84fbb83e4819f9beb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1740800363 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1209577016892264312, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}

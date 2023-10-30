@@ -107,6 +107,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UseFlask"",
+                    ""type"": ""Button"",
+                    ""id"": ""92e5d6a3-20d4-43e0-a589-ea020ae52e1e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -338,6 +347,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""99acb699-860e-4ece-a594-e0e743d664d9"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseFlask"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ab321b72-e398-47ae-bc1c-686fd7f57d57"",
+                    ""path"": ""<XInputController>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseFlask"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1227,6 +1258,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_Respawn = m_Player.FindAction("Respawn", throwIfNotFound: true);
         m_Player_PrintStateTree = m_Player.FindAction("PrintStateTree", throwIfNotFound: true);
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
+        m_Player_UseFlask = m_Player.FindAction("UseFlask", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1317,6 +1349,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Respawn;
     private readonly InputAction m_Player_PrintStateTree;
     private readonly InputAction m_Player_Dash;
+    private readonly InputAction m_Player_UseFlask;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -1330,6 +1363,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @Respawn => m_Wrapper.m_Player_Respawn;
         public InputAction @PrintStateTree => m_Wrapper.m_Player_PrintStateTree;
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
+        public InputAction @UseFlask => m_Wrapper.m_Player_UseFlask;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1366,6 +1400,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Dash.started += instance.OnDash;
             @Dash.performed += instance.OnDash;
             @Dash.canceled += instance.OnDash;
+            @UseFlask.started += instance.OnUseFlask;
+            @UseFlask.performed += instance.OnUseFlask;
+            @UseFlask.canceled += instance.OnUseFlask;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1397,6 +1434,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Dash.started -= instance.OnDash;
             @Dash.performed -= instance.OnDash;
             @Dash.canceled -= instance.OnDash;
+            @UseFlask.started -= instance.OnUseFlask;
+            @UseFlask.performed -= instance.OnUseFlask;
+            @UseFlask.canceled -= instance.OnUseFlask;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1674,6 +1714,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnRespawn(InputAction.CallbackContext context);
         void OnPrintStateTree(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
+        void OnUseFlask(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

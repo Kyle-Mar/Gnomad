@@ -224,7 +224,15 @@ public class PlayerStateMachine : StateMachine
         if (currentState == SlashState || currentState == DashState || currentState == SlideState) { return; }
 
         UpdateComponentsDirection();
+    }
 
+    public void ConsumeLeftInputBuffer()
+    {
+        leftInputBufferTime = 0f;
+    }
+    public void ConsumeRightInputBuffer()
+    {
+        rightInputBufferTime = 0f;
     }
 
     public bool DoWallSlide()
@@ -242,10 +250,12 @@ public class PlayerStateMachine : StateMachine
         float inputX = Controls.Player.Move.ReadValue<Vector2>().x;
         if (IsTouchingWallLeft && inputX < 0 || (IsTouchingWallLeft && leftInputBufferTime > 0f))
         {
+            ConsumeLeftInputBuffer();
             return true;
         }
         if (IsTouchingWallRight && inputX > 0 || (IsTouchingWallRight && leftInputBufferTime > 0f))
         {
+            ConsumeRightInputBuffer();
             return true;
         }
         return false;
