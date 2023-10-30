@@ -7,7 +7,7 @@ public class Health : MonoBehaviour, IDamageable
 {
     public delegate void OnDeath();
     public OnDeath onDeath;
-    public delegate void OnDamage();
+    public delegate void OnDamage(float amt, Vector3 dir);
     public OnDamage onDamage;
     public delegate void OnHeal();
     public OnDamage onHeal;
@@ -26,7 +26,7 @@ public class Health : MonoBehaviour, IDamageable
     public bool CanTakeDamage { get => canTakeDamage; set => canTakeDamage = value; }
     public float CooldownTime { get => cooldownTime; set => cooldownTime = value; }
     #endregion
-    public virtual void Damage(float amount)
+    public virtual void Damage(float amount, Vector3? dir = null)
     {
         if (canTakeDamage)
         {
@@ -34,7 +34,14 @@ public class Health : MonoBehaviour, IDamageable
             StartCoroutine(DoCooldownTimer());
             if (onDamage.GetInvocationList().Length > 0)
             {
-                onDamage?.Invoke();
+                if (dir.HasValue)
+                {
+                    onDamage?.Invoke(amount, dir.Value);
+                }
+                else
+                {
+                    onDamage.Invoke(amount, Vector3.zero);
+                }
                 return;
             }
         }
@@ -46,7 +53,7 @@ public class Health : MonoBehaviour, IDamageable
 
         if (onHeal.GetInvocationList().Length > 0)
         {
-            onHeal?.Invoke();
+            onHeal?.Invoke(-amount, Vector3.zero);
             return;
         }
     }

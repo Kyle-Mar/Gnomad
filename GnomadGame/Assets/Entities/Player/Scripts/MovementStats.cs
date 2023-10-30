@@ -23,8 +23,8 @@ public class MovementStats
     public static float maxJumpHeight = 0.3f;
 
     //backflip
-    public static float backflipVerticalSpeed = 17f;
-    public static float backflipHorizontalSpeed = 12f;
+    public static float backflipVerticalSpeed = 50f;
+    public static float backflipHorizontalSpeed = 50f;
     public static float maxBackflipHeight = 0.3f;
 
     //slide

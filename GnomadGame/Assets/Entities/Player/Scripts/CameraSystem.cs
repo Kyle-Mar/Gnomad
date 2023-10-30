@@ -26,6 +26,7 @@ public class CameraSystem : MonoBehaviour
     [SerializeField] float smoothingFactorAnticipationY;
     [SerializeField] float horizontalAnticipation;
     [SerializeField] float verticalAnticipation;
+    [SerializeField] float minFallingVelocity;
     [SerializeField] float fallingAnticipationMultiplier;
     [SerializeField] float offsetY;
     [SerializeField] float ledgeOffsetY;
@@ -163,7 +164,7 @@ public class CameraSystem : MonoBehaviour
         if (playerRB.velocity.magnitude > 1)
         {
             anticipationVector.Normalize();
-            if (playerRB.velocity.y < -45f)
+            if (playerRB.velocity.y < minFallingVelocity)
             {
                 anticipationVector = Vector3.Scale(anticipationVector, new Vector3(horizontalAnticipation, verticalAnticipation * fallingAnticipationMultiplier, 0));
             }
@@ -288,6 +289,7 @@ public class CameraSystem : MonoBehaviour
         desiredDelta.z *= 0;
         if (allowedAmountNegX == 0 && allowedAmountNegY == 0 && allowedAmountPosX ==0 && allowedAmountPosY == 0)
         {
+            Debug.LogWarning("[CameraSystem.cs] We lost the player. Are you missing something? We might be going too fast.");
             return desiredDelta;
         }
         if (desiredDelta.x > 0)

@@ -23,7 +23,11 @@ public class PlayerWallSlideState : PlayerBaseState
             context.ConsumeJumpBuffer();
             SwitchState(context.WallJumpState);
         }
-        if(timer <= 0)
+        if (context.Controls.Player.Dash.WasPressedThisFrame())
+        {
+            SwitchState(context.DashState);
+        }
+        if (timer <= 0)
         {
             context.SetWallSlideExpired(true);
             SwitchState(context.FallState);
@@ -46,12 +50,14 @@ public class PlayerWallSlideState : PlayerBaseState
     {
         InitializeSubState();
         timer = 0.5f;
+        context.Animator.SetTrigger("WallSlideTrigger");
     }
 
 
     public override void ExitState()
     {
         context.SetMoveSpeed(MovementStats.moveSpeed);
+        context.Animator.SetTrigger("StopWallSlideTrigger");
     }
 
     public override void FixedUpdateState()

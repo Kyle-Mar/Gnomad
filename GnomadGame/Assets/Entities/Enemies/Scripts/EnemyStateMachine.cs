@@ -110,6 +110,10 @@ public class EnemyStateMachine : StateMachine
     public float KnockbackSpeed => GorbStats.knockbackSpeed;
     public float KnockbackTimer => GorbStats.knockbackTimer;
 
+    public Vector3 LastKBDirection = Vector3.zero;
+    public delegate void OnDamageKB(float amt, Vector3 dir);
+    public OnDamageKB onDamageKB;
+
     private void OnEnable()
     {
         //enable AI
@@ -345,73 +349,99 @@ public class EnemyStateMachine : StateMachine
         {
             if (ps != null)
             {//nullify the parent so the particles persist after death
-                UnityEngine.Object.Instantiate(ps, transform.position, Quaternion.identity).transform.parent = null;
+                Instantiate(ps, transform.position, Quaternion.identity).transform.parent = null;
 
             }
         }
         Destroy(this.gameObject);
     }
 
-    void OnDamage()
+    void OnDamage(float amount, Vector3 dir)
     {
-        Debug.Log("Player is reacting to damage");
+        if (currentState != KnockbackState)
+        {
+            IsDamaged = true;
+            foreach (ParticleSystem ps in OnHitParticles)
+            {
+                if (ps != null)
+                {
+                    Instantiate(ps, transform.position, Quaternion.identity);
+                }
+            }
+        }
+        LastKBDirection = dir;
+        onDamageKB?.Invoke(amount,dir);
     }
-
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        
-
-        if (collision.CompareTag("PlayerHitBox"))
+        Debug.Log("HELLO WORLD" + collision.name);
+        if (collision.CompareTag("PlayerHurtBox"))
         {
-            IDamageable damageable = null;
-            if (collision.gameObject.TryGetComponent<IDamageable>(out damageable))
+            IDamageable damageable;
+            if (collision.gameObject.TryGetComponent(out damageable))
             {
-                //Debug.LogWarning(damageable);
-                damageable.Damage(AttackDamage);
+                Debug.LogWarning(damageable);
+                var collisionPoint = collision.ClosestPoint(transform.position);
+                damageable.Damage(AttackDamage,  collisionPoint - new Vector2(transform.position.x, transform.position.y));
                 Debug.Log(this.name + " is Damaging the Player for " + AttackDamage);
             }
         }
 
         else if (collision.CompareTag("PlayerAttack"))
         {
-            if (currentState != KnockbackState)
-            {
-                if (this.transform.position.x - collision.transform.position.x > 0f)
-                {
-                    damageDirection = 1;
-                }
-                else { damageDirection = -1; }
-                IsDamaged = true;
-                foreach (ParticleSystem ps in OnHitParticles)
-                {
-                    if (ps != null)
-                    {
-                        UnityEngine.Object.Instantiate(ps, transform.position, Quaternion.identity);
-                    }
-                }
-            }
+
         }
+    }
+
+    public void PickNextMovePoint()
+    {
+        // Move to the next move point
+        if (currentMovePointIndex >= movePoints.Count - 1)
+        {
+            currentMovePointIndex = 0;
+        }
+        else
+        {
+            currentMovePointIndex++;
+        }
+        targetObject = movePoints[currentMovePointIndex].gameObject;
     }
 
     public void OnCollisionStay2D(Collision2D collision)
     {
-        if (ContextUtils.CheckIfGrounded(collision))
+        
+
+        if(collision.gameObject.tag == "Ground")
         {
-            isGrounded = true;
-            animator.SetBool("InAir", false);
+            if (ContextUtils.CheckIfGrounded(collision))
+            {
+                isGrounded = true;
+                animator.SetBool("InAir", false);
+            }
+            else
+            {
+                isGrounded = false;
+                animator.SetBool("InAir", true);
+            }
         }
-        else
+    }
+
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag == "Enemy")
         {
-            isGrounded = false;
-            animator.SetBool("InAir", true);
+            PickNextMovePoint();
         }
     }
     public void OnCollisionExit2D(Collision2D collision)
     {
-        if (!ContextUtils.CheckIfGrounded(collision))
+        if(collision.gameObject.tag == "Ground")
         {
-            isGrounded = false;
-            animator.SetBool("InAir", true);
+            if (!ContextUtils.CheckIfGrounded(collision))
+            {
+                isGrounded = false;
+                animator.SetBool("InAir", true);
+            }
         }
     }
 }

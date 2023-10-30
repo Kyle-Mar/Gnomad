@@ -21,16 +21,7 @@ public class EnemyIdleState : EnemyBaseState
             // Wait for timer to be done
             if (timerChangeState <= 0.0f)
             {
-                // Move to the next move point
-                if (context.currentMovePointIndex >= context.movePoints.Count - 1)
-                {
-                    context.currentMovePointIndex = 0;
-                }
-                else
-                {
-                    context.currentMovePointIndex++;
-                }
-                context.targetObject = context.movePoints[context.currentMovePointIndex].gameObject;
+                context.PickNextMovePoint();
                 SwitchState(context.MoveState);
             }
         }

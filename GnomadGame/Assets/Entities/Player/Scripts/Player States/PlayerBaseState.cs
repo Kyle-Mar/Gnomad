@@ -13,7 +13,19 @@ public abstract class PlayerBaseState: BaseState
     public PlayerBaseState(StateMachine psm) : base(psm)
     {
         context = psm as PlayerStateMachine;
+        context.onDamageKB += OnDamageKB;
         currentSubState = base.currentSubState as PlayerBaseState;
         currentSuperState = base.currentSuperState as PlayerBaseState;
+    }
+
+    public virtual void OnDamageKB(float amount, Vector3 dir)
+    {
+        if(this != context.CurrentState)
+        {
+            return;
+        }
+        Debug.Log("OUCH KB!");
+        SwitchState(context.KnockbackState);
+
     }
 }

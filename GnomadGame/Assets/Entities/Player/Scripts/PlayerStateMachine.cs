@@ -26,6 +26,7 @@ public class PlayerStateMachine : StateMachine
     public PlayerGPBounceState GPBounceState;
     public PlayerDashState DashState;
     public PlayerBackflipState BackflipState;
+    public PlayerKnockbackState KnockbackState;
     public PlayerControls Controls;
 
     LayerMask groundLayerMask;
@@ -86,6 +87,10 @@ public class PlayerStateMachine : StateMachine
     public bool WallSlideExpired => wallSlideExpired;
     public Vector2 LastMovementDirection => lastMovementDirection;
     public float CurrentMoveSpeed => currentMoveSpeed;
+
+    public Vector3 LastKBDirection = Vector3.zero;
+    public delegate void OnDamageKB(float amt, Vector3 dir);
+    public OnDamageKB onDamageKB;
 
 
     private void OnEnable()
@@ -228,25 +233,22 @@ public class PlayerStateMachine : StateMachine
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (ContextUtils.CheckIfGrounded(collision))
-        {
-            //Debug.Log("I AM GROUNDED PLAYER");
-            isGrounded = true;
-            wallSlideExpired = false;
-            canDash = true;
-        }
-        else
-        {
-            if (isGrounded)
-            {
-                StartCoroutine(StartCoyoteTimer());
-            }
-            isGrounded = false;
-        }
-        
-
         if (collision.transform.tag == "Ground")
         {
+            if (ContextUtils.CheckIfGrounded(collision))
+            {
+                isGrounded = true;
+                wallSlideExpired = false;
+                canDash = true;
+            }
+            else
+            {
+                if (isGrounded)
+                {
+                    StartCoroutine(StartCoyoteTimer());
+                }
+                isGrounded = false;
+            }
             foreach (ContactPoint2D contact in collision.contacts)
             {
                 float angle = Vector2.SignedAngle(Vector2.up, contact.normal);
@@ -279,15 +281,17 @@ public class PlayerStateMachine : StateMachine
         }
     }
 
-    public void UpdateComponentsDirection()
+    public void UpdateComponentsDirection(bool flipDirection=false)
     {
         Vector2 sliderHitboxOffset = SlideCollider.GetComponent<BoxCollider2D>().offset;
         Vector2 slashHitboxOffset = SlashCollider.GetComponent<PolygonCollider2D>().offset;
 
         //SpriteRenderer.flipX = !SpriteRenderer.flipX;
-
+        float facingDirection = LastMovementDirection.x;
         Vector3 tmp = SpriteRenderer.gameObject.transform.localScale;
-        transform.localScale = new Vector2(LastMovementDirection.x, tmp.y);
+        if (flipDirection) { facingDirection *= -1; }
+
+        transform.localScale = new Vector2(facingDirection, tmp.y);
         //HatSpriteRenderer.flipX = !HatSpriteRenderer.flipX;
         //SlideCollider.GetComponent<BoxCollider2D>().offset = new Vector2(-1 * sliderHitboxOffset.x, sliderHitboxOffset.y);
         //SlideCollider.transform.localScale = new Vector2(SlideCollider.transform.localScale.x*-1, SlideCollider.transform.localScale.y);
@@ -336,6 +340,7 @@ public class PlayerStateMachine : StateMachine
         GPBounceState = new PlayerGPBounceState(this);
         DashState = new PlayerDashState(this);
         BackflipState = new PlayerBackflipState(this);
+        KnockbackState = new PlayerKnockbackState(this);
     }
 
     void DieHealth()
@@ -347,7 +352,7 @@ public class PlayerStateMachine : StateMachine
         }
     }
 
-    void OnDamage()
+    void OnDamage(float amount, Vector3 dir)
     {
         foreach (ParticleSystem ps in HurtParticles)
         {
@@ -356,6 +361,8 @@ public class PlayerStateMachine : StateMachine
                 Object.Instantiate(ps, transform.position, Quaternion.identity);
             }
         }
+        LastKBDirection = dir;
+        onDamageKB?.Invoke(amount, dir);
     }
 
     void PrintDebugInfo(InputAction.CallbackContext cxt)

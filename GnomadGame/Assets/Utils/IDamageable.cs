@@ -9,9 +9,9 @@ public interface IDamageable
     public float Health { get; set; }
     public bool CanTakeDamage { get; set; }
 
-    public void Damage(float amount)
+    public void Damage(float amount, Vector3? dir = null)
     {
-        HealthUtil.Damage(this, amount);
+        HealthUtil.Damage(this, amount, dir);
     }
     public void Heal(float amount)
     {
@@ -23,7 +23,7 @@ public interface IDamageable
 
 public static class HealthUtil
 {
-    public static void Damage(this IDamageable dmg, float amount)
+    public static void Damage(this IDamageable dmg, float amount, Vector3? dir = null)
     {
         if (!dmg.CanTakeDamage)
         {
