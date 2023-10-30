@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class EnemyFallState : EnemyBaseState
 {
+
+    Vector2 currentVelocity = Vector2.zero;
+
     public EnemyFallState(EnemyStateMachine esm) : base(esm)
     {
         isRootState = true;
@@ -25,6 +28,7 @@ public class EnemyFallState : EnemyBaseState
     {
         //throw new System.NotImplementedException();
         context.animator.SetBool("InAir", true);
+        currentVelocity = context.rb.velocity;
         InitializeSubState();
     }
 
@@ -32,12 +36,14 @@ public class EnemyFallState : EnemyBaseState
     {
         context.animator.SetBool("InAir", false);
         Physics2D.gravity = new(0, -9.8f);
+        SetSubState(context.IdleState);
         //throw new System.NotImplementedException();
     }
 
     public override void FixedUpdateState()
     {
         //throw new System.NotImplementedException();
+        context.rb.velocity = new(currentVelocity.x, context.rb.velocity.y + (MovementStats.fallSpeed * Time.fixedDeltaTime * 1.25f));
     }
 
     public override void InitializeSubState()
@@ -51,7 +57,7 @@ public class EnemyFallState : EnemyBaseState
         }
         else
         {
-            SetSubState(context.IdleState);
+            SetSubState(null);
         }
     }
 
@@ -60,7 +66,6 @@ public class EnemyFallState : EnemyBaseState
         //Debug.Log("HELLO WORLD");
 
         //Debug.Log(context.animator.GetBool("InAir"));
-        Physics2D.gravity = new(0, context.FallSpeed);
         CheckSwitchStates();
 
         //context.rb.velocity = Vector2.Lerp(context.rb.velocity, new Vector2(context.rb.velocity.x, MovementStats.fallSpeed), Utils.GetInterpolant(10f));

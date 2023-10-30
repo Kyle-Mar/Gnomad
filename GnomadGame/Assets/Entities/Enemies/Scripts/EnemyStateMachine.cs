@@ -60,6 +60,8 @@ public class EnemyStateMachine : StateMachine
 
     [SerializeField] private float attackCooldownTimer = 0f;
 
+    [SerializeField] public bool isSlidedInto = false;
+
     [Header("Components")]
 
     public Collider2D col;
@@ -92,6 +94,8 @@ public class EnemyStateMachine : StateMachine
 
     public bool IsDamaged { get { return isDamaged; } set { isDamaged = value; } }
 
+    public bool IsSlidedInto { get { return isSlidedInto; } set { isSlidedInto = value; } }
+
     //public Vector2 LastMovementDirection { get { return lastMovementDirection; } set { lastMovementDirection = value; } }
     public float CurrentMoveSpeed => currentMoveSpeed;
 
@@ -113,6 +117,8 @@ public class EnemyStateMachine : StateMachine
     public Vector3 LastKBDirection = Vector3.zero;
     public delegate void OnDamageKB(float amt, Vector3 dir);
     public OnDamageKB onDamageKB;
+
+    
 
     private void OnEnable()
     {
@@ -368,6 +374,7 @@ public class EnemyStateMachine : StateMachine
                 }
             }
         }
+        
         LastKBDirection = dir;
         onDamageKB?.Invoke(amount,dir);
     }
@@ -383,9 +390,10 @@ public class EnemyStateMachine : StateMachine
             }
         }
 
-        else if (collision.CompareTag("PlayerAttack"))
+        // Temporary
+        else if (collision.name == "Slide Collider")
         {
-
+            IsSlidedInto = true;
         }
     }
 
