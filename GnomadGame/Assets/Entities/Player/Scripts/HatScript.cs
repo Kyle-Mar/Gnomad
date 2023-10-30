@@ -52,11 +52,11 @@ public class HatScript : MonoBehaviour
                 {
                     if (collisionPoint.x - transform.position.x < 0)
                     {
-                        damageable.Damage(MovementStats.baseSlashDamage, new Vector2(0.25f * 1f, 3.5f));
+                        damageable.Damage(MovementStats.baseSlashDamage, new Vector2(0.25f * 1f, 4.0f));
                     }
                     else
                     {
-                        damageable.Damage(MovementStats.baseSlashDamage, new Vector2(0.25f * -1f, 3.5f));
+                        damageable.Damage(MovementStats.baseSlashDamage, new Vector2(0.25f * -1f, 4.0f));
                     }
                 }
                 else
