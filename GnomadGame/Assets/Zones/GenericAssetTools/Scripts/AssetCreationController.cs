@@ -53,7 +53,7 @@ public class AssetCreationController : MonoBehaviour
             if (tmp.TryGetComponent(out spriteRenderer))
             {
                 spriteRenderer.sprite = sprites[i];
-                PrefabUtility.SaveAsPrefabAsset(tmp, "Assets/Zones/GenericAssetTools/AssetTemplatePrefabs/AutomaticallyGeneratedPrefabs/" + sprites[i].name + ".prefab");
+                PrefabUtility.SaveAsPrefabAsset(tmp, "Assets/Zones/GenericAssetTools/PropPrefabs/AutomaticallyGeneratedPrefabs/" + sprites[i].name + ".prefab");
                 DestroyImmediate(tmp);
             }
             else

@@ -11,7 +11,7 @@ using UnityEngine.UIElements;
 
 public class EnvironmentEditor : EditorWindow
 {
-    private static string prefabFolderPath = "Assets/Zones/ForestZone/Environmental Assets/Elements";
+    private static string prefabFolderPath = "Assets/Zones/ForestZone/Environmental Assets/Elements/EnvironmentEditorPool";
     private List<GameObject> prefabList = new List<GameObject>();
     private Vector2 scrollPosition;
     private GameObject selectedBrush;
