@@ -32,7 +32,7 @@ public class EnemyKnockbackState : EnemyBaseState
         //throw new System.NotImplementedException();
         InitializeSubState();
         knockbackTimer = context.KnockbackTimer;
-        initialKnockbackDirection = context.LastKBDirection.normalized;
+        initialKnockbackDirection = context.LastKBDirection;
         if (initialKnockbackDirection.x < 0.5f && initialKnockbackDirection.x > -0.5f)
         {
             initialKnockbackDirection.x = 0.5f * Mathf.Sign(initialKnockbackDirection.x);

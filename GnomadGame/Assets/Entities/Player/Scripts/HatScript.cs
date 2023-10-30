@@ -38,7 +38,7 @@ public class HatScript : MonoBehaviour
             if (collision.gameObject.TryGetComponent<IDamageable>(out damageable))
             {
                 var collisionPoint = collision.ClosestPoint(transform.position);
-                damageable.Damage(MovementStats.baseSlashDamage, new Vector2(collisionPoint.x - transform.position.x, .5f));
+                damageable.Damage(MovementStats.baseSlashDamage, new Vector2(0f, 2f));
                 Debug.Log("Damaging Enemy");
             }
         }
