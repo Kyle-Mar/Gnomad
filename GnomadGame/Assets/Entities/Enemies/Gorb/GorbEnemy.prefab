@@ -245,6 +245,7 @@ MonoBehaviour:
   - {fileID: 6970482471691421841, guid: 3e0ee47e2dab2d7478e497d22120e697, type: 3}
   OnDeathParticles:
   - {fileID: 6970482471691421841, guid: a9a8a7a62fd2fcd4484ccbf09a2e9495, type: 3}
+  LastKBDirection: {x: 0, y: 0, z: 0}
 --- !u!114 &6578426276248700629
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -298,7 +299,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   esm: {fileID: 5393304967517252571}
-  viewRadius: 10
+  viewRadius: 15
   viewAngle: 360
   lookingForTargetObject: 0
   timeSinceLastSeen: 0
