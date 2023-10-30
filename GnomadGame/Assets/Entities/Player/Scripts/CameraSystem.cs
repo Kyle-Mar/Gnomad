@@ -12,6 +12,7 @@ public class CameraSystem : MonoBehaviour
     [SerializeField] Transform playerTransform;
     [SerializeField] BoxCollider2D playerCollider;
     [SerializeField] Rigidbody2D playerRB;
+    [SerializeField] PlayerStateMachine psm;
     [SerializeField] CompositeCollider2D boundingArea;
     [Header("Camera Details")]
     [SerializeField] Camera mainCamera;
@@ -56,6 +57,7 @@ public class CameraSystem : MonoBehaviour
         Assert.IsNotNull(playerTransform);
         Assert.IsNotNull(playerRB);
         Assert.IsNotNull(playerCollider);
+        Assert.IsNotNull(psm);
         desiredPosition = GetCameraPosFromPlayerPos();
         currentAnticipation = GetAnticipationVector();
         originalPosition = transform.position;
@@ -136,15 +138,20 @@ public class CameraSystem : MonoBehaviour
     void UpdateYPos()
     {
         Vector3 playerPos = GetComponent<Camera>().WorldToViewportPoint(playerTransform.position);
+        if(psm.CurrentState == psm.GroundedState)
+        {
+            originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
+            return;
+        }
         if (playerRB.velocity.y < -15.5f)
         {
             originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
             return;
-
         }
         if(playerPos.y < yDeadzone.x)
         {
             originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
+            return;
         }
         if (playerPos.y < yDeadzone.y)
         {
@@ -211,7 +218,6 @@ public class CameraSystem : MonoBehaviour
             return;
         }
         this.boundingCollider = boundingCollider;
-        Debug.Log("Hello from Camera System");
     }
 
     Vector3 GetAllowedDelta(Vector3 desiredDelta)

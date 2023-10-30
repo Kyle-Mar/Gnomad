@@ -26,7 +26,6 @@ public class EnemyFallState : EnemyBaseState
 
     public override void EnterState()
     {
-        Debug.Log("HELLO I AM FALLING");
         //throw new System.NotImplementedException();
         context.animator.SetBool("InAir", true);
         currentVelocity = context.rb.velocity;

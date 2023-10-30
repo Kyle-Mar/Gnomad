@@ -147,7 +147,6 @@ public class EnemyStateMachine : StateMachine
         if (movePoints.Count <= 0)
         {
             // If there aren't create them at a good common offset
-            Debug.Log("TEST");
             var mp = new GameObject("MovePoint0");
             mp.transform.parent = gameObject.transform.parent;
             mp.transform.position = new(transform.position.x + 5, transform.position.y, transform.position.z);
@@ -381,16 +380,13 @@ public class EnemyStateMachine : StateMachine
     }
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("HELLO WORLD" + collision.name);
         if (collision.CompareTag("PlayerHurtBox"))
         {
             IDamageable damageable;
             if (collision.gameObject.TryGetComponent(out damageable))
             {
-                Debug.LogWarning(damageable);
                 var collisionPoint = collision.ClosestPoint(transform.position);
                 damageable.Damage(AttackDamage,  collisionPoint - new Vector2(transform.position.x, transform.position.y));
-                Debug.Log(this.name + " is Damaging the Player for " + AttackDamage);
             }
         }
 

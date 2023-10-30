@@ -27,7 +27,6 @@ public class EnemyGroundedState : EnemyBaseState
     {
         InitializeSubState();
         context.animator.SetBool("InAir", false);
-        Debug.Log("HELLO WORLD ENEMY AM GROUNDED!");
         //context.rb.velocity = new(context.rb.velocity.x, 0);
         //Object.Instantiate(context.LandParticles, context.Feet.position, Quaternion.identity);
     }

@@ -40,7 +40,6 @@ public class PlayerGroundedState : PlayerBaseState
     public override void EnterState()
     {
         InitializeSubState();
-        Debug.Log("HELLO WORLD I AM GROUNDED!");
         //context.rb.velocity = new(context.rb.velocity.x, 0);
         Object.Instantiate(context.LandParticles, context.Feet.position, Quaternion.identity);
     }

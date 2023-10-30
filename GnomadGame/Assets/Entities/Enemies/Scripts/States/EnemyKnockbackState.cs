@@ -44,7 +44,6 @@ public class EnemyKnockbackState : EnemyBaseState
                 initialKnockbackDirection.y = 0.5f * Mathf.Sign(initialKnockbackDirection.y);
             }
         }
-        Debug.Log("Initial Knockback Direction + " + initialKnockbackDirection);
         context.rb.velocity = initialKnockbackDirection * 27.5f;
         currentKnockbackVelocity = context.rb.velocity;
 

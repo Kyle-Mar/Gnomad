@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e997813291397d447b4696137b8c0e96, type: 3}
+  m_Name: PosterRoom
+  m_EditorClassIdentifier: 
+  scene:
+    asset: {fileID: 102900000, guid: c3c9563b2d36b2044a679169ac329717, type: 3}
+    guid: c3c9563b2d36b2044a679169ac329717
+  adjacentScenes:
+  - {fileID: 11400000, guid: 98da1b3ef271d7848b078f086b645d35, type: 2}
+  DoorPositions:
+  - {x: 28, y: 0.5, z: 0}
+  DoorConnections:
+    m_keys: 00000000
+    m_values: 01000000
