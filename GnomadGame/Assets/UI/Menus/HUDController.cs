@@ -63,7 +63,6 @@ public class HUDController : MonoBehaviour
 
     public void UIRemoveHealth(float amount, Vector3 dir)
     {
-        Debug.Log("OUCH");
 
         UpdateUIHealth();
     }
