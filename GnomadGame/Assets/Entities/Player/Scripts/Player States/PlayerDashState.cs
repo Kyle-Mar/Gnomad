@@ -47,7 +47,10 @@ public class PlayerDashState : PlayerBaseState
         context.Animator.SetTrigger("DashTrigger");
         context.Animator.SetBool("Dashing", true);
         context.CanDash = false;
-
+        if (context.IsTouchingWall) {
+            initialMovementDir *= -1;
+            context.UpdateComponentsDirection(true);
+        }
         dashEndTime = Time.time + MovementStats.dashDuration;
         context.rb.velocity = new Vector2(MovementStats.dashSpeed * initialMovementDir.x, 0);
     }
