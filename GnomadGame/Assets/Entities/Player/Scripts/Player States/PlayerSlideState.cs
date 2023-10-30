@@ -11,6 +11,7 @@ public class PlayerSlideState : PlayerBaseState
     bool sliding = true;
     float verticalBounceEndTime;
     public float TryingToTurn;
+    float timeSinceStart = 0f;
 
     public PlayerSlideState(PlayerStateMachine psm) : base(psm)
     {
@@ -57,12 +58,13 @@ public class PlayerSlideState : PlayerBaseState
         initialMovementDir = context.LastMovementDirection;
         sliding = true;
 
-        context.SlideCollider.gameObject.SetActive(true);
+        //context.SlideCollider.gameObject.SetActive(true);
 
         slideEndTime = Time.time + MovementStats.slideDuration;
         verticalBounceEndTime = Time.time + MovementStats.slideVerticalBounceDuration;
         context.rb.velocity = new Vector2(MovementStats.slideSpeedX * initialMovementDir.x, MovementStats.slideVerticalBounce);
         context.Animator.SetTrigger("SlideTrigger");
+        timeSinceStart = 0f;
     }
 
     public override void ExitState()
@@ -101,6 +103,12 @@ public class PlayerSlideState : PlayerBaseState
 
     public override void UpdateState()
     {
+        timeSinceStart += Time.deltaTime;
+        if (!context.SlideCollider.gameObject.activeInHierarchy && timeSinceStart >= 0.05f)
+        {
+            context.SlideCollider.gameObject.SetActive(true);
+            Debug.LogWarning("Set To True");
+        }
         CheckSwitchStates();
     }
 

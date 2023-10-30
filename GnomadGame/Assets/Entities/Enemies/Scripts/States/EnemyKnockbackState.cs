@@ -67,7 +67,7 @@ public class EnemyKnockbackState : EnemyBaseState
         }
         else
         {
-            context.rb.velocity = currentKnockbackVelocity + new Vector3(0,  (MovementStats.fallSpeed * Time.fixedDeltaTime * 0.5f));
+            context.rb.velocity = currentKnockbackVelocity + new Vector3(0,  (MovementStats.fallSpeed * Time.fixedDeltaTime * 0.43f));
         }
         currentKnockbackVelocity = context.rb.velocity;
     }
