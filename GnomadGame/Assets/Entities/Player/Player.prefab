@@ -1174,6 +1174,8 @@ MonoBehaviour:
   inCoyoteRange: 0
   lastMovementDirection: {x: 0, y: 0}
   jumpBufferTime: 0
+  leftInputBufferTime: 0
+  rightInputBufferTime: 0
   currentMoveSpeed: 9.5
   col: {fileID: 0}
   rb: {fileID: 0}
@@ -1244,7 +1246,7 @@ MonoBehaviour:
   graphicRaycaster: {fileID: 0}
   eventSystem: {fileID: 0}
   backpackRectTransform: {fileID: 0}
-  backpack: {fileID: 0}
+  backpack: {fileID: 1209577016253726563}
   canvas: {fileID: 0}
   isOpen: 0
   jasonItem: {fileID: 11400000, guid: b4da248e18cb8d944a56f6e9c62221d0, type: 2}
@@ -1745,6 +1747,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eda28a2c191018249b8baa38c4cbff99, type: 3}
+--- !u!1 &1209577016253726563 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4428942495922704742, guid: eda28a2c191018249b8baa38c4cbff99, type: 3}
+  m_PrefabInstance: {fileID: 3296498996727344645}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1209577016892264311 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4428942497163141490, guid: eda28a2c191018249b8baa38c4cbff99, type: 3}

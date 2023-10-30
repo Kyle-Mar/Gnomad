@@ -22,6 +22,12 @@ public class PlayerFallState : PlayerBaseState
             SwitchState(context.GroundedState);
             return;
         }
+        if(context.DoWallSlide() && context.JumpBufferTime > 0f)
+        {
+            SwitchState(context.WallJumpState);
+            context.ConsumeJumpBuffer();
+            return;
+        }
         if (context.DoWallSlide())
         {
             SwitchState(context.WallSlideState);
