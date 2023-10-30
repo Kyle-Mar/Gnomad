@@ -9,26 +9,34 @@ using UnityEngine.UI;
 public class HUDController : MonoBehaviour
 {
     [SerializeField] private GameObject player;
-
     [SerializeField] private Sprite fullHeartSprite, emptyHeartSprite;
     [SerializeField] private GameObject heartContainer;
 
+    [SerializeField] private Sprite[] flaskLevels;
+    [SerializeField] private GameObject flaskContainer;
+
 
     private Health playerHealth;
+    private Flask playerFlask;
     public List<GameObject> hearts = new();//if this does not behave correctly, try UnityEngine.UIElements.Image
+    private GameObject flaskObject;
 
     private void Awake()
     {
         Assert.IsNotNull(player);
+        Assert.IsTrue(flaskLevels.Length == 4);
         // Moved Player Health Component into a new GameObject
         playerHealth = player.GetComponentInChildren<Health>();
+        playerFlask = player.GetComponent<Flask>();
         PopulateUIHearts();
+        CreateFlask();
     }
 
     private void OnEnable()
     {
         playerHealth.onDamage += UIRemoveHealth;
         playerHealth.onHeal += UIAddHealth;
+        playerFlask.onFlaskUpdate += UpdateUIFlask;
     }
 
     private void PopulateUIHearts()
@@ -41,9 +49,25 @@ public class HUDController : MonoBehaviour
         }
     }
 
+    void CreateFlask()
+    {
+        GameObject imgObject = new GameObject("Flask");
+        Image image = imgObject.AddComponent<Image>();
+        
+        //Get Max level flask
+        image.sprite = flaskLevels[3];
+        imgObject.transform.SetParent(flaskContainer.transform);
+        if (imgObject.TryGetComponent(out RectTransform rect))
+        {
+            rect.sizeDelta = new(500, 500);
+            rect.anchoredPosition = Vector2.zero;
+        }
+        flaskObject = imgObject;
+    }
+
     private void CreateHeart(bool heartFull)
     {
-        GameObject imgObject = new GameObject();
+        GameObject imgObject = new GameObject("Heart");
         Image newImage = imgObject.AddComponent<Image>();
         if(imgObject.TryGetComponent(out RectTransform rect))
         {
@@ -56,14 +80,11 @@ public class HUDController : MonoBehaviour
         { newImage.sprite = fullHeartSprite; }
         else 
         { newImage.sprite = emptyHeartSprite; }
-
         hearts.Add(imgObject);
     }
 
-
     public void UIRemoveHealth(float amount, Vector3 dir)
     {
-
         UpdateUIHealth();
     }
     public void UIAddHealth(float amount, Vector3 dir)
@@ -74,6 +95,7 @@ public class HUDController : MonoBehaviour
     private void UpdateUIHealth()
     {
         int playerCurrentHealth = (int)playerHealth.health;
+        Debug.Log(playerCurrentHealth);
         //int playerMaxHealth = (int)playerHealth.MaxHealth;
 
         for (int i = 0; i < hearts.Count; i++)
@@ -81,12 +103,16 @@ public class HUDController : MonoBehaviour
             if (i > playerHealth.MaxHealth) { return; }
             if (i >= playerCurrentHealth) { 
                 hearts[i].GetComponent<Image>().sprite = emptyHeartSprite;
-                hearts[i].name = "EMPTY";
             }
             else{ 
                 hearts[i].GetComponent<Image>().sprite = fullHeartSprite; 
             }
         }
+    }
+
+    void UpdateUIFlask()
+    {
+        flaskObject.GetComponent<Image>().sprite = flaskLevels[playerFlask.FlaskLevel];
     }
 
 }
