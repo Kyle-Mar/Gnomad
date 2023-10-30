@@ -217,7 +217,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8983253026821217788, guid: b25a01fe7eb1a424c922be7161d36a12, type: 3}
       propertyPath: m_Name
-      value: Random Sprite Seed
+      value: Forest Sprite Seed
       objectReference: {fileID: 0}
     - target: {fileID: 8983253026821217788, guid: b25a01fe7eb1a424c922be7161d36a12, type: 3}
       propertyPath: m_IsActive
@@ -276,9 +276,9 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.484375, y: 0.7265625}
+  m_Size: {x: 0.1875, y: 0.1640625}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1

@@ -21,6 +21,7 @@ public class EnvironmentEditor : EditorWindow
     private int currentLayer = 4;
     private int prefabButtonSize = 128;
     GUIContent currentLayerIcon;
+    bool paintBehind = true;
     private int CurrentLayer
     {
         get { return currentLayer; }
@@ -51,6 +52,7 @@ public class EnvironmentEditor : EditorWindow
         initializeLayers();
         SceneView.duringSceneGui += OnSceneGUI;
         rotateMode = false;
+        paintBehind = true;
         prefabHistory = new Stack<GameObject>();
 
 
@@ -151,6 +153,10 @@ public class EnvironmentEditor : EditorWindow
             lastPlacedPref = PrefabUtility.InstantiatePrefab(selectedBrush) as GameObject;
             lastPlacedPref.transform.position = GetMousePosition();
             lastPlacedPref.transform.parent = layersList[CurrentLayer].transform.GetChild(0);
+            if (paintBehind)
+            {
+                lastPlacedPref.transform.SetAsFirstSibling();
+            }
             if (prefabHistory.Count > 40)
             {//remove first item
                 prefabHistory.Reverse();
@@ -255,12 +261,25 @@ public class EnvironmentEditor : EditorWindow
         {
             CurrentLayer = CurrentLayer - 1;
             Debug.Log(layersList[CurrentLayer].name);
+            foreach (GameObject l in layersList)
+            {
+                if (l == layersList[currentLayer]) { l.hideFlags = HideFlags.None; }
+                l.hideFlags = HideFlags.NotEditable;
+            }
+            EditorApplication.RepaintHierarchyWindow();
             drawStateIcons();
+
         }
         if (e.type == EventType.KeyDown && e.keyCode == KeyCode.Equals)
         {
             CurrentLayer = CurrentLayer + 1;
             Debug.Log(layersList[CurrentLayer].name);
+            foreach (GameObject l in layersList)
+            {
+                if (l == layersList[currentLayer]) { l.hideFlags = HideFlags.None; }
+                l.hideFlags = HideFlags.NotEditable;
+            }
+            EditorApplication.RepaintHierarchyWindow();
             drawStateIcons();
         }
 
@@ -272,7 +291,7 @@ public class EnvironmentEditor : EditorWindow
         {
             if (Selection.activeTransform != null)
             {
-                Selection.activeTransform.SetSiblingIndex(lastPlacedPref.transform.GetSiblingIndex() - 1);
+                Selection.activeTransform.SetSiblingIndex(Selection.activeTransform.GetSiblingIndex() - 1);
             }
             else
             {
@@ -283,7 +302,7 @@ public class EnvironmentEditor : EditorWindow
         {
             if (Selection.activeTransform != null)
             {
-                Selection.activeTransform.SetSiblingIndex(lastPlacedPref.transform.GetSiblingIndex() + 1);
+                Selection.activeTransform.SetSiblingIndex(Selection.activeTransform.GetSiblingIndex() + 1);
             }
             else
             {
@@ -296,6 +315,18 @@ public class EnvironmentEditor : EditorWindow
             selectedBrush = lastBrush;
             lastBrush = tmp;
         }
+        if(e.type == EventType.KeyDown && e.keyCode == KeyCode.L)
+        {
+            if (Selection.activeTransform != null)
+            {
+                Selection.activeTransform.GetComponent<SpriteRenderer>().flipX = !Selection.activeTransform.GetComponent<SpriteRenderer>().flipX;
+            }
+            else
+            {
+                lastPlacedPref.transform.GetComponent<SpriteRenderer>().flipX = !lastPlacedPref.transform.GetComponent<SpriteRenderer>().flipX;
+            }
+        }
+        
     }
 
     //draws icons for current brush, current layer, etc
