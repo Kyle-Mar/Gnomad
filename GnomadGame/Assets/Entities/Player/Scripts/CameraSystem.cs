@@ -218,7 +218,6 @@ public class CameraSystem : MonoBehaviour
             return;
         }
         this.boundingCollider = boundingCollider;
-        Debug.Log("Hello from Camera System");
     }
 
     Vector3 GetAllowedDelta(Vector3 desiredDelta)

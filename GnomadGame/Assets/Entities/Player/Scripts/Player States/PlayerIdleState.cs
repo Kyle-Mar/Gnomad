@@ -37,7 +37,6 @@ public class PlayerIdleState : PlayerBaseState
     {
         if ((context.Controls.Player.Slash.WasPressedThisFrame() || context.IsSlashing) && context.CheckCanSlash())
         {
-            Debug.Log("SLASHING");
             SetSubState(context.SlashState);
         }
         else

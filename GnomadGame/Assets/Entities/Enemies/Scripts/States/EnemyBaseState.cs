@@ -21,7 +21,6 @@ public abstract class EnemyBaseState : BaseState
         {
             return;
         }
-        Debug.Log("OUCH KB!");
         SwitchState(context.KnockbackState);
     }
 }

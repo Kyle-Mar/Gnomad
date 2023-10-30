@@ -53,11 +53,9 @@ namespace Entities.Player.Inventory {
             backpackRectTransform = backpack.GetComponent<RectTransform>();
             if(data.PlaceItem(jasonItem, new(0, 0)))
             {
-                Debug.Log("HELLO WORLD");
             }
             else
             {
-                Debug.Log(jasonItem);
             }
 
 
@@ -328,7 +326,6 @@ namespace Entities.Player.Inventory {
 
         public static Vector3 GetNewItemLocalPosition(Vector3 backpackTopLeftCorner, Vector2 itemSize, Vector2 cellSize, Vector2 pivot, int row, int col)
         {
-            Debug.Log((backpackTopLeftCorner.x + cellSize.x * row) + " + " + (backpackTopLeftCorner.y - cellSize.y * col - itemSize.y, 1));
             return new Vector3(backpackTopLeftCorner.x + (cellSize.x * row) + (itemSize.x * pivot.x), backpackTopLeftCorner.y - (cellSize.y * col) + (itemSize.y * pivot.y ) - itemSize.y, 1);
             //+cellSize.x * col + itemSize.x / 2
         }
