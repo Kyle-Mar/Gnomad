@@ -378,7 +378,7 @@ public class EnemyStateMachine : StateMachine
         LastKBDirection = dir;
         onDamageKB?.Invoke(amount,dir);
     }
-    public void OnTriggerEnter2D(Collider2D collision)
+    public void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.CompareTag("PlayerHurtBox"))
         {
