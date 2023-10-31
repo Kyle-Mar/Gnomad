@@ -73,7 +73,8 @@ public class EnvironmentEditor : EditorWindow
             "Press 'X' to use the last brush\n" +
             "Press '-' and '+' to go back and forth between layers\n" +
             "Press '[' or ']' too change order within layer\n" + 
-            "Press 'L' I think to flip the sprite"
+            "Press 'L' to flip the sprite\n" + 
+            "Press ctrl+[ or ctrl+] switch from paint behind and paint infront"
             );
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
         //ToDo
@@ -157,7 +158,7 @@ public class EnvironmentEditor : EditorWindow
         if (e.type == EventType.MouseDown && e.button == 0 && selectedBrush != null)
         {
             lastPlacedPref = PrefabUtility.InstantiatePrefab(selectedBrush) as GameObject;
-            lastPlacedPref.transform.position = GetMousePosition();
+            lastPlacedPref.transform.position = new Vector3(GetMousePosition().x, GetMousePosition().y,0);
             lastPlacedPref.transform.parent = layersList[CurrentLayer].transform.GetChild(0);
             if (paintBehind)
             {
@@ -318,7 +319,8 @@ public class EnvironmentEditor : EditorWindow
         }
         if (e.type == EventType.KeyDown && e.keyCode == KeyCode.LeftBracket)
         {
-            if (Selection.activeTransform != null)
+            if (e.control) { paintBehind = true; }
+            else if (Selection.activeTransform != null)
             {
                 Selection.activeTransform.SetSiblingIndex(Selection.activeTransform.GetSiblingIndex() - 1);
             }
@@ -329,6 +331,8 @@ public class EnvironmentEditor : EditorWindow
         }
         if (e.type == EventType.KeyDown && e.keyCode == KeyCode.RightBracket)
         {
+            if (e.control) { paintBehind = false; }
+
             if (Selection.activeTransform != null)
             {
                 Selection.activeTransform.SetSiblingIndex(Selection.activeTransform.GetSiblingIndex() + 1);
