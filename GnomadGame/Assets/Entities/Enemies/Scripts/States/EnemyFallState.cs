@@ -16,6 +16,7 @@ public class EnemyFallState : EnemyBaseState
     {
         if (context.IsDamaged)
         {
+            context.IsVolleyed = true;
             SwitchState(context.KnockbackState);
         }
         else if (context.IsGrounded)

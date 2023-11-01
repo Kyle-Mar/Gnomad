@@ -18,7 +18,7 @@ MonoBehaviour:
   adjacentScenes:
   - {fileID: 11400000, guid: 18eb08c32e4383448b43c1d3932c3aab, type: 2}
   DoorPositions:
-  - {x: 88, y: -137, z: 0}
+  - {x: 88, y: -13, z: 0}
   DoorConnections:
     m_keys: 00000000
     m_values: 00000000

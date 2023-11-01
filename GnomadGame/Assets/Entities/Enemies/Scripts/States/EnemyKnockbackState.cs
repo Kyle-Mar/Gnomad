@@ -27,25 +27,47 @@ public class EnemyKnockbackState : EnemyBaseState
         }
     }
 
+    
+
     public override void EnterState()
     {
         //throw new System.NotImplementedException();
         InitializeSubState();
+        context.animator.SetBool("InAir", true);
         knockbackTimer = context.KnockbackTimer;
         initialKnockbackDirection = context.LastKBDirection.normalized;
-        if (!context.IsSlidedInto)
+
+        if (context.IsGrounded)
         {
-            if (initialKnockbackDirection.x < 0.5f && initialKnockbackDirection.x > -0.5f)
+
+            if (!context.IsSlidedInto)
             {
-                initialKnockbackDirection.x = 0.5f * Mathf.Sign(initialKnockbackDirection.x);
+                
+                if (initialKnockbackDirection.x < 0.5f && initialKnockbackDirection.x > -0.5f)
+                {
+                    initialKnockbackDirection.x = 0.5f * Mathf.Sign(initialKnockbackDirection.x);
+                }
+                if (initialKnockbackDirection.y < 0.5f && initialKnockbackDirection.y > -0.5f)
+                {
+                    initialKnockbackDirection.y = 0.5f * Mathf.Sign(initialKnockbackDirection.y);
+                }
+                
+                context.rb.velocity = initialKnockbackDirection * 12.5f;
             }
-            if (initialKnockbackDirection.y < 0.5f && initialKnockbackDirection.y > -0.5f)
+            else
             {
-                initialKnockbackDirection.y = 0.5f * Mathf.Sign(initialKnockbackDirection.y);
+                context.rb.velocity = initialKnockbackDirection * 27.5f;
             }
         }
-        context.rb.velocity = initialKnockbackDirection * 27.5f;
+        // Knockback for when player volleys enemy
+        else
+        {
+            context.rb.velocity = initialKnockbackDirection * 42.5f;
+        }
+        
+        //context.rb.velocity = initialKnockbackDirection * 27.5f;
         currentKnockbackVelocity = context.rb.velocity;
+        Debug.Log(initialKnockbackDirection);
 
         //context.rb.Sleep();
     }
@@ -53,10 +75,13 @@ public class EnemyKnockbackState : EnemyBaseState
     public override void ExitState()
     {
         //throw new System.NotImplementedException();
+        context.animator.SetBool("InAir", false);
         knockbackTimer = 0f;
         SetSubState(context.MoveState);
         context.IsDamaged = false;
-        
+        context.IsSlidedInto = false;
+        context.IsVolleyed = false;
+        context.volleyCol.gameObject.SetActive(false);
     }
 
     public override void FixedUpdateState()
@@ -67,7 +92,7 @@ public class EnemyKnockbackState : EnemyBaseState
         }
         else
         {
-            context.rb.velocity = currentKnockbackVelocity + new Vector3(0,  (MovementStats.fallSpeed * Time.fixedDeltaTime * 0.43f));
+            context.rb.velocity = currentKnockbackVelocity + new Vector3(0,  (MovementStats.fallSpeed * Time.fixedDeltaTime * 0.42f));
         }
         currentKnockbackVelocity = context.rb.velocity;
     }

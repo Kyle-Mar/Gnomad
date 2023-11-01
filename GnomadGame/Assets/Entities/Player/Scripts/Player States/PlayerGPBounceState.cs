@@ -15,7 +15,7 @@ public class PlayerGPBounceState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        if (context.DoWallSlide())
+        if (context.DoWallSlide().Item2)
         {
             //SwitchState(factory.WallSlide());
         }

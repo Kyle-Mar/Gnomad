@@ -47,7 +47,10 @@ public class CameraSystem : MonoBehaviour
     Vector3 middleLeft;
     Vector3 middleRight;
 
+    Vector3 playerPosViewport;
+
     float curOffset;
+
 
     LayerMask groundLayerMask;
 
@@ -81,7 +84,10 @@ public class CameraSystem : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        playerPosViewport = GetComponent<Camera>().WorldToViewportPoint(playerTransform.position);
+
         var playerPos = playerTransform.position;
+        
         Vector3 extents = playerCollider.bounds.extents;
         RaycastHit2D hitRight = Physics2D.Raycast(new Vector2(playerPos.x + extents.x, playerPos.y - extents.y),
             Vector2.down,
@@ -92,7 +98,7 @@ public class CameraSystem : MonoBehaviour
             3f,
             groundLayerMask);
 
-        if (hitRight && hitLeft)
+        if (hitRight && hitLeft && psm.CurrentState != psm.WallSlideState && psm.CurrentState != psm.WallJumpState)
         {
             curOffset = offsetY;
         }
@@ -110,8 +116,8 @@ public class CameraSystem : MonoBehaviour
                                 );
         desiredPosition = GetCameraPosFromPlayerPos() + currentAnticipation;
         desiredPosition.z = originalPosition.z;
-        desiredDelta = Vector3.Lerp(transform.position, desiredPosition, Utils.GetInterpolant(smoothingFactor)) - transform.position;
-        //Debug.Log(desiredDelta);
+        Debug.Log(playerPosViewport.y);
+        desiredDelta = Vector3.Lerp(transform.position, desiredPosition, Utils.GetInterpolant(smoothingFactor + Mathf.Abs(40 * 0.5f-playerPosViewport.y))) - transform.position;
         if (boundingCollider)
         {
             transform.position += GetAllowedDelta(desiredDelta);
@@ -137,8 +143,8 @@ public class CameraSystem : MonoBehaviour
 
     void UpdateYPos()
     {
-        Vector3 playerPos = GetComponent<Camera>().WorldToViewportPoint(playerTransform.position);
-        if(psm.CurrentState == psm.GroundedState)
+        
+        if(psm.CurrentState == psm.GroundedState || psm.CurrentState == psm.WallSlideState || psm.CurrentState == psm.WallJumpState)
         {
             originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
             return;
@@ -148,16 +154,16 @@ public class CameraSystem : MonoBehaviour
             originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
             return;
         }
-        if(playerPos.y < yDeadzone.x)
+        if(playerPosViewport.y < yDeadzone.x)
         {
             originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
             return;
         }
-        if (playerPos.y < yDeadzone.y)
+        if (playerPosViewport.y < yDeadzone.y)
         {
+           originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
            return;
         }
-        originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
     }
 
     Vector3 GetCameraPosFromPlayerPos()
@@ -173,7 +179,14 @@ public class CameraSystem : MonoBehaviour
             anticipationVector.Normalize();
             if (playerRB.velocity.y < minFallingVelocity)
             {
-                anticipationVector = Vector3.Scale(anticipationVector, new Vector3(horizontalAnticipation, verticalAnticipation * fallingAnticipationMultiplier, 0));
+                if (psm.CurrentState == psm.GroundPoundState)
+                {
+                    anticipationVector = Vector3.Scale(anticipationVector, new Vector3(horizontalAnticipation, verticalAnticipation * fallingAnticipationMultiplier, 0));
+                }
+                else
+                {
+                    anticipationVector = Vector3.Scale(anticipationVector, new Vector3(horizontalAnticipation, verticalAnticipation * fallingAnticipationMultiplier, 0));
+                }
             }
             else
             {

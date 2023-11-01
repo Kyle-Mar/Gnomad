@@ -7,10 +7,12 @@ public class Health : MonoBehaviour, IDamageable
 {
     public delegate void OnDeath();
     public OnDeath onDeath;
-    public delegate void OnDamage(float amt, Vector3 dir);
+    public delegate void OnDamage(float amt, Collider2D collider, Vector3 dir);
     public OnDamage onDamage;
     public delegate void OnHeal();
     public OnDamage onHeal;
+    public List<Collider2D> MyColliders = new();
+
 
     #region Health Properties
     [Header("Health")] // I don't know why this doesn't show up.
@@ -26,21 +28,30 @@ public class Health : MonoBehaviour, IDamageable
     public bool CanTakeDamage { get => canTakeDamage; set => canTakeDamage = value; }
     public float CooldownTime { get => cooldownTime; set => cooldownTime = value; }
     #endregion
-    public virtual void Damage(float amount, Vector3? dir = null)
+    public virtual void Damage(float amount, Collider2D collider, Vector3 dir)
     {
         if (canTakeDamage)
         {
-            HealthUtil.Damage(this, amount);
+            if(collider == null)
+            {
+                return;
+            }
+            if (MyColliders.Contains(collider))
+            {
+                return;
+            }
+            HealthUtil.Damage(this, amount, collider, dir);
             StartCoroutine(DoCooldownTimer());
             if (onDamage.GetInvocationList().Length > 0)
             {
-                if (dir.HasValue)
+                if (dir != null)
                 {
-                    onDamage?.Invoke(amount, dir.Value);
+                    onDamage?.Invoke(amount,collider, dir);
                 }
                 else
                 {
-                    onDamage.Invoke(amount, Vector3.zero);
+                    Debug.Log("I AM IN NO DIR");
+                    onDamage.Invoke(amount, collider, Vector3.zero);
                 }
                 return;
             }
@@ -53,7 +64,7 @@ public class Health : MonoBehaviour, IDamageable
 
         if (onHeal.GetInvocationList().Length > 0)
         {
-            onHeal?.Invoke(-amount, Vector3.zero);
+            onHeal?.Invoke(-amount, null, Vector3.zero);
             return;
         }
     }

@@ -62,6 +62,8 @@ public class EnemyStateMachine : StateMachine
 
     [SerializeField] public bool isSlidedInto = false;
 
+    [SerializeField] bool isVolleyed = false;
+
     [Header("Components")]
 
     public Collider2D col;
@@ -70,15 +72,18 @@ public class EnemyStateMachine : StateMachine
     public Animator animator;
     public List<Transform> movePoints = new();
     public GameObject targetObject;
-    public GameObject EnemyAttackObj;
+    //public GameObject EnemyAttackObj;
     public int currentMovePointIndex;
     public EnemyMovementStats EnemyStats;
     public ParticleSystem[] OnHitParticles;
     public ParticleSystem[] OnDeathParticles;
+    public Collider2D volleyCol;
 
     //public ParticleSystem WalkParticles;
     //public ParticleSystem JumpCloudParticles;
     //public ParticleSystem LandParticles;
+
+    public bool IsVolleyed { get { return isVolleyed; } set { isVolleyed = value; } }
 
     public bool IsAttacking { get { return isAttacking; } set { isAttacking = value; } }
 
@@ -115,7 +120,7 @@ public class EnemyStateMachine : StateMachine
     public float KnockbackTimer => GorbStats.knockbackTimer;
 
     public Vector3 LastKBDirection = Vector3.zero;
-    public delegate void OnDamageKB(float amt, Vector3 dir);
+    public delegate void OnDamageKB(float amt, Collider2D collision, Vector3 dir);
     public OnDamageKB onDamageKB;
 
     
@@ -137,6 +142,7 @@ public class EnemyStateMachine : StateMachine
         groundLayerMask = LayerMask.GetMask("Ground");
         col = GetComponent<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
+        //EnemyAttackObj = null;
         currentMoveSpeed = GorbStats.moveSpeed;
         currentMovePointIndex = 0;
 
@@ -361,8 +367,9 @@ public class EnemyStateMachine : StateMachine
         Destroy(this.gameObject);
     }
 
-    void OnDamage(float amount, Vector3 dir)
+    void OnDamage(float amount, Collider2D collider, Vector3 dir)
     {
+        Debug.Log(collider +" "+ dir);
         if (currentState != KnockbackState)
         {
             IsDamaged = true;
@@ -374,26 +381,50 @@ public class EnemyStateMachine : StateMachine
                 }
             }
         }
-        
+        if (!IsGrounded)
+        {
+            //IsSlidedInto = false;
+            IsVolleyed = true;
+            volleyCol.gameObject.SetActive(true);
+            //Debug.LogWarning("Enemy Volleyed");
+        }
         LastKBDirection = dir;
-        onDamageKB?.Invoke(amount,dir);
+        onDamageKB?.Invoke(amount,collider, dir);
     }
+
     public void OnTriggerStay2D(Collider2D collision)
-    {
+    { 
         if (collision.CompareTag("PlayerHurtBox"))
         {
             IDamageable damageable;
             if (collision.gameObject.TryGetComponent(out damageable))
             {
                 var collisionPoint = collision.ClosestPoint(transform.position);
-                damageable.Damage(AttackDamage,  collisionPoint - new Vector2(transform.position.x, transform.position.y));
+                var dur = collisionPoint - new Vector2(transform.position.x, transform.position.y);
+                damageable.Damage(AttackDamage, col, dur);
             }
         }
-
-        // Temporary
-        else if (collision.name == "Slide Collider")
+        else if (collision.CompareTag("Enemy") && collision.gameObject.layer != 7)
         {
-            IsSlidedInto = true;
+            IDamageable damageable;
+            if (collision.gameObject.TryGetComponent(out damageable))
+            {
+                var collisionPoint = collision.ClosestPoint(transform.position);
+                var dur = collisionPoint - new Vector2(transform.position.x, transform.position.y);
+                damageable.Damage(AttackDamage, volleyCol, dur);
+                volleyCol.gameObject.SetActive(false);
+            }
+        }
+        else if (collision.CompareTag("Enemy") && collision.gameObject.layer == 7)
+        {
+            IDamageable damageable;
+            if (collision.gameObject.TryGetComponent(out damageable))
+            {
+                var collisionPoint = collision.ClosestPoint(transform.position);
+                var dur = collisionPoint - new Vector2(transform.position.x, transform.position.y);
+                damageable.Damage(AttackDamage, col, dur);
+                //volleyCol.gameObject.SetActive(false);
+            }
         }
     }
 
@@ -421,6 +452,7 @@ public class EnemyStateMachine : StateMachine
             {
                 isGrounded = true;
                 animator.SetBool("InAir", false);
+                IsVolleyed = false;
             }
             else
             {
@@ -432,10 +464,12 @@ public class EnemyStateMachine : StateMachine
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
+        /*
         if(collision.gameObject.tag == "Enemy")
         {
             PickNextMovePoint();
         }
+        */
     }
     public void OnCollisionExit2D(Collision2D collision)
     {

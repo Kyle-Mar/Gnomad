@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
@@ -65,6 +64,7 @@ public class PlayerStateMachine : StateMachine
     public Collider2D GroundPoundCollider;
     public Collider2D SlideCollider;
     public Animator Animator;
+    public Collider2D HurtBox;
     [Header("Zone Dependent Assets")]
     public ParticleSystem WalkParticles;
     public ParticleSystem JumpCloudParticles;
@@ -84,11 +84,11 @@ public class PlayerStateMachine : StateMachine
 
     public bool IsTouchingWall => isTouchingWallLeft || isTouchingWallRight;
     public bool WallSlideExpired => wallSlideExpired;
-    public Vector2 LastMovementDirection => lastMovementDirection;
+    public Vector2 LastMovementDirection { get { return lastMovementDirection; } set { } }
     public float CurrentMoveSpeed => currentMoveSpeed;
 
     public Vector3 LastKBDirection = Vector3.zero;
-    public delegate void OnDamageKB(float amt, Vector3 dir);
+    public delegate void OnDamageKB(float amt, Collider2D collider, Vector3 dir);
     public OnDamageKB onDamageKB;
 
 
@@ -124,6 +124,7 @@ public class PlayerStateMachine : StateMachine
         Assert.IsNotNull(SlashCollider);
         Assert.IsNotNull(GroundPoundCollider);
         Assert.IsNotNull(SlideCollider);
+        Assert.IsNotNull(HurtBox);
 
         Controls = new PlayerControls();
 
@@ -235,30 +236,30 @@ public class PlayerStateMachine : StateMachine
         rightInputBufferTime = 0f;
     }
 
-    public bool DoWallSlide()
+    public (Vector2, bool) DoWallSlide()
     {
         if (IsGrounded)
         {
-            return false;
+            return (Vector2.zero, false);
         }
 
         if (wallSlideExpired)
         {
-            return false;
+            return (Vector2.zero, false);
         }
 
         float inputX = Controls.Player.Move.ReadValue<Vector2>().x;
         if (IsTouchingWallLeft && inputX < 0 || (IsTouchingWallLeft && leftInputBufferTime > 0f))
         {
             ConsumeLeftInputBuffer();
-            return true;
+            return (Vector2.left, true);
         }
         if (IsTouchingWallRight && inputX > 0 || (IsTouchingWallRight && leftInputBufferTime > 0f))
         {
             ConsumeRightInputBuffer();
-            return true;
+            return (Vector2.right, true);
         }
-        return false;
+        return (Vector2.zero, false);
     }
 
     private void OnCollisionStay2D(Collision2D collision)
@@ -382,17 +383,17 @@ public class PlayerStateMachine : StateMachine
         }
     }
 
-    void OnDamage(float amount, Vector3 dir)
+    void OnDamage(float amount, Collider2D collider, Vector3 dir)
     {
         foreach (ParticleSystem ps in HurtParticles)
         {
             if (ps != null)
             {
-                Object.Instantiate(ps, transform.position, Quaternion.identity);
+                Instantiate(ps, transform.position, Quaternion.identity);
             }
         }
         LastKBDirection = dir;
-        onDamageKB?.Invoke(amount, dir);
+        onDamageKB?.Invoke(amount, collider, dir);
     }
 
     void PrintDebugInfo(InputAction.CallbackContext cxt)

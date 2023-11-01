@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e997813291397d447b4696137b8c0e96, type: 3}
+  m_Name: SGC2
+  m_EditorClassIdentifier: 
+  scene:
+    asset: {fileID: 102900000, guid: ea1d54c52a3272a468dabeb224eec6ec, type: 3}
+    guid: ea1d54c52a3272a468dabeb224eec6ec
+  adjacentScenes:
+  - {fileID: 11400000, guid: 18eb08c32e4383448b43c1d3932c3aab, type: 2}
+  - {fileID: 11400000, guid: 1583c6d928ac09f4eae6a13a4e5dca58, type: 2}
+  DoorPositions:
+  - {x: 0.5, y: 0, z: 0}
+  - {x: 36, y: -49, z: 0}
+  DoorConnections:
+    m_keys: 0000000001000000
+    m_values: 0100000000000000
