@@ -65,6 +65,7 @@ public class PlayerStateMachine : StateMachine
     public Collider2D GroundPoundCollider;
     public Collider2D SlideCollider;
     public Animator Animator;
+    public Collider2D HurtBox;
     [Header("Zone Dependent Assets")]
     public ParticleSystem WalkParticles;
     public ParticleSystem JumpCloudParticles;
@@ -84,7 +85,7 @@ public class PlayerStateMachine : StateMachine
 
     public bool IsTouchingWall => isTouchingWallLeft || isTouchingWallRight;
     public bool WallSlideExpired => wallSlideExpired;
-    public Vector2 LastMovementDirection => lastMovementDirection;
+    public Vector2 LastMovementDirection { get { return lastMovementDirection; } set { } }
     public float CurrentMoveSpeed => currentMoveSpeed;
 
     public Vector3 LastKBDirection = Vector3.zero;
@@ -124,6 +125,7 @@ public class PlayerStateMachine : StateMachine
         Assert.IsNotNull(SlashCollider);
         Assert.IsNotNull(GroundPoundCollider);
         Assert.IsNotNull(SlideCollider);
+        Assert.IsNotNull(HurtBox);
 
         Controls = new PlayerControls();
 

@@ -1190,6 +1190,7 @@ MonoBehaviour:
   GroundPoundCollider: {fileID: 1298881716027849319}
   SlideCollider: {fileID: 4811139611164380565}
   Animator: {fileID: 4463939604477833805}
+  HurtBox: {fileID: 7483023591055343161}
   WalkParticles: {fileID: 112438054345840056, guid: 1227be19308dc9a41829b5795ecb33be, type: 3}
   JumpCloudParticles: {fileID: 6970482471691421841, guid: 7b477171c9bb7bd43a1e8adabdc129d9, type: 3}
   LandParticles: {fileID: 6970482471691421841, guid: 7b477171c9bb7bd43a1e8adabdc129d9, type: 3}
