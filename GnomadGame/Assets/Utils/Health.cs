@@ -49,7 +49,7 @@ public class Health : MonoBehaviour, IDamageable
 
     public virtual void Heal(float amount)
     {
-        HealthUtil.Damage(this, -amount);
+        HealthUtil.Heal(this, amount);
 
         if (onHeal.GetInvocationList().Length > 0)
         {

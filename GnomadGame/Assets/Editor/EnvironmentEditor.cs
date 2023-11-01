@@ -11,7 +11,7 @@ using UnityEngine.UIElements;
 
 public class EnvironmentEditor : EditorWindow
 {
-    private static string prefabFolderPath = "Assets/Zones/ForestZone/Environmental Assets/Elements";
+    private static string prefabFolderPath = "Assets/Zones/ForestZone/Environmental Assets/Elements/EnvironmentEditorPool";
     private List<GameObject> prefabList = new List<GameObject>();
     private Vector2 scrollPosition;
     private GameObject selectedBrush;
@@ -19,9 +19,11 @@ public class EnvironmentEditor : EditorWindow
     private GameObject lastPlacedPref;
     private Stack<GameObject> prefabHistory;
     private int currentLayer = 4;
-    private int prefabButtonSize = 128;
+    private int prefabButtonSize = 64;
     GUIContent currentLayerIcon;
     bool paintBehind = true;
+    List<List<GameObject>> SubfolderPrefabLists = new List<List<GameObject>>();
+
     private int CurrentLayer
     {
         get { return currentLayer; }
@@ -48,7 +50,8 @@ public class EnvironmentEditor : EditorWindow
 
     private void OnEnable()
     {
-        GetPrefabs();
+        //GetPrefabs();
+        GetPrefabsInSubfolders();
         initializeLayers();
         SceneView.duringSceneGui += OnSceneGUI;
         rotateMode = false;
@@ -69,7 +72,8 @@ public class EnvironmentEditor : EditorWindow
             "Press 'Z' To clear the current brush and leave edit mode\n" +
             "Press 'X' to use the last brush\n" +
             "Press '-' and '+' to go back and forth between layers\n" +
-            "Press '[' or ']' too change order within layer"
+            "Press '[' or ']' too change order within layer\n" + 
+            "Press 'L' I think to flip the sprite"
             );
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
         //ToDo
@@ -82,10 +86,12 @@ public class EnvironmentEditor : EditorWindow
         //dont draw when clicking to move a selected object
         //add heirarchy for brush types
         //after being placed, props should scoot until mouse up
-        //flip sprite hotkey
 
         drawStateIcons();
-        DrawPrefabIconGrid(prefabList, prefabButtonSize, prefabButtonSize, (int)position.width / prefabButtonSize);
+        foreach (List<GameObject> l in SubfolderPrefabLists)
+        {
+            DrawPrefabIconGrid(l, prefabButtonSize, (int)position.width / prefabButtonSize);
+        }
 
         EditorGUILayout.EndScrollView();
         Event e = Event.current;
@@ -98,7 +104,7 @@ public class EnvironmentEditor : EditorWindow
         checkInputCommon(e);
     }
 
-    private void DrawPrefabIconGrid(List<GameObject> prefabList, int buttonWidth, int buttonHeight, int itemsPerRow)
+    private void DrawPrefabIconGrid(List<GameObject> prefabList, int buttonSize, int itemsPerRow)
     {
         GUILayout.BeginVertical();
 
@@ -122,7 +128,7 @@ public class EnvironmentEditor : EditorWindow
                     content.tooltip = prefab.name;
                 }
 
-                if (GUILayout.Button(content, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
+                if (GUILayout.Button(content, GUILayout.Width(buttonSize), GUILayout.Height(buttonSize)))
                 {
                     lastBrush = selectedBrush;
                     selectedBrush = prefab;
@@ -216,21 +222,44 @@ public class EnvironmentEditor : EditorWindow
 
     }
 
-    private void GetPrefabs()
+    /*
+     private void GetPrefabs()
+     {
+         prefabList.Clear();
+
+         string[] guids = AssetDatabase.FindAssets("t:Prefab", new string[] { prefabFolderPath });
+         foreach (string guid in guids)
+         {
+             string path = AssetDatabase.GUIDToAssetPath(guid);
+             GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+             if (prefab != null)
+             {
+                 prefabList.Add(prefab);
+
+             }
+         }
+     }*/
+    private void GetPrefabsInSubfolders()
     {
-        prefabList.Clear();
 
-        string[] guids = AssetDatabase.FindAssets("t:Prefab", new string[] { prefabFolderPath });
-        foreach (string guid in guids)
+        string[] subfolderPaths = AssetDatabase.GetSubFolders(prefabFolderPath);
+
+        foreach (string subfolderPath in subfolderPaths)
         {
-            string path = AssetDatabase.GUIDToAssetPath(guid);
-            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-            if (prefab != null)
+            List<GameObject> subfolderPrefabList = new List<GameObject>();
+            string[] guids = AssetDatabase.FindAssets("t:Prefab", new string[] { subfolderPath });
+            foreach (string guid in guids)
             {
-                prefabList.Add(prefab);
-
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+                if (prefab != null)
+                {
+                    subfolderPrefabList.Add(prefab);
+                }
             }
+            SubfolderPrefabLists.Add(subfolderPrefabList);
         }
+
     }
 
     public Vector3 GetMousePosition()

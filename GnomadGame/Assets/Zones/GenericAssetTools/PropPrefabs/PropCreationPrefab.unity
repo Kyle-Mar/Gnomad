@@ -167,7 +167,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 675cb1d6b25f6134badf173587039b38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectAsset: {fileID: 3722818512057133728, guid: 023db6d73d722614eabecfe3bd190c78, type: 3}
-  sprites: []
+  objectAsset: {fileID: 4756128662606143408, guid: d64c31393d62d2d448f5cc6a7eefbf9c, type: 3}
+  sprites:
+  - {fileID: 1753921734, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
+  - {fileID: 268484263, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
+  - {fileID: -193728884, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
+  - {fileID: -165984962, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
+  - {fileID: -950820691, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
   create: 0
   areYouSure: 0
