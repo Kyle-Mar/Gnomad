@@ -5,6 +5,7 @@ using UnityEngine;
 public class HatScript : MonoBehaviour
 {
 
+    public PlayerStateMachine psm;
 
     bool sliding = false;
 
@@ -52,16 +53,18 @@ public class HatScript : MonoBehaviour
                     collision.gameObject.GetComponentInChildren<EnemyStateMachine>().IsSlidedInto = true;
                     if (collisionPoint.x - transform.position.x < 0)
                     {
-                        damageable.Damage(MovementStats.baseSlashDamage, new Vector2(0.4f * 1f, 4.0f));
+                        Debug.Log("Sliding Left");
+                        damageable.Damage(MovementStats.baseSlashDamage, psm.SlideCollider, new Vector3(0.4f * 1f, 4.0f));
                     }
                     else
                     {
-                        damageable.Damage(MovementStats.baseSlashDamage, new Vector2(0.4f * -1f, 4.0f));
+                        Debug.Log("Sliding Right");
+                        damageable.Damage(MovementStats.baseSlashDamage, psm.SlideCollider, new Vector3(0.4f * -1f, 4.0f));
                     }
                 }
                 else
                 {
-                    damageable.Damage(MovementStats.baseSlashDamage, new Vector2(collisionPoint.x - transform.position.x, 0.5f));
+                    damageable.Damage(MovementStats.baseSlashDamage, psm.SlashCollider, new Vector3(collisionPoint.x - transform.position.x, 0.5f));
                 }
                 Debug.Log("Damaging Enemy");
             }

@@ -81,6 +81,7 @@ public class EnemyKnockbackState : EnemyBaseState
         context.IsDamaged = false;
         context.IsSlidedInto = false;
         context.IsVolleyed = false;
+        context.volleyCol.gameObject.SetActive(false);
     }
 
     public override void FixedUpdateState()

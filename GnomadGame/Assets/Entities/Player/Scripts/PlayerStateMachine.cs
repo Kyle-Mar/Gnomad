@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
@@ -89,7 +88,7 @@ public class PlayerStateMachine : StateMachine
     public float CurrentMoveSpeed => currentMoveSpeed;
 
     public Vector3 LastKBDirection = Vector3.zero;
-    public delegate void OnDamageKB(float amt, Vector3 dir);
+    public delegate void OnDamageKB(float amt, Collider2D collider, Vector3 dir);
     public OnDamageKB onDamageKB;
 
 
@@ -384,17 +383,17 @@ public class PlayerStateMachine : StateMachine
         }
     }
 
-    void OnDamage(float amount, Vector3 dir)
+    void OnDamage(float amount, Collider2D collider, Vector3 dir)
     {
         foreach (ParticleSystem ps in HurtParticles)
         {
             if (ps != null)
             {
-                Object.Instantiate(ps, transform.position, Quaternion.identity);
+                Instantiate(ps, transform.position, Quaternion.identity);
             }
         }
         LastKBDirection = dir;
-        onDamageKB?.Invoke(amount, dir);
+        onDamageKB?.Invoke(amount, collider, dir);
     }
 
     void PrintDebugInfo(InputAction.CallbackContext cxt)

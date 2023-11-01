@@ -615,6 +615,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6527211751149490514}
   - component: {fileID: 4811139611164380565}
+  - component: {fileID: 7103693328050927609}
   m_Layer: 7
   m_Name: Slide Collider
   m_TagString: PlayerAttack
@@ -664,6 +665,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.8172836, y: 1.1873994}
   m_EdgeRadius: 0
+--- !u!114 &7103693328050927609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2184988014544808216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 210a91e26a88f40458363f8e64b9df7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  psm: {fileID: 4446419450577938884}
 --- !u!1 &2258806424372879040
 GameObject:
   m_ObjectHideFlags: 0
@@ -842,13 +856,14 @@ GameObject:
   m_Component:
   - component: {fileID: 4764661950720505983}
   - component: {fileID: 8554812746784029834}
+  - component: {fileID: 8351500086247336024}
   m_Layer: 7
   m_Name: Slash Collider
   m_TagString: PlayerAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4764661950720505983
 Transform:
   m_ObjectHideFlags: 0
@@ -899,6 +914,19 @@ PolygonCollider2D:
       - {x: -0.85210633, y: -0.8882868}
       - {x: -0.041867375, y: -0.62674904}
       - {x: -0.051234066, y: 1.0818815}
+--- !u!114 &8351500086247336024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3408991542148751100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 210a91e26a88f40458363f8e64b9df7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  psm: {fileID: 4446419450577938884}
 --- !u!1 &3478738244255078419
 GameObject:
   m_ObjectHideFlags: 0
@@ -970,6 +998,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd641dd00fe97a84fbb83e4819f9beb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MyColliders:
+  - {fileID: 8554812746784029834}
+  - {fileID: 1298881716027849319}
+  - {fileID: 4811139611164380565}
+  - {fileID: 4446419450577938880}
   MAX_HEALTH: 10
   health: 10
   canTakeDamage: 1
@@ -1540,6 +1573,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5949686592627464360}
   - component: {fileID: 1298881716027849319}
+  - component: {fileID: 2547991360655493994}
   m_Layer: 0
   m_Name: Ground Pound Collider
   m_TagString: PlayerAttack
@@ -1589,6 +1623,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.6, y: 1.12}
   m_EdgeRadius: 0
+--- !u!114 &2547991360655493994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8456049520238219120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 210a91e26a88f40458363f8e64b9df7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  psm: {fileID: 4446419450577938884}
 --- !u!1 &8573543962123263843
 GameObject:
   m_ObjectHideFlags: 0
