@@ -104,10 +104,10 @@ public class PlayerSlideState : PlayerBaseState
     public override void UpdateState()
     {
         timeSinceStart += Time.deltaTime;
+
         if (!context.SlideCollider.gameObject.activeInHierarchy && timeSinceStart >= 0.05f)
         {
             context.SlideCollider.gameObject.SetActive(true);
-            Debug.LogWarning("Set To True");
         }
         CheckSwitchStates();
     }
