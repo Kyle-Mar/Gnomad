@@ -22,13 +22,15 @@ public class PlayerFallState : PlayerBaseState
             SwitchState(context.GroundedState);
             return;
         }
-        if(context.DoWallSlide() && context.JumpBufferTime > 0f)
+        var wallSlide = context.DoWallSlide();
+        if(wallSlide.Item2 && context.JumpBufferTime > 0f && wallSlide.Item1 != Vector2.zero)
         {
+            context.WallJumpState.SetJumpDirection(wallSlide.Item1);
             SwitchState(context.WallJumpState);
             context.ConsumeJumpBuffer();
             return;
         }
-        if (context.DoWallSlide())
+        if (wallSlide.Item2)
         {
             SwitchState(context.WallSlideState);
             return;

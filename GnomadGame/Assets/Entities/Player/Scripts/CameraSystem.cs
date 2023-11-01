@@ -92,7 +92,7 @@ public class CameraSystem : MonoBehaviour
             3f,
             groundLayerMask);
 
-        if (hitRight && hitLeft)
+        if (hitRight && hitLeft && psm.CurrentState != psm.WallSlideState && psm.CurrentState != psm.WallJumpState)
         {
             curOffset = offsetY;
         }
@@ -138,7 +138,7 @@ public class CameraSystem : MonoBehaviour
     void UpdateYPos()
     {
         Vector3 playerPos = GetComponent<Camera>().WorldToViewportPoint(playerTransform.position);
-        if(psm.CurrentState == psm.GroundedState)
+        if(psm.CurrentState == psm.GroundedState || psm.CurrentState == psm.WallSlideState || psm.CurrentState == psm.WallJumpState)
         {
             originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
             return;
@@ -155,9 +155,9 @@ public class CameraSystem : MonoBehaviour
         }
         if (playerPos.y < yDeadzone.y)
         {
+           originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
            return;
         }
-        originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
     }
 
     Vector3 GetCameraPosFromPlayerPos()
