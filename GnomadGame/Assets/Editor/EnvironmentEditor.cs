@@ -11,20 +11,29 @@ using UnityEngine.UIElements;
 
 public class EnvironmentEditor : EditorWindow
 {
+    #region Variables
+    //Prefab Info
     private static string prefabFolderPath = "Assets/Zones/ForestZone/Environmental Assets/Elements/EnvironmentEditorPool";
-    private List<GameObject> prefabList = new List<GameObject>();
+    //private List<GameObject> prefabList = new List<GameObject>();
+    List<List<GameObject>> SubfolderPrefabLists = new List<List<GameObject>>();
+    //Window Info
     private Vector2 scrollPosition;
+    //Painting Variables
     private GameObject selectedBrush;
     private GameObject lastBrush;
     private GameObject lastPlacedPref;
     private Stack<GameObject> prefabHistory;
+    bool paintBehind = true;
+    private bool rotateMode;
+    //Layer Info
     private int currentLayer = 4;
+    private GameObject[] layersList;
+    //GUI Variables
     private int prefabButtonSize = 64;
     GUIContent currentLayerIcon;
-    bool paintBehind = true;
-    List<List<GameObject>> SubfolderPrefabLists = new List<List<GameObject>>();
 
-    private int CurrentLayer
+    //----Variable Interfaces----
+    public int CurrentLayer
     {
         get { return currentLayer; }
         set
@@ -33,16 +42,16 @@ public class EnvironmentEditor : EditorWindow
             EditorUtility.SetDefaultParentObject(layersList[currentLayer]);
         }
     }
-    private GameObject[] layersList;
 
-    //can be uncommented when it's update logic is fixed
-    //private bool mouseHeld;
-    private bool rotateMode;
-
+    #endregion variables
 
     [MenuItem("Window/Environment Editor")]
+
+    #region Initialization
     static void Init()
-    {
+    {   //Runs once when the Editor is first Opened. Initializes the window
+        //This needs to run at a different stage in settup from OnEnable, so it needs to be kept seperate
+        Debug.Log("Initializing EDITOR");
         EnvironmentEditor window = GetWindow<EnvironmentEditor>();
         window.minSize = new Vector2(200, 200);
         window.Show();
@@ -50,20 +59,30 @@ public class EnvironmentEditor : EditorWindow
 
     private void OnEnable()
     {
+        //Also runs once on startup
+        Debug.Log("Enabling EDITOR");
         //GetPrefabs();
         GetPrefabsInSubfolders();
         initializeLayers();
+  
         SceneView.duringSceneGui += OnSceneGUI;
         rotateMode = false;
         paintBehind = true;
         prefabHistory = new Stack<GameObject>();
-
-
     }
-
+    #endregion Initialization
 
     private void OnGUI()
-    {
+    {   
+        if (layersList.Length < 1) {
+            GUILayout.Label("Not a valid environment heirarchy.\n Make sure your layers are properly tagged\n and you are using the level template.");
+            if (GUILayout.Button("Refresh"))
+            {
+                OnEnable();
+                EditorApplication.RepaintHierarchyWindow();
+            }
+            return; 
+        }
 
         GUILayout.Label(
             "Click a prop icon below to set the BRUSH\n" +
@@ -152,6 +171,7 @@ public class EnvironmentEditor : EditorWindow
 
     private void OnSceneGUI(SceneView sceneView)
     {
+        if (layersList.Length < 1) { return; }
         Event e = Event.current;
         //stamp
         if (e.type == EventType.MouseDown && e.button == 0 && selectedBrush != null)
@@ -279,9 +299,11 @@ public class EnvironmentEditor : EditorWindow
 
     }
 
-    private void initializeLayers()
+    private int initializeLayers()
     {   //might not work. Array is immuatable
         layersList = GameObject.FindGameObjectsWithTag("ParalaxLayer");
+        if (layersList == null) { return -1; }
+        return 0;
     }
 
     private void checkInputCommon(Event e)
