@@ -62,6 +62,8 @@ public class EnemyStateMachine : StateMachine
 
     [SerializeField] public bool isSlidedInto = false;
 
+    [SerializeField] bool isVolleyed = false;
+
     [Header("Components")]
 
     public Collider2D col;
@@ -70,7 +72,7 @@ public class EnemyStateMachine : StateMachine
     public Animator animator;
     public List<Transform> movePoints = new();
     public GameObject targetObject;
-    public GameObject EnemyAttackObj;
+    //public GameObject EnemyAttackObj;
     public int currentMovePointIndex;
     public EnemyMovementStats EnemyStats;
     public ParticleSystem[] OnHitParticles;
@@ -79,6 +81,8 @@ public class EnemyStateMachine : StateMachine
     //public ParticleSystem WalkParticles;
     //public ParticleSystem JumpCloudParticles;
     //public ParticleSystem LandParticles;
+
+    public bool IsVolleyed { get { return isVolleyed; } set { isVolleyed = value; } }
 
     public bool IsAttacking { get { return isAttacking; } set { isAttacking = value; } }
 
@@ -137,6 +141,7 @@ public class EnemyStateMachine : StateMachine
         groundLayerMask = LayerMask.GetMask("Ground");
         col = GetComponent<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
+        //EnemyAttackObj = null;
         currentMoveSpeed = GorbStats.moveSpeed;
         currentMovePointIndex = 0;
 
@@ -374,6 +379,12 @@ public class EnemyStateMachine : StateMachine
                 }
             }
         }
+        if (!IsGrounded)
+        {
+            //IsSlidedInto = false;
+            IsVolleyed = true;
+            Debug.LogWarning("Enemy Volleyed");
+        }
         
         LastKBDirection = dir;
         onDamageKB?.Invoke(amount,dir);
@@ -394,6 +405,21 @@ public class EnemyStateMachine : StateMachine
         else if (collision.name == "Slide Collider")
         {
             IsSlidedInto = true;
+        }
+
+        else if (collision.CompareTag("Enemy") && IsVolleyed)
+        {
+            IDamageable damageable;
+            if (collision.gameObject.TryGetComponent(out damageable))
+            {
+                var collisionPoint = collision.ClosestPoint(transform.position);
+                damageable.Damage(AttackDamage, collisionPoint - new Vector2(transform.position.x, transform.position.y));
+                Debug.LogWarning("Colliding With Enemy");
+            }
+        }
+        else if (collision.CompareTag("Enemy"))
+        {
+            Debug.LogWarning("Colliding With Enemy");
         }
     }
 
@@ -421,6 +447,7 @@ public class EnemyStateMachine : StateMachine
             {
                 isGrounded = true;
                 animator.SetBool("InAir", false);
+                IsVolleyed = false;
             }
             else
             {

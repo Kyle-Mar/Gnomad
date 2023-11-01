@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyIdleState : EnemyBaseState
 {
-    float TimerChangeStateMax = 1f;
+    float TimerChangeStateMax = 0.5f;
     float timerChangeState = 0f;
 
     public EnemyIdleState(EnemyStateMachine esm) : base(esm)

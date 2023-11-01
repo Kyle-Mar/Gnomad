@@ -31,6 +31,7 @@ public class EnemyKnockbackState : EnemyBaseState
     {
         //throw new System.NotImplementedException();
         InitializeSubState();
+        context.animator.SetBool("InAir", true);
         knockbackTimer = context.KnockbackTimer;
         initialKnockbackDirection = context.LastKBDirection.normalized;
         if (!context.IsSlidedInto)
@@ -44,7 +45,19 @@ public class EnemyKnockbackState : EnemyBaseState
                 initialKnockbackDirection.y = 0.5f * Mathf.Sign(initialKnockbackDirection.y);
             }
         }
-        context.rb.velocity = initialKnockbackDirection * 27.5f;
+        if (!context.isSlidedInto && context.IsGrounded)
+        {
+            context.rb.velocity = initialKnockbackDirection * 20.5f;
+        }
+        else if (context.IsVolleyed)
+        {
+            Debug.LogWarning("Hitting Enemy to Volley");
+            context.rb.velocity = initialKnockbackDirection * 100.5f;
+        }
+        else
+        {
+            context.rb.velocity = initialKnockbackDirection * 27.5f;
+        }
         currentKnockbackVelocity = context.rb.velocity;
 
         //context.rb.Sleep();
@@ -53,10 +66,12 @@ public class EnemyKnockbackState : EnemyBaseState
     public override void ExitState()
     {
         //throw new System.NotImplementedException();
+        context.animator.SetBool("InAir", false);
         knockbackTimer = 0f;
         SetSubState(context.MoveState);
         context.IsDamaged = false;
-        
+        context.IsSlidedInto = false;
+        context.IsVolleyed = false;
     }
 
     public override void FixedUpdateState()
@@ -67,7 +82,7 @@ public class EnemyKnockbackState : EnemyBaseState
         }
         else
         {
-            context.rb.velocity = currentKnockbackVelocity + new Vector3(0,  (MovementStats.fallSpeed * Time.fixedDeltaTime * 0.43f));
+            context.rb.velocity = currentKnockbackVelocity + new Vector3(0,  (MovementStats.fallSpeed * Time.fixedDeltaTime * 0.42f));
         }
         currentKnockbackVelocity = context.rb.velocity;
     }

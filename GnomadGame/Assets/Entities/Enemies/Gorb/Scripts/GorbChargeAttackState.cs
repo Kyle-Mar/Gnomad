@@ -37,7 +37,7 @@ public class GorbChargeAttackState : EnemyBaseState
         //throw new System.NotImplementedException();
         context.SetMoveSpeed(context.MoveSpeed);
         context.StartAttackCooldown();
-        context.EnemyAttackObj.SetActive(false);
+        //context.EnemyAttackObj.SetActive(false);
         context.animator.SetBool("Charging", false);
     }
 
