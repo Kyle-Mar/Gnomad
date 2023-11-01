@@ -235,30 +235,30 @@ public class PlayerStateMachine : StateMachine
         rightInputBufferTime = 0f;
     }
 
-    public bool DoWallSlide()
+    public (Vector2, bool) DoWallSlide()
     {
         if (IsGrounded)
         {
-            return false;
+            return (Vector2.zero, false);
         }
 
         if (wallSlideExpired)
         {
-            return false;
+            return (Vector2.zero, false);
         }
 
         float inputX = Controls.Player.Move.ReadValue<Vector2>().x;
         if (IsTouchingWallLeft && inputX < 0 || (IsTouchingWallLeft && leftInputBufferTime > 0f))
         {
             ConsumeLeftInputBuffer();
-            return true;
+            return (Vector2.left, true);
         }
         if (IsTouchingWallRight && inputX > 0 || (IsTouchingWallRight && leftInputBufferTime > 0f))
         {
             ConsumeRightInputBuffer();
-            return true;
+            return (Vector2.right, true);
         }
-        return false;
+        return (Vector2.zero, false);
     }
 
     private void OnCollisionStay2D(Collision2D collision)
