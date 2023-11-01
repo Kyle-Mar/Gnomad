@@ -19,12 +19,12 @@ public class PlayerSlideState : PlayerBaseState
     }
 
     public override void CheckSwitchStates()
-    {
+    {   /*
         if (context.CanJumpStandard())
         {
             context.ConsumeJumpBuffer();
             SwitchState(context.BackflipState);
-        }
+        }*/
         if (DidBonk())
         {
             if (!context.IsGrounded)

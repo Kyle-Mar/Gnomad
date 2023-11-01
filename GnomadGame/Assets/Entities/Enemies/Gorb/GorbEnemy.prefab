@@ -128,7 +128,6 @@ MonoBehaviour:
   animator: {fileID: 3209980095533021705}
   movePoints: []
   targetObject: {fileID: 0}
-  EnemyAttackObj: {fileID: 0}
   currentMovePointIndex: 0
   OnHitParticles:
   - {fileID: 6970482471691421841, guid: 4210765f1d9406a42bc64cc15e21a4a4, type: 3}
@@ -160,8 +159,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd641dd00fe97a84fbb83e4819f9beb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MAX_HEALTH: 4
-  health: 4
+  MAX_HEALTH: 7
+  health: 7
   canTakeDamage: 1
   cooldownTime: 0.2
 --- !u!114 &1960499130926194949

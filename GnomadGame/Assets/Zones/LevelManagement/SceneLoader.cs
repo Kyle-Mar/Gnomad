@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using System.Linq;
 using Eflatun.SceneReference;
 using Gnomad.Utils;
+using UnityEngine.Assertions;
 
 [RequireComponent(typeof(Collider2D))]
 public class SceneLoader : MonoBehaviour
@@ -154,6 +155,11 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadScene(SceneInfo scene)
     {
+        Assert.IsNotNull(sceneInfo);
+        Assert.IsNotNull(tilemapCollider);
+        Assert.IsNotNull(boundingCollider);
+
+
         scene.isLoaded = true;
         StartCoroutine(LevelManager.LoadSceneAsync(scene.scene.Name));
         return;

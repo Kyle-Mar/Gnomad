@@ -918,7 +918,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 210a91e26a88f40458363f8e64b9df7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canDamage: 0
 --- !u!1 &387668952 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8456049520238219120, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
@@ -936,7 +935,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 210a91e26a88f40458363f8e64b9df7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canDamage: 0
 --- !u!1 &404819289
 GameObject:
   m_ObjectHideFlags: 0
@@ -1531,11 +1529,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4446419450577938882, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -9.73
+      value: -27.13
       objectReference: {fileID: 0}
     - target: {fileID: 4446419450577938882, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.07
+      value: -2.9
       objectReference: {fileID: 0}
     - target: {fileID: 4446419450577938882, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4230,7 +4228,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1023
+    m_Bits: 3071
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -4262,7 +4260,7 @@ MonoBehaviour:
   m_RendererIndex: -1
   m_VolumeLayerMask:
     serializedVersion: 2
-    m_Bits: 1023
+    m_Bits: 3071
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 1
@@ -4442,4 +4440,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 210a91e26a88f40458363f8e64b9df7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canDamage: 0

@@ -345,46 +345,46 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 4762493489516053774}
-    m_Position: {x: 170, y: -30, z: 0}
+    m_Position: {x: -20, y: 570, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -2723105493889708787}
-    m_Position: {x: 750, y: -190, z: 0}
+    m_Position: {x: 730, y: -190, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -1668313618671053572}
-    m_Position: {x: 740, y: -260, z: 0}
+    m_Position: {x: 730, y: -260, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8055899347259516762}
-    m_Position: {x: 760, y: -320, z: 0}
+    m_Position: {x: 730, y: -320, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -11342583036785059}
-    m_Position: {x: 750, y: 170, z: 0}
+    m_Position: {x: 730, y: 170, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4870937135552779583}
-    m_Position: {x: 750, y: 40, z: 0}
+    m_Position: {x: 730, y: 50, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 6782986024267220306}
-    m_Position: {x: 750, y: 100, z: 0}
+    m_Position: {x: 730, y: 110, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -2349249611431335267}
-    m_Position: {x: 910, y: -80, z: 0}
+    m_Position: {x: 970, y: -70, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -6292118000881659103}
-    m_Position: {x: 740, y: -140, z: 0}
+    m_Position: {x: 730, y: -120, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1187114893282219795}
-    m_Position: {x: 760, y: 220, z: 0}
+    m_Position: {x: 730, y: 230, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3286495213894322431}
-    m_Position: {x: 740, y: -20, z: 0}
+    m_Position: {x: 730, y: -10, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -537522757415000776}
-    m_Position: {x: 760, y: 390, z: 0}
+    m_Position: {x: 730, y: 350, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 6962346826371445383}
-    m_Position: {x: 760, y: 320, z: 0}
+    m_Position: {x: 730, y: 290, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 184717912589891012}
-    m_Position: {x: 730, y: -400, z: 0}
+    m_Position: {x: 730, y: -390, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7448016094786784296}
     m_Position: {x: 730, y: -460, z: 0}
@@ -399,9 +399,9 @@ AnimatorStateMachine:
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: 190, y: -240, z: 0}
-  m_EntryPosition: {x: 50, y: 130, z: 0}
-  m_ExitPosition: {x: 970, y: 120, z: 0}
+  m_AnyStatePosition: {x: -240, y: -690, z: 0}
+  m_EntryPosition: {x: -330, y: 90, z: 0}
+  m_ExitPosition: {x: 1200, y: -10, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: 4762493489516053774}
 --- !u!1102 &-537522757415000776
@@ -472,79 +472,79 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: DashTrigger
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: SlashTrigger
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: IsRunning
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: IsJumping
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: IsFalling
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: GroundPoundTrigger
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: StopGroundPoundTrigger
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: SlideTrigger
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: StopSlideTrigger
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: WallSlideTrigger
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: StopWallSlideTrigger
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: KnockbackTrigger
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
