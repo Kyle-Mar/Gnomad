@@ -18,9 +18,11 @@ public class PlayerWallSlideState : PlayerBaseState
         {
             SwitchState(context.GroundedState);
         }
-        if (context.Controls.Player.Jump.WasPressedThisFrame() || context.JumpBufferTime > 0)
+        var wallSlide = context.DoWallSlide();
+        if ((context.Controls.Player.Jump.WasPressedThisFrame() || context.JumpBufferTime > 0) && wallSlide.Item1 != Vector2.zero)
         {
             context.ConsumeJumpBuffer();
+            context.WallJumpState.SetJumpDirection(wallSlide.Item1);
             SwitchState(context.WallJumpState);
         }
         if (context.Controls.Player.Dash.WasPressedThisFrame())

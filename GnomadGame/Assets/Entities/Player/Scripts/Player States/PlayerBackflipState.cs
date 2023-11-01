@@ -15,7 +15,7 @@ public class PlayerBackflipState : PlayerBaseState
     public override void CheckSwitchStates()
     {
         //allows the player to wall backflip while assending
-        if (context.DoWallSlide() && 
+        if (context.DoWallSlide().Item2 && 
             (context.JumpBufferTime > 0 || context.Controls.Player.Jump.WasPressedThisFrame()))
         {
 
