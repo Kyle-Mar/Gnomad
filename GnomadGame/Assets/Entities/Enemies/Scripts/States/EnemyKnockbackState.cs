@@ -27,6 +27,8 @@ public class EnemyKnockbackState : EnemyBaseState
         }
     }
 
+    
+
     public override void EnterState()
     {
         //throw new System.NotImplementedException();
@@ -34,31 +36,38 @@ public class EnemyKnockbackState : EnemyBaseState
         context.animator.SetBool("InAir", true);
         knockbackTimer = context.KnockbackTimer;
         initialKnockbackDirection = context.LastKBDirection.normalized;
-        if (!context.IsSlidedInto)
+
+        if (context.IsGrounded)
         {
-            if (initialKnockbackDirection.x < 0.5f && initialKnockbackDirection.x > -0.5f)
+
+            if (!context.IsSlidedInto)
             {
-                initialKnockbackDirection.x = 0.5f * Mathf.Sign(initialKnockbackDirection.x);
+                
+                if (initialKnockbackDirection.x < 0.5f && initialKnockbackDirection.x > -0.5f)
+                {
+                    initialKnockbackDirection.x = 0.5f * Mathf.Sign(initialKnockbackDirection.x);
+                }
+                if (initialKnockbackDirection.y < 0.5f && initialKnockbackDirection.y > -0.5f)
+                {
+                    initialKnockbackDirection.y = 0.5f * Mathf.Sign(initialKnockbackDirection.y);
+                }
+                
+                context.rb.velocity = initialKnockbackDirection * 12.5f;
             }
-            if (initialKnockbackDirection.y < 0.5f && initialKnockbackDirection.y > -0.5f)
+            else
             {
-                initialKnockbackDirection.y = 0.5f * Mathf.Sign(initialKnockbackDirection.y);
+                context.rb.velocity = initialKnockbackDirection * 27.5f;
             }
         }
-        if (!context.isSlidedInto && context.IsGrounded)
-        {
-            context.rb.velocity = initialKnockbackDirection * 20.5f;
-        }
-        else if (context.IsVolleyed)
-        {
-            Debug.LogWarning("Hitting Enemy to Volley");
-            context.rb.velocity = initialKnockbackDirection * 100.5f;
-        }
+        // Knockback for when player volleys enemy
         else
         {
-            context.rb.velocity = initialKnockbackDirection * 27.5f;
+            context.rb.velocity = initialKnockbackDirection * 42.5f;
         }
+        
+        //context.rb.velocity = initialKnockbackDirection * 27.5f;
         currentKnockbackVelocity = context.rb.velocity;
+        Debug.Log(initialKnockbackDirection);
 
         //context.rb.Sleep();
     }

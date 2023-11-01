@@ -5,7 +5,6 @@ using UnityEngine;
 public class HatScript : MonoBehaviour
 {
 
-    [SerializeField] bool canDamage = false;
 
     bool sliding = false;
 
@@ -50,13 +49,14 @@ public class HatScript : MonoBehaviour
                 
                 if (sliding)
                 {
+                    collision.gameObject.GetComponentInChildren<EnemyStateMachine>().IsSlidedInto = true;
                     if (collisionPoint.x - transform.position.x < 0)
                     {
-                        damageable.Damage(MovementStats.baseSlashDamage, new Vector2(0.25f * 1f, 4.0f));
+                        damageable.Damage(MovementStats.baseSlashDamage, new Vector2(0.4f * 1f, 4.0f));
                     }
                     else
                     {
-                        damageable.Damage(MovementStats.baseSlashDamage, new Vector2(0.25f * -1f, 4.0f));
+                        damageable.Damage(MovementStats.baseSlashDamage, new Vector2(0.4f * -1f, 4.0f));
                     }
                 }
                 else

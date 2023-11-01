@@ -383,12 +383,12 @@ public class EnemyStateMachine : StateMachine
         {
             //IsSlidedInto = false;
             IsVolleyed = true;
-            Debug.LogWarning("Enemy Volleyed");
+            //Debug.LogWarning("Enemy Volleyed");
         }
-        
         LastKBDirection = dir;
         onDamageKB?.Invoke(amount,dir);
     }
+
     public void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.CompareTag("PlayerHurtBox"))
@@ -401,11 +401,7 @@ public class EnemyStateMachine : StateMachine
             }
         }
 
-        // Temporary
-        else if (collision.name == "Slide Collider")
-        {
-            IsSlidedInto = true;
-        }
+        
 
         else if (collision.CompareTag("Enemy") && IsVolleyed)
         {
@@ -419,7 +415,7 @@ public class EnemyStateMachine : StateMachine
         }
         else if (collision.CompareTag("Enemy"))
         {
-            Debug.LogWarning("Colliding With Enemy");
+            Debug.LogWarning("Colliding Enemy (Not Volleyed)");
         }
     }
 
