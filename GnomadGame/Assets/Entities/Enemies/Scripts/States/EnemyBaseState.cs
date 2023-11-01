@@ -15,7 +15,7 @@ public abstract class EnemyBaseState : BaseState
         currentSubState = base.currentSubState as EnemyBaseState;
         currentSuperState = base.currentSuperState as EnemyBaseState;
     }
-    public virtual void OnDamageKB(float amount, Vector3 dir)
+    public virtual void OnDamageKB(float amount, Collider2D collider, Vector3 dir)
     {
         if (this != context.CurrentState)
         {

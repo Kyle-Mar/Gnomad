@@ -83,11 +83,11 @@ public class HUDController : MonoBehaviour
         hearts.Add(imgObject);
     }
 
-    public void UIRemoveHealth(float amount, Vector3 dir)
+    public void UIRemoveHealth(float amount, Collider2D collider, Vector3 dir)
     {
         UpdateUIHealth();
     }
-    public void UIAddHealth(float amount, Vector3 dir)
+    public void UIAddHealth(float amount, Collider2D collider, Vector3 dir)
     {
         UpdateUIHealth();
     }

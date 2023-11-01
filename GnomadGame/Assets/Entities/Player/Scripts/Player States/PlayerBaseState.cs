@@ -18,7 +18,7 @@ public abstract class PlayerBaseState: BaseState
         currentSuperState = base.currentSuperState as PlayerBaseState;
     }
 
-    public virtual void OnDamageKB(float amount, Vector3 dir)
+    public virtual void OnDamageKB(float amount, Collider2D collision, Vector3 dir)
     {
         if(this != context.CurrentState)
         {

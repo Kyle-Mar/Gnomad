@@ -901,9 +901,9 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &316057530 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3408991542148751100, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+--- !u!60 &316057535 stripped
+PolygonCollider2D:
+  m_CorrespondingSourceObject: {fileID: 8554812746784029834, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
   m_PrefabInstance: {fileID: 671944597}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &316057533
@@ -1619,6 +1619,26 @@ PrefabInstance:
       propertyPath: MAX_HEALTH
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 7458543973091233723, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: MyColliders.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7458543973091233723, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: MyColliders.Array.data[0]
+      value: 
+      objectReference: {fileID: 2086180677}
+    - target: {fileID: 7458543973091233723, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: MyColliders.Array.data[1]
+      value: 
+      objectReference: {fileID: 387668957}
+    - target: {fileID: 7458543973091233723, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: MyColliders.Array.data[2]
+      value: 
+      objectReference: {fileID: 316057535}
+    - target: {fileID: 7458543973091233723, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+      propertyPath: MyColliders.Array.data[3]
+      value: 
+      objectReference: {fileID: 316057535}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
 --- !u!4 &671944598 stripped
@@ -4423,9 +4443,9 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2017183891}
   m_CullTransparentMesh: 1
---- !u!1 &2086180672 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2184988014544808216, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
+--- !u!61 &2086180677 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 4811139611164380565, guid: f19907eaf54dd4d4a912a1ad029a427c, type: 3}
   m_PrefabInstance: {fileID: 671944597}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &2086180675
