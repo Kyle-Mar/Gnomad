@@ -10,6 +10,8 @@ public class WhackableObject : MonoBehaviour
     [SerializeField] protected ParticleSystem HitParticles;
     [SerializeField] protected bool IsBounceable;
     [SerializeField] protected SpriteRenderer[] sprites;
+    [Tooltip("Activatable object upon hit")]
+    [SerializeField] protected ActivatableObject ActivationLink;
     protected AudioSource AudioPlayer;
 
     private void Awake()
@@ -30,6 +32,8 @@ public class WhackableObject : MonoBehaviour
     {
         if (!collision.gameObject.CompareTag("PlayerAttack")) {return;}
         SpawnWhackEffects();
+        if(ActivationLink != null) { ActivationLink.Activate(); }
+        Debug.Log("Object activated");
     }
 
     protected void SpawnWhackEffects()

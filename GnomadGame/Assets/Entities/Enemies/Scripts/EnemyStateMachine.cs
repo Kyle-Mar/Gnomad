@@ -406,6 +406,7 @@ public class EnemyStateMachine : StateMachine
         }
         else if (collision.CompareTag("Enemy") && collision.gameObject.layer != 7)
         {
+            if (collision.GetComponent<EnemyStateMachine>().IsVolleyed) { return; }//prevent volleyed enemies from cancelling each other out
             IDamageable damageable;
             if (collision.gameObject.TryGetComponent(out damageable))
             {
@@ -417,6 +418,8 @@ public class EnemyStateMachine : StateMachine
         }
         else if (collision.CompareTag("Enemy") && collision.gameObject.layer == 7)
         {
+            if (collision.GetComponent<EnemyStateMachine>().IsVolleyed) { return; }
+
             IDamageable damageable;
             if (collision.gameObject.TryGetComponent(out damageable))
             {
