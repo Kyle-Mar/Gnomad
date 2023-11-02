@@ -165,8 +165,8 @@ MonoBehaviour:
   - {fileID: 6126009427784262044}
   - {fileID: 6994896498312757180}
   - {fileID: 7585615322855970257}
-  MAX_HEALTH: 7
-  health: 7
+  MAX_HEALTH: 4
+  health: 4
   canTakeDamage: 1
   cooldownTime: 0.2
 --- !u!114 &1960499130926194949
