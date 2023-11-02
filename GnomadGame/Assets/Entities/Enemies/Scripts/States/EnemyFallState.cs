@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Gnomad.Utils;
 public class EnemyFallState : EnemyBaseState
 {
 
@@ -44,7 +44,9 @@ public class EnemyFallState : EnemyBaseState
     public override void FixedUpdateState()
     {
         //throw new System.NotImplementedException();
-        context.rb.velocity = new(currentVelocity.x, context.rb.velocity.y + (MovementStats.fallSpeed * Time.fixedDeltaTime * 1.25f));
+        var nextXVel = Mathf.Lerp(currentVelocity.x, 0f, Utils.GetInterpolant(10));
+        context.rb.velocity = new(nextXVel, context.rb.velocity.y + (MovementStats.fallSpeed * Time.fixedDeltaTime * 1.25f));
+        currentVelocity = new Vector3(nextXVel, currentVelocity.y);
     }
 
     public override void InitializeSubState()
