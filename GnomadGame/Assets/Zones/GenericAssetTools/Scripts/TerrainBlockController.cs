@@ -25,7 +25,7 @@ public class TerrainBlockController : MonoBehaviour
     [SerializeField] private Sprite VxXBlock;
     [SerializeField] private Sprite XxXBlock;
 
-    private List<GameObject> blocks;
+    private List<GameObject> blocks = new List<GameObject>();
     /*
         ----Plan----
     Terrain blocks should be top left justified
@@ -42,18 +42,29 @@ public class TerrainBlockController : MonoBehaviour
     */
     private void OnValidate()
     {
-       if (previousSize == size) { return; }
-       previousSize = size;
-       foreach (GameObject block in blocks)
-       {
-            //https://forum.unity.com/threads/onvalidate-and-destroying-objects.258782/
+        //only run when size is updated
+        if (previousSize == size) { return; }
+        //only run when we are within our quantom range
+        if ( size.x % minBlockHeight != 0 || size.y % minBlockHeight != 0) { return; }
+        previousSize = size;
+        if (transform.childCount > 0) { DestroyCurrentBlocks(); }
+
+        Debug.Log(blocks);
+        //BuildTerrain();
+    }
+
+    private void DestroyCurrentBlocks()
+    {
+        GameObject currentBlock = transform.GetChild(0).gameObject;
+        while (currentBlock != null)
+        {   //https://forum.unity.com/threads/onvalidate-and-destroying-objects.258782/
             //idk how this works, but it's from here
+            return;
             UnityEditor.EditorApplication.delayCall += () =>
             {
-                DestroyImmediate(block);
+                DestroyImmediate(currentBlock);
             };
         }
-        BuildTerrain();
     }
 
     private void BuildTerrain()
@@ -76,6 +87,7 @@ public class TerrainBlockController : MonoBehaviour
     //returns the height of the row built
     private void BuildTerrainRow(uint height, uint y)
     {
+        Debug.Log("Building Terrain Row with height " + height);
         for(uint x = 0; x < size.x;)
         {
             if (x+maxBlockWidth <= size.x)
@@ -90,7 +102,6 @@ public class TerrainBlockController : MonoBehaviour
             {
                 //create a block that is 5xheight
                 x += minBlockWidth;
-
             }
         }
     }
@@ -101,9 +112,9 @@ public class TerrainBlockController : MonoBehaviour
         blockPosition *= 128;
         GameObject blockObject = new GameObject("BlockSprite");
         SpriteRenderer spriteRenderer = blockObject.AddComponent<SpriteRenderer>();
-        blockObject.transform.position = blockPosition;
         blockObject.transform.parent = transform;
         blocks.Add(blockObject);
+        Debug.Log("Creating block");
         if (blockSize.x == maxBlockHeight)
         {
             if (blockSize.y == maxBlockWidth)
@@ -126,6 +137,7 @@ public class TerrainBlockController : MonoBehaviour
                 spriteRenderer.sprite = VxVBlock;
             }
         }
+        blockObject.transform.position += (Vector3)spriteRenderer.size * 0.5f;
     }
     
 

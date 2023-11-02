@@ -42,8 +42,6 @@ public class EnemySpawner : MonoBehaviour
         if (!SpawnContinuous) { enemiesToSpawn -= (uint)enemies.Count; }
 
         if (enemiesToSpawn > 100) { Debug.Log("Spawning way too many entities"); return; }
-        Debug.Log("SPanwing enemies this many" +  enemiesToSpawn);
-        Debug.Log("List is this long" + enemies.Count);
         for (uint i = 0; i < enemiesToSpawn; i++)
         {
             GameObject newEnemy = Instantiate(enemy, transform.position, Quaternion.identity);
