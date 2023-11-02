@@ -340,7 +340,8 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2144612815061009410, guid: c0c496bf2235bc747b6816349c1dc9db, type: 3}
       propertyPath: m_text
-      value: This room should teach the player how to dash and wall jump
+      value: This room should teach the player how to wall jump, wall climb by jumping
+        and dashing
       objectReference: {fileID: 0}
     - target: {fileID: 7518371676343145353, guid: c0c496bf2235bc747b6816349c1dc9db, type: 3}
       propertyPath: m_Name
