@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2144612815061009410}
   - component: {fileID: 6720664133429018094}
   - component: {fileID: 8319888106107707934}
-  m_Layer: 6
+  m_Layer: 11
   m_Name: TextBoxPopupTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -116,7 +116,7 @@ public class CameraSystem : MonoBehaviour
                                 );
         desiredPosition = GetCameraPosFromPlayerPos() + currentAnticipation;
         desiredPosition.z = originalPosition.z;
-        Debug.Log(playerPosViewport.y);
+        //Debug.Log(playerPosViewport.y);
         desiredDelta = Vector3.Lerp(transform.position, desiredPosition, Utils.GetInterpolant(smoothingFactor + Mathf.Abs(40 * 0.5f-playerPosViewport.y))) - transform.position;
         if (boundingCollider)
         {

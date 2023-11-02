@@ -364,7 +364,7 @@ public class EnemyStateMachine : StateMachine
 
             }
         }
-        Destroy(this.gameObject);
+        Destroy(transform.parent.gameObject);
     }
 
     void OnDamage(float amount, Collider2D collider, Vector3 dir)
