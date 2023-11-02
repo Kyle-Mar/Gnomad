@@ -149,6 +149,7 @@ public class PlayerStateMachine : StateMachine
 
     void Update()
     {
+        Debug.Log(isGrounded);
         InputAction.CallbackContext callbackContext = new();
         //PrintDebugInfo(callbackContext);
         DoJumpBuffer();
@@ -262,6 +263,17 @@ public class PlayerStateMachine : StateMachine
         return (Vector2.zero, false);
     }
 
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (ContextUtils.CheckIfGrounded(collision))
+        {
+            isGrounded = true;
+            wallSlideExpired = false;
+            canDash = true;
+        }
+    }
+
     private void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.transform.tag == "Ground")
@@ -302,7 +314,7 @@ public class PlayerStateMachine : StateMachine
             isTouchingWallLeft = false;
             isTouchingWallRight = false;
         }
-        if (!ContextUtils.CheckIfGrounded(collision))
+        if (!ContextUtils.CheckIfGrounded(collision, col))
         {
             if (isGrounded)
             {
