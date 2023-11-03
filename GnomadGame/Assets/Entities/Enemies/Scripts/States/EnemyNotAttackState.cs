@@ -45,6 +45,7 @@ public class EnemyNotAttackState : EnemyBaseState
         //throw new System.NotImplementedException();
         context.IsAttacking = false;
         context.JustAttacked = true;
+        context.animator.SetBool("Charging", false);
         CheckSwitchStates();
     }
 

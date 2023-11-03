@@ -84,7 +84,10 @@ MonoBehaviour:
   HitParticles: {fileID: 0}
   IsBounceable: 0
   sprites: []
+  ActivationLink: {fileID: 0}
   HitsBeforeBreaking: 1
   BreakSound: {fileID: 0}
   BreakParticles: {fileID: 0}
   PlayHitNoiseOnBreak: 0
+  sprite: {fileID: 0}
+  PlayerDamageable: 1

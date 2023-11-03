@@ -21,15 +21,19 @@ public class EnemyIdleState : EnemyBaseState
             // Wait for timer to be done
             if (timerChangeState <= 0.0f)
             {
+                int lastIndex = context.currentMovePointIndex;
                 context.PickNextMovePoint();
-                SwitchState(context.MoveState);
+                if (lastIndex != context.currentMovePointIndex || Vector2.Distance(context.transform.position, context.targetObject.transform.position) >= 0.4f)
+                {
+                    SwitchState(context.MoveState);
+                }
             }
         }
 
         // If enemy is aggro
         else
         {
-            if (Vector2.Distance(context.transform.position, context.targetObject.transform.position) > 0.4f)
+            if (Vector2.Distance(context.transform.position, context.targetObject.transform.position) > 0.5f)
             {
                 if (context.IsAttackOnCooldown)
                 {
@@ -40,7 +44,7 @@ public class EnemyIdleState : EnemyBaseState
                 }
                 else
                 {
-                        SwitchState(context.MoveState);
+                    SwitchState(context.MoveState);
                 }
             }
         }
@@ -52,14 +56,20 @@ public class EnemyIdleState : EnemyBaseState
     {
         //throw new System.NotImplementedException();
         InitializeSubState();
+        if (!context.animator.GetBool("InAir"))
+        {
+            context.animator.SetTrigger("IdleTrigger");
+        }
+        context.animator.SetFloat("Velocity", 0f);
         timerChangeState = TimerChangeStateMax;
         context.rb.Sleep();
+        context.PickNextMovePoint();
     }
 
     public override void ExitState()
     {
         //throw new System.NotImplementedException();
-        
+
     }
 
     public override void FixedUpdateState()
