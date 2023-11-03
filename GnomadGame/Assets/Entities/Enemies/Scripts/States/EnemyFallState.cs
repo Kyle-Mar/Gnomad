@@ -41,7 +41,7 @@ public class EnemyFallState : EnemyBaseState
     {
         context.animator.SetBool("InAir", false);
         Physics2D.gravity = new(0, -9.8f);
-        SetSubState(context.IdleState);
+        SetSubState(context.MoveState);
         //throw new System.NotImplementedException();
     }
 

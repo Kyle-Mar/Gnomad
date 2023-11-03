@@ -98,11 +98,12 @@ public class EnemyKnockbackState : EnemyBaseState
         //throw new System.NotImplementedException();
         //context.animator.SetBool("InAir", false);
         knockbackTimer = 0f;
-        SetSubState(context.MoveState);
         context.IsDamaged = false;
         context.IsSlidedInto = false;
         context.IsVolleyed = false;
         context.volleyCol.gameObject.SetActive(false);
+        SetSubState(context.MoveState);
+        
     }
 
     public override void FixedUpdateState()

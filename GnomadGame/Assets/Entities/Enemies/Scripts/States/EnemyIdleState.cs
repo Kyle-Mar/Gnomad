@@ -33,7 +33,7 @@ public class EnemyIdleState : EnemyBaseState
         // If enemy is aggro
         else
         {
-            if (Vector2.Distance(context.transform.position, context.targetObject.transform.position) > 0.5f)
+            if (Vector2.Distance(context.transform.position, context.targetObject.transform.position) > 0.3f)
             {
                 if (context.IsAttackOnCooldown)
                 {
@@ -55,15 +55,13 @@ public class EnemyIdleState : EnemyBaseState
     public override void EnterState()
     {
         //throw new System.NotImplementedException();
+        //Debug.Log("Entering Idle State");
         InitializeSubState();
-        if (!context.animator.GetBool("InAir"))
-        {
-            context.animator.SetTrigger("IdleTrigger");
-        }
-        context.animator.SetFloat("Velocity", 0f);
+        context.animator.SetBool("Moving", false);
         timerChangeState = TimerChangeStateMax;
         context.rb.Sleep();
         context.PickNextMovePoint();
+        
     }
 
     public override void ExitState()

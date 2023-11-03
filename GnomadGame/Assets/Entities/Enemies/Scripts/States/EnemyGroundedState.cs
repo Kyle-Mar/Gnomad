@@ -25,15 +25,14 @@ public class EnemyGroundedState : EnemyBaseState
 
     public override void EnterState()
     {
-        InitializeSubState();
         context.animator.SetBool("InAir", false);
+        InitializeSubState();
         //context.rb.velocity = new(context.rb.velocity.x, 0);
         //Object.Instantiate(context.LandParticles, context.Feet.position, Quaternion.identity);
     }
 
     public override void ExitState()
     {
-        context.animator.SetFloat("Velocity", 0f);
         context.animator.SetTrigger("InAirTrigger");
         context.animator.SetBool("InAir", true);
         //throw new System.NotImplementedException();

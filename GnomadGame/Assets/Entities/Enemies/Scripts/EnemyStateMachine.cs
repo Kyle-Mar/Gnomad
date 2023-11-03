@@ -191,7 +191,8 @@ public class EnemyStateMachine : StateMachine
     {
         UpdateMovementDirection();
         currentState.UpdateStates();
-        //Debug.Log(currentState.ToString());
+        //Debug.LogWarning(currentState.ToString());
+        //Debug.LogWarning(currentState.CurrentSubState().ToString());
         if (IsAttackOnCooldown)
         {
             attackCooldownTimer -= Time.deltaTime;
@@ -310,9 +311,6 @@ public class EnemyStateMachine : StateMachine
         // Probably use this for non aggro movement, and switch states based on its movement vector
         //  Instead of only using its Idle behavior as a timer
         
-        animator.SetFloat("Velocity", Mathf.Abs(rb.velocity.x));
-
-
         if (rb.velocity.x <= -0.001 && SpriteRenderer.flipX && !IsDamaged)
         { FlipComponents(); }
         else if (rb.velocity.x >= 0.001 && !SpriteRenderer.flipX && !IsDamaged)

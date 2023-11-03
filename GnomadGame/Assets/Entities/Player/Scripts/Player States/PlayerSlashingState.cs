@@ -47,7 +47,7 @@ public class PlayerSlashingState : PlayerBaseState
 
     public override void UpdateState()
     {
-        Debug.Log(currentSuperState);
+        //Debug.Log(currentSuperState);
         slashEndTime -= Time.deltaTime; 
         CheckSwitchStates();
     }
