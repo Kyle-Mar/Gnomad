@@ -27,6 +27,10 @@ public class GorbChargeAttackState : EnemyBaseState
     {
         //throw new System.NotImplementedException();
         context.SetMoveSpeed(context.ChargeSpeed);
+        if (!context.animator.GetBool("InAir"))
+        {
+            context.animator.SetTrigger("ChargingTrigger");
+        }
         context.animator.SetBool("Charging", true);
         context.IsAttacking = true;
         attackTimer = context.AttackDuration;

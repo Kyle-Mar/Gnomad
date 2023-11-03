@@ -85,9 +85,12 @@ public class EnemyMoveState : EnemyBaseState
             }
         }
 
+        
 
+        //context.animator.SetFloat("Velocity", Mathf.Abs(newVelocity.x));
 
         context.rb.velocity = new Vector2(newVelocity.x, context.rb.velocity.y);
+
 
         //context.LastMovementDirection = newVelocity.normalized;
         // Could create a movemnt stats script that stores this
@@ -146,14 +149,21 @@ public class EnemyMoveState : EnemyBaseState
 
         // Setting currentMoveDirection here so if the enemy starts attacking
         // in Idle state, it will be gaurenteed to be charging in the correct direction
-        currentMoveDirection = new Vector2(context.targetObject.transform.position.x - context.gameObject.transform.position.x, 0).normalized;
+        Debug.Log("Entering Move State");
+        currentMoveDirection = new Vector2(context.targetObject.transform.position.x - context.gameObject.transform.position.x, 0);
+        if (!context.animator.GetBool("InAir") && Mathf.Abs(currentMoveDirection.x) >= 0.5f)
+        {
+            context.animator.SetTrigger("WalkingTrigger");
+        }
+        currentMoveDirection = currentMoveDirection.normalized;
         InitializeSubState();
+        
     }
 
     public override void ExitState()
     {
-        //throw new System.NotImplementedException();
-
+        //throw new System.NotImplementedException();1
+        context.animator.SetFloat("Velocity", 0f);
     }
 
     public override void FixedUpdateState()

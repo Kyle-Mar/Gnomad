@@ -33,6 +33,9 @@ public class EnemyGroundedState : EnemyBaseState
 
     public override void ExitState()
     {
+        context.animator.SetFloat("Velocity", 0f);
+        context.animator.SetTrigger("InAirTrigger");
+        context.animator.SetBool("InAir", true);
         //throw new System.NotImplementedException();
     }
     
@@ -47,7 +50,7 @@ public class EnemyGroundedState : EnemyBaseState
 
         // Right now, it is just static behavior
         // Tells the enemy to move towards Move Point
-        if (context.targetObject != null)
+        if (context.targetObject != null && Vector2.Distance(context.transform.position, context.targetObject.transform.position) >= 0.4f)
         {
             SetSubState(context.MoveState);
         }

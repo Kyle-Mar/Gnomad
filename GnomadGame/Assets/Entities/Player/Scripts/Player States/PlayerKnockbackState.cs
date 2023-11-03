@@ -43,7 +43,7 @@ public class PlayerKnockbackState : PlayerBaseState
             initialKnockbackDirection.y = 0.5f * Mathf.Sign(initialKnockbackDirection.y);
         }
         Debug.Log("Initial Knockback Direction + " + initialKnockbackDirection);
-        context.rb.velocity = initialKnockbackDirection * 27.5f;
+        context.rb.velocity = initialKnockbackDirection * 23.5f;
         context.Animator.SetTrigger("KnockbackTrigger");
 
     }
