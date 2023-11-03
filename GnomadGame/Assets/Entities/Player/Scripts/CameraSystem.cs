@@ -129,7 +129,7 @@ public class CameraSystem : MonoBehaviour
         if(shakeTimer >= 0f)
         {
             shakeTimer -= Time.fixedDeltaTime;
-            desiredPosition += new Vector3(Random.insideUnitCircle.x, Random.insideUnitCircle.y, 0)*2.0f;
+            desiredPosition += new Vector3(Random.insideUnitCircle.x, Random.insideUnitCircle.y, 0);
         }
         
         

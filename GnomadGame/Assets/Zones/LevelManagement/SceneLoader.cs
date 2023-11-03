@@ -21,6 +21,10 @@ public class SceneLoader : MonoBehaviour
     //When the player enters a new room, update the currently loaded scenes.
     private void OnTriggerStay2D(Collider2D collision)
     {
+        if (boundingCollider)
+        {
+            LevelManager.onEnterNewRoom?.Invoke(boundingCollider);
+        }
         if (collision.tag == "Player")
         {
 
@@ -32,10 +36,7 @@ public class SceneLoader : MonoBehaviour
             LevelManager.UpdateLoadedScenes(sceneInfo.adjacentScenes, sceneInfo, this);
         }
 
-        if (boundingCollider)
-        {
-            LevelManager.onEnterNewRoom?.Invoke(boundingCollider);
-        }
+        
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -156,7 +157,7 @@ public class SceneLoader : MonoBehaviour
             Debug.Log(boundingCollider);
             if (boundingCollider)
             {
-                LevelManager.onEnterNewRoom?.Invoke(boundingCollider);
+                //LevelManager.onEnterNewRoom?.Invoke(boundingCollider);
             }
             Debug.LogWarning(sceneInfo.scene.Name + offset);
         }
