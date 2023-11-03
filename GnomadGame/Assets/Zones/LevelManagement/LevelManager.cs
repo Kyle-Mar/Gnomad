@@ -87,6 +87,17 @@ public static class LevelManager
         
     }
 
+    /// <summary>
+    /// Cleanup Cleanup Everybody Cleanup! Gorb.
+    /// </summary>
+    public static void UnloadAllScenes()
+    {
+        foreach(var sceneInfo in loadedScenes)
+        {
+            UnloadSceneAsync(sceneInfo.scene.Name);
+        }
+        OccupiedScene = null;
+    }
     public static IEnumerator LoadSceneAsync(string sceneName)
     {
         
@@ -105,7 +116,6 @@ public static class LevelManager
             yield return null;
         }
     }
-
 
     public static IEnumerator UnloadSceneAsync(string sceneName)
     {
