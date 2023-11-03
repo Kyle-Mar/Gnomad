@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 25598647}
   - component: {fileID: 25598646}
   - component: {fileID: 25598648}
+  - component: {fileID: 25598649}
   m_Layer: 0
   m_Name: CameraBounds
   m_TagString: Untagged
@@ -185,9 +186,23 @@ CompositeCollider2D:
         Y: 79859904
       - X: -573131712
         Y: 79859904
+  - m_Collider: {fileID: 25598649}
+    m_ColliderPaths:
+    - - X: -184160080
+        Y: 245314560
+      - X: -793231936
+        Y: 245314560
+      - X: -793231936
+        Y: 83916400
+      - X: -184160080
+        Y: 83916400
   m_CompositePaths:
     m_Paths:
     - - {x: -57.313206, y: 7.9859905}
+      - {x: -57.31314, y: 8.39164}
+      - {x: -18.416008, y: 8.391669}
+      - {x: -18.416037, y: 24.531456}
+      - {x: -57.31317, y: 24.531485}
       - {x: -57.313206, y: 65.352554}
       - {x: -102.74579, y: 65.35252}
       - {x: -102.74576, y: 7.9859905}
@@ -239,6 +254,32 @@ BoxCollider2D:
   m_AutoTiling: 0
   serializedVersion: 2
   m_Size: {x: 45.432617, y: 57.366566}
+  m_EdgeRadius: 0
+--- !u!61 &25598649
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 25598644}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 1
+  m_Offset: {x: -48.869602, y: 16.461548}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 60.90719, y: 16.139816}
   m_EdgeRadius: 0
 --- !u!1 &49860082
 GameObject:
@@ -66776,7 +66817,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1855115833}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -17.04, y: 0.04, z: 0}
+  m_LocalPosition: {x: -48.5403, y: 0.04, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -66829,7 +66870,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 2
-  m_Size: {x: 12.043803, y: 62.1647}
+  m_Size: {x: 43.544113, y: 62.1647}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
