@@ -31,6 +31,7 @@ public class PlayerKnockbackState : PlayerBaseState
     public override void EnterState()
     {
         InitializeSubState();
+        CameraSystemEvent.onShake?.Invoke();
         knockbackTimer = knockbackTime;
         initialKnockbackDirection = context.LastKBDirection.normalized;
         if(initialKnockbackDirection.x < 0.5f && initialKnockbackDirection.x > -0.5f)

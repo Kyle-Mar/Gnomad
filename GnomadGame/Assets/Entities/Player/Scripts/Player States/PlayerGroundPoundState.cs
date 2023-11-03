@@ -34,6 +34,7 @@ public class PlayerGroundPoundState : PlayerBaseState
     {
         //Debug.Log("exiting");
         context.rb.velocity = new(0, 0);
+        context.IsGPBounceQueued = false;
         context.GroundPoundCollider.gameObject.SetActive(false);
         context.Animator.SetTrigger("StopGroundPoundTrigger");
 

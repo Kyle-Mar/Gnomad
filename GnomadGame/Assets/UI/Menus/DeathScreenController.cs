@@ -40,6 +40,7 @@ public class DeathScreenController : MonoBehaviour
     }
     public void OnClickReturnToMainMenu()
     {
+        LevelManager.UnloadAllScenes();
         StaticUIFunctions.LoadMainMenu();
         ExitDeathScreen();
     }
