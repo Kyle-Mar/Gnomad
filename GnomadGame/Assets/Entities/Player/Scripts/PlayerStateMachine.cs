@@ -149,12 +149,13 @@ public class PlayerStateMachine : StateMachine
 
     void Update()
     {
-        Debug.Log(isGrounded);
-        InputAction.CallbackContext callbackContext = new();
+        //Debug.Log(isGrounded);
+        //InputAction.CallbackContext callbackContext = new();
         //PrintDebugInfo(callbackContext);
         DoJumpBuffer();
         DoInputBuffer();
         currentState.UpdateStates();
+        currentState.PrintStateTree();
 
     }
 
@@ -413,8 +414,8 @@ public class PlayerStateMachine : StateMachine
         CurrentState.PrintStateTree();
         //Debug.Log(currentMoveSpeed);
         //GetComponentInChildren<Health>().Damage(2);
-        Debug.Log("Screen Shot Take");
-        ScreenShot();
+        //Debug.Log("Screen Shot Take");
+        //ScreenShot();
     }
 
     void ScreenShot()
