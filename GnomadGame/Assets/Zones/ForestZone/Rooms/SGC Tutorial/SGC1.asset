@@ -18,6 +18,7 @@ MonoBehaviour:
   adjacentScenes:
   - {fileID: 11400000, guid: 41c7e34094354e1408d76879e7c9e42c, type: 2}
   - {fileID: 11400000, guid: 42568e2189f3b4247a54c9410cc58e06, type: 2}
+  isLoaded: 1
   DoorPositions:
   - {x: 4, y: 8, z: 0}
   - {x: 99, y: -23, z: 0}
