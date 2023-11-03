@@ -4,6 +4,12 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using Gnomad.Utils;
 
+public static class CameraSystemEvent
+{
+    public delegate void OnShake();
+    public static OnShake onShake;
+}
+
 public class CameraSystem : MonoBehaviour
 {
     [Header("Toggles")]
@@ -53,6 +59,7 @@ public class CameraSystem : MonoBehaviour
 
 
     LayerMask groundLayerMask;
+    public float shakeTimer = 0f;
 
     void Start()
     {
@@ -61,6 +68,7 @@ public class CameraSystem : MonoBehaviour
         Assert.IsNotNull(playerRB);
         Assert.IsNotNull(playerCollider);
         Assert.IsNotNull(psm);
+        CameraSystemEvent.onShake += Shake;
         desiredPosition = GetCameraPosFromPlayerPos();
         currentAnticipation = GetAnticipationVector();
         originalPosition = transform.position;
@@ -117,7 +125,16 @@ public class CameraSystem : MonoBehaviour
         desiredPosition = GetCameraPosFromPlayerPos() + currentAnticipation;
         desiredPosition.z = originalPosition.z;
         //Debug.Log(playerPosViewport.y);
+        
+        if(shakeTimer >= 0f)
+        {
+            shakeTimer -= Time.fixedDeltaTime;
+            desiredPosition += new Vector3(Random.insideUnitCircle.x, Random.insideUnitCircle.y, 0)*2.0f;
+        }
+        
+        
         desiredDelta = Vector3.Lerp(transform.position, desiredPosition, Utils.GetInterpolant(smoothingFactor + Mathf.Abs(40 * 0.5f-playerPosViewport.y))) - transform.position;
+        
         if (boundingCollider)
         {
             transform.position += GetAllowedDelta(desiredDelta);
@@ -126,6 +143,11 @@ public class CameraSystem : MonoBehaviour
         {
             transform.position += desiredDelta;
         }
+    }
+
+    public void Shake()
+    {
+        shakeTimer = 0.35f;
     }
 
     void Update()
