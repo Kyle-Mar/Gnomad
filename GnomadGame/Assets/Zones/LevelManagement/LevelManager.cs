@@ -88,7 +88,7 @@ public static class LevelManager
     }
 
     /// <summary>
-    /// Cleanup Cleanup Everybody Cleanup! Gorb.
+    /// Cleanup Cleanup, Everybody Cleanup! Gorb.
     /// </summary>
     public static void UnloadAllScenes()
     {
