@@ -95,8 +95,10 @@ public static class LevelManager
     {
         foreach(var sceneInfo in loadedScenes)
         {
+            sceneInfo.isLoaded = false;
             UnloadSceneAsync(sceneInfo.scene.Name);
         }
+        loadedScenes.Clear();
         OccupiedScene = null;
     }
     public static IEnumerator LoadSceneAsync(string sceneName)

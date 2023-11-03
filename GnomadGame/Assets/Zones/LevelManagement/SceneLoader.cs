@@ -55,6 +55,7 @@ public class SceneLoader : MonoBehaviour
     //Remove it when the SceneLoader is disabled.
     private void OnDisable()
     {
+        isEnteredByPlayer = false;
         SceneManager.sceneLoaded -= OnLoadScene;
     }
 
@@ -68,7 +69,7 @@ public class SceneLoader : MonoBehaviour
             //This is called after UpdateLoadedScenes because
             //Update Loaded Scenes is what loads and unloads the scenes.
             //So The event is only invoked once the scenes loaded and the occupiedscene is now set.
-            if (LevelManager.OccupiedScene != sceneInfo)
+            if (LevelManager.OccupiedScene != sceneInfo && LevelManager.OccupiedScene != null)
             {
                 return;
             }
@@ -77,7 +78,7 @@ public class SceneLoader : MonoBehaviour
             {
                 return;
             }
-
+            Debug.Log("After checks;");
             // Find the adjacent scene where the name matches the just loaded scene name.
             int idx = sceneInfo.adjacentScenes.FindIndex(0, x => x.scene.Name == scene.name);
             // if we can't find it, it wasn't a room.

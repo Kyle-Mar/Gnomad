@@ -25,7 +25,7 @@ public class SceneInfo : ScriptableObject
         set { DoorConnections.CopyFrom(value); }
     }
     public List<SceneInfo> adjacentScenes;
-    public bool isLoaded { get; set; }
+    public bool isLoaded = false;
     public List<Vector3> DoorPositions = new(); // this is related in order to the sceneInfo's adjacent scene list
     [Header("KEY: Idx Of Our Door\nVALUE: Idx Of Adjacent Scene's door\nLooks like: [KEY] [VALUE]")]
     public IntIntDictionary DoorConnections = new IntIntDictionary{ { 0,0 } }; // Key = idx of our adjacent scenes, Value = other adjacent scenes idx.
