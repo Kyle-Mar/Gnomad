@@ -78706,6 +78706,14 @@ PrefabInstance:
       propertyPath: m_text
       value: WALL JUMP BY HOLDING MOVE INTO THE WALL AND PRESSING JUMP
       objectReference: {fileID: 0}
+    - target: {fileID: 2144612815061009410, guid: c0c496bf2235bc747b6816349c1dc9db, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
+    - target: {fileID: 2144612815061009410, guid: c0c496bf2235bc747b6816349c1dc9db, type: 3}
+      propertyPath: m_overrideHtmlColors
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6720664133429018094, guid: c0c496bf2235bc747b6816349c1dc9db, type: 3}
       propertyPath: m_Size.x
       value: 9.659683
@@ -78725,6 +78733,18 @@ PrefabInstance:
     - target: {fileID: 7518371676343145353, guid: c0c496bf2235bc747b6816349c1dc9db, type: 3}
       propertyPath: m_Name
       value: TextBoxPopupTrigger
+      objectReference: {fileID: 0}
+    - target: {fileID: 7549553089446344387, guid: c0c496bf2235bc747b6816349c1dc9db, type: 3}
+      propertyPath: m_SortingLayer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7549553089446344387, guid: c0c496bf2235bc747b6816349c1dc9db, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -32849253
+      objectReference: {fileID: 0}
+    - target: {fileID: 7549553089446344387, guid: c0c496bf2235bc747b6816349c1dc9db, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8299678297839038484, guid: c0c496bf2235bc747b6816349c1dc9db, type: 3}
       propertyPath: m_Pivot.x
