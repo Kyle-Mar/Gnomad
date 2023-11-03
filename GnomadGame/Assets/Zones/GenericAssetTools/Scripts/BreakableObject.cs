@@ -11,6 +11,7 @@ public class BreakableObject : WhackableObject
     [SerializeField] protected ParticleSystem BreakParticles;
     [SerializeField] protected bool PlayHitNoiseOnBreak;
     [SerializeField] SpriteRenderer sprite;
+    [SerializeField] protected bool PlayerDamageable = true;
     // This should take a loot table, but they are not implemented yet
     // See DoBreak for use of this var
     //[SerializeField] protected GameObject LootTable;
@@ -34,19 +35,27 @@ public class BreakableObject : WhackableObject
         Debug.Log("OnTriggerEnterTarget");
         // Never calls the base function... maybe could cause issues if expanded
         //if (!collision.gameObject.CompareTag("PlayerAttack")) { return; }
-        HitsBeforeBreaking--;
-        if(HitsBeforeBreaking <= 0)
+        if (!PlayerDamageable && !collision.CompareTag("Enemy"))
         {
-            //prevents base from playing hit noise on the break hit
-            if (BreakSound != null && !PlayHitNoiseOnBreak)
-            {
-                HitSound = null;
-            }
-            SpawnWhackEffects();
-            DoBreak();
             return;
         }
-        SpawnWhackEffects();
+
+        else
+        {
+            HitsBeforeBreaking--;
+            if(HitsBeforeBreaking <= 0)
+            {
+                //prevents base from playing hit noise on the break hit
+                if (BreakSound != null && !PlayHitNoiseOnBreak)
+                {
+                    HitSound = null;
+                }
+                SpawnWhackEffects();
+                DoBreak();
+                return;
+            }
+            SpawnWhackEffects();
+        }
 
     }
 

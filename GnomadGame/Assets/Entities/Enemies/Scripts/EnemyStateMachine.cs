@@ -404,7 +404,7 @@ public class EnemyStateMachine : StateMachine
                 damageable.Damage(AttackDamage, col, dur);
             }
         }
-        else if (collision.CompareTag("Enemy") && collision.gameObject.layer != 7)
+        else if (collision.CompareTag("Enemy"))
         {
             if (collision.GetComponent<EnemyStateMachine>().IsVolleyed) { return; }//prevent volleyed enemies from cancelling each other out
             IDamageable damageable;
@@ -413,20 +413,10 @@ public class EnemyStateMachine : StateMachine
                 var collisionPoint = collision.ClosestPoint(transform.position);
                 var dur = collisionPoint - new Vector2(transform.position.x, transform.position.y);
                 damageable.Damage(AttackDamage, volleyCol, dur);
-                volleyCol.gameObject.SetActive(false);
-            }
-        }
-        else if (collision.CompareTag("Enemy") && collision.gameObject.layer == 7)
-        {
-            if (collision.GetComponent<EnemyStateMachine>().IsVolleyed) { return; }
-
-            IDamageable damageable;
-            if (collision.gameObject.TryGetComponent(out damageable))
-            {
-                var collisionPoint = collision.ClosestPoint(transform.position);
-                var dur = collisionPoint - new Vector2(transform.position.x, transform.position.y);
-                damageable.Damage(AttackDamage, col, dur);
-                //volleyCol.gameObject.SetActive(false);
+                if (collision.gameObject.layer == 7)
+                {
+                    volleyCol.gameObject.SetActive(false);
+                }
             }
         }
     }
