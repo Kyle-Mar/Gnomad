@@ -169,10 +169,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectAsset: {fileID: 4756128662606143408, guid: d64c31393d62d2d448f5cc6a7eefbf9c, type: 3}
   sprites:
-  - {fileID: 1753921734, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
-  - {fileID: 268484263, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
-  - {fileID: -193728884, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
-  - {fileID: -165984962, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
-  - {fileID: -950820691, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
+  - {fileID: 629038143, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
+  - {fileID: 1779781798, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
+  - {fileID: 533939537, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
   create: 0
   areYouSure: 0

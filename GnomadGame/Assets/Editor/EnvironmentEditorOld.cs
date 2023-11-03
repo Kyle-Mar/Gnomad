@@ -8,6 +8,7 @@ using System.Drawing.Printing;
 using System.Linq;
 using System.Collections.Concurrent;
 using UnityEngine.UIElements;
+using UnityEngine.EventSystems;
 
 public class EnvironmentEditorOld : EditorWindow
 {
@@ -181,6 +182,7 @@ public class EnvironmentEditorOld : EditorWindow
                 prefabHistory.Reverse();
             }
             prefabHistory.Push(lastPlacedPref);
+            EventSystem.current.SetSelectedGameObject(lastPlacedPref);
 
 
 

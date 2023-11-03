@@ -34,6 +34,7 @@ public class PlayerGroundPoundState : PlayerBaseState
     {
         //Debug.Log("exiting");
         context.rb.velocity = new(0, 0);
+        context.IsGPBounceQueued = false;
         context.GroundPoundCollider.gameObject.SetActive(false);
         context.Animator.SetTrigger("StopGroundPoundTrigger");
 
@@ -54,6 +55,7 @@ public class PlayerGroundPoundState : PlayerBaseState
 
     public override void UpdateState()
     {
+        SetSubState(null);
         //Debug.Log(currentSubState);
         context.rb.velocity = Vector2.Lerp(context.rb.velocity,
                               new(MovementStats.groundPoundXSpeed, MovementStats.groundPoundYSpeed),

@@ -389,6 +389,7 @@ public class EnemyStateMachine : StateMachine
         {
             //IsSlidedInto = false;
             IsVolleyed = true;
+            CameraSystemEvent.onShake?.Invoke();
             volleyCol.gameObject.SetActive(true);
             //Debug.LogWarning("Enemy Volleyed");
         }
