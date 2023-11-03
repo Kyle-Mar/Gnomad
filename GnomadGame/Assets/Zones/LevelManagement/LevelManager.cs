@@ -22,10 +22,11 @@ public static class LevelManager
     /// <param name="connectedScenes">All the connected scenes (rooms) to the root room.</param>
     /// <param name="occupiedScene">The scene the player is presently in.</param>
     
+    
     public static void UpdateLoadedScenes(List<SceneInfo> connectedScenes, SceneInfo occupiedScene, SceneLoader loader)
     {
         // list of scenes we plan to remove.
-        
+        Debug.Log(occupiedScene);
         lock (lockObj)
         {
             List<SceneInfo> removeScenes = new List<SceneInfo>();

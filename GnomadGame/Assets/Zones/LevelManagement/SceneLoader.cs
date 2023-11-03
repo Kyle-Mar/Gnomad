@@ -15,11 +15,11 @@ public class SceneLoader : MonoBehaviour
     [SerializeField] CompositeCollider2D tilemapCollider;
     // THIS PROBABLY SHOULDN'T BE HERE BUT I CAN'T FIGURE OUT A BETTER WAY.
     [SerializeField] CompositeCollider2D boundingCollider;
-    public CompositeCollider2D TilemapCollider { get => tilemapCollider; set => tilemapCollider = value; }
+    public CompositeCollider2D TilemapCollider { get => tilemapCollider; private set { return; } }
     bool isEnteredByPlayer = false;
 
     //When the player enters a new room, update the currently loaded scenes.
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.tag == "Player")
         {
@@ -49,13 +49,15 @@ public class SceneLoader : MonoBehaviour
     //Remove it when the SceneLoader is disabled.
     private void OnDisable()
     {
-        SceneManager.sceneLoaded += OnLoadScene;
+        SceneManager.sceneLoaded -= OnLoadScene;
     }
 
     void OnLoadScene(Scene scene, LoadSceneMode mode)
     {
+        Debug.Log(LevelManager.OccupiedScene);
         lock (objLock)
         {
+            Debug.Log($"{this == null}");
             //Assure that this only runs once on the new Occupied Scene.
             //This is called after UpdateLoadedScenes because
             //Update Loaded Scenes is what loads and unloads the scenes.
@@ -111,8 +113,9 @@ public class SceneLoader : MonoBehaviour
             // This Room's center based on the collider.    Top Left + half extents = center
             if (!tilemapCollider)
             {
-                Debug.LogError($"[SceneLoader.cs] The TilemapCollider of {scene.name} is not attached.");
+                Debug.LogError($"[SceneLoader.cs] The TilemapCollider of {sceneInfo.name} is not attached.");
             }
+            Debug.Log($"{TilemapCollider} + {this==null}");
             curRoomCenter = tilemapCollider.gameObject.transform.position + tilemapCollider.bounds.extents;
             var otherRoomCenter = otherTilemapCollider.bounds.center;
             #endregion
