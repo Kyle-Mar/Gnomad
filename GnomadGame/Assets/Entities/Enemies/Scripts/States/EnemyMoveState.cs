@@ -149,7 +149,7 @@ public class EnemyMoveState : EnemyBaseState
 
         // Setting currentMoveDirection here so if the enemy starts attacking
         // in Idle state, it will be gaurenteed to be charging in the correct direction
-        Debug.Log("Entering Move State");
+        //Debug.Log("Entering Move State");
         currentMoveDirection = new Vector2(context.targetObject.transform.position.x - context.gameObject.transform.position.x, 0);
         if (!context.animator.GetBool("InAir") && Mathf.Abs(currentMoveDirection.x) >= 0.5f)
         {

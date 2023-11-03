@@ -31,6 +31,11 @@ public class SceneLoader : MonoBehaviour
             isEnteredByPlayer = true;
             LevelManager.UpdateLoadedScenes(sceneInfo.adjacentScenes, sceneInfo, this);
         }
+
+        if (boundingCollider)
+        {
+            LevelManager.onEnterNewRoom?.Invoke(boundingCollider);
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -148,6 +153,7 @@ public class SceneLoader : MonoBehaviour
                 //x.transform.position += curRoomCenter + doorPosition;
                 x.transform.position += Utils.Vector3ToVector3Int(offset);
             }
+            Debug.Log(boundingCollider);
             if (boundingCollider)
             {
                 LevelManager.onEnterNewRoom?.Invoke(boundingCollider);

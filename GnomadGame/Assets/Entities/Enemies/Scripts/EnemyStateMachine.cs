@@ -399,7 +399,7 @@ public class EnemyStateMachine : StateMachine
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("EnteringTrigger");
+        //Debug.Log("EnteringTrigger");
         if (collision.CompareTag("Enemy"))
         {
             if (collision.GetComponentInParent<EnemyStateMachine>().IsVolleyed && IsVolleyed) { return; }//prevent volleyed enemies from cancelling each other out
