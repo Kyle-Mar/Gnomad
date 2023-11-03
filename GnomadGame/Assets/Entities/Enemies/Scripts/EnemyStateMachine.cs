@@ -64,6 +64,8 @@ public class EnemyStateMachine : StateMachine
 
     [SerializeField] bool isVolleyed = false;
 
+    [SerializeField] bool isVolleyedInto = false;
+
     [Header("Components")]
 
     public Collider2D col;
@@ -100,6 +102,8 @@ public class EnemyStateMachine : StateMachine
     public bool IsDamaged { get { return isDamaged; } set { isDamaged = value; } }
 
     public bool IsSlidedInto { get { return isSlidedInto; } set { isSlidedInto = value; } }
+
+    public bool IsVolleyedInto { get { return isVolleyedInto; } set { isVolleyedInto = value; } }
 
     //public Vector2 LastMovementDirection { get { return lastMovementDirection; } set { lastMovementDirection = value; } }
     public float CurrentMoveSpeed => currentMoveSpeed;
@@ -392,8 +396,35 @@ public class EnemyStateMachine : StateMachine
         onDamageKB?.Invoke(amount,collider, dir);
     }
 
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log("EnteringTrigger");
+        if (collision.CompareTag("Enemy"))
+        {
+            if (collision.GetComponentInParent<EnemyStateMachine>().IsVolleyed && IsVolleyed) { return; }//prevent volleyed enemies from cancelling each other out
+            IDamageable damageable;
+            if (collision.gameObject.TryGetComponent(out damageable))
+            {
+                var collisionPoint = collision.ClosestPoint(transform.position);
+                var dir = collisionPoint - new Vector2(transform.position.x, transform.position.y);
+                collision.GetComponentInParent<EnemyStateMachine>().IsVolleyedInto = true;
+                damageable.Damage(AttackDamage, volleyCol, dir);
+            }
+        }
+        else if (collision.CompareTag("Ground") && IsVolleyed)
+        {
+            if (currentState != FallState)
+            {
+                currentState.ExitState();
+                currentState = FallState;
+            }
+        }
+
+    }
+
     public void OnTriggerStay2D(Collider2D collision)
-    { 
+    {
+
         if (collision.CompareTag("PlayerHurtBox"))
         {
             IDamageable damageable;
@@ -402,21 +433,6 @@ public class EnemyStateMachine : StateMachine
                 var collisionPoint = collision.ClosestPoint(transform.position);
                 var dur = collisionPoint - new Vector2(transform.position.x, transform.position.y);
                 damageable.Damage(AttackDamage, col, dur);
-            }
-        }
-        else if (collision.CompareTag("Enemy"))
-        {
-            if (collision.GetComponent<EnemyStateMachine>().IsVolleyed) { return; }//prevent volleyed enemies from cancelling each other out
-            IDamageable damageable;
-            if (collision.gameObject.TryGetComponent(out damageable))
-            {
-                var collisionPoint = collision.ClosestPoint(transform.position);
-                var dur = collisionPoint - new Vector2(transform.position.x, transform.position.y);
-                damageable.Damage(AttackDamage, volleyCol, dur);
-                if (collision.gameObject.layer == 7)
-                {
-                    volleyCol.gameObject.SetActive(false);
-                }
             }
         }
     }
@@ -450,7 +466,11 @@ public class EnemyStateMachine : StateMachine
             else
             {
                 isGrounded = false;
-                animator.SetBool("InAir", true);
+                if (!animator.GetBool("InAir"))
+                {
+                    animator.SetTrigger("InAirTrigger");
+                    animator.SetBool("InAir", true);
+                }
             }
         }
     }
@@ -471,6 +491,8 @@ public class EnemyStateMachine : StateMachine
             if (!ContextUtils.CheckIfGrounded(collision))
             {
                 isGrounded = false;
+                
+                animator.SetTrigger("InAirTrigger");
                 animator.SetBool("InAir", true);
             }
         }

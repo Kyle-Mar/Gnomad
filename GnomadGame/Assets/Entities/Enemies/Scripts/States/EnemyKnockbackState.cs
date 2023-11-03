@@ -33,16 +33,40 @@ public class EnemyKnockbackState : EnemyBaseState
     {
         //throw new System.NotImplementedException();
         InitializeSubState();
+        context.animator.SetTrigger("InAirTrigger");
         context.animator.SetBool("InAir", true);
         knockbackTimer = context.KnockbackTimer;
         initialKnockbackDirection = context.LastKBDirection.normalized;
 
-        if (context.IsGrounded)
-        {
+        Debug.Log("IsVolleyedInto = " + context.IsVolleyedInto);
 
-            if (!context.IsSlidedInto)
+        if (context.IsVolleyedInto)
+        {
+            if (context.IsGrounded)
             {
-                
+                initialKnockbackDirection.y = 0.5f;
+            }
+            if (context.IsVolleyed)
+            {
+                context.rb.velocity = initialKnockbackDirection * 12.5f;
+                Debug.Log("Normal Volley knockback");
+            }
+            else
+            {
+                context.rb.velocity = initialKnockbackDirection * 32.5f;
+                Debug.Log("Not Volley");
+            }
+        }
+
+        else if (context.IsGrounded)
+        {
+            if (context.IsSlidedInto)
+            {
+                context.rb.velocity = initialKnockbackDirection * 27.5f;
+            }
+            else
+            {
+
                 if (initialKnockbackDirection.x < 0.5f && initialKnockbackDirection.x > -0.5f)
                 {
                     initialKnockbackDirection.x = 0.5f * Mathf.Sign(initialKnockbackDirection.x);
@@ -54,14 +78,11 @@ public class EnemyKnockbackState : EnemyBaseState
                 
                 context.rb.velocity = initialKnockbackDirection * 12.5f;
             }
-            else
-            {
-                context.rb.velocity = initialKnockbackDirection * 27.5f;
-            }
         }
         // Knockback for when player volleys enemy
         else
         {
+            //Debug.Log("EXTREME EPIC KNOCKBACK");
             context.rb.velocity = initialKnockbackDirection * 42.5f;
         }
         
