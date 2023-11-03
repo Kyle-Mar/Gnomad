@@ -33,12 +33,12 @@ public class EnemyKnockbackState : EnemyBaseState
     {
         //throw new System.NotImplementedException();
         InitializeSubState();
-        context.animator.SetTrigger("InAirTrigger");
-        context.animator.SetBool("InAir", true);
+        //context.animator.SetTrigger("InAirTrigger");
+        //context.animator.SetBool("InAir", true);
         knockbackTimer = context.KnockbackTimer;
         initialKnockbackDirection = context.LastKBDirection.normalized;
 
-        Debug.Log("IsVolleyedInto = " + context.IsVolleyedInto);
+        //Debug.Log("IsVolleyedInto = " + context.IsVolleyedInto);
 
         if (context.IsVolleyedInto)
         {
@@ -49,12 +49,12 @@ public class EnemyKnockbackState : EnemyBaseState
             if (context.IsVolleyed)
             {
                 context.rb.velocity = initialKnockbackDirection * 12.5f;
-                Debug.Log("Normal Volley knockback");
+                //Debug.Log("Normal Volley knockback");
             }
             else
             {
                 context.rb.velocity = initialKnockbackDirection * 32.5f;
-                Debug.Log("Not Volley");
+                //Debug.Log("Not Volley");
             }
         }
 
@@ -96,7 +96,7 @@ public class EnemyKnockbackState : EnemyBaseState
     public override void ExitState()
     {
         //throw new System.NotImplementedException();
-        context.animator.SetBool("InAir", false);
+        //context.animator.SetBool("InAir", false);
         knockbackTimer = 0f;
         SetSubState(context.MoveState);
         context.IsDamaged = false;
