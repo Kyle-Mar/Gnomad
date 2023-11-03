@@ -27,7 +27,7 @@ public class PlayerNotAttackingState : PlayerBaseState
     
     public override void EnterState()
     {
-        delayTillNextAttack = 0.3f;
+        delayTillNextAttack = 0.10f;
         CheckSwitchStates();//handles the case that slash is preformed this very frame
                             //possibly not necessary depending on when update is called. Idk ~Elijah
     }
