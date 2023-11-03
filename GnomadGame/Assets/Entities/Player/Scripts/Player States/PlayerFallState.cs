@@ -45,7 +45,7 @@ public class PlayerFallState : PlayerBaseState
             SwitchState(context.SlideState);
             return;
         }
-        if (context.Controls.Player.GroundPound.WasPressedThisFrame())
+        if (context.Controls.Player.GroundPound.IsPressed())
         {
             SwitchState(context.GroundPoundState);
             return;

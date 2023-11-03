@@ -24,31 +24,31 @@ public class PlayerWallJumpState : PlayerBaseState
     {
         if (context.IsGrounded)
         {
-            Debug.Log("I AM GROUNDED");
+            //Debug.Log("I AM GROUNDED");
             SwitchState(context.GroundedState);
             return;
         }
         if(jumpTimer <= 0)
         {
-            Debug.Log("Timer End");
+            //Debug.Log("Timer End");
             SwitchState(context.FallState);
             return;
         }
         if (context.Controls.Player.Slide.WasPressedThisFrame() && context.CanSlide)
         {
-            Debug.Log("Slide State");
+            //Debug.Log("Slide State");
             SwitchState(context.SlideState);
             return;
         }
         if (context.Controls.Player.Dash.WasPressedThisFrame() && context.CanDash)
         {
-            Debug.Log("Dash State");
+            //Debug.Log("Dash State");
             SwitchState(context.DashState);
             return;
         }
         if (context.Controls.Player.GroundPound.WasPressedThisFrame())
         {
-            Debug.Log("Ground Pound");
+            //Debug.Log("Ground Pound");
             SwitchState(context.GroundPoundState);
             return;
         }
@@ -57,7 +57,7 @@ public class PlayerWallJumpState : PlayerBaseState
 
     public override void EnterState()
     {
-        Debug.Log(initialMovementDir);
+        //Debug.Log(initialMovementDir);
         InitializeSubState();
         arrestMovementTimer = MovementStats.WallJumpArrestMovementTimer;
         startJumpTime = 0;

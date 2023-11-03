@@ -54,6 +54,7 @@ public class PlayerGroundPoundState : PlayerBaseState
 
     public override void UpdateState()
     {
+        SetSubState(null);
         //Debug.Log(currentSubState);
         context.rb.velocity = Vector2.Lerp(context.rb.velocity,
                               new(MovementStats.groundPoundXSpeed, MovementStats.groundPoundYSpeed),
