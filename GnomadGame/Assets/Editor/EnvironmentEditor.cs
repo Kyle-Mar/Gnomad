@@ -8,6 +8,7 @@ using System.Drawing.Printing;
 using System.Linq;
 using System.Collections.Concurrent;
 using UnityEngine.UIElements;
+using UnityEngine.EventSystems;
 
 public class EnvironmentEditor : EditorWindow
 {
@@ -184,6 +185,10 @@ public class EnvironmentEditor : EditorWindow
             {
                 lastPlacedPref.transform.SetAsFirstSibling();
             }
+            else
+            {
+                lastPlacedPref.transform.SetAsLastSibling();
+            }
             if (prefabHistory.Count > 40)
             {//remove first item
                 prefabHistory.Reverse();
@@ -191,7 +196,7 @@ public class EnvironmentEditor : EditorWindow
                 prefabHistory.Reverse();
             }
             prefabHistory.Push(lastPlacedPref);
-
+            //EventSystem.current.SetSelectedGameObject(lastPlacedPref);
 
 
         }
@@ -316,7 +321,7 @@ public class EnvironmentEditor : EditorWindow
             foreach (GameObject l in layersList)
             {
                 if (l == layersList[currentLayer]) { l.hideFlags = HideFlags.None; }
-                l.hideFlags = HideFlags.NotEditable;
+                l.hideFlags = HideFlags.None; //notEditable should be
             }
             EditorApplication.RepaintHierarchyWindow();
             drawStateIcons();
@@ -329,7 +334,7 @@ public class EnvironmentEditor : EditorWindow
             foreach (GameObject l in layersList)
             {
                 if (l == layersList[currentLayer]) { l.hideFlags = HideFlags.None; }
-                l.hideFlags = HideFlags.NotEditable;
+                l.hideFlags = HideFlags.None; // shoould be not editable
             }
             EditorApplication.RepaintHierarchyWindow();
             drawStateIcons();
@@ -341,7 +346,7 @@ public class EnvironmentEditor : EditorWindow
         }
         if (e.type == EventType.KeyDown && e.keyCode == KeyCode.LeftBracket)
         {
-            if (e.control) { paintBehind = true; }
+            if (e.control) { paintBehind = true;}
             else if (Selection.activeTransform != null)
             {
                 Selection.activeTransform.SetSiblingIndex(Selection.activeTransform.GetSiblingIndex() - 1);
@@ -355,7 +360,7 @@ public class EnvironmentEditor : EditorWindow
         {
             if (e.control) { paintBehind = false; }
 
-            if (Selection.activeTransform != null)
+            else if (Selection.activeTransform != null)
             {
                 Selection.activeTransform.SetSiblingIndex(Selection.activeTransform.GetSiblingIndex() + 1);
             }
