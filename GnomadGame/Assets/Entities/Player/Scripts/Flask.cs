@@ -36,7 +36,7 @@ public class Flask : MonoBehaviour
         }
     }
 
-    private void RefillFlask()
+    public void RefillFlask()
     {
         flaskLevel = 3;
         onFlaskUpdate?.Invoke();
