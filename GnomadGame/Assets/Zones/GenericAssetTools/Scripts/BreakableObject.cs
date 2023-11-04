@@ -52,6 +52,13 @@ public class BreakableObject : WhackableObject
                 }
                 SpawnWhackEffects();
                 DoBreak();
+                IDamageable damageable;
+                if (collision.gameObject.TryGetComponent(out damageable))
+                {
+                    var collisionPoint = collision.ClosestPoint(transform.position);
+                    var dur = collisionPoint - new Vector2(transform.position.x, transform.position.y);
+                    damageable.Damage(300, transform.GetComponent<Collider2D>(), dur);
+                }
                 return;
             }
             SpawnWhackEffects();

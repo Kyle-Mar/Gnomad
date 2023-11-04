@@ -33,7 +33,7 @@ public class EnemyIdleState : EnemyBaseState
         // If enemy is aggro
         else
         {
-            if (Vector2.Distance(context.transform.position, context.targetObject.transform.position) > 0.3f)
+            if (Vector2.Distance(context.transform.position, context.targetObject.transform.position) > 0.3f && !context.IsTargetOutOfSight)
             {
                 if (context.IsAttackOnCooldown)
                 {
@@ -48,8 +48,8 @@ public class EnemyIdleState : EnemyBaseState
                 }
             }
         }
-        
-        
+
+
     }
 
     public override void EnterState()
@@ -61,7 +61,7 @@ public class EnemyIdleState : EnemyBaseState
         timerChangeState = TimerChangeStateMax;
         context.rb.Sleep();
         context.PickNextMovePoint();
-        
+
     }
 
     public override void ExitState()

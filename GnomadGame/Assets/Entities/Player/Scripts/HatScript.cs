@@ -54,12 +54,12 @@ public class HatScript : MonoBehaviour
                     if (collisionPoint.x - transform.position.x < 0)
                     {
                         Debug.Log("Sliding Left");
-                        damageable.Damage(MovementStats.baseSlashDamage, psm.SlideCollider, new Vector3(0.4f * 1f, 4.0f));
+                        damageable.Damage(MovementStats.baseSlashDamage, psm.SlideCollider, new Vector3(0.3f * 1f, 4.0f));
                     }
                     else
                     {
                         Debug.Log("Sliding Right");
-                        damageable.Damage(MovementStats.baseSlashDamage, psm.SlideCollider, new Vector3(0.4f * -1f, 4.0f));
+                        damageable.Damage(MovementStats.baseSlashDamage, psm.SlideCollider, new Vector3(0.3f * -1f, 4.0f));
                     }
                 }
                 else

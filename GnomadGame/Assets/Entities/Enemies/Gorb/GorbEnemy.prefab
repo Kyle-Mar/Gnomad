@@ -124,6 +124,7 @@ MonoBehaviour:
   attackCooldownTimer: 0
   isSlidedInto: 0
   isVolleyed: 0
+  isVolleyedInto: 0
   col: {fileID: 6126009427784262044}
   rb: {fileID: 7339741108203295407}
   SpriteRenderer: {fileID: 5179297393850050217}
@@ -195,7 +196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   esm: {fileID: 5393304967517252571}
-  viewRadius: 15
+  viewRadius: 22
   viewAngle: 360
   lookingForTargetObject: 0
   timeSinceLastSeen: 0

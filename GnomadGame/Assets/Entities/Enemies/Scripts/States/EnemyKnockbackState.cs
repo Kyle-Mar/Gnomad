@@ -34,7 +34,7 @@ public class EnemyKnockbackState : EnemyBaseState
         //throw new System.NotImplementedException();
         InitializeSubState();
         //context.animator.SetTrigger("InAirTrigger");
-        //context.animator.SetBool("InAir", true);
+        context.animator.SetBool("InAir", true);
         knockbackTimer = context.KnockbackTimer;
         initialKnockbackDirection = context.LastKBDirection.normalized;
 

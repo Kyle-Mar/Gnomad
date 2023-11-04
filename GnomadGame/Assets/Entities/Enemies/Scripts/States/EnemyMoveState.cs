@@ -81,7 +81,7 @@ public class EnemyMoveState : EnemyBaseState
             }
             else
             {
-                context.rb.velocity = new Vector2((currentMoveDirection * context.CurrentMoveSpeed).x,context.rb.velocity.y);
+                context.rb.velocity = new Vector2((currentMoveDirection * context.CurrentMoveSpeed).x, context.rb.velocity.y);
             }
         }
 
@@ -109,7 +109,7 @@ public class EnemyMoveState : EnemyBaseState
         {
             SwitchState(context.IdleState);
         }
-        
+
 
 
         bool isGrounded = context.IsGrounded;
@@ -150,7 +150,7 @@ public class EnemyMoveState : EnemyBaseState
         context.animator.SetTrigger("WalkingTrigger");
         currentMoveDirection = new Vector2(context.targetObject.transform.position.x - context.gameObject.transform.position.x, 0).normalized;
         InitializeSubState();
-        
+
     }
 
     public override void ExitState()
