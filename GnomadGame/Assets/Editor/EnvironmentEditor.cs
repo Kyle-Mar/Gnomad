@@ -10,7 +10,30 @@ using System.Collections.Concurrent;
 using UnityEngine.UIElements;
 using UnityEngine.EventSystems;
 using UnityEditor.SceneManagement;
+using UnityEditor.TerrainTools;
+using PlasticGui.WorkspaceWindow.Home.Workspaces;
+using static PlasticGui.WorkspaceWindow.Items.ExpandedTreeNode;
+using SandolkakosDigital.EditorUtils;
+using static Codice.CM.WorkspaceServer.WorkspaceTreeDataStore;
 
+//TODO
+/*
+Finish implementing buttons from mockup
+Refactor grid into a folder based system
+Create different tabs in the folder view zone
+Move objects on paint and drag
+implement rotation mode
+set last painted prefab to selected prefab
+automatically set render layer of placed props
+Implement light tab
+Implement actor tab
+Implement collection tab
+Implement last placed prefab button that selects it and focus camera on it
+Implement jitter button popup
+Implement hotkeys popup button
+fix ctrl-z discrepency and rectiy distinction between selected and last placed prefab
+toggle to change tileset and sky to bright colors so holes can be seen
+*/
 public class EnvironmentEditor : EditorWindow
 {
     #region Variables
@@ -25,8 +48,14 @@ public class EnvironmentEditor : EditorWindow
     private GameObject lastBrush;
     private GameObject lastPlacedPref;
     private Stack<GameObject> prefabHistory;
-    bool paintBehind = true;
-    private bool rotateMode;
+    public enum PaintMode
+    {
+        PaintBehind,
+        PaintMiddle,
+        PaintInFront
+    }
+    private PaintMode paintMode;
+
     //Layer Info
     private int currentLayer = 4;
     private GameObject[] layersList;
@@ -34,6 +63,14 @@ public class EnvironmentEditor : EditorWindow
     //GUI Variables
     private int prefabButtonSize = 64;
     GUIContent currentLayerIcon;
+    //Textures
+    private Texture2D layerButtonsTexture;
+    private Color layerButtonsColor = new Color(0.01f,0.01f,1f,1f);
+    //Event/State Information
+    bool mouseHeldRight = false;
+    bool mouseHeldLeft = false;
+    private bool rotateMode;
+    private bool ScootMode;
 
     //----Variable Interfaces----
     public int CurrentLayer
@@ -51,84 +88,321 @@ public class EnvironmentEditor : EditorWindow
     [MenuItem("Window/Environment Editor")]
 
     #region Initialization
+    /// <summary>
+    /// creates the window. Must be created before OnEnable()
+    /// </summary>
     static void Init()
     {   //Runs once when the Editor is first Opened. Initializes the window
         //This needs to run at a different stage in settup from OnEnable, so it needs to be kept seperate
         Debug.Log("Initializing EDITOR");
         EnvironmentEditor window = GetWindow<EnvironmentEditor>();
-        window.minSize = new Vector2(200, 200);
+        window.minSize = new Vector2(600, 600);
         window.Show();
     }
 
+    /// <summary>
+    /// Initialize assets from folders. Once on start up
+    /// </summary>
     private void OnEnable()
     {
-        //Also runs once on startup
-        Debug.Log("Enabling EDITOR");
-        //GetPrefabs();
         GetPrefabsInSubfolders();
         initializeLayers();
-  
+
         SceneView.duringSceneGui += OnSceneGUI;
+
         rotateMode = false;
-        paintBehind = true;
+        paintMode = PaintMode.PaintBehind;
         prefabHistory = new Stack<GameObject>();
+    }
+
+    private void GetPrefabsInSubfolders()
+    {
+
+        string[] subfolderPaths = AssetDatabase.GetSubFolders(prefabFolderPath);
+
+        foreach (string subfolderPath in subfolderPaths)
+        {
+            List<GameObject> subfolderPrefabList = new List<GameObject>();
+            string[] guids = AssetDatabase.FindAssets("t:Prefab", new string[] { subfolderPath });
+            foreach (string guid in guids)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+                if (prefab != null)
+                {
+                    subfolderPrefabList.Add(prefab);
+                }
+            }
+            SubfolderPrefabLists.Add(subfolderPrefabList);
+        }
+
+    }
+    private int initializeLayers()
+    {   //might not work. Array is immuatable
+        layersList = GameObject.FindGameObjectsWithTag("ParalaxLayer");
+        if (layersList == null) { return -1; }
+        return 0;
     }
     #endregion Initialization
 
+    #region Update
+
+    /// <summary>
+    /// called when GUI is updated or moused over
+    /// </summary>
     private void OnGUI()
-    {   
-        if (layersList.Length < 1) {
+    {
+        Event e = Event.current;
+        HandleInput(e);
+        if (layersList.Length < 1)//make sure we are in a valid room
+        {
             GUILayout.Label("Not a valid environment heirarchy.\n Make sure your layers are properly tagged\n and you are using the level template.");
             if (GUILayout.Button("Refresh"))
             {
                 OnEnable();
                 EditorApplication.RepaintHierarchyWindow();
             }
-            return; 
+            return;
         }
 
-        GUILayout.Label(
-            "Click a prop icon below to set the BRUSH\n" +
-            "Hold 'E' to ROTATE the last painted prop\n" +
-            "Press Ctrl+Z to DESTROY the last painted prop\n" +
-            "Press 'Z' To clear the current brush and leave edit mode\n" +
-            "Press 'X' to use the last brush\n" +
-            "Press '-' and '+' to go back and forth between layers\n" +
-            "Press '[' or ']' too change order within layer\n" + 
-            "Press 'L' to flip the sprite\n" + 
-            "Press ctrl+[ or ctrl+] switch from paint behind and paint infront"
-            );
-        scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
-        //ToDo
-        //
-        // alternative paint modes
-        //change prop size
-        //  on ctrl + or ctrl - clicked
-        //      check neighbor in prefab array for same name with different last letter
-        //add icon for current and last brushes
-        //dont draw when clicking to move a selected object
-        //add heirarchy for brush types
-        //after being placed, props should scoot until mouse up
-        //expand selected layer heirarchy on layer change and collapse previous
-        //select the prefab taht was just painted always
 
-        drawStateIcons();
+        DrawLayerButtons();
+        DrawBrushButtons();
+        scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+        DrawGrids();
+        EditorGUILayout.EndScrollView();
+    }
+    private void OnSceneGUI(SceneView sceneView)
+    {
+        if (layersList.Length < 1) { return; }
+
+        Event e = Event.current;
+        //if (e.button == 0 && e.isMouse)
+        HandleInput(e);
+
+        if (e.type == EventType.MouseDown && e.button == 0 && selectedBrush != null)
+        {
+            Paint();
+        }
+
+    }
+    private void Update()
+    {
+        if (ScootMode)
+        {
+            Debug.Log("Scoot mode entered");
+            if (lastPlacedPref == null){
+                Debug.Log("Scoot mode pref is null");
+                ScootMode = false;
+                return;
+            }
+            if (!mouseHeldLeft)
+            {
+                Debug.Log("Scoot mode mouse not held");
+                ScootMode = false;
+                return;
+            }
+            lastPlacedPref.transform.position = lastPlacedPref.transform.position = new Vector3(GetMousePosition().x, GetMousePosition().y, 0);
+        }
+    }
+    private void HandleInput(Event e)
+    {
+        if (e.isMouse && e.button == 0)
+        {
+            mouseHeldLeft = true;
+            Debug.Log("Mouse Held Left!");
+        }
+        if (e.button != 0)
+        {
+            mouseHeldLeft = false;
+            Debug.Log("Mouse NOT Held Left!");
+        }
+        if (e.type == EventType.KeyDown)
+        {
+            HandleKeyDownInput(e);
+        }
+   
+    }
+
+    /// <summary>
+    /// Handles simple hotkeys
+    /// </summary>
+    /// <param name="e"></param>
+    private void HandleKeyDownInput(Event e)
+    {
+        switch (e.keyCode)
+        {
+            case KeyCode.Minus:
+                OnCLickLayerDown();
+                break;
+            case KeyCode.Equals:
+                OnCLickLayerUp();
+                break;
+            case KeyCode.LeftBracket:
+                if (e.alt) { OnCLickPaintBehind(); }
+                else { MoveBackInLayer(); }
+                break;
+            case KeyCode.Backslash:
+                if (e.alt) { OnCLickPaintMiddle(); }
+                break;
+            case KeyCode.RightBracket:
+                if (e.alt) { OnCLickPaintInFront(); }
+                else { MoveForwardInLayer(); }
+                break;
+            case KeyCode.H:
+                OnCLickIsolateLayer();
+                break;
+            case KeyCode.L:
+                if (e.alt) { FlipPrefabY(); }
+                else { FlipPrefabX(); }
+                break;
+            case KeyCode.X:
+                UseLastBrush();
+                break;
+            case KeyCode.Z:
+                if (e.control) { OnCLickUndo(); }
+                else { ClearBrush(); }
+                break;
+
+        }
+    }
+
+    #endregion Update
+
+    #region DrawingGUI
+    private void DrawLayerButtons()
+    {
+        GUILayout.BeginArea(new Rect(position.width - position.width / 4,
+     10,
+     position.width / 4,
+     position.height / 5)
+     );
+
+        // Create a group of vertical buttons
+        GUILayout.BeginVertical();
+
+        GUILayout.BeginHorizontal();
+        // "Current Layer" button with "Up" and "Down" buttons arranged vertically
+        GUILayout.BeginVertical();
+        if (GUILayout.Button("^", GUILayout.Height(14), GUILayout.Width(25)))
+        {
+            OnCLickLayerUp();
+        }
+        if (GUILayout.Button("v", GUILayout.Height(14), GUILayout.Width(25)))
+        {
+            OnCLickLayerDown();
+        }
+        GUILayout.EndVertical();
+        if (GUILayout.Button(layersList[currentLayer].name, GUILayout.Height(70), GUILayout.Height(30)))
+        {
+            // Handle "Current Layer" button click
+        }
+        GUILayout.EndHorizontal();
+
+        // "Isolate Layer" button
+        if (GUILayout.Button("Isolate Layer", GUILayout.ExpandWidth(true)))
+        {
+            OnCLickIsolateLayer();
+        }
+
+        //Paint Mode 
+        GUILayout.BeginHorizontal();
+        GUILayout.BeginVertical();
+
+        if (GUILayout.Button("^", GUILayout.Height(10), GUILayout.Width(25)))
+        {
+            OnCLickPaintInFront();
+        }
+        if (GUILayout.Button("=", GUILayout.Height(10), GUILayout.Width(25)))
+        {
+            OnCLickPaintMiddle();
+        }
+        if (GUILayout.Button("v", GUILayout.Height(10), GUILayout.Width(25)))
+        {
+            OnCLickPaintBehind();
+        }
+        GUILayout.EndVertical();
+        GUILayout.Button(paintMode.ToString(), GUILayout.ExpandWidth(true),GUILayout.Height(30));
+        GUILayout.EndHorizontal();
+
+        // "Camera Mode" button
+        if (GUILayout.Button("Camera Mode", GUILayout.ExpandWidth(true)))
+        {
+            OnCLickToggleCameraMode();
+        }
+
+        GUILayout.EndVertical();
+        GUILayout.EndArea();
+    }
+    private void DrawBrushButtons()
+    {
+        GUILayout.BeginArea(new Rect(10,
+             10,
+             position.width / 3,
+             position.height / 5)
+             );
+
+        // Create a group of vertical buttons
+        GUILayout.BeginVertical();
+        if (GUILayout.Button("Undo", GUILayout.Width(40), GUILayout.Height(25)))
+        {
+            // Handle "Undo" button click
+        }
+        //Current Brush Icon
+        Texture2D icon = AssetPreview.GetAssetPreview(selectedBrush);
+        if (icon != null)
+        {   //initialize our objects
+            GUIContent content = new GUIContent();
+            GUIStyle iconStyle = new GUIStyle();
+
+            content.image = icon;
+            content.tooltip = selectedBrush.name;
+            //get rid of button hover changes
+            iconStyle.normal.background = null;
+            iconStyle.hover.background = null;
+            GUILayout.Label("CurrentStamp");
+            GUILayout.Label(content, iconStyle, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
+        }
+        //current brush
+        //clear current brush
+        //last placed prefab
+        //jitter settings
+        //Current Brush Icon
+        Texture2D lastPlacedPrefabIcon = AssetPreview.GetAssetPreview(lastPlacedPref);
+        if (lastPlacedPrefabIcon != null)
+        {   //initialize our objects
+            GUIContent content = new GUIContent();
+            GUIStyle iconStyle = new GUIStyle();
+
+            content.image = lastPlacedPrefabIcon;
+            content.tooltip = lastPlacedPref.name;
+            //get rid of button hover changes
+
+            //GUILayout.Label(content, iconStyle, GUILayout.Width(64), GUILayout.Height(64));
+            GUILayout.Label("Last Placed Prefab");
+            if (GUILayout.Button(content, GUILayout.Width(64), GUILayout.Height(64)))
+            {
+                //OnClickLastPlacedPrefab();
+            }
+        }
+
+        GUILayout.EndVertical();
+        GUILayout.EndArea();
+    }
+    private void DrawGrids()
+    {
+        //create prefab grids
+        GUILayout.BeginArea(new Rect(0f,
+            position.height / 4,
+            position.width,
+            position.height*3/4)
+            );
         foreach (List<GameObject> l in SubfolderPrefabLists)
         {
             DrawPrefabIconGrid(l, prefabButtonSize, (int)position.width / prefabButtonSize);
         }
-
-        EditorGUILayout.EndScrollView();
-        Event e = Event.current;
-
-
-        if (GUILayout.Button("Clear Brush"))
-        {
-            ClearBrush();
-        }
-        checkInputCommon(e);
+        GUILayout.EndArea();
     }
-
     private void DrawPrefabIconGrid(List<GameObject> prefabList, int buttonSize, int itemsPerRow)
     {
         GUILayout.BeginVertical();
@@ -169,129 +443,175 @@ public class EnvironmentEditor : EditorWindow
 
         GUILayout.EndVertical();
     }
+    #endregion DrawingGUI
 
+    #region ButtonFunctions
+
+    private void OnCLickUndo()
+    {
+        if (lastPlacedPref != null)
+        {
+            DestroyImmediate(prefabHistory.Pop());
+            lastPlacedPref = null;
+            if (prefabHistory.Count > 0)
+            {
+                lastPlacedPref = prefabHistory.Peek();
+            }
+        }
+    }
+    private void OnCLickIsolateLayer()
+    {
+        if (!hideMode)
+        {
+            SceneVisibilityManager.instance.HideAll();
+            SceneVisibilityManager.instance.Show(layersList[CurrentLayer], true);
+            hideMode = true;
+        }
+        else
+        {
+            SceneVisibilityManager.instance.ShowAll();
+            hideMode = false;
+        }
+    }
+    private void OnCLickToggleCameraMode()
+    {
+        SceneView sceneView = SceneView.lastActiveSceneView;
+        if (sceneView == null) { return; }
+
+        sceneView.in2DMode = !sceneView.in2DMode;
+        if (!sceneView.in2DMode)
+        {
+            sceneView.orthographic = false;
+            sceneView.rotation = Quaternion.LookRotation(Vector3.forward);
+        }
+
+
+        SceneView.RepaintAll();
+    }
+    private void OnCLickPaintBehind()
+    {
+        paintMode = PaintMode.PaintBehind;
+        Repaint();
+    }
+    private void OnCLickPaintMiddle()
+    {
+        paintMode = PaintMode.PaintMiddle;
+        Repaint();
+    }
+    private void OnCLickPaintInFront()
+    {
+        paintMode = PaintMode.PaintInFront;
+        Repaint();
+    }
+    private void OnCLickLayerUp()
+    {
+        CurrentLayer = CurrentLayer + 1;
+        UpdateLayers();
+    }
+    private void OnCLickLayerDown()
+    {
+        CurrentLayer = CurrentLayer - 1;
+        UpdateLayers();
+    }
+
+
+    private void UpdateLayers()
+    {
+        //disable clicking on all but the current layer
+        SceneVisibilityManager.instance.DisableAllPicking();
+        SceneVisibilityManager.instance.EnablePicking(layersList[currentLayer], true);
+        foreach (GameObject l in layersList)
+        {
+            SandolkakosDigital.EditorUtils.SceneHierarchyUtility.SetExpandedRecursive(l, false);
+        }
+        SandolkakosDigital.EditorUtils.SceneHierarchyUtility.SetExpandedRecursive(layersList[currentLayer], true);
+        this.Focus();
+        if (hideMode)
+        {
+            SceneVisibilityManager.instance.HideAll();
+            SceneVisibilityManager.instance.Show(layersList[currentLayer], true);
+
+        }
+        EditorApplication.RepaintHierarchyWindow();
+        Repaint();
+    }
+    private void MoveBackInLayer()
+    {
+        if (Selection.activeTransform != null)
+        {
+            Selection.activeTransform.SetSiblingIndex(Selection.activeTransform.GetSiblingIndex() - 1);
+        }
+        else
+        {
+            lastPlacedPref.transform.SetSiblingIndex(lastPlacedPref.transform.GetSiblingIndex() - 1);
+        }
+    }
+    private void MoveForwardInLayer()
+    {
+        if (Selection.activeTransform != null)
+        {
+            Selection.activeTransform.SetSiblingIndex(Selection.activeTransform.GetSiblingIndex() + 1);
+        }
+        else
+        {
+            lastPlacedPref.transform.SetSiblingIndex(lastPlacedPref.transform.GetSiblingIndex() + 1);
+        }
+    }
     private void ClearBrush()
     {
         selectedBrush = null;
+        Repaint();
     }
-
-    private void OnSceneGUI(SceneView sceneView)
+    private void UseLastBrush()
     {
-        if (layersList.Length < 1) { return; }
-        Event e = Event.current;
-        //stamp
-        if (e.type == EventType.MouseDown && e.button == 0 && selectedBrush != null)
-        {
-            lastPlacedPref = PrefabUtility.InstantiatePrefab(selectedBrush) as GameObject;
-            lastPlacedPref.transform.position = new Vector3(GetMousePosition().x, GetMousePosition().y,0);
-            lastPlacedPref.transform.parent = layersList[CurrentLayer].transform.GetChild(0);
-            if (paintBehind)
-            {
-                lastPlacedPref.transform.SetAsFirstSibling();
-            }
-            else
-            {
-                lastPlacedPref.transform.SetAsLastSibling();
-            }
-            if (prefabHistory.Count > 40)
-            {//remove first item
-                prefabHistory.Reverse();
-                prefabHistory.Pop();
-                prefabHistory.Reverse();
-            }
-            prefabHistory.Push(lastPlacedPref);
-            //EventSystem.current.SetSelectedGameObject(lastPlacedPref);
-
-
-        }
-        UpdateEventStates(e);
-        //rotate
-        if (rotateMode == true && lastPlacedPref != null)
-        {
-            Vector3 mousePosition = GetMousePosition();
-            Vector3 objectPosition;
-            if (Selection.activeTransform)
-            {
-                objectPosition = Selection.activeTransform.position;
-            }
-            else
-            {
-                objectPosition = lastPlacedPref.transform.position;
-            }
-
-            // Calculate the angle in radians between the object and the mouse position
-            float angle = Mathf.Atan2(mousePosition.y - objectPosition.y, mousePosition.x - objectPosition.x);
-
-            // Convert the angle to degrees and create a rotation quaternion around the z-axis
-            Quaternion rotation = Quaternion.Euler(0, 0, angle * Mathf.Rad2Deg);
-            if (Selection.activeTransform == null)
-            {
-                lastPlacedPref.transform.rotation = rotation;
-            }
-            else { Selection.activeTransform.rotation = rotation; }
-
-        }
-
-        if (e.type == EventType.KeyDown && e.control && e.keyCode == KeyCode.Z)
-        {
-            if (lastPlacedPref != null)
-            {
-                DestroyImmediate(prefabHistory.Pop());
-                lastPlacedPref = null;
-                if (prefabHistory.Count > 0)
-                {
-                    lastPlacedPref = prefabHistory.Peek();
-                }
-            }
-            e.Use();
-        }
-
-        checkInputCommon(e);
-
-
-
+        GameObject tmp = selectedBrush;
+        selectedBrush = lastBrush;
+        lastBrush = tmp;
+        Repaint();
     }
-
-    /*
-     private void GetPrefabs()
-     {
-         prefabList.Clear();
-
-         string[] guids = AssetDatabase.FindAssets("t:Prefab", new string[] { prefabFolderPath });
-         foreach (string guid in guids)
-         {
-             string path = AssetDatabase.GUIDToAssetPath(guid);
-             GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-             if (prefab != null)
-             {
-                 prefabList.Add(prefab);
-
-             }
-         }
-     }*/
-    private void GetPrefabsInSubfolders()
+    private void FlipPrefabX()
     {
-
-        string[] subfolderPaths = AssetDatabase.GetSubFolders(prefabFolderPath);
-
-        foreach (string subfolderPath in subfolderPaths)
+        if (lastPlacedPref != null)
         {
-            List<GameObject> subfolderPrefabList = new List<GameObject>();
-            string[] guids = AssetDatabase.FindAssets("t:Prefab", new string[] { subfolderPath });
-            foreach (string guid in guids)
-            {
-                string path = AssetDatabase.GUIDToAssetPath(guid);
-                GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-                if (prefab != null)
-                {
-                    subfolderPrefabList.Add(prefab);
-                }
-            }
-            SubfolderPrefabLists.Add(subfolderPrefabList);
+            lastPlacedPref.GetComponent<SpriteRenderer>().flipX = !lastPlacedPref.GetComponent<SpriteRenderer>().flipX;
         }
-
     }
+    private void FlipPrefabY()
+    {
+        if (lastPlacedPref != null)
+        {
+            lastPlacedPref.GetComponent<SpriteRenderer>().flipY = !lastPlacedPref.GetComponent<SpriteRenderer>().flipY;
+        }
+    }
+    private void Paint()
+    {
+        lastPlacedPref = PrefabUtility.InstantiatePrefab(selectedBrush) as GameObject;
+        lastPlacedPref.transform.position = new Vector3(GetMousePosition().x, GetMousePosition().y, 0);
+        lastPlacedPref.transform.parent = layersList[CurrentLayer].transform.GetChild(0);
+        if (paintMode == PaintMode.PaintBehind)
+        {
+            lastPlacedPref.transform.SetAsFirstSibling();
+        }
+        else if (paintMode == PaintMode.PaintInFront)
+        {
+            lastPlacedPref.transform.SetAsLastSibling();
+        }
+        else
+        {
+            lastPlacedPref.transform.SetSiblingIndex(lastPlacedPref.transform.parent.childCount/2);
+        }
+        if (prefabHistory.Count > 40)
+        {//remove first item
+            prefabHistory.Reverse();
+            prefabHistory.Pop();
+            prefabHistory.Reverse();
+        }
+        prefabHistory.Push(lastPlacedPref);
+        ScootMode = true;
+    }
+    #endregion ButtonFunctions
 
+    #region Utils
     public Vector3 GetMousePosition()
     {
         Event e = Event.current;
@@ -299,139 +619,9 @@ public class EnvironmentEditor : EditorWindow
         Ray worldRay = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
         float z = 0; // Set z to 0 for 2D games
         return new Vector3(worldRay.origin.x, worldRay.origin.y, z);
-
     }
 
-    private void UpdateEventStates(Event e)
-    {
-        if (e.type == EventType.KeyDown && e.keyCode == KeyCode.E) { rotateMode = true; }
-        else if (e.type == EventType.KeyUp && e.keyCode == KeyCode.E) { rotateMode = false; }
 
-    }
-
-    private int initializeLayers()
-    {   //might not work. Array is immuatable
-        layersList = GameObject.FindGameObjectsWithTag("ParalaxLayer");
-        if (layersList == null) { return -1; }
-        return 0;
-    }
-
-    private void checkInputCommon(Event e)
-    {//some input actions need to checked from both focuses
-        if (e.type == EventType.KeyDown && e.keyCode == KeyCode.Minus)
-        {
-            CurrentLayer = CurrentLayer - 1;
-            Debug.Log(layersList[CurrentLayer].name);
-
-            SceneVisibilityManager.instance.DisableAllPicking();
-            SceneVisibilityManager.instance.EnablePicking(layersList[currentLayer], true);
-            if (hideMode)
-            {
-                SceneVisibilityManager.instance.HideAll();
-                SceneVisibilityManager.instance.Show(layersList[currentLayer], true);
-
-            }
-            EditorApplication.RepaintHierarchyWindow();
-            drawStateIcons();
-
-        }
-        if (e.type == EventType.KeyDown && e.keyCode == KeyCode.Equals)
-        {
-            CurrentLayer = CurrentLayer + 1;
-            Debug.Log(layersList[CurrentLayer].name);
-            SceneVisibilityManager.instance.DisableAllPicking();
-            SceneVisibilityManager.instance.EnablePicking(layersList[currentLayer], true);
-            if (hideMode)
-            {
-                SceneVisibilityManager.instance.HideAll();
-                SceneVisibilityManager.instance.Show(layersList[currentLayer], true);
-
-            }
-            EditorApplication.RepaintHierarchyWindow();
-            drawStateIcons();
-        }
-
-        if (e.type == EventType.KeyDown && e.keyCode == KeyCode.Z)
-        {
-            ClearBrush();
-        }
-        if (e.type == EventType.KeyDown && e.keyCode == KeyCode.LeftBracket)
-        {
-            if (e.alt) { paintBehind = true;Debug.Log("Painting Behind"); }
-            else if (Selection.activeTransform != null)
-            {
-                Selection.activeTransform.SetSiblingIndex(Selection.activeTransform.GetSiblingIndex() - 1);
-            }
-            else
-            {
-                lastPlacedPref.transform.SetSiblingIndex(lastPlacedPref.transform.GetSiblingIndex() - 1);
-            }
-        }
-        if (e.type == EventType.KeyDown && e.keyCode == KeyCode.RightBracket)
-        {
-            if (e.alt) { paintBehind = false; Debug.Log("Painting Infront"); }
-
-            else if (Selection.activeTransform != null)
-            {
-                Selection.activeTransform.SetSiblingIndex(Selection.activeTransform.GetSiblingIndex() + 1);
-            }
-            else
-            {
-                lastPlacedPref.transform.SetSiblingIndex(lastPlacedPref.transform.GetSiblingIndex() + 1);
-            }
-        }
-        if (e.type == EventType.KeyDown && e.keyCode == KeyCode.X)
-        {
-            GameObject tmp = selectedBrush;
-            selectedBrush = lastBrush;
-            lastBrush = tmp;
-        }
-        if(e.type == EventType.KeyDown && e.keyCode == KeyCode.L)
-        {
-            if (Selection.activeTransform != null)
-            {
-                Selection.activeTransform.GetComponent<SpriteRenderer>().flipX = !Selection.activeTransform.GetComponent<SpriteRenderer>().flipX;
-            }
-            else
-            {
-                lastPlacedPref.transform.GetComponent<SpriteRenderer>().flipX = !lastPlacedPref.transform.GetComponent<SpriteRenderer>().flipX;
-            }
-        }
-        if (e.type == EventType.KeyDown && e.keyCode == KeyCode.H && e.control)
-        {
-            if (!hideMode)
-            {
-                SceneVisibilityManager.instance.HideAll();
-                SceneVisibilityManager.instance.Show(layersList[CurrentLayer], true);
-                hideMode = true;
-            }
-            else
-            {
-                SceneVisibilityManager.instance.ShowAll();
-                hideMode = false;
-            }
-        }
-
-    }
-
-    //draws icons for current brush, current layer, etc
-    private void drawStateIcons()
-    {
-        int iconBoxWidth = 128;
-        int iconBoxHeight = 240;
-        GUILayout.BeginArea(new Rect(position.width - iconBoxWidth, 0, position.width, iconBoxHeight)); // Adjust the height (20) as needed
-
-        // Draw a label with the text icon
-        currentLayerIcon = new GUIContent("Current Layer\n" + layersList[CurrentLayer].name, "Selected paralax layer");
-        GUIStyle style = new GUIStyle(GUI.skin.box);
-        style.alignment = TextAnchor.MiddleCenter;
-        style.normal.textColor = Color.white;
-
-        GUILayout.Label(currentLayerIcon, style);
-
-        GUILayout.EndArea();
-        Repaint();
-    }
-
+    #endregion Utils
 
 }
