@@ -53,6 +53,7 @@ namespace Entities.Player.Inventory {
             backpackRectTransform = backpack.GetComponent<RectTransform>();
             if(data.PlaceItem(jasonItem, new(0, 0)))
             {
+                
             }
             else
             {
@@ -75,8 +76,8 @@ namespace Entities.Player.Inventory {
             OpenCloseInput();
             if (isOpen)
             {
-                CursorMoveInput();
                 PickupPlaceInput();
+                CursorMoveInput();
                 RotateInput();
                 UpdateInventoryAlreadyOnCanvas();
             }
@@ -112,7 +113,7 @@ namespace Entities.Player.Inventory {
                 {
                     cursorPosition.x = Mathf.Clamp(cursorPosition.x - 1, 0, data.NumColumns - 1);
                 }
-
+                goto moveItem;
             }
             if (controls.Inventory.MoveCursorY.WasPressedThisFrame())
             {
@@ -126,31 +127,44 @@ namespace Entities.Player.Inventory {
                 {
                     cursorPosition.y = Mathf.Clamp(cursorPosition.y + 1, 0, data.NumColumns - 1);
                 }
-
+                goto moveItem;
             }
-            
+
+            return;
+            moveItem:
+            if(data.CurrentItem is not null)
+            {
+                var panelOffsetX = backpackRectTransform.rect.width / data.NumColumns;
+                var panelOffsetY = backpackRectTransform.rect.height / data.NumRows;
+                InventoryItem item = data.CurrentItem.GetComponent<InventoryItem>();
+                Debug.Log(cursorPosition);
+                item.UpdateIMG(item.Item, new Vector2(panelOffsetX, panelOffsetY), cursorPosition, backpackRectTransform);
+            }
         }
 
         void PickupPlaceInput()
         {
-            if (controls.Inventory.PickupPlace.WasPressedThisFrame())
+            if (!controls.Inventory.PickupPlace.WasPressedThisFrame())
+            {
+                return;
+            }
+            if (data.CurrentItem is not null)
             {
                 Vector2Int itemPosition = new(cursorPosition.x, cursorPosition.y);
-                if (data.CurrentItem is not null)
+                Debug.Log(data.CurrentItem.name);
+                InventoryItem invItem = data.CurrentItem.GetComponent<InventoryItem>();
+                BaseItem item = invItem.Item;
+                if (data.PlaceItem(item, itemPosition))
                 {
-                    Debug.Log(data.CurrentItem.name);
-                    InventoryItem invItem = data.CurrentItem.GetComponent<InventoryItem>();
-                    BaseItem item = invItem.Item;
-                    if(data.PlaceItem(item, itemPosition))
-                    {
-                        var panelOffsetX = backpackRectTransform.rect.width / data.NumColumns;
-                        var panelOffsetY = backpackRectTransform.rect.height / data.NumRows;
-                        invItem.UpdateIMG(item, new(panelOffsetX, panelOffsetY), cursorPosition, backpackRectTransform);
-                        data.SetCurrentItem(null);
-                    }
-                    return;
+                    var panelOffsetX = backpackRectTransform.rect.width / data.NumColumns;
+                    var panelOffsetY = backpackRectTransform.rect.height / data.NumRows;
+                    //invItem.UpdateIMG(item, new(panelOffsetX, panelOffsetY), cursorPosition, backpackRectTransform);
+                    data.SetCurrentItem(null);
                 }
-
+                return;
+            }
+            else
+            {
                 PointerEventData pointerEventData = new(eventSystem);
                 pointerEventData.position = cursor.transform.position;
                 List<RaycastResult> results = new();
@@ -158,14 +172,13 @@ namespace Entities.Player.Inventory {
 
                 foreach (var x in results)
                 {
-
                     InventoryItem item;
-                    if(x.gameObject.TryGetComponent(out item))
+                    if (x.gameObject.TryGetComponent(out item))
                     {
-                        data.TryRemoveItem(item.Item, data.ItemPositions[item.Item]);
+                        Vector2Int itemPosition = data.ItemPositions[item.Item];
+                        data.TryRemoveItem(item.Item, itemPosition);
                         data.ItemPositions.Remove(item.Item);
-                        //Debug.Log(cursorPosition);
-                        //cursorPosition = itemPosition;
+                        cursorPosition = itemPosition;
                         //Debug.Log(itemPosition);
                         //x.gameObject.transform.localScale *= 1.2f;
                         data.SetCurrentItem(x.gameObject);
