@@ -47,6 +47,7 @@ public class PauseMenuLogic : MonoBehaviour
     public void OnExitToMainMenuPressed()
     {
         Time.timeScale = 1.0f;
+        LevelManager.UnloadAllScenes();
         StaticUIFunctions.LoadMainMenu();
     }
 
