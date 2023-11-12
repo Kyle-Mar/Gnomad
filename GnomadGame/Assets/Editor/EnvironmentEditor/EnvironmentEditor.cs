@@ -17,7 +17,7 @@ using SandolkakosDigital.EditorUtils;
 using static Codice.CM.WorkspaceServer.WorkspaceTreeDataStore;
 using System;
 using System.IO;
-
+#if UNITY_EDITOR
 //TODO
 /*
 Finish implementing buttons from mockup
@@ -738,3 +738,4 @@ public class EnvironmentEditor : EditorWindow
     #endregion Utils
 
 }
+#endif

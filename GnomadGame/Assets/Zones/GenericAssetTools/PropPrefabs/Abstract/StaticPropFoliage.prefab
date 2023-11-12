@@ -116,6 +116,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   alternateSprites: []
-  hueJitterRange: 0.468
-  saturationJitterRange: 0.338
-  sizeJitterRange: 0.04

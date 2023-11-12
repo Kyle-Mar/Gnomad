@@ -23,7 +23,7 @@ using Entities.Player.Inventory;
 using Codice.Client.Common.GameUI;
 using System.Drawing;
 using NUnit.Framework;
-
+#if UNITY_EDITOR
 //TODO
 /*
 
@@ -318,3 +318,4 @@ public class EnvironmentBrushPallet : EditorWindow
     #endregion Utils
 
 }
+#endif

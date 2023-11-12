@@ -40,7 +40,9 @@ public class WhackableObject : MonoBehaviour
     {
         if (HitParticles != null)
         {
-            HitParticles.Play();
+            ParticleSystem p = Instantiate<ParticleSystem>(HitParticles);
+            p.transform.position = transform.position;
+            p.transform.parent = null;
         }
         if (HitSound != null)
         {
