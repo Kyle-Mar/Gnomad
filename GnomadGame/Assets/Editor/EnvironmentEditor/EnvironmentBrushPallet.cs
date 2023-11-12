@@ -22,6 +22,7 @@ using static EnvironmentEditor;
 using Entities.Player.Inventory;
 using Codice.Client.Common.GameUI;
 using System.Drawing;
+using NUnit.Framework;
 
 //TODO
 /*
@@ -44,13 +45,17 @@ public class EnvironmentBrushPallet : EditorWindow
     bool randomizeFlipX = true;
     bool randomizeFlipY = false;
 
+    //brush
     String brushName = "";
     String newBrushName = "";
     List<BrushData> brushList = new List<BrushData>();
     BrushData currentBrush = null;
+    BrushData currentBrushOriginal = null;
 
     //GUI Info
     bool assetMenuOpen = false;
+    bool variableMenuOpen = false;
+    Vector2 scrollPosition = new Vector2();
 
     #endregion variables
 
@@ -70,7 +75,7 @@ public class EnvironmentBrushPallet : EditorWindow
         PopulateBrushList();
         if (currentBrush == null && brushList.Count > 0)
         {
-            SetCurrentBrush(brushList[0]);
+            InitializeBrushFromFile(brushList[0]);
         }
     }
 
@@ -80,6 +85,8 @@ public class EnvironmentBrushPallet : EditorWindow
     private void OnGUI()
     {
         DrawGUI();
+        SetBrushToValues(currentBrush);
+
     }
 
     #endregion Update
@@ -88,20 +95,16 @@ public class EnvironmentBrushPallet : EditorWindow
 
     private void DrawGUI()
     {
-        GUILayout.BeginVertical();
-        GUILayout.Label("Current Brush: " + currentBrush, GUILayout.Height(40));
+        scrollPosition = GUILayout.BeginScrollView(scrollPosition);
+        if (GUILayout.Button("Current Brush: " + brushName, GUILayout.Height(40)))
+        {
+            variableMenuOpen = !variableMenuOpen;
+        }
         DrawSliders();
         DrawToggles();
 
         GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Save Settings as New brush"))
-        {
-            assetMenuOpen = !assetMenuOpen;
-        }
-        if (GUILayout.Button("Apply Settings to Current Brush"))
-        {
-            SetBrushToValues(currentBrush);
-        }
+        DrawSaveBrushButtons();
         GUILayout.EndHorizontal();
         if (assetMenuOpen)
         {
@@ -110,11 +113,11 @@ public class EnvironmentBrushPallet : EditorWindow
 
         DrawBrushList();
 
-        GUILayout.EndVertical();
+        GUILayout.EndScrollView();
     }
-
     private void DrawSliders()
     {
+        if (!variableMenuOpen) { return; }
         GUIContent content = new GUIContent(); // fill in as needed
         int sliderHeight = 20;
         int maxLabelWidth = 125;
@@ -163,9 +166,9 @@ public class EnvironmentBrushPallet : EditorWindow
         GUILayout.EndHorizontal();
 
     }
-
     private void DrawToggles()
     {
+        if (!variableMenuOpen) { return; }
         GUIContent content = new GUIContent(); // fill in as needed
 
         // Toggles go side by side in collumns of two
@@ -177,9 +180,9 @@ public class EnvironmentBrushPallet : EditorWindow
         randomizeFlipY = GUILayout.Toggle(randomizeFlipY, content, GUILayout.Height(toggleHeight), GUILayout.ExpandWidth(true));
         GUILayout.EndHorizontal();
     }
-
-    private void DrawAssetMenu()
+    private void DrawAssetMenu()    
     {
+        if (!variableMenuOpen) { return; }
         GUILayout.Label("Enter Brush Name...");
         newBrushName = GUILayout.TextField(newBrushName);
         if (System.IO.File.Exists(brushDirectory + newBrushName + ".asset"))
@@ -201,26 +204,41 @@ public class EnvironmentBrushPallet : EditorWindow
             return;
         }
         //add finalize creation button
+        Debug.Log("Creating a new brush");
         BrushData newBrush = ScriptableObject.CreateInstance<BrushData>();
         SetBrushToValues(newBrush);
-        SaveBrush(newBrush);
-        SetCurrentBrush(newBrush);
+        SaveNewBrush(newBrush);
         PopulateBrushList();//refresh the brush lisn
+        SetBrushName(newBrush);
+
         newBrushName = "";
     }
-
     private void DrawBrushList()
     {
         //GUILayout.BeginArea(new Rect(position.x, position.height*2/3, position.width, position.height));
         GUILayout.Label("Select Your Brush Below");
+
         foreach (BrushData brush in brushList)
         {
             if (GUILayout.Button(brush.ToString().Substring(0, brush.ToString().Length-12)))
             {
-                SetCurrentBrush(brush);
+                InitializeBrushFromFile(brush);
+                
             }
         }
         //GUILayout.EndArea();
+    }
+    private void DrawSaveBrushButtons()
+    {
+        if (!variableMenuOpen) { return; }
+        if (GUILayout.Button("Save Settings as New brush"))
+        {
+            assetMenuOpen = !assetMenuOpen;
+        }
+        if (GUILayout.Button("Apply Settings to Current Brush"))
+        {
+            SetBrushToValues(currentBrushOriginal);
+        }
     }
     #endregion DrawingGUI
 
@@ -246,11 +264,17 @@ public class EnvironmentBrushPallet : EditorWindow
         }
 
     }
-
+    private void InitializeBrushFromFile(BrushData b)
+    {
+        currentBrushOriginal = b;
+        SetCurrentBrush(b.Copy());
+        SetBrushName(b);
+    }
     private void SetCurrentBrush(BrushData b)
     {
         SetValuesFromBrush(b);
         currentBrush = b;
+        Assert.IsNotNull(GetWindow<EnvironmentEditor>());
         GetWindow<EnvironmentEditor>().SetBrush(b);
         Focus();
 
@@ -262,9 +286,11 @@ public class EnvironmentBrushPallet : EditorWindow
         brightnessJitter = b.BrightnessJitterRange;
         rotationJitter = b.RotationJitterRange;
         scaleJitter = b.ScaleJitterRange;
-        brushName = b.ToString().Substring(0, b.ToString().Length - 12);
+        String n = b.ToString().Substring(0, b.ToString().Length - 12);
         randomizeFlipX = b.RandomFlipX;
         randomizeFlipY = b.RandomFlipY;
+        GetWindow<EnvironmentEditor>().SetBrush(b);
+        Focus();
     }
     private void SetBrushToValues(BrushData b)
     {
@@ -276,12 +302,19 @@ public class EnvironmentBrushPallet : EditorWindow
             scaleJitter,
             rotationJitter
             );
+        //SetCurrentBrush(b);
     }
-    private void SaveBrush(BrushData b)
+    private void SaveNewBrush(BrushData b)
     {
-        Debug.Log("Brushname:" + newBrushName);
         AssetDatabase.CreateAsset(b, brushDirectory + newBrushName + ".asset");
+        InitializeBrushFromFile(b);
     }
+
+    private void SetBrushName(BrushData b)
+    {
+        brushName = b.ToString().Substring(0, b.ToString().Length - 12);
+    }
+
     #endregion Utils
 
 }

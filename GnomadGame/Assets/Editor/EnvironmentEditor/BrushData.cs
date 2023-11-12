@@ -65,4 +65,13 @@ public class BrushData: ScriptableObject
         ScaleJitterRange = scaleJitterRange;
         RotationJitterRange = rotationJitterRange;
     }
+
+    public BrushData Copy()
+    {
+        BrushData copy = ScriptableObject.CreateInstance<BrushData>();
+        copy.Init(RandomFlipX, RandomFlipY,
+        HueJitterRange, BrightnessJitterRange, SaturationJitterRange,
+        ScaleJitterRange, RotationJitterRange);
+        return copy;
+    }
 }

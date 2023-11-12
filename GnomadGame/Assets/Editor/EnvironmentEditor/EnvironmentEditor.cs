@@ -701,19 +701,27 @@ public class EnvironmentEditor : EditorWindow
     private void ApplyBrushToObject(GameObject o)
     {
         //randomize jitter ammount within range
-        float hueJitterRange = UnityEngine.Random.Range(-CurrentBrush.HueJitterRange, -CurrentBrush.HueJitterRange);
+        float hueJitterRange = UnityEngine.Random.Range(-CurrentBrush.HueJitterRange, CurrentBrush.HueJitterRange);
         float saturationJitterRange = UnityEngine.Random.Range(0,CurrentBrush.SaturationJitterRange);
         float brightnessJitterRange = UnityEngine.Random.Range(0,CurrentBrush.BrightnessJitterRange);
 
-        float scaleJitterRange = UnityEngine.Random.Range(1f - CurrentBrush.ScaleJitterRange, 1f + CurrentBrush.ScaleJitterRange);
+        float scaleJitterRange = UnityEngine.Random.Range(1f - (CurrentBrush.ScaleJitterRange * 0.15f), 1f + (CurrentBrush.ScaleJitterRange * 0.15f));
+
         float rotationJitterRange = UnityEngine.Random.Range(-CurrentBrush.RotationJitterRange, CurrentBrush.RotationJitterRange);
         //float positionOffset = UnityEngine.Random.Range(0, CurrentBrush.scatterRange);
+        if (false)
+        {
+            Debug.Log("Scale Jitter Range: " + scaleJitterRange);
+            Debug.Log("Rotation Jitter Range: " + rotationJitterRange);
+            Debug.Log("Saturation Jitter Range: " + saturationJitterRange);
+            Debug.Log("Brightness Jitter Range: " + brightnessJitterRange);
+            Debug.Log("Hue Final Value: " + (hueJitterRange + 1) / 2f);
+        }
 
         //randomize attributes by jitter ammount
         SpriteRenderer sprite = o.GetComponent<SpriteRenderer>();
-        sprite.color = Color.HSVToRGB((hueJitterRange + 1) / 2f, saturationJitterRange, brightnessJitterRange);
+        sprite.color = Color.HSVToRGB((hueJitterRange + 1) / 2f, saturationJitterRange, 1-brightnessJitterRange);
         o.transform.localScale = new Vector3(scaleJitterRange, scaleJitterRange, 1);
-        Debug.Log(rotationJitterRange);
         o.transform.RotateAroundLocal(Vector3.back, rotationJitterRange * Mathf.Deg2Rad);
        // o.transform.position += positionOffset;
 
