@@ -32,7 +32,8 @@ public class HatScript : MonoBehaviour
         // It will try and get its 'IDamageable' component and 
         // set this 'damageable' variable to it
         IDamageable damageable = null;
-
+        IKnockable knockable = null;
+        Vector3 KBVector = Vector3.zero;
         // Maybe add a tag called "EnemyHitBox"
         // So we can be more specific in what we are colliding with
         // And potentially isolating our collisions in case we don't want
@@ -48,23 +49,36 @@ public class HatScript : MonoBehaviour
             {
                 var collisionPoint = collision.ClosestPoint(transform.position);
                 
+                
+
                 if (sliding)
                 {
-                    collision.gameObject.GetComponentInChildren<EnemyStateMachine>().IsSlidedInto = true;
+                    if (collision.gameObject.tag == "Enemy")
+                    {
+                        collision.gameObject.GetComponentInChildren<EnemyStateMachine>().IsSlidedInto = true;
+                    }
+
                     if (collisionPoint.x - transform.position.x < 0)
                     {
                         Debug.Log("Sliding Left");
                         damageable.Damage(MovementStats.baseSlashDamage, psm.SlideCollider, new Vector3(0.3f * 1f, 4.0f));
+                        KBVector = new Vector3(0.3f * 1f, 4.0f);
                     }
                     else
                     {
                         Debug.Log("Sliding Right");
                         damageable.Damage(MovementStats.baseSlashDamage, psm.SlideCollider, new Vector3(0.3f * -1f, 4.0f));
+                        KBVector = new Vector3(0.3f * -1f, 4.0f);
                     }
                 }
                 else
                 {
                     damageable.Damage(MovementStats.baseSlashDamage, psm.SlashCollider, new Vector3(collisionPoint.x - transform.position.x, 0.5f));
+                    KBVector = new Vector3(collisionPoint.x - transform.position.x, 0.5f);
+                }
+                if (collision.gameObject.TryGetComponent<IKnockable>(out knockable))
+                {
+                    knockable.Knockback(KBVector);
                 }
                 Debug.Log("Damaging Enemy");
             }
