@@ -196,9 +196,17 @@ namespace Entities.Player.Inventory {
                 {
                     return;
                 }
+
+
+
+
+
                 InventoryItem item;
                 if(data.CurrentItem.TryGetComponent(out item)){
-                    item.Rotate90(graphicRaycaster, eventSystem);
+                    if(item.Rotate90(data.Grid) == false)
+                    {
+                        return;
+                    }
                 }
                 var panelWidth = 1f / data.NumColumns;
                 var panelHeight = 1f / data.NumRows;
@@ -208,8 +216,7 @@ namespace Entities.Player.Inventory {
                 var panelOffsetX = backpackRectTransform.rect.width / data.NumColumns;
                 var panelOffsetY = backpackRectTransform.rect.height / data.NumRows;
                 //cursorPosition = cursorPosition.Rotate(90f);
-                
-                
+                               
                 data.CurrentItem.transform.Rotate(Vector3.forward * -90f);
 
             }

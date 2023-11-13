@@ -13,6 +13,8 @@ namespace Entities.Player.Inventory
         [SerializeField] BaseItem item;
         [SerializeField] Grid grid;
         public BaseItem Item => item;
+        RectTransform backpackRectTransform;
+        Vector2Int itemPos;
         public Grid Grid => grid;
         Vector3 pvt;
         int rot;
@@ -37,37 +39,25 @@ namespace Entities.Player.Inventory
             itemTransform.GetWorldCorners(arr);
             pvt = arr[1];
             rot = 1;
+            this.backpackRectTransform = backpackRectTransform;
+            this.itemPos = itemPos;
             //Debug.Log(PlayerInventory.GetNewItemLocalPosition(PlayerInventory.GetBackpackTopLeftCorner(backpackRectTransform), itemSize, panelSize, 0, 0));
         }
 
-        public void Rotate90(GraphicRaycaster graphicRaycaster, EventSystem eventSystem)
+        public bool Rotate90(Grid inventoryGrid)
         {
-            grid.ReverseColumns();
-            grid.Transpose();
-            RectTransform rectTransform = transform as RectTransform;
-            PointerEventData pointerEventData = new(eventSystem);
-            Vector3[] arr = new Vector3[4];
-            rectTransform.GetWorldCorners(arr);
-            pointerEventData.position = arr[1];
+            Grid nextGrid = (Grid)grid.Clone();
+            nextGrid.ReverseColumns();
+            nextGrid.Transpose();
+
+            Vector2Int nextItemPos = itemPos;
 
 
-            
-            List<RaycastResult> results = new();
-            graphicRaycaster.Raycast(pointerEventData, results);
-            Debug.DrawRay(arr[rot], Vector3.right * 100f, Color.red, 10f);
-            rot -= 1;
-            if (rot < 0)
-            {
-                rot = 3;
-            }
-            foreach (var x in results)
-            {
-                InventoryCell cell;
-                if (x.gameObject.TryGetComponent(out cell))
-                {
-                    Debug.Log(cell.r + " " + cell.c);
-                }
-            }
+
+            inventoryGrid.IsOutsideGrid(ref nextGrid, itemPos);
+
+
+            return true;
         }
 
         public void UpdateIMG(BaseItem item, Vector2 panelOffset, Vector2Int itemPos, RectTransform backpackRectTransform)
@@ -76,6 +66,7 @@ namespace Entities.Player.Inventory
             RectTransform itemTransform = transform as RectTransform;
             //itemTransform.pivot = new(1.0f / grid.NumColumns / 2, 1.0f / grid.NumRows / 2);
             itemTransform.localPosition = PlayerInventory.GetNewItemLocalPosition(PlayerInventory.GetBackpackTopLeftCorner(backpackRectTransform), itemSize, panelOffset, itemTransform.pivot, itemPos.x, itemPos.y);
+            this.itemPos = itemPos;
         }
     }
 }

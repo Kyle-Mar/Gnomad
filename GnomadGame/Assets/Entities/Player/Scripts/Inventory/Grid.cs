@@ -159,16 +159,8 @@ namespace Entities.Player.Inventory
         public bool CheckCollisionWithGrid(ref Grid collGrid, Vector2Int desiredPos)
         {
 
-            // Will placing this grid on top of the other grid place the grid outside of the larger grid?
-            // Or: Does it fit?
-            if (collGrid.numColumns + desiredPos.x > NumColumns || desiredPos.x < 0)
+            if(IsOutsideGrid(ref collGrid, desiredPos))
             {
-                Debug.Log("too big columns");
-                return true;
-            }
-            if (collGrid.numRows + desiredPos.y > numRows || desiredPos.y < 0)
-            {
-                Debug.Log("too big rows");
                 return true;
             }
 
@@ -187,6 +179,23 @@ namespace Entities.Player.Inventory
                 }
             }
 
+            return false;
+        }
+
+        public bool IsOutsideGrid(ref Grid collGrid, Vector2Int desiredPos)
+        {
+            // Will placing this grid on top of the other grid place the grid outside of the larger grid?
+            // Or: Does it fit?
+            if (collGrid.numColumns + desiredPos.x > NumColumns || desiredPos.x < 0)
+            {
+                Debug.Log("too big columns");
+                return true;
+            }
+            if (collGrid.numRows + desiredPos.y > numRows || desiredPos.y < 0)
+            {
+                Debug.Log("too big rows");
+                return true;
+            }
             return false;
         }
 
