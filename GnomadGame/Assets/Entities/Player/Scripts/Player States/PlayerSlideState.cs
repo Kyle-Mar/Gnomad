@@ -65,6 +65,8 @@ public class PlayerSlideState : PlayerBaseState
         context.rb.velocity = new Vector2(MovementStats.slideSpeedX * initialMovementDir.x, MovementStats.slideVerticalBounce);
         context.Animator.SetTrigger("SlideTrigger");
         timeSinceStart = 0f;
+        context.SlideCollider.gameObject.SetActive(true);
+
     }
 
     public override void ExitState()
@@ -105,10 +107,10 @@ public class PlayerSlideState : PlayerBaseState
     {
         timeSinceStart += Time.deltaTime;
 
-        if (!context.SlideCollider.gameObject.activeInHierarchy && timeSinceStart >= 0.05f)
-        {
-            context.SlideCollider.gameObject.SetActive(true);
-        }
+        //if (!context.SlideCollider.gameObject.activeInHierarchy) ;// && timeSinceStart >= 0.05f)
+        //{
+        //    context.SlideCollider.gameObject.SetActive(true);
+        //}
         CheckSwitchStates();
     }
 
