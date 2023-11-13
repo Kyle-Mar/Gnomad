@@ -36,6 +36,10 @@ PrefabInstance:
       value: WhackableProp
       objectReference: {fileID: 0}
     - target: {fileID: 7815394889220271497, guid: 8c6f90dac5666b546a8a88b3a6ba66be, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7815394889220271497, guid: 8c6f90dac5666b546a8a88b3a6ba66be, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -85,7 +89,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7815394889220271503, guid: 8c6f90dac5666b546a8a88b3a6ba66be, type: 3}
       propertyPath: m_Color.b
-      value: 0.8682088
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7815394889220271503, guid: 8c6f90dac5666b546a8a88b3a6ba66be, type: 3}
       propertyPath: m_Color.g
@@ -93,7 +97,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7815394889220271503, guid: 8c6f90dac5666b546a8a88b3a6ba66be, type: 3}
       propertyPath: m_Color.r
-      value: 0.76201534
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c6f90dac5666b546a8a88b3a6ba66be, type: 3}
@@ -112,7 +116,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -145,3 +149,4 @@ MonoBehaviour:
   HitParticles: {fileID: 0}
   IsBounceable: 0
   sprites: []
+  ActivationLink: {fileID: 0}

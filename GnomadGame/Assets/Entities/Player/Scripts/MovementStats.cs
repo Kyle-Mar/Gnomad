@@ -54,7 +54,7 @@ public class MovementStats
     public static float WallJumpDuration = 0.2f;
 
     //Dash
-    public static float dashDuration = 0.35f;
+    public static float dashDuration = 0.18f;
     public static float dashSpeed = 30f;
-    public static float DashCooldown = 0.3f;
+    public static float DashCooldown = 0.35f;
 }

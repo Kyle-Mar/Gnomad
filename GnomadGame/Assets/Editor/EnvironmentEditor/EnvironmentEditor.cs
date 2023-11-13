@@ -15,11 +15,12 @@ using PlasticGui.WorkspaceWindow.Home.Workspaces;
 using static PlasticGui.WorkspaceWindow.Items.ExpandedTreeNode;
 using SandolkakosDigital.EditorUtils;
 using static Codice.CM.WorkspaceServer.WorkspaceTreeDataStore;
-
+using System;
+using System.IO;
+#if UNITY_EDITOR
 //TODO
 /*
 Finish implementing buttons from mockup
-Refactor grid into a folder based system
 Create different tabs in the folder view zone
 Move objects on paint and drag
 implement rotation mode
@@ -40,7 +41,23 @@ public class EnvironmentEditor : EditorWindow
     //Prefab Info
     private static string prefabFolderPath = "Assets/Zones/ForestZone/Environmental Assets/Elements/EnvironmentEditorPool";
     //private List<GameObject> prefabList = new List<GameObject>();
-    List<List<GameObject>> SubfolderPrefabLists = new List<List<GameObject>>();
+    public class StampFolder
+    {
+        public List<GameObject> Stamps;
+        public String Name;
+        public bool Active;
+
+        public StampFolder(string name, List<GameObject> stamps, bool active)
+        {
+            Name = name;
+            Stamps = stamps;
+            Active = active;
+        }
+
+    }
+    //List<Tuple<String, List<GameObject>>> SubfolderPrefabLists = new List<Tuple<String, List<GameObject>>>();
+    //List<bool> prefabCategoryActivationStatuses = new List<bool>();
+    List<StampFolder> stampFolders = new List<StampFolder>();
     //Window Info
     private Vector2 scrollPosition;
     //Painting Variables
@@ -48,6 +65,7 @@ public class EnvironmentEditor : EditorWindow
     private GameObject lastBrush;
     private GameObject lastPlacedPref;
     private Stack<GameObject> prefabHistory;
+    private BrushData CurrentBrush;
     public enum PaintMode
     {
         PaintBehind,
@@ -85,7 +103,7 @@ public class EnvironmentEditor : EditorWindow
 
     #endregion variables
 
-    [MenuItem("Window/Environment Editor")]
+    [MenuItem("Window/Environment Editor/Environment Editor")]
 
     #region Initialization
     /// <summary>
@@ -105,7 +123,7 @@ public class EnvironmentEditor : EditorWindow
     /// </summary>
     private void OnEnable()
     {
-        GetPrefabsInSubfolders();
+        PopulatePrefabList();
         initializeLayers();
 
         SceneView.duringSceneGui += OnSceneGUI;
@@ -114,7 +132,7 @@ public class EnvironmentEditor : EditorWindow
         paintMode = PaintMode.PaintBehind;
         prefabHistory = new Stack<GameObject>();
     }
-
+    /*
     private void GetPrefabsInSubfolders()
     {
 
@@ -136,7 +154,42 @@ public class EnvironmentEditor : EditorWindow
             SubfolderPrefabLists.Add(subfolderPrefabList);
         }
 
+    }*/
+
+    private void PopulatePrefabList()
+    {
+        string[] subfolderPaths = AssetDatabase.GetSubFolders(prefabFolderPath);
+
+        foreach (string subfolderPath in subfolderPaths)
+        {
+            string[] subSubfolderPaths = AssetDatabase.GetSubFolders(subfolderPath);
+            List<GameObject> subfolderPrefabList = new List<GameObject>();
+            foreach (string subSubfolderPath in subSubfolderPaths)
+            {
+                string[] guids = AssetDatabase.FindAssets("t:Prefab", new string[] { subSubfolderPath });
+                foreach (string guid in guids)
+                {
+                    string path = AssetDatabase.GUIDToAssetPath(guid);
+                    GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+                    if (prefab != null)
+                    {
+                        subfolderPrefabList.Add(prefab);
+                        //prefabCategoryActivationStatuses.Add(false);
+                    }
+                }
+            }
+            if (subfolderPrefabList.Count > 0)
+            {
+                string topLevelFolderName = Path.GetFileName(subfolderPath);
+                //Tuple<string, List<GameObject>> topLevelFolderPrefabTuple = new Tuple<string, List<GameObject>>(topLevelFolderName, subfolderPrefabList);
+                //SubfolderPrefabLists.Add(topLevelFolderPrefabTuple);
+                //Debug.Log(topLevelFolderPrefabTuple);
+                stampFolders.Add(new StampFolder(topLevelFolderName, subfolderPrefabList, false));
+
+            }
+        }
     }
+
     private int initializeLayers()
     {   //might not work. Array is immuatable
         layersList = GameObject.FindGameObjectsWithTag("ParalaxLayer");
@@ -168,9 +221,7 @@ public class EnvironmentEditor : EditorWindow
 
         DrawLayerButtons();
         DrawBrushButtons();
-        scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
         DrawGrids();
-        EditorGUILayout.EndScrollView();
     }
     private void OnSceneGUI(SceneView sceneView)
     {
@@ -179,6 +230,13 @@ public class EnvironmentEditor : EditorWindow
         Event e = Event.current;
         //if (e.button == 0 && e.isMouse)
         HandleInput(e);
+
+        if (e.type == EventType.MouseUp)
+        { 
+            mouseHeldLeft = false;
+            ScootMode = false;
+            //Debug.Log("Mouse NOT Held Left!");
+        }
 
         if (e.type == EventType.MouseDown && e.button == 0 && selectedBrush != null)
         {
@@ -190,7 +248,6 @@ public class EnvironmentEditor : EditorWindow
     {
         if (ScootMode)
         {
-            Debug.Log("Scoot mode entered");
             if (lastPlacedPref == null){
                 Debug.Log("Scoot mode pref is null");
                 ScootMode = false;
@@ -202,11 +259,11 @@ public class EnvironmentEditor : EditorWindow
                 ScootMode = false;
                 return;
             }
-            lastPlacedPref.transform.position = lastPlacedPref.transform.position = new Vector3(GetMousePosition().x, GetMousePosition().y, 0);
+            lastPlacedPref.transform.position = new Vector3(GetMousePosition().x, GetMousePosition().y, 0);
         }
     }
     private void HandleInput(Event e)
-    {
+    {/*
         if (e.isMouse && e.button == 0)
         {
             mouseHeldLeft = true;
@@ -216,7 +273,7 @@ public class EnvironmentEditor : EditorWindow
         {
             mouseHeldLeft = false;
             Debug.Log("Mouse NOT Held Left!");
-        }
+        }*/
         if (e.type == EventType.KeyDown)
         {
             HandleKeyDownInput(e);
@@ -339,7 +396,7 @@ public class EnvironmentEditor : EditorWindow
         GUILayout.BeginArea(new Rect(10,
              10,
              position.width / 3,
-             position.height / 5)
+             position.height / 4)
              );
 
         // Create a group of vertical buttons
@@ -393,14 +450,27 @@ public class EnvironmentEditor : EditorWindow
     {
         //create prefab grids
         GUILayout.BeginArea(new Rect(0f,
-            position.height / 4,
+            position.height * 2 / 4,
             position.width,
-            position.height*3/4)
+            position.height*2/4)
             );
-        foreach (List<GameObject> l in SubfolderPrefabLists)
+        scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+
+        //foreach (Tuple<String,List<GameObject>> t in SubfolderPrefabLists)
+        for(int i =0; i < stampFolders.Count;i++)
         {
-            DrawPrefabIconGrid(l, prefabButtonSize, (int)position.width / prefabButtonSize);
+            if (GUILayout.Button(stampFolders[i].Name))
+            {
+                stampFolders[i].Active = !stampFolders[i].Active;
+            }
+
+            if (stampFolders[i].Active)
+            {
+                DrawPrefabIconGrid(stampFolders[i].Stamps, prefabButtonSize, (int)position.width / prefabButtonSize);
+            }
         }
+        EditorGUILayout.EndScrollView();
+
         GUILayout.EndArea();
     }
     private void DrawPrefabIconGrid(List<GameObject> prefabList, int buttonSize, int itemsPerRow)
@@ -441,6 +511,7 @@ public class EnvironmentEditor : EditorWindow
             }
         }
 
+        Repaint();
         GUILayout.EndVertical();
     }
     #endregion DrawingGUI
@@ -449,7 +520,7 @@ public class EnvironmentEditor : EditorWindow
 
     private void OnCLickUndo()
     {
-        if (lastPlacedPref != null)
+        if (lastPlacedPref != null && prefabHistory.Peek()!=null)
         {
             DestroyImmediate(prefabHistory.Pop());
             lastPlacedPref = null;
@@ -607,7 +678,8 @@ public class EnvironmentEditor : EditorWindow
             prefabHistory.Reverse();
         }
         prefabHistory.Push(lastPlacedPref);
-        ScootMode = true;
+        ApplyBrushToObject(lastPlacedPref);
+        Selection.activeObject = lastPlacedPref;
     }
     #endregion ButtonFunctions
 
@@ -615,13 +687,55 @@ public class EnvironmentEditor : EditorWindow
     public Vector3 GetMousePosition()
     {
         Event e = Event.current;
-
-        Ray worldRay = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
+        if (e == null) { return Vector3.zero; }
+        Ray worldRay = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);   
         float z = 0; // Set z to 0 for 2D games
         return new Vector3(worldRay.origin.x, worldRay.origin.y, z);
     }
+    
+    public void SetBrush(BrushData brushData)
+    {
+        CurrentBrush = brushData;
+    }
 
+    private void ApplyBrushToObject(GameObject o)
+    {
+        //randomize jitter ammount within range
+        float hueJitterRange = UnityEngine.Random.Range(-CurrentBrush.HueJitterRange, CurrentBrush.HueJitterRange);
+        float saturationJitterRange = UnityEngine.Random.Range(0,CurrentBrush.SaturationJitterRange);
+        float brightnessJitterRange = UnityEngine.Random.Range(0,CurrentBrush.BrightnessJitterRange);
+
+        float scaleJitterRange = UnityEngine.Random.Range(1f - (CurrentBrush.ScaleJitterRange * 0.15f), 1f + (CurrentBrush.ScaleJitterRange * 0.15f));
+
+        float rotationJitterRange = UnityEngine.Random.Range(-CurrentBrush.RotationJitterRange, CurrentBrush.RotationJitterRange);
+        //float positionOffset = UnityEngine.Random.Range(0, CurrentBrush.scatterRange);
+        if (false)
+        {
+            Debug.Log("Scale Jitter Range: " + scaleJitterRange);
+            Debug.Log("Rotation Jitter Range: " + rotationJitterRange);
+            Debug.Log("Saturation Jitter Range: " + saturationJitterRange);
+            Debug.Log("Brightness Jitter Range: " + brightnessJitterRange);
+            Debug.Log("Hue Final Value: " + (hueJitterRange + 1) / 2f);
+        }
+
+        //randomize attributes by jitter ammount
+        SpriteRenderer sprite = o.GetComponent<SpriteRenderer>();
+        sprite.color = Color.HSVToRGB((hueJitterRange + 1) / 2f, saturationJitterRange, 1-brightnessJitterRange);
+        o.transform.localScale = new Vector3(scaleJitterRange, scaleJitterRange, 1);
+        o.transform.RotateAroundLocal(Vector3.back, rotationJitterRange * Mathf.Deg2Rad);
+       // o.transform.position += positionOffset;
+
+        //randomize flipping
+        if (CurrentBrush.RandomFlipX) {
+            sprite.flipX = UnityEngine.Random.value > 0.5f;
+        }
+        if (CurrentBrush.RandomFlipY)
+        {
+            sprite.flipY = UnityEngine.Random.value > 0.5f;
+        }
+    }
 
     #endregion Utils
 
 }
+#endif

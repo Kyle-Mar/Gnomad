@@ -80,6 +80,7 @@ public class EnemyStateMachine : StateMachine
     public ParticleSystem[] OnHitParticles;
     public ParticleSystem[] OnDeathParticles;
     public Collider2D volleyCol;
+    public Knockable knockableComp;
 
     //public ParticleSystem WalkParticles;
     //public ParticleSystem JumpCloudParticles;
@@ -120,20 +121,20 @@ public class EnemyStateMachine : StateMachine
 
     public float KnockbackXConst => GorbStats.knockbackXConst;
     public float KnockbackYConst => GorbStats.knockbackYConst;
-    public float KnockbackSpeed => GorbStats.knockbackSpeed;
     public float KnockbackTimer => GorbStats.knockbackTimer;
 
-    public Vector3 LastKBDirection = Vector3.zero;
-    public delegate void OnDamageKB(float amt, Collider2D collision, Vector3 dir);
-    public OnDamageKB onDamageKB;
-
-    
+    public float knockbackSpeed = 12.5f;
+    // Connected to EnemyBaseState's OnKB function
+    public delegate void OnKnockback(Vector3 dir);
+    public OnKnockback onKB;
 
     private void OnEnable()
     {
         //enable AI
         GetComponentInChildren<Health>().onDeath += DieHealth;
         GetComponentInChildren<Health>().onDamage += OnDamage;
+        GetComponentInChildren<Knockable>().onKnockback += ApplyKnockback;
+
     }
     private void OnDisable()
     {
@@ -146,7 +147,9 @@ public class EnemyStateMachine : StateMachine
         groundLayerMask = LayerMask.GetMask("Ground");
         col = GetComponent<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
+        knockableComp = GetComponent<Knockable>();
         //EnemyAttackObj = null;
+
         currentMoveSpeed = GorbStats.moveSpeed;
         currentMovePointIndex = 0;
 
@@ -203,6 +206,13 @@ public class EnemyStateMachine : StateMachine
         }
         
     }
+
+    public void ApplyKnockback(Vector3 dir)
+    {
+        // Switches state to Knockback State inside EnemyBaseState
+        onKB?.Invoke(dir);
+    }
+
 
     // Builder Functions
 
@@ -369,6 +379,10 @@ public class EnemyStateMachine : StateMachine
         Destroy(transform.parent.gameObject);
     }
 
+
+    // Probably want to remove dir as a parameter for OnDamage
+    // dir should probably be handled by IKnockable
+
     void OnDamage(float amount, Collider2D collider, Vector3 dir)
     {
         Debug.Log(collider +" "+ dir);
@@ -385,14 +399,18 @@ public class EnemyStateMachine : StateMachine
         }
         if (!IsGrounded)
         {
-            //IsSlidedInto = false;
+            IsSlidedInto = false;
             IsVolleyed = true;
             CameraSystemEvent.onShake?.Invoke();
             volleyCol.gameObject.SetActive(true);
             //Debug.LogWarning("Enemy Volleyed");
         }
-        LastKBDirection = dir;
-        onDamageKB?.Invoke(amount,collider, dir);
+        else
+        {
+            IsVolleyed = false;   
+        }
+        //LastKBDirection = dir;
+        
     }
 
     public void OnTriggerEnter2D(Collider2D collision)
@@ -402,11 +420,16 @@ public class EnemyStateMachine : StateMachine
         {
             if (collision.GetComponentInParent<EnemyStateMachine>().IsVolleyed && IsVolleyed) { return; }//prevent volleyed enemies from cancelling each other out
             IDamageable damageable;
+            IKnockable knockable;
             if (collision.gameObject.TryGetComponent(out damageable))
             {
                 var collisionPoint = collision.ClosestPoint(transform.position);
                 var dir = collisionPoint - new Vector2(transform.position.x, transform.position.y);
                 collision.GetComponentInParent<EnemyStateMachine>().IsVolleyedInto = true;
+                if (collision.gameObject.TryGetComponent(out knockable))
+                {
+                    knockable.Knockback(dir);
+                }
                 damageable.Damage(AttackDamage, volleyCol, dir);
             }
         }

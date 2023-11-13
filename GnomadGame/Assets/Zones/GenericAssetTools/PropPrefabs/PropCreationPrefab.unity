@@ -167,10 +167,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 675cb1d6b25f6134badf173587039b38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectAsset: {fileID: 4756128662606143408, guid: d64c31393d62d2d448f5cc6a7eefbf9c, type: 3}
+  objectAsset: {fileID: 4035210678737002035, guid: dd4b0940171390b499501c144d039538, type: 3}
   sprites:
-  - {fileID: 629038143, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
-  - {fileID: 1779781798, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
-  - {fileID: 533939537, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
+  - {fileID: -515226451, guid: 219948300d15ddc438299ae0da1c99ab, type: 3}
   create: 0
   areYouSure: 0

@@ -8,12 +8,14 @@ public class EnemyKnockbackState : EnemyBaseState
     float knockbackTimer = 0f;
     Vector3 initialKnockbackDirection = Vector3.zero;
     Vector3 currentKnockbackVelocity = Vector3.zero;
+    float knockbackSpeed = 0f;
     // add a timer, that when zero, enemy switches back to its normal states
 
     public EnemyKnockbackState(EnemyStateMachine esm) : base(esm)
     {
         isRootState = true;
     }
+
 
     public override void CheckSwitchStates()
     {
@@ -27,8 +29,6 @@ public class EnemyKnockbackState : EnemyBaseState
         }
     }
 
-    
-
     public override void EnterState()
     {
         //throw new System.NotImplementedException();
@@ -36,9 +36,13 @@ public class EnemyKnockbackState : EnemyBaseState
         //context.animator.SetTrigger("InAirTrigger");
         context.animator.SetBool("InAir", true);
         knockbackTimer = context.KnockbackTimer;
-        initialKnockbackDirection = context.LastKBDirection.normalized;
+        initialKnockbackDirection = context.transform.GetComponentInChildren<IKnockable>().KBDirection;
 
         //Debug.Log("IsVolleyedInto = " + context.IsVolleyedInto);
+
+        // If Volleyed, use 42.5f multiplier
+        // else, use speed var
+
 
         if (context.IsVolleyedInto)
         {
@@ -48,11 +52,14 @@ public class EnemyKnockbackState : EnemyBaseState
             }
             if (context.IsVolleyed)
             {
+                // should be multiplied by 12.5f
                 context.rb.velocity = initialKnockbackDirection * 12.5f;
+
                 //Debug.Log("Normal Volley knockback");
             }
             else
             {
+                // should be multiplied by 32.5f
                 context.rb.velocity = initialKnockbackDirection * 32.5f;
                 //Debug.Log("Not Volley");
             }
@@ -62,6 +69,7 @@ public class EnemyKnockbackState : EnemyBaseState
         {
             if (context.IsSlidedInto)
             {
+                // should be multiplied by 27.5f
                 context.rb.velocity = initialKnockbackDirection * 27.5f;
             }
             else
@@ -75,7 +83,8 @@ public class EnemyKnockbackState : EnemyBaseState
                 {
                     initialKnockbackDirection.y = 0.5f * Mathf.Sign(initialKnockbackDirection.y);
                 }
-                
+
+                // should be multiplied by 12.5f
                 context.rb.velocity = initialKnockbackDirection * 12.5f;
             }
         }
@@ -83,6 +92,8 @@ public class EnemyKnockbackState : EnemyBaseState
         else
         {
             //Debug.Log("EXTREME EPIC KNOCKBACK");
+
+            // should be multiplied by 42.5f
             context.rb.velocity = initialKnockbackDirection * 42.5f;
         }
         
@@ -153,7 +164,6 @@ public class EnemyKnockbackState : EnemyBaseState
         // Check Switch States
         CheckSwitchStates();
     }
-
     void Start()
     {
 

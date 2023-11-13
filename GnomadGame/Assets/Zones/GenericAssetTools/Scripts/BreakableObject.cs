@@ -70,15 +70,15 @@ public class BreakableObject : WhackableObject
     {
         if (BreakParticles != null)
         {
-            //ParticleSystem breakParticles = Instantiate(BreakParticles);
-            //breakParticles.Play();
+            ParticleSystem p = Instantiate<ParticleSystem>(BreakParticles);
+            p.transform.position = transform.position;
+            p.transform.parent = null;
             foreach (SpriteRenderer s in sprites)
             {
                 Destroy(s);
             }
             sprite.enabled = false;
             Destroy(GetComponent<GroundPoundBouncer>());
-            BreakParticles.Play();
         }
         if (BreakSound != null)
         {

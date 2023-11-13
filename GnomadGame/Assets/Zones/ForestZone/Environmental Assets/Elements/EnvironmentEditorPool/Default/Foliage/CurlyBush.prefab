@@ -98,8 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c9764374f396b249a8c6b6372a34603, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  alternateSprites:
-  - {fileID: 0}
+  alternateSprites: []
   randomFlipX: 1
   hueJitterRange: 0.468
   saturationJitterRange: 0.338

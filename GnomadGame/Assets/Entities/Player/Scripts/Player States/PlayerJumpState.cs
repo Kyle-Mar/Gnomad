@@ -30,11 +30,11 @@ public class PlayerJumpState : PlayerBaseState
             SwitchState(context.DashState);
             return;
         }
-        if (context.Controls.Player.Slide.WasPressedThisFrame() && context.CanSlide)
-        {
-            SwitchState(context.SlideState);
-            return;
-        }
+        //if (context.Controls.Player.Slide.WasPressedThisFrame() && context.CanSlide)
+        //{
+        //    SwitchState(context.SlideState);
+        //    return;
+        //}
         if (context.Controls.Player.GroundPound.WasPressedThisFrame())
         {
             SwitchState(context.GroundPoundState);
