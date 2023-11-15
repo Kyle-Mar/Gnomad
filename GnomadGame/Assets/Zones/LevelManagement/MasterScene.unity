@@ -607,7 +607,9 @@ MonoBehaviour:
   desiredPosition: {x: 0, y: 0, z: 0}
   currentAnticipation: {x: 0, y: 0, z: 0}
   desiredDelta: {x: 0, y: 0, z: 0}
+  xDeadzone: {x: 0.4, y: 0.6}
   yDeadzone: {x: 0.4, y: 0.75}
+  deadzone: 25
   smoothingFactor: 6
   smoothingFactorAnticipationX: 60
   smoothingFactorAnticipationY: 100
@@ -622,6 +624,8 @@ MonoBehaviour:
   allowedAmountPosY: 0
   allowedAmountNegX: 0
   allowedAmountNegY: 0
+  leftX: 0
+  rightX: 0
   shakeTimer: 0
 --- !u!1 &217606917
 GameObject:
@@ -1103,7 +1107,9 @@ MonoBehaviour:
   desiredPosition: {x: 0, y: 0, z: 0}
   currentAnticipation: {x: 0, y: 0, z: 0}
   desiredDelta: {x: 0, y: 0, z: 0}
+  xDeadzone: {x: 0, y: 0}
   yDeadzone: {x: 0.4, y: 0.75}
+  deadzone: 0
   smoothingFactor: 6
   smoothingFactorAnticipationX: 60
   smoothingFactorAnticipationY: 100
@@ -1118,6 +1124,8 @@ MonoBehaviour:
   allowedAmountPosY: 0
   allowedAmountNegX: 0
   allowedAmountNegY: 0
+  leftX: 0
+  rightX: 0
   shakeTimer: 0
 --- !u!114 &427990221
 MonoBehaviour:

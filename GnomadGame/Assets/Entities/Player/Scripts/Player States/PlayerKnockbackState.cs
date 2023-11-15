@@ -16,6 +16,10 @@ public class PlayerKnockbackState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
+        if (context.IsOnCeiling)
+        {
+            SwitchState(context.FallState);
+        }
         if(context.IsGrounded && knockbackTimer <= 0.9f * knockbackTime)
         {
             SwitchState(context.GroundedState);

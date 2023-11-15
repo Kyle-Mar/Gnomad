@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 public class PlayerStateMachine : StateMachine
 {
     [Header("States")]
-
+    #region properties and fields
     public PlayerGroundedState GroundedState;
     public PlayerFallState FallState;
     public PlayerGroundPoundState GroundPoundState;
@@ -35,6 +35,7 @@ public class PlayerStateMachine : StateMachine
     [Header("Movement")]
 
     [SerializeField] bool isGrounded = false;
+    [SerializeField] bool isOnCeiling = false;
     [SerializeField] bool isTouchingWallLeft = false;
     [SerializeField] bool isTouchingWallRight = false;
     [SerializeField] bool wallSlideExpired = false;
@@ -73,6 +74,7 @@ public class PlayerStateMachine : StateMachine
 
 
     public bool IsGrounded => isGrounded;
+    public bool IsOnCeiling => isOnCeiling;
     public float JumpBufferTime => jumpBufferTime;
     public bool IsTouchingWallLeft => isTouchingWallLeft;
     public bool IsTouchingWallRight => isTouchingWallRight;
@@ -90,7 +92,7 @@ public class PlayerStateMachine : StateMachine
     public Vector3 LastKBDirection = Vector3.zero;
     public delegate void OnDamageKB(float amt, Collider2D collider, Vector3 dir);
     public OnDamageKB onDamageKB;
-
+    #endregion
 
     private void OnEnable()
     {
@@ -273,6 +275,10 @@ public class PlayerStateMachine : StateMachine
             wallSlideExpired = false;
             canDash = true;
         }
+        if(ContextUtils.CheckIfOnCeiling(collision, col))
+        {
+            isOnCeiling = true;
+        }
     }
 
     private void OnCollisionStay2D(Collision2D collision)
@@ -293,6 +299,15 @@ public class PlayerStateMachine : StateMachine
                 }
                 isGrounded = false;
             }
+            if(ContextUtils.CheckIfOnCeiling(collision, col))
+            {
+                isOnCeiling = true;
+            }
+            else
+            {
+                isOnCeiling = false;
+            }
+
             foreach (ContactPoint2D contact in collision.contacts)
             {
                 float angle = Vector2.SignedAngle(Vector2.up, contact.normal);
@@ -322,6 +337,11 @@ public class PlayerStateMachine : StateMachine
                 StartCoroutine(StartCoyoteTimer());
             }
             isGrounded = false;
+        }
+
+        if(!ContextUtils.CheckIfOnCeiling(collision, col))
+        {
+            isOnCeiling = false;
         }
     }
 

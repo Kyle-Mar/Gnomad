@@ -9,6 +9,7 @@ using System;
 public class EnemyStateMachine : StateMachine
 {
     [SerializeField] public EnemyMovementStats Stats;
+    #region properties and fields
     [Header("Stats")]
     //health, etc
 
@@ -42,6 +43,7 @@ public class EnemyStateMachine : StateMachine
     [SerializeField] bool isDamaged = false;
 
     [SerializeField] bool isGrounded = false;
+    [SerializeField] bool isOnCeiling = false;
 
     [SerializeField] bool attackOnCooldown = false;
 
@@ -100,6 +102,8 @@ public class EnemyStateMachine : StateMachine
 
     public bool IsGrounded => isGrounded;
 
+    public bool IsOnCeiling => isOnCeiling;
+
     public bool IsDamaged { get { return isDamaged; } set { isDamaged = value; } }
 
     public bool IsSlidedInto { get { return isSlidedInto; } set { isSlidedInto = value; } }
@@ -127,7 +131,7 @@ public class EnemyStateMachine : StateMachine
     // Connected to EnemyBaseState's OnKB function
     public delegate void OnKnockback(Vector3 dir);
     public OnKnockback onKB;
-
+    #endregion
     private void OnEnable()
     {
         //enable AI
@@ -382,6 +386,7 @@ public class EnemyStateMachine : StateMachine
 
     // Probably want to remove dir as a parameter for OnDamage
     // dir should probably be handled by IKnockable
+    // I agree - Kyle
 
     void OnDamage(float amount, Collider2D collider, Vector3 dir)
     {
@@ -495,10 +500,23 @@ public class EnemyStateMachine : StateMachine
                 }
             }
         }
+        if (ContextUtils.CheckIfOnCeiling(collision, col))
+        {
+            isOnCeiling = true;
+        }
+        else
+        {
+            isOnCeiling = false;
+        }
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
+        if(ContextUtils.CheckIfOnCeiling(collision, col))
+        {
+            isOnCeiling = true;
+        }
+
         /*
         if(collision.gameObject.tag == "Enemy")
         {
@@ -517,6 +535,10 @@ public class EnemyStateMachine : StateMachine
                 animator.SetTrigger("InAirTrigger");
                 animator.SetBool("InAir", true);
             }
+        }
+        if(!ContextUtils.CheckIfOnCeiling(collision, col))
+        {
+            isOnCeiling = false;
         }
     }
 }

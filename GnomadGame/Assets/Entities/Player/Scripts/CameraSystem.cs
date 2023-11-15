@@ -27,6 +27,7 @@ public class CameraSystem : MonoBehaviour
     [SerializeField] Vector3 currentAnticipation;
     [SerializeField] Vector3 desiredDelta;
     [Header("Camera Settings")]
+    [SerializeField] Vector2 xDeadzone;
     [SerializeField] Vector2 yDeadzone;
     [SerializeField] float smoothingFactor;
     [SerializeField] float smoothingFactorAnticipationX;
@@ -56,6 +57,9 @@ public class CameraSystem : MonoBehaviour
     Vector3 playerPosViewport;
 
     float curOffset;
+    [SerializeField] bool leftX = false;
+    [SerializeField] bool rightX = false;
+
 
 
     LayerMask groundLayerMask;
@@ -117,6 +121,10 @@ public class CameraSystem : MonoBehaviour
         
         Debug.DrawRay(new Vector3(playerPos.x+playerCollider.bounds.extents.x, playerPos.y - playerCollider.bounds.extents.y, playerPos.z), Vector3.down, Color.blue, 10f);
         var nextAnticipation = GetAnticipationVector();
+        if (Mathf.Abs(psm.rb.velocity.x) <= MovementStats.moveSpeed / 2)
+        {
+            currentAnticipation.x *= 0.5f;
+        }
         currentAnticipation = new Vector3(
                                 Mathf.Lerp(currentAnticipation.x, nextAnticipation.x, Utils.GetInterpolant(smoothingFactorAnticipationX)),
                                 Mathf.Lerp(currentAnticipation.y, nextAnticipation.y, Utils.GetInterpolant(smoothingFactorAnticipationY)),
@@ -134,6 +142,27 @@ public class CameraSystem : MonoBehaviour
         
         
         desiredDelta = Vector3.Lerp(transform.position, desiredPosition, Utils.GetInterpolant(smoothingFactor + Mathf.Abs(40 * 0.5f-playerPosViewport.y))) - transform.position;
+        /*
+        if(playerPosViewport.x < xDeadzone.x)
+        {
+            leftX = true;
+            rightX = false;
+        }
+        else if(playerPosViewport.x > xDeadzone.x + 0.1f)
+        {
+            //leftX = false;
+        }
+        if(playerPosViewport.x > xDeadzone.y)
+        {
+            rightX = true;
+            leftX = false;
+        }
+        else if(playerPosViewport.x < xDeadzone.y - 0.1f)
+        {
+            //rightX = false;
+        }*/
+
+        
         
         if (boundingCollider)
         {

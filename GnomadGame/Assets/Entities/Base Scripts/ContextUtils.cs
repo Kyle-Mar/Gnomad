@@ -55,4 +55,29 @@ public static class ContextUtils
         }
         return false;
     }
+    public static bool CheckIfOnCeiling(Collision2D collision, Collider2D collider)
+    {
+
+        Vector3 extents = collider.bounds.extents;
+        Vector3 position = collider.transform.position;
+        ContactPoint2D[] contacts = new ContactPoint2D[collision.contactCount];
+        collision.GetContacts(contacts);
+
+        if (collision.transform.tag != "Ground")
+        {
+            return false;
+        }
+        foreach (var contact in contacts)
+        {
+            float angle = Vector2.Angle(Vector2.down, contact.normal);
+            angle = Mathf.RoundToInt(angle);
+            if (angle <= 80f)
+            {
+                return true;
+            }
+        }
+
+        LayerMask layerMask = LayerMask.GetMask("Ground");
+        return false;
+    }
 }

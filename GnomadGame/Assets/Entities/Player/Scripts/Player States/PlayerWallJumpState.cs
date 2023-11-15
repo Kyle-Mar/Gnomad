@@ -28,7 +28,7 @@ public class PlayerWallJumpState : PlayerBaseState
             SwitchState(context.GroundedState);
             return;
         }
-        if(jumpTimer <= 0)
+        if(jumpTimer <= 0 || context.IsOnCeiling)
         {
             //Debug.Log("Timer End");
             SwitchState(context.FallState);
