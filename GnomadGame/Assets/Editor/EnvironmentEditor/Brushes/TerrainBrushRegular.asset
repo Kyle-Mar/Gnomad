@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fb82dc78de5f32b48b41f2e508daa56e, type: 3}
-  m_Name: RotationJitterTestBrush
+  m_Name: TerrainBrushRegular
   m_EditorClassIdentifier: 
-  RandomFlipX: 0
+  RandomFlipX: 1
   RandomFlipY: 0
   HueJitterRange: 0
   SaturationJitterRange: 0
   BrightnessJitterRange: 0
-  ScaleJitterRange: 0
-  RotationJitterRange: 25
+  ScaleJitterRange: 0.3033943
+  RotationJitterRange: 360

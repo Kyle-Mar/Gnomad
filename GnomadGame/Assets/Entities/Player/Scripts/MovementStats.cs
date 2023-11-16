@@ -40,7 +40,7 @@ public class MovementStats
     public static float wallSlideSpeed = -5f;
 
     //Slashing Variabels
-    public static float slashDuration = .10f;
+    public static float slashDuration = 1.10f;
     public static float baseSlashDamage = 1f;
 
     //Bouncing

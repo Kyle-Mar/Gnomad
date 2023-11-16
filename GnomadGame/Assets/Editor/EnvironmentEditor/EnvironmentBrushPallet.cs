@@ -49,9 +49,9 @@ public class EnvironmentBrushPallet : EditorWindow
     String brushName = "";
     String newBrushName = "";
     List<BrushData> brushList = new List<BrushData>();
-    BrushData currentBrush = null;
+    private BrushData currentBrush = null;
     BrushData currentBrushOriginal = null;
-
+    public BrushData CurrentBrush { get { return currentBrush; } }
     //GUI Info
     bool assetMenuOpen = false;
     bool variableMenuOpen = false;

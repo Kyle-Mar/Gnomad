@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fb82dc78de5f32b48b41f2e508daa56e, type: 3}
-  m_Name: Frust
+  m_Name: Standard Foliage
   m_EditorClassIdentifier: 
   RandomFlipX: 1
-  RandomFlipY: 1
-  HueJitterRange: 1
-  SaturationJitterRange: 1
-  BrightnessJitterRange: 1
-  ScaleJitterRange: 1
-  RotationJitterRange: 360
+  RandomFlipY: 0
+  HueJitterRange: 0.74040407
+  SaturationJitterRange: 0.40202025
+  BrightnessJitterRange: 0.16969696
+  ScaleJitterRange: 0.74986947
+  RotationJitterRange: 17.454544

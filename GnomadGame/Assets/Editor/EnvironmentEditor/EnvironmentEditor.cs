@@ -17,11 +17,12 @@ using SandolkakosDigital.EditorUtils;
 using static Codice.CM.WorkspaceServer.WorkspaceTreeDataStore;
 using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 #if UNITY_EDITOR
 //TODO
 /*
-Finish implementing buttons from mockup
 Create different tabs in the folder view zone
+rotate/scale/flip indicators
 Move objects on paint and drag
 implement rotation mode
 set last painted prefab to selected prefab
@@ -29,8 +30,6 @@ automatically set render layer of placed props
 Implement light tab
 Implement actor tab
 Implement collection tab
-Implement last placed prefab button that selects it and focus camera on it
-Implement jitter button popup
 Implement hotkeys popup button
 fix ctrl-z discrepency and rectiy distinction between selected and last placed prefab
 toggle to change tileset and sky to bright colors so holes can be seen
@@ -61,7 +60,7 @@ public class EnvironmentEditor : EditorWindow
     //Window Info
     private Vector2 scrollPosition;
     //Painting Variables
-    private GameObject selectedBrush;
+    private GameObject selectedStamp;
     private GameObject lastBrush;
     private GameObject lastPlacedPref;
     private Stack<GameObject> prefabHistory;
@@ -83,12 +82,15 @@ public class EnvironmentEditor : EditorWindow
     GUIContent currentLayerIcon;
     //Textures
     private Texture2D layerButtonsTexture;
-    private Color layerButtonsColor = new Color(0.01f,0.01f,1f,1f);
+    private Color layerButtonsColor = new Color(0.01f, 0.01f, 1f, 1f);
     //Event/State Information
     bool mouseHeldRight = false;
     bool mouseHeldLeft = false;
     private bool rotateMode;
     private bool ScootMode;
+    //this is used to select the last placed object
+    //something after us selects a different object sometimes, so we reselect next frame
+    private bool placedObjectLastFrame; 
 
     //----Variable Interfaces----
     public int CurrentLayer
@@ -132,29 +134,7 @@ public class EnvironmentEditor : EditorWindow
         paintMode = PaintMode.PaintBehind;
         prefabHistory = new Stack<GameObject>();
     }
-    /*
-    private void GetPrefabsInSubfolders()
-    {
 
-        string[] subfolderPaths = AssetDatabase.GetSubFolders(prefabFolderPath);
-
-        foreach (string subfolderPath in subfolderPaths)
-        {
-            List<GameObject> subfolderPrefabList = new List<GameObject>();
-            string[] guids = AssetDatabase.FindAssets("t:Prefab", new string[] { subfolderPath });
-            foreach (string guid in guids)
-            {
-                string path = AssetDatabase.GUIDToAssetPath(guid);
-                GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-                if (prefab != null)
-                {
-                    subfolderPrefabList.Add(prefab);
-                }
-            }
-            SubfolderPrefabLists.Add(subfolderPrefabList);
-        }
-
-    }*/
 
     private void PopulatePrefabList()
     {
@@ -220,27 +200,39 @@ public class EnvironmentEditor : EditorWindow
 
 
         DrawLayerButtons();
+        GUILayout.BeginArea(new Rect(position.width / 3 + 10,
+             10,
+             position.width / 3 + 10,
+             position.height / 2)
+             );
+        DrawBrushHotkeys();
+        GUILayout.EndArea();
         DrawBrushButtons();
+
         DrawGrids();
     }
     private void OnSceneGUI(SceneView sceneView)
     {
         if (layersList.Length < 1) { return; }
-
+        if (placedObjectLastFrame) {
+            Selection.activeObject = lastPlacedPref; 
+            placedObjectLastFrame = false;
+        }
         Event e = Event.current;
         //if (e.button == 0 && e.isMouse)
         HandleInput(e);
 
         if (e.type == EventType.MouseUp)
-        { 
+        {
             mouseHeldLeft = false;
             ScootMode = false;
             //Debug.Log("Mouse NOT Held Left!");
         }
 
-        if (e.type == EventType.MouseDown && e.button == 0 && selectedBrush != null)
+        if (e.type == EventType.MouseDown && e.button == 0 && selectedStamp != null)
         {
             Paint();
+            e.Use();
         }
 
     }
@@ -248,7 +240,7 @@ public class EnvironmentEditor : EditorWindow
     {
         if (ScootMode)
         {
-            if (lastPlacedPref == null){
+            if (lastPlacedPref == null) {
                 Debug.Log("Scoot mode pref is null");
                 ScootMode = false;
                 return;
@@ -278,7 +270,7 @@ public class EnvironmentEditor : EditorWindow
         {
             HandleKeyDownInput(e);
         }
-   
+
     }
 
     /// <summary>
@@ -301,6 +293,7 @@ public class EnvironmentEditor : EditorWindow
                 break;
             case KeyCode.Backslash:
                 if (e.alt) { OnCLickPaintMiddle(); }
+                else { MoveMiddleInLayer(); }
                 break;
             case KeyCode.RightBracket:
                 if (e.alt) { OnCLickPaintInFront(); }
@@ -318,7 +311,7 @@ public class EnvironmentEditor : EditorWindow
                 break;
             case KeyCode.Z:
                 if (e.control) { OnCLickUndo(); }
-                else { ClearBrush(); }
+                else { ClearStamp(); }
                 break;
 
         }
@@ -332,7 +325,7 @@ public class EnvironmentEditor : EditorWindow
         GUILayout.BeginArea(new Rect(position.width - position.width / 4,
      10,
      position.width / 4,
-     position.height / 5)
+     position.height / 2)
      );
 
         // Create a group of vertical buttons
@@ -379,7 +372,7 @@ public class EnvironmentEditor : EditorWindow
             OnCLickPaintBehind();
         }
         GUILayout.EndVertical();
-        GUILayout.Button(paintMode.ToString(), GUILayout.ExpandWidth(true),GUILayout.Height(30));
+        GUILayout.Button(paintMode.ToString(), GUILayout.ExpandWidth(true), GUILayout.Height(30));
         GUILayout.EndHorizontal();
 
         // "Camera Mode" button
@@ -387,16 +380,40 @@ public class EnvironmentEditor : EditorWindow
         {
             OnCLickToggleCameraMode();
         }
-
+        DrawLayerHotkeys();
         GUILayout.EndVertical();
         GUILayout.EndArea();
+    }
+    private void DrawBrushHotkeys()
+    {
+        GUILayout.Label(
+            "Hold 'E' to ROTATE the last painted prop\n" +
+            "Ctrl+Z to DESTROY the last painted prop\n" +
+            "Z Clear Stamp\n" +
+            "alt-X use previous brush\n" +
+            "L to flip the sprite\n"
+            );
+    }
+    private void DrawLayerHotkeys()
+    {
+        GUILayout.Label(
+            "- go back a layer\n" +
+            "+ go forward a layer\n" +
+            "[ go back in layer\n" +
+            "] go forward in layer\n" +
+            "| go to middle of layer\n" +
+            "alt+[ paint behind\n" +
+            "alt+] paint infront\n" +
+            "alt+| paint middle\n" +
+            "H isolate layer"
+            );
     }
     private void DrawBrushButtons()
     {
         GUILayout.BeginArea(new Rect(10,
              10,
              position.width / 3,
-             position.height / 4)
+             position.height / 2)
              );
 
         // Create a group of vertical buttons
@@ -406,20 +423,23 @@ public class EnvironmentEditor : EditorWindow
             // Handle "Undo" button click
         }
         //Current Brush Icon
-        Texture2D icon = AssetPreview.GetAssetPreview(selectedBrush);
+        Texture2D icon = AssetPreview.GetAssetPreview(selectedStamp);
+        //initialize our objects
+        GUIContent content = new GUIContent();
+        GUIStyle iconStyle = new GUIStyle();
         if (icon != null)
-        {   //initialize our objects
-            GUIContent content = new GUIContent();
-            GUIStyle iconStyle = new GUIStyle();
-
+        {
             content.image = icon;
-            content.tooltip = selectedBrush.name;
-            //get rid of button hover changes
-            iconStyle.normal.background = null;
-            iconStyle.hover.background = null;
-            GUILayout.Label("CurrentStamp");
-            GUILayout.Label(content, iconStyle, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
+            content.tooltip = selectedStamp.name;
+
         }
+
+        //get rid of button hover changes
+        iconStyle.normal.background = null;
+        iconStyle.hover.background = null;
+        GUILayout.Label("Current Stamp");
+        GUILayout.Label(content, iconStyle, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
+
         //current brush
         //clear current brush
         //last placed prefab
@@ -427,22 +447,27 @@ public class EnvironmentEditor : EditorWindow
         //Current Brush Icon
         Texture2D lastPlacedPrefabIcon = AssetPreview.GetAssetPreview(lastPlacedPref);
         if (lastPlacedPrefabIcon != null)
-        {   //initialize our objects
-            GUIContent content = new GUIContent();
-            GUIStyle iconStyle = new GUIStyle();
-
+        {
             content.image = lastPlacedPrefabIcon;
             content.tooltip = lastPlacedPref.name;
-            //get rid of button hover changes
 
-            //GUILayout.Label(content, iconStyle, GUILayout.Width(64), GUILayout.Height(64));
-            GUILayout.Label("Last Placed Prefab");
-            if (GUILayout.Button(content, GUILayout.Width(64), GUILayout.Height(64)))
-            {
-                //OnClickLastPlacedPrefab();
-            }
         }
 
+        //get rid of button hover changes
+
+        //GUILayout.Label(content, iconStyle, GUILayout.Width(64), GUILayout.Height(64));
+        GUILayout.Label("Last Placed Prefab");
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button(content, iconStyle, GUILayout.Width(64), GUILayout.Height(64)))
+        {
+            OnClickLastPlacedPrefab();
+        }
+
+        if (GUILayout.Button("Clear Current Stamp"))
+        {
+            ClearStamp();
+        }
+        GUILayout.EndHorizontal();
         GUILayout.EndVertical();
         GUILayout.EndArea();
     }
@@ -450,14 +475,14 @@ public class EnvironmentEditor : EditorWindow
     {
         //create prefab grids
         GUILayout.BeginArea(new Rect(0f,
-            position.height * 2 / 4,
+            position.height / 2 + 10,
             position.width,
-            position.height*2/4)
+            position.height / 2)
             );
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 
         //foreach (Tuple<String,List<GameObject>> t in SubfolderPrefabLists)
-        for(int i =0; i < stampFolders.Count;i++)
+        for (int i = 0; i < stampFolders.Count; i++)
         {
             if (GUILayout.Button(stampFolders[i].Name))
             {
@@ -490,7 +515,10 @@ public class EnvironmentEditor : EditorWindow
             {
                 GUIContent content = new GUIContent();
                 Texture2D icon = AssetPreview.GetAssetPreview(prefab);
-
+                GUIStyle iconStyle = new GUIStyle();
+                //get rid of button hover changes
+                iconStyle.normal.background = null;
+                iconStyle.hover.background = null;
                 if (icon != null)
                 {
                     content.image = icon;
@@ -499,8 +527,8 @@ public class EnvironmentEditor : EditorWindow
 
                 if (GUILayout.Button(content, GUILayout.Width(buttonSize), GUILayout.Height(buttonSize)))
                 {
-                    lastBrush = selectedBrush;
-                    selectedBrush = prefab;
+                    lastBrush = selectedStamp;
+                    selectedStamp = prefab;
                     Debug.Log("Selected prefab is " + prefab.name);
                 }
             }
@@ -520,7 +548,7 @@ public class EnvironmentEditor : EditorWindow
 
     private void OnCLickUndo()
     {
-        if (lastPlacedPref != null && prefabHistory.Peek()!=null)
+        if (lastPlacedPref != null && prefabHistory.Peek() != null)
         {
             DestroyImmediate(prefabHistory.Pop());
             lastPlacedPref = null;
@@ -628,15 +656,26 @@ public class EnvironmentEditor : EditorWindow
             lastPlacedPref.transform.SetSiblingIndex(lastPlacedPref.transform.GetSiblingIndex() + 1);
         }
     }
-    private void ClearBrush()
+    private void MoveMiddleInLayer()
     {
-        selectedBrush = null;
+        if (Selection.activeTransform != null)
+        {
+            Selection.activeTransform.SetSiblingIndex(Selection.activeTransform.parent.childCount / 2);
+        }
+        else
+        {
+            lastPlacedPref.transform.SetSiblingIndex(Selection.activeTransform.parent.childCount/2);
+        }
+    }
+    private void ClearStamp()
+    {
+        selectedStamp = null;
         Repaint();
     }
     private void UseLastBrush()
     {
-        GameObject tmp = selectedBrush;
-        selectedBrush = lastBrush;
+        GameObject tmp = selectedStamp;
+        selectedStamp = lastBrush;
         lastBrush = tmp;
         Repaint();
     }
@@ -654,9 +693,16 @@ public class EnvironmentEditor : EditorWindow
             lastPlacedPref.GetComponent<SpriteRenderer>().flipY = !lastPlacedPref.GetComponent<SpriteRenderer>().flipY;
         }
     }
+    private void OnClickLastPlacedPrefab()
+    {
+        if (lastPlacedPref == null) { return; }
+        Selection.activeObject = lastPlacedPref;
+        SceneView.FrameLastActiveSceneView();
+    }
+
     private void Paint()
     {
-        lastPlacedPref = PrefabUtility.InstantiatePrefab(selectedBrush) as GameObject;
+        lastPlacedPref = PrefabUtility.InstantiatePrefab(selectedStamp) as GameObject;
         lastPlacedPref.transform.position = new Vector3(GetMousePosition().x, GetMousePosition().y, 0);
         lastPlacedPref.transform.parent = layersList[CurrentLayer].transform.GetChild(0);
         if (paintMode == PaintMode.PaintBehind)
@@ -680,6 +726,7 @@ public class EnvironmentEditor : EditorWindow
         prefabHistory.Push(lastPlacedPref);
         ApplyBrushToObject(lastPlacedPref);
         Selection.activeObject = lastPlacedPref;
+        placedObjectLastFrame = true;
     }
     #endregion ButtonFunctions
 
@@ -701,6 +748,11 @@ public class EnvironmentEditor : EditorWindow
     private void ApplyBrushToObject(GameObject o)
     {
         //randomize jitter ammount within range
+        if (CurrentBrush == null)
+        {
+            CurrentBrush = GetWindow<EnvironmentBrushPallet>().CurrentBrush;
+        }
+        if (CurrentBrush == null) { Debug.Log("No Brush Active"); return; }
         float hueJitterRange = UnityEngine.Random.Range(-CurrentBrush.HueJitterRange, CurrentBrush.HueJitterRange);
         float saturationJitterRange = UnityEngine.Random.Range(0,CurrentBrush.SaturationJitterRange);
         float brightnessJitterRange = UnityEngine.Random.Range(0,CurrentBrush.BrightnessJitterRange);
