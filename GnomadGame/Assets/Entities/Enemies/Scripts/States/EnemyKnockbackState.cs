@@ -22,6 +22,10 @@ public class EnemyKnockbackState : EnemyBaseState
         //throw new System.NotImplementedException();
 
         // check if timer is done, then if grounded
+        if (context.IsOnCeiling)
+        {
+            SwitchState(context.FallState);
+        }
         if (context.IsGrounded && knockbackTimer <= 0.9f * context.KnockbackTimer)
         {
             SwitchState(context.GroundedState);
