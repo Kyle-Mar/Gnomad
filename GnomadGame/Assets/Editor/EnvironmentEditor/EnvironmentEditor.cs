@@ -18,6 +18,7 @@ using static Codice.CM.WorkspaceServer.WorkspaceTreeDataStore;
 using System;
 using System.IO;
 using System.Runtime.CompilerServices;
+using PlasticPipe.PlasticProtocol.Client;
 #if UNITY_EDITOR
 //TODO
 /*
@@ -705,18 +706,19 @@ public class EnvironmentEditor : EditorWindow
         lastPlacedPref = PrefabUtility.InstantiatePrefab(selectedStamp) as GameObject;
         lastPlacedPref.transform.position = new Vector3(GetMousePosition().x, GetMousePosition().y, 0);
         lastPlacedPref.transform.parent = layersList[CurrentLayer].transform.GetChild(0);
-        if (paintMode == PaintMode.PaintBehind)
+        switch (paintMode)
         {
-            lastPlacedPref.transform.SetAsFirstSibling();
+            case PaintMode.PaintBehind:
+                lastPlacedPref.transform.SetAsFirstSibling();
+                break;
+            case PaintMode.PaintMiddle:
+                lastPlacedPref.transform.SetSiblingIndex(lastPlacedPref.transform.parent.childCount / 2);
+                break;
+            case PaintMode.PaintInFront:
+                lastPlacedPref.transform.SetAsLastSibling();
+                break;
         }
-        else if (paintMode == PaintMode.PaintInFront)
-        {
-            lastPlacedPref.transform.SetAsLastSibling();
-        }
-        else
-        {
-            lastPlacedPref.transform.SetSiblingIndex(lastPlacedPref.transform.parent.childCount/2);
-        }
+
         if (prefabHistory.Count > 40)
         {//remove first item
             prefabHistory.Reverse();
