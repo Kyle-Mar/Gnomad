@@ -11,6 +11,7 @@ TagManager:
   - PlayerAttack
   - ParalaxLayer
   - PlayerHurtBox
+  - AttentionPoint
   layers:
   - Default
   - TransparentFX

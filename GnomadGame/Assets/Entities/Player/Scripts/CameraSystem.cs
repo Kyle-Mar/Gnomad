@@ -45,6 +45,8 @@ public class CameraSystem : MonoBehaviour
     [SerializeField] float allowedAmountNegX;
     [SerializeField] float allowedAmountNegY;
 
+    public List<GameObject> attentionPoints = new();
+
     Vector3 bottomLeft;
     Vector3 bottomRight;
     Vector3 topLeft;
@@ -57,13 +59,11 @@ public class CameraSystem : MonoBehaviour
     Vector3 playerPosViewport;
 
     float curOffset;
-    [SerializeField] bool leftX = false;
-    [SerializeField] bool rightX = false;
-
-
+    bool leftX = false;
+    bool rightX = false;
 
     LayerMask groundLayerMask;
-    public float shakeTimer = 0f;
+    float shakeTimer = 0f;
 
     void Start()
     {
@@ -93,7 +93,6 @@ public class CameraSystem : MonoBehaviour
         LevelManager.onEnterNewRoom -= OnEnterNewRoom;
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         playerPosViewport = GetComponent<Camera>().WorldToViewportPoint(playerTransform.position);
@@ -132,15 +131,17 @@ public class CameraSystem : MonoBehaviour
                                 );
         desiredPosition = GetCameraPosFromPlayerPos() + currentAnticipation;
         desiredPosition.z = originalPosition.z;
-        //Debug.Log(playerPosViewport.y);
         
         if(shakeTimer >= 0f)
         {
             shakeTimer -= Time.fixedDeltaTime;
             desiredPosition += new Vector3(Random.insideUnitCircle.x, Random.insideUnitCircle.y, 0)*3.0f;
         }
-        
-        
+
+        desiredPosition = CenterOfMass(attentionPoints, desiredPosition);
+        desiredPosition.z = originalPosition.z;
+
+
         desiredDelta = Vector3.Lerp(transform.position, desiredPosition, Utils.GetInterpolant(smoothingFactor + Mathf.Abs(40 * 0.5f-playerPosViewport.y))) - transform.position;
         /*
         if(playerPosViewport.x < xDeadzone.x)
@@ -174,11 +175,6 @@ public class CameraSystem : MonoBehaviour
         }
     }
 
-    public void Shake()
-    {
-        shakeTimer = 0.07f;
-    }
-
     void Update()
     {
         UpdateYPos();
@@ -192,36 +188,39 @@ public class CameraSystem : MonoBehaviour
 
     }
 
-    void UpdateYPos()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        
-        if(psm.CurrentState == psm.GroundedState || psm.CurrentState == psm.WallSlideState || psm.CurrentState == psm.WallJumpState)
+        Debug.Log(collision.gameObject.name);
+        if (collision.gameObject.CompareTag("AttentionPoint"))
         {
-            originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
-            return;
-        }
-        if (playerRB.velocity.y < -15.5f)
+            attentionPoints.Add(collision.gameObject);
+        }        
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("AttentionPoint"))
         {
-            originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
-            return;
-        }
-        if(playerPosViewport.y < yDeadzone.x)
-        {
-            originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
-            return;
-        }
-        if (playerPosViewport.y < yDeadzone.y)
-        {
-           originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
-           return;
+            attentionPoints.Remove(collision.gameObject);
         }
     }
 
-    Vector3 GetCameraPosFromPlayerPos()
+    public void OnEnterNewRoom(CompositeCollider2D boundingCollider)
     {
-        return new Vector3(playerTransform.position.x, curOffset + originalPosition.y, transform.position.z);
+        if (!boundingCollider)
+        {
+            return;
+        }
+        this.boundingCollider = boundingCollider;
     }
 
+    public void Shake()
+    {
+        shakeTimer = 0.07f;
+    }
+
+
+
+    #region Movement
     Vector3 GetAnticipationVector()
     {
         var anticipationVector = new Vector3(playerRB.velocity.x, playerRB.velocity.y, 0);
@@ -248,42 +247,33 @@ public class CameraSystem : MonoBehaviour
         //Debug.Log(anticipationVector);
         return anticipationVector;
     }
-    void CalculateCollisionPoints()
+    void UpdateYPos()
     {
-        if (!boundingCollider) { return; }
-        var zPos = Mathf.Abs(mainCamera.transform.position.z - boundingCollider.transform.position.z);
-        bottomLeft = mainCamera.ViewportToWorldPoint(new Vector3(0, 0, zPos));
-        bottomRight = mainCamera.ViewportToWorldPoint(new Vector3(1, 0, zPos));
-        topLeft = mainCamera.ViewportToWorldPoint(new Vector3(0, 1, zPos));
-        topRight = mainCamera.ViewportToWorldPoint(new Vector3(1, 1, zPos));
-
-        // Calculate vectors for the four edges (midpoints of the corners)
-        middleBottom = Vector3.Lerp(bottomLeft, bottomRight, 0.5f);
-        middleTop = Vector3.Lerp(topLeft, topRight, 0.5f);
-        middleLeft = Vector3.Lerp(bottomLeft, topLeft, 0.5f);
-        middleRight = Vector3.Lerp(bottomRight, topRight, 0.5f);
-    }
-
-    Vector3 GetPointBoundsAligned(Vector3 point)
-    {
-        if (doRenderSpheres)
+        
+        if(psm.CurrentState == psm.GroundedState || psm.CurrentState == psm.WallSlideState || psm.CurrentState == psm.WallJumpState)
         {
-            point.z = boundingCollider.transform.position.z;
-            var go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            go.transform.position = point;
-        }
-        return point;
-    }
-
-    public void OnEnterNewRoom(CompositeCollider2D boundingCollider)
-    {
-        if (!boundingCollider)
-        {
+            originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
             return;
         }
-        this.boundingCollider = boundingCollider;
+        if (playerRB.velocity.y < -15.5f)
+        {
+            originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
+            return;
+        }
+        if(playerPosViewport.y < yDeadzone.x)
+        {
+            originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
+            return;
+        }
+        if (playerPosViewport.y < yDeadzone.y)
+        {
+           originalPosition = new(playerTransform.position.x, playerTransform.position.y, transform.position.z);
+           return;
+        }
     }
+    #endregion
 
+    #region Collision
     Vector3 GetAllowedDelta(Vector3 desiredDelta)
     {
         if (boundingCollider)
@@ -381,4 +371,59 @@ public class CameraSystem : MonoBehaviour
         //Debug.Log(desiredDelta);
         return desiredDelta;
     }
+    void CalculateCollisionPoints()
+    {
+        if (!boundingCollider) { return; }
+        var zPos = Mathf.Abs(mainCamera.transform.position.z - boundingCollider.transform.position.z);
+        bottomLeft = mainCamera.ViewportToWorldPoint(new Vector3(0, 0, zPos));
+        bottomRight = mainCamera.ViewportToWorldPoint(new Vector3(1, 0, zPos));
+        topLeft = mainCamera.ViewportToWorldPoint(new Vector3(0, 1, zPos));
+        topRight = mainCamera.ViewportToWorldPoint(new Vector3(1, 1, zPos));
+
+        // Calculate vectors for the four edges (midpoints of the corners)
+        middleBottom = Vector3.Lerp(bottomLeft, bottomRight, 0.5f);
+        middleTop = Vector3.Lerp(topLeft, topRight, 0.5f);
+        middleLeft = Vector3.Lerp(bottomLeft, topLeft, 0.5f);
+        middleRight = Vector3.Lerp(bottomRight, topRight, 0.5f);
+    }
+
+    #endregion
+
+    #region Utils
+
+    Vector3 GetCameraPosFromPlayerPos()
+    {
+        return new Vector3(playerTransform.position.x, curOffset + originalPosition.y, transform.position.z);
+    }
+    Vector3 GetPointBoundsAligned(Vector3 point)
+    {
+        if (doRenderSpheres)
+        {
+            point.z = boundingCollider.transform.position.z;
+            var go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            go.transform.position = point;
+        }
+        return point;
+    }
+
+    /// <summary>
+    /// Will find the average position of attention points + one minimum point
+    /// </summary>
+    /// <param name="attentionPoints">List of all attention points</param>
+    /// <param name="minimumPoint">The point that must exist, can't have a center of mass of nothing</param>
+    /// <returns>The average position</returns>
+    Vector2 CenterOfMass(List<GameObject> attentionPoints, Vector2 minimumPoint)
+    {
+        var averageX = minimumPoint.x;
+        var averageY = minimumPoint.y;
+
+        foreach (var go in attentionPoints)
+        {
+            averageX += go.transform.position.x;
+            averageY += go.transform.position.y;
+        }
+        int size = attentionPoints.Count+1;
+        return new Vector2(averageX/size, averageY/size);
+    }
+    #endregion
 }
