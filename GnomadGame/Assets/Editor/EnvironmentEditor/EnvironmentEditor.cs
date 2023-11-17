@@ -19,6 +19,7 @@ using System;
 using System.IO;
 using System.Runtime.CompilerServices;
 using PlasticPipe.PlasticProtocol.Client;
+using Mono.Cecil.Cil;
 #if UNITY_EDITOR
 //TODO
 /*
@@ -89,6 +90,12 @@ public class EnvironmentEditor : EditorWindow
     bool mouseHeldLeft = false;
     private bool rotateMode;
     private bool ScootMode;
+    private enum Tab
+    {
+        StaticProp,
+        Collection
+    }
+    Tab tab = Tab.StaticProp;
     //this is used to select the last placed object
     //something after us selects a different object sometimes, so we reselect next frame
     private bool placedObjectLastFrame; 
@@ -209,8 +216,22 @@ public class EnvironmentEditor : EditorWindow
         DrawBrushHotkeys();
         GUILayout.EndArea();
         DrawBrushButtons();
+        GUILayout.BeginArea(new Rect(0f,
+            position.height / 2 + 10,
+            position.width,
+            position.height / 2)
+            );
+        DrawTabs();
+        switch (tab){
+            case Tab.Collection:
 
-        DrawGrids();
+                break;
+            case Tab.StaticProp:
+                DrawGrids();
+                break;
+        }
+
+        GUILayout.EndArea();
     }
     private void OnSceneGUI(SceneView sceneView)
     {
@@ -475,11 +496,7 @@ public class EnvironmentEditor : EditorWindow
     private void DrawGrids()
     {
         //create prefab grids
-        GUILayout.BeginArea(new Rect(0f,
-            position.height / 2 + 10,
-            position.width,
-            position.height / 2)
-            );
+
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 
         //foreach (Tuple<String,List<GameObject>> t in SubfolderPrefabLists)
@@ -498,6 +515,46 @@ public class EnvironmentEditor : EditorWindow
         EditorGUILayout.EndScrollView();
 
         GUILayout.EndArea();
+    }
+
+    private void DrawCollectionGrids()
+    {
+        //create prefab grids
+
+        scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+
+        //foreach (Tuple<String,List<GameObject>> t in SubfolderPrefabLists)
+        for (int i = 0; i < stampFolders.Count; i++)
+        {
+            if (GUILayout.Button(stampFolders[i].Name))
+            {
+                stampFolders[i].Active = !stampFolders[i].Active;
+            }
+
+            if (stampFolders[i].Active)
+            {
+                DrawPrefabIconGrid(stampFolders[i].Stamps, prefabButtonSize, (int)position.width / prefabButtonSize);
+            }
+        }
+        EditorGUILayout.EndScrollView();
+
+        GUILayout.EndArea();
+    }
+    private void DrawTabs()
+    {
+        GUILayout.BeginHorizontal();
+
+        if(GUILayout.Button("Static Props"))
+        {
+            tab = Tab.StaticProp;
+        }
+
+        if (GUILayout.Button("Collections"))
+        {
+            tab = Tab.Collection;
+        }
+        
+        GUILayout.EndHorizontal();
     }
     private void DrawPrefabIconGrid(List<GameObject> prefabList, int buttonSize, int itemsPerRow)
     {
