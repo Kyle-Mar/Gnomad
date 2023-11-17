@@ -72,7 +72,7 @@ public class BreakableObject : WhackableObject
         {
             ParticleSystem p = Instantiate<ParticleSystem>(BreakParticles);
             p.transform.position = transform.position;
-            p.transform.parent = null;
+            p.transform.parent = transform.parent;
             foreach (SpriteRenderer s in sprites)
             {
                 Destroy(s);
@@ -86,7 +86,7 @@ public class BreakableObject : WhackableObject
         }
         if (ActivationLink != null) { ActivationLink.Activate(); }
         //create loot from loot table
-        Invoke("Die", 5);
+        Die();
 
 
     }
