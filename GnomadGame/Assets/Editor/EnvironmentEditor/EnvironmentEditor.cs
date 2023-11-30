@@ -1,25 +1,10 @@
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
-using UnityEditor.UIElements;
-using UnityEditor.UI;
-using Unity.VisualScripting;
-using System.Drawing.Printing;
 using System.Linq;
-using System.Collections.Concurrent;
-using UnityEngine.UIElements;
-using UnityEngine.EventSystems;
-using UnityEditor.SceneManagement;
-using UnityEditor.TerrainTools;
-using PlasticGui.WorkspaceWindow.Home.Workspaces;
-using static PlasticGui.WorkspaceWindow.Items.ExpandedTreeNode;
-using SandolkakosDigital.EditorUtils;
-using static Codice.CM.WorkspaceServer.WorkspaceTreeDataStore;
 using System;
 using System.IO;
-using System.Runtime.CompilerServices;
-using PlasticPipe.PlasticProtocol.Client;
-using Mono.Cecil.Cil;
+
 #if UNITY_EDITOR
 //TODO
 /*
@@ -35,6 +20,9 @@ Implement collection tab
 Implement hotkeys popup button
 fix ctrl-z discrepency and rectiy distinction between selected and last placed prefab
 toggle to change tileset and sky to bright colors so holes can be seen
+clicking on current stamp icon should highlight prefab in heirarchy
+make collections not expand automatically in heirarchy
+make collection children not individually selectable
 */
 public class EnvironmentEditor : EditorWindow
 {
@@ -42,23 +30,24 @@ public class EnvironmentEditor : EditorWindow
     //Prefab Info
     private static string prefabFolderPath = "Assets/Zones/ForestZone/Environmental Assets/Elements/EnvironmentEditorPool";
     //private List<GameObject> prefabList = new List<GameObject>();
-    public class StampFolder
+    public class PropFolder
     {
-        public List<GameObject> Stamps;
+        public List<GameObject> Props;
         public String Name;
         public bool Active;
 
-        public StampFolder(string name, List<GameObject> stamps, bool active)
+        public PropFolder(string name, List<GameObject> props, bool active)
         {
             Name = name;
-            Stamps = stamps;
+            Props = props;
             Active = active;
         }
 
     }
     //List<Tuple<String, List<GameObject>>> SubfolderPrefabLists = new List<Tuple<String, List<GameObject>>>();
     //List<bool> prefabCategoryActivationStatuses = new List<bool>();
-    List<StampFolder> stampFolders = new List<StampFolder>();
+    List<PropFolder> stampFolders = new List<PropFolder>();
+    List<PropFolder> collectionFolders = new List<PropFolder>();
     //Window Info
     private Vector2 scrollPosition;
     //Painting Variables
@@ -133,7 +122,8 @@ public class EnvironmentEditor : EditorWindow
     /// </summary>
     private void OnEnable()
     {
-        PopulatePrefabList();
+        PopulatePrefabFolders(stampFolders, prefabFolderPath + "/Stamps");
+        PopulatePrefabFolders(collectionFolders, prefabFolderPath + "/Collections");
         initializeLayers();
 
         SceneView.duringSceneGui += OnSceneGUI;
@@ -144,9 +134,9 @@ public class EnvironmentEditor : EditorWindow
     }
 
 
-    private void PopulatePrefabList()
+    private void PopulatePrefabFolders(List<PropFolder> list, String rootDirectory)
     {
-        string[] subfolderPaths = AssetDatabase.GetSubFolders(prefabFolderPath);
+        string[] subfolderPaths = AssetDatabase.GetSubFolders(rootDirectory);
 
         foreach (string subfolderPath in subfolderPaths)
         {
@@ -169,14 +159,11 @@ public class EnvironmentEditor : EditorWindow
             if (subfolderPrefabList.Count > 0)
             {
                 string topLevelFolderName = Path.GetFileName(subfolderPath);
-                //Tuple<string, List<GameObject>> topLevelFolderPrefabTuple = new Tuple<string, List<GameObject>>(topLevelFolderName, subfolderPrefabList);
-                //SubfolderPrefabLists.Add(topLevelFolderPrefabTuple);
-                //Debug.Log(topLevelFolderPrefabTuple);
-                stampFolders.Add(new StampFolder(topLevelFolderName, subfolderPrefabList, false));
-
+                list.Add(new PropFolder(topLevelFolderName, subfolderPrefabList, false));
             }
         }
     }
+   
 
     private int initializeLayers()
     {   //might not work. Array is immuatable
@@ -202,36 +189,12 @@ public class EnvironmentEditor : EditorWindow
             {
                 OnEnable();
                 EditorApplication.RepaintHierarchyWindow();
-            }
+            }   
             return;
         }
-
-
-        DrawLayerButtons();
-        GUILayout.BeginArea(new Rect(position.width / 3 + 10,
-             10,
-             position.width / 3 + 10,
-             position.height / 2)
-             );
-        DrawBrushHotkeys();
-        GUILayout.EndArea();
-        DrawBrushButtons();
-        GUILayout.BeginArea(new Rect(0f,
-            position.height / 2 + 10,
-            position.width,
-            position.height / 2)
-            );
-        DrawTabs();
-        switch (tab){
-            case Tab.Collection:
-
-                break;
-            case Tab.StaticProp:
-                DrawGrids();
-                break;
-        }
-
-        GUILayout.EndArea();
+        DrawGUI();
+        //this really shoulnd't need to be commented out, but it was throwing strange errors
+        //GUILayout.EndArea();
     }
     private void OnSceneGUI(SceneView sceneView)
     {
@@ -292,13 +255,25 @@ public class EnvironmentEditor : EditorWindow
         {
             HandleKeyDownInput(e);
         }
+        if (e.type == EventType.KeyUp)
+        {
+            HandleKeyUpInput(e);
+        }
 
     }
 
-    /// <summary>
-    /// Handles simple hotkeys
-    /// </summary>
-    /// <param name="e"></param>
+    private void HandleKeyUpInput(Event e)
+    {
+        switch (e.keyCode)
+        {
+            case KeyCode.E:
+                rotateMode = false;
+                break;
+            case KeyCode.W:
+                ScootMode = false;
+                break;
+        }
+    }
     private void HandleKeyDownInput(Event e)
     {
         switch (e.keyCode)
@@ -321,12 +296,18 @@ public class EnvironmentEditor : EditorWindow
                 if (e.alt) { OnCLickPaintInFront(); }
                 else { MoveForwardInLayer(); }
                 break;
+            case KeyCode.E:
+                rotateMode = true;
+                break;
             case KeyCode.H:
                 OnCLickIsolateLayer();
                 break;
             case KeyCode.L:
                 if (e.alt) { FlipPrefabY(); }
                 else { FlipPrefabX(); }
+                break;
+            case KeyCode.W:
+                ScootMode = true;
                 break;
             case KeyCode.X:
                 UseLastBrush();
@@ -342,6 +323,33 @@ public class EnvironmentEditor : EditorWindow
     #endregion Update
 
     #region DrawingGUI
+    private void DrawGUI()
+    {
+        DrawLayerButtons();
+        GUILayout.BeginArea(new Rect(position.width / 3 + 10,
+             10,
+             position.width / 3 + 10,
+             position.height / 2)
+             );
+        DrawBrushHotkeys();
+        GUILayout.EndArea();
+        DrawBrushButtons();
+        GUILayout.BeginArea(new Rect(0f,
+            position.height / 2 + 10,
+            position.width,
+            position.height / 2)
+            );
+        DrawTabs();
+        switch (tab)
+        {
+            case Tab.Collection:
+                DrawFolderButtons(collectionFolders);
+                break;
+            case Tab.StaticProp:
+                DrawFolderButtons(stampFolders);
+                break;
+        }
+    }
     private void DrawLayerButtons()
     {
         GUILayout.BeginArea(new Rect(position.width - position.width / 4,
@@ -493,47 +501,23 @@ public class EnvironmentEditor : EditorWindow
         GUILayout.EndVertical();
         GUILayout.EndArea();
     }
-    private void DrawGrids()
+    private void DrawFolderButtons(List<PropFolder> propFolders)
     {
         //create prefab grids
 
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 
         //foreach (Tuple<String,List<GameObject>> t in SubfolderPrefabLists)
-        for (int i = 0; i < stampFolders.Count; i++)
+        for (int i = 0; i < propFolders.Count; i++)
         {
-            if (GUILayout.Button(stampFolders[i].Name))
+            if (GUILayout.Button(propFolders[i].Name))
             {
-                stampFolders[i].Active = !stampFolders[i].Active;
+                propFolders[i].Active = !propFolders[i].Active;
             }
 
-            if (stampFolders[i].Active)
+            if (propFolders[i].Active)
             {
-                DrawPrefabIconGrid(stampFolders[i].Stamps, prefabButtonSize, (int)position.width / prefabButtonSize);
-            }
-        }
-        EditorGUILayout.EndScrollView();
-
-        GUILayout.EndArea();
-    }
-
-    private void DrawCollectionGrids()
-    {
-        //create prefab grids
-
-        scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
-
-        //foreach (Tuple<String,List<GameObject>> t in SubfolderPrefabLists)
-        for (int i = 0; i < stampFolders.Count; i++)
-        {
-            if (GUILayout.Button(stampFolders[i].Name))
-            {
-                stampFolders[i].Active = !stampFolders[i].Active;
-            }
-
-            if (stampFolders[i].Active)
-            {
-                DrawPrefabIconGrid(stampFolders[i].Stamps, prefabButtonSize, (int)position.width / prefabButtonSize);
+                DrawPrefabIconGrid(propFolders[i].Props, prefabButtonSize, (int)position.width / prefabButtonSize);
             }
         }
         EditorGUILayout.EndScrollView();
@@ -587,7 +571,7 @@ public class EnvironmentEditor : EditorWindow
                 {
                     lastBrush = selectedStamp;
                     selectedStamp = prefab;
-                    Debug.Log("Selected prefab is " + prefab.name);
+                    //Debug.Log("Selected prefab is " + prefab.name);
                 }
             }
 
@@ -760,6 +744,7 @@ public class EnvironmentEditor : EditorWindow
 
     private void Paint()
     {
+        Debug.Log("Selected Stamp" + selectedStamp);
         lastPlacedPref = PrefabUtility.InstantiatePrefab(selectedStamp) as GameObject;
         lastPlacedPref.transform.position = new Vector3(GetMousePosition().x, GetMousePosition().y, 0);
         lastPlacedPref.transform.parent = layersList[CurrentLayer].transform.GetChild(0);
@@ -830,19 +815,36 @@ public class EnvironmentEditor : EditorWindow
         }
 
         //randomize attributes by jitter ammount
+        List<SpriteRenderer> sprites = new List<SpriteRenderer>();
         SpriteRenderer sprite = o.GetComponent<SpriteRenderer>();
-        sprite.color = Color.HSVToRGB((hueJitterRange + 1) / 2f, saturationJitterRange, 1-brightnessJitterRange);
+        if (sprite != null)
+        {
+            sprites.Add(sprite);
+        }
+
+        //in case of compound objects, add all sprites
+        sprites.AddRange(o.GetComponentsInChildren<SpriteRenderer>());
+        foreach (SpriteRenderer s in sprites)
+        {
+            s.color = Color.HSVToRGB((hueJitterRange + 1) / 2f, saturationJitterRange, 1 - brightnessJitterRange);
+        }
         o.transform.localScale = new Vector3(scaleJitterRange, scaleJitterRange, 1);
         o.transform.RotateAroundLocal(Vector3.back, rotationJitterRange * Mathf.Deg2Rad);
        // o.transform.position += positionOffset;
 
-        //randomize flipping
+        //instead of flipping the sprite, flip the whole object.
+        //That way we account for any child sprites in compound objects
         if (CurrentBrush.RandomFlipX) {
-            sprite.flipX = UnityEngine.Random.value > 0.5f;
+            //sprite.flipX = UnityEngine.Random.value > 0.5f;
+            Vector3 ls = o.transform.transform.localScale;
+            ls = new Vector3(ls.x* UnityEngine.Random.Range(0, 2) * 2 - 1, ls.y,ls.z);
+
         }
         if (CurrentBrush.RandomFlipY)
         {
-            sprite.flipY = UnityEngine.Random.value > 0.5f;
+            //sprite.flipY = UnityEngine.Random.value > 0.5f;
+            Vector3 ls = o.transform.transform.localScale;
+            ls = new Vector3(ls.x, ls.y * UnityEngine.Random.Range(0, 2) * 2 - 1, ls.z);
         }
     }
 
