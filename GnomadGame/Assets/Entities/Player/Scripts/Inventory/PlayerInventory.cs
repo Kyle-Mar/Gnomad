@@ -218,7 +218,8 @@ namespace Entities.Player.Inventory {
                 //cursorPosition = cursorPosition.Rotate(90f);
                                
                 data.CurrentItem.transform.Rotate(Vector3.forward * -90f);
-
+                item.UpdateIMG(item.Item, new Vector2(panelOffsetX, panelOffsetY), item.ItemPos, backpackRectTransform);
+                cursorPosition = item.ItemPos;
             }
         }
         

@@ -13,6 +13,7 @@ namespace Entities.Player.Inventory{
     {
         // The grid that represents where the item is and is not.
         public Grid grid = new(1,1,0);
+        public Vector2Int[] RotationMovementSequence = new Vector2Int[4]; 
         public Texture2D itemTexture;
         //unset value flag but not nullable because that's weird with 0's
         public int ItemID = -0xBEEF;

@@ -16,5 +16,10 @@ MonoBehaviour:
     numColumns: 3
     numRows: 1
     matrix: 010000000100000001000000
+  RotationMovementSequence:
+  - {x: -1, y: 1}
+  - {x: 1, y: -1}
+  - {x: -1, y: 1}
+  - {x: 1, y: -1}
   itemTexture: {fileID: 2800000, guid: 71efcfdd023f0ce4b9d93c59f216ab65, type: 3}
   ItemID: 1
