@@ -1,40 +1,55 @@
-#if UNITY_EDITOR
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+using Mono.Cecil;
 using UnityEngine;
+
+#if UNITY_EDITOR
 [ExecuteInEditMode]
 //editor script to randomize small asset locations while furnishing levels
 public class SpriteSeeder : MonoBehaviour
 {
-    SpriteRenderer spriteRenderer;
-    [SerializeField] Sprite[] spritePool;
+    [SerializeField] BrushData brushData;
+    [SerializeField] GameObject[] propPool;
+    GameObject prop;
     [SerializeField] public uint index;
     [SerializeField] bool randomize;
     private void OnEnable()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
     }
     private void OnValidate()
     {//if an attribut has been changed, either randomize or set to new index
      //will also randomize when new sprites are added. No efficient way to stop this
-        if (spritePool.Length == 0) { return; }
+     
+        if (propPool.Length == 0) { return; }
         if (randomize == true)
         {
             randomize = false;
             uint seed = (uint)UnityEngine.Random.Range(0, uint.MaxValue);
-            spriteRenderer.sprite = spritePool[seed % spritePool.Length];
+            prop = CreateProp(propPool[seed % propPool.Length]);
         }
         else
         {
-            if (spriteRenderer == null)
+            if (prop == null)
             {
                 Debug.LogWarning("Sprite Renderer for Sprite Seeder is Null");
                 return;
             }
-            spriteRenderer.sprite = spritePool[index % spritePool.Length];
+            prop = CreateProp(propPool[index % propPool.Length]);
+
         }
+
+    }
+
+    GameObject CreateProp(GameObject propRef)
+    {
+        GameObject newProp = Instantiate<GameObject>(propRef);
+        if (brushData != null)
+        {
+            BrushData.ApplyBrushToObject(brushData, newProp);
+        }
+        else
+        {
+            BrushData.ApplyBrushToObject(newProp.GetComponent<Prop>().defaultBrush, newProp);
+        }
+        return newProp;
     }
 
 

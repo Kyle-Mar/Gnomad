@@ -23,6 +23,8 @@ toggle to change tileset and sky to bright colors so holes can be seen
 clicking on current stamp icon should highlight prefab in heirarchy
 make collections not expand automatically in heirarchy
 make collection children not individually selectable
+give props a default brush
+add a system for switching between current brush and default brush
 */
 public class EnvironmentEditor : EditorWindow
 {
@@ -56,6 +58,7 @@ public class EnvironmentEditor : EditorWindow
     private GameObject lastPlacedPref;
     private Stack<GameObject> prefabHistory;
     private BrushData CurrentBrush;
+    private bool useDefaultBrush;
     public enum PaintMode
     {
         PaintBehind,
@@ -497,7 +500,14 @@ public class EnvironmentEditor : EditorWindow
         {
             ClearStamp();
         }
+
         GUILayout.EndHorizontal();
+
+        if (GUILayout.Button("Toggle Prop Default Brush"))
+        {
+            OnClickUseDefaultBrush();
+        }
+
         GUILayout.EndVertical();
         GUILayout.EndArea();
     }
@@ -655,6 +665,10 @@ public class EnvironmentEditor : EditorWindow
         UpdateLayers();
     }
 
+    private void OnClickUseDefaultBrush()
+    {
+        useDefaultBrush = !useDefaultBrush;
+    }
 
     private void UpdateLayers()
     {
@@ -791,60 +805,28 @@ public class EnvironmentEditor : EditorWindow
 
     private void ApplyBrushToObject(GameObject o)
     {
-        //randomize jitter ammount within range
+        //wrapper for brush data function 
         if (CurrentBrush == null)
         {
             CurrentBrush = GetWindow<EnvironmentBrushPallet>().CurrentBrush;
         }
         if (CurrentBrush == null) { Debug.Log("No Brush Active"); return; }
-        float hueJitterRange = UnityEngine.Random.Range(-CurrentBrush.HueJitterRange, CurrentBrush.HueJitterRange);
-        float saturationJitterRange = UnityEngine.Random.Range(0,CurrentBrush.SaturationJitterRange);
-        float brightnessJitterRange = UnityEngine.Random.Range(0,CurrentBrush.BrightnessJitterRange);
-
-        float scaleJitterRange = UnityEngine.Random.Range(1f - (CurrentBrush.ScaleJitterRange * 0.15f), 1f + (CurrentBrush.ScaleJitterRange * 0.15f));
-
-        float rotationJitterRange = UnityEngine.Random.Range(-CurrentBrush.RotationJitterRange, CurrentBrush.RotationJitterRange);
-        //float positionOffset = UnityEngine.Random.Range(0, CurrentBrush.scatterRange);
-        if (false)
+        if (useDefaultBrush)
         {
-            Debug.Log("Scale Jitter Range: " + scaleJitterRange);
-            Debug.Log("Rotation Jitter Range: " + rotationJitterRange);
-            Debug.Log("Saturation Jitter Range: " + saturationJitterRange);
-            Debug.Log("Brightness Jitter Range: " + brightnessJitterRange);
-            Debug.Log("Hue Final Value: " + (hueJitterRange + 1) / 2f);
+            Prop tmp = o.GetComponent<Prop>();
+            if (tmp == null)
+            {
+                Debug.Log("Can't get default brush for prop");
+                BrushData.ApplyBrushToObject(CurrentBrush, o);
+            }
+            else
+            {
+                BrushData.ApplyBrushToObject(tmp.defaultBrush, o);
+            }
         }
-
-        //randomize attributes by jitter ammount
-        List<SpriteRenderer> sprites = new List<SpriteRenderer>();
-        SpriteRenderer sprite = o.GetComponent<SpriteRenderer>();
-        if (sprite != null)
+        else
         {
-            sprites.Add(sprite);
-        }
-
-        //in case of compound objects, add all sprites
-        sprites.AddRange(o.GetComponentsInChildren<SpriteRenderer>());
-        foreach (SpriteRenderer s in sprites)
-        {
-            s.color = Color.HSVToRGB((hueJitterRange + 1) / 2f, saturationJitterRange, 1 - brightnessJitterRange);
-        }
-        o.transform.localScale = new Vector3(scaleJitterRange, scaleJitterRange, 1);
-        o.transform.RotateAroundLocal(Vector3.back, rotationJitterRange * Mathf.Deg2Rad);
-       // o.transform.position += positionOffset;
-
-        //instead of flipping the sprite, flip the whole object.
-        //That way we account for any child sprites in compound objects
-        if (CurrentBrush.RandomFlipX) {
-            //sprite.flipX = UnityEngine.Random.value > 0.5f;
-            Vector3 ls = o.transform.transform.localScale;
-            ls = new Vector3(ls.x* UnityEngine.Random.Range(0, 2) * 2 - 1, ls.y,ls.z);
-
-        }
-        if (CurrentBrush.RandomFlipY)
-        {
-            //sprite.flipY = UnityEngine.Random.value > 0.5f;
-            Vector3 ls = o.transform.transform.localScale;
-            ls = new Vector3(ls.x, ls.y * UnityEngine.Random.Range(0, 2) * 2 - 1, ls.z);
+            BrushData.ApplyBrushToObject(CurrentBrush, o);
         }
     }
 
