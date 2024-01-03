@@ -404,7 +404,7 @@ public class EnemyStateMachine : StateMachine
         }
         if (!IsGrounded)
         {
-            IsSlidedInto = false;
+            //IsSlidedInto = false;
             IsVolleyed = true;
             CameraSystemEvent.onShake?.Invoke();
             volleyCol.gameObject.SetActive(true);

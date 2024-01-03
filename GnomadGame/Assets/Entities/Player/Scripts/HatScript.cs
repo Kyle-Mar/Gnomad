@@ -56,31 +56,33 @@ public class HatScript : MonoBehaviour
                     if (collision.gameObject.tag == "Enemy")
                     {
                         collision.gameObject.GetComponentInChildren<EnemyStateMachine>().IsSlidedInto = true;
+                        //Debug.LogWarning("Slide True");
                     }
 
                     if (collisionPoint.x - transform.position.x < 0)
                     {
-                        Debug.Log("Sliding Left");
+                        //Debug.Log("Sliding Left");
                         damageable.Damage(MovementStats.baseSlashDamage, psm.SlideCollider, new Vector3(0.3f * 1f, 4.0f));
-                        KBVector = new Vector3(0.3f * 1f, 4.0f);
+                        KBVector = new Vector3(0.165f * 1f, 1.35f);
                     }
                     else
                     {
-                        Debug.Log("Sliding Right");
+                        //Debug.Log("Sliding Right");
                         damageable.Damage(MovementStats.baseSlashDamage, psm.SlideCollider, new Vector3(0.3f * -1f, 4.0f));
-                        KBVector = new Vector3(0.3f * -1f, 4.0f);
+                        KBVector = new Vector3(0.165f * -1f, 1.35f);
                     }
                 }
                 else
                 {
                     damageable.Damage(MovementStats.baseSlashDamage, psm.SlashCollider, new Vector3(collisionPoint.x - transform.position.x, 0.5f));
-                    KBVector = new Vector3(collisionPoint.x - transform.position.x, 0.5f);
+                    KBVector = new Vector3(collisionPoint.x - transform.position.x, 0.5f).normalized;
+                    //Debug.Log(KBVector.x);
                 }
                 if (collision.gameObject.TryGetComponent<IKnockable>(out knockable))
                 {
                     knockable.Knockback(KBVector);
                 }
-                Debug.Log("Damaging Enemy");
+                //Debug.Log("Damaging Enemy");
             }
         }
     }
