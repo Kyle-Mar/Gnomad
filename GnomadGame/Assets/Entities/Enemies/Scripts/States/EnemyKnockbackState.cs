@@ -40,7 +40,7 @@ public class EnemyKnockbackState : EnemyBaseState
         //context.animator.SetTrigger("InAirTrigger");
         context.animator.SetBool("InAir", true);
         knockbackTimer = context.KnockbackTimer;
-        initialKnockbackDirection = context.transform.GetComponentInChildren<IKnockable>().KBDirection;
+        initialKnockbackDirection = context.knockableComp.KBDirection;
 
         //Debug.Log("IsVolleyedInto = " + context.IsVolleyedInto);
 

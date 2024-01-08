@@ -11,7 +11,7 @@ public class Knockable : MonoBehaviour, IKnockable
     public Vector3 KBDirection { get => KBDir; set => KBDir = value; }
 
     // Gets declared inside OnAwake function on parent object (ESM OnAwake(), PSM OnAwake(), etc)
-    public delegate void OnKnockback(Vector3 dir);
+    public delegate void OnKnockback();
     public OnKnockback onKnockback;
 
     public void Knockback(Vector3 dir)
@@ -19,7 +19,7 @@ public class Knockable : MonoBehaviour, IKnockable
         KBDir = dir;
         if (onKnockback.GetInvocationList().Length > 0)
         {
-            onKnockback?.Invoke(KBDir);
+            onKnockback?.Invoke();
         }
     }
 
