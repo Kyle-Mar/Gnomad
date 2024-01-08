@@ -435,7 +435,7 @@ public class PlayerStateMachine : StateMachine
         //Debug.Log(currentMoveSpeed);
         //GetComponentInChildren<Health>().Damage(2);
         //Debug.Log("Screen Shot Take");
-        //ScreenShot();
+        ScreenShot();
     }
 
     void ScreenShot()

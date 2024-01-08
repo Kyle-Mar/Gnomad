@@ -8,23 +8,15 @@ using System.IO;
 #if UNITY_EDITOR
 //TODO
 /*
-Create different tabs in the folder view zone
 rotate/scale/flip indicators
-Move objects on paint and drag
-implement rotation mode
 set last painted prefab to selected prefab
-automatically set render layer of placed props
-Implement light tab
 Implement actor tab
-Implement collection tab
 Implement hotkeys popup button
 fix ctrl-z discrepency and rectiy distinction between selected and last placed prefab
 toggle to change tileset and sky to bright colors so holes can be seen
 clicking on current stamp icon should highlight prefab in heirarchy
 make collections not expand automatically in heirarchy
 make collection children not individually selectable
-give props a default brush
-add a system for switching between current brush and default brush
 */
 public class EnvironmentEditor : EditorWindow
 {
@@ -50,6 +42,7 @@ public class EnvironmentEditor : EditorWindow
     //List<bool> prefabCategoryActivationStatuses = new List<bool>();
     List<PropFolder> stampFolders = new List<PropFolder>();
     List<PropFolder> collectionFolders = new List<PropFolder>();
+    List<PropFolder> effectFolders = new List<PropFolder>();
     //Window Info
     private Vector2 scrollPosition;
     //Painting Variables
@@ -82,12 +75,15 @@ public class EnvironmentEditor : EditorWindow
     bool mouseHeldLeft = false;
     private bool rotateMode;
     private bool ScootMode;
+    private bool highContrastMode;
     private enum Tab
     {
         StaticProp,
-        Collection
+        Collection,
+        Effects,
+        Entities
     }
-    Tab tab = Tab.StaticProp;
+    Tab tab = Tab.Effects;
     //this is used to select the last placed object
     //something after us selects a different object sometimes, so we reselect next frame
     private bool placedObjectLastFrame; 
@@ -125,12 +121,13 @@ public class EnvironmentEditor : EditorWindow
     /// </summary>
     private void OnEnable()
     {
+        PopulatePrefabFolders(effectFolders, prefabFolderPath + "/Effects");
         PopulatePrefabFolders(stampFolders, prefabFolderPath + "/Stamps");
         PopulatePrefabFolders(collectionFolders, prefabFolderPath + "/Collections");
         initializeLayers();
 
         SceneView.duringSceneGui += OnSceneGUI;
-
+            
         rotateMode = false;
         paintMode = PaintMode.PaintBehind;
         prefabHistory = new Stack<GameObject>();
@@ -223,26 +220,28 @@ public class EnvironmentEditor : EditorWindow
             e.Use();
         }
 
-    }
-    private void Update()
-    {
+        if (rotateMode == true && lastPlacedPref != null)
+        {
+            RotateToMouse();
+        }
+
         if (ScootMode)
         {
-            if (lastPlacedPref == null) {
-                Debug.Log("Scoot mode pref is null");
-                ScootMode = false;
-                return;
-            }
-            if (!mouseHeldLeft)
+            if (lastPlacedPref == null)
             {
-                Debug.Log("Scoot mode mouse not held");
+                Debug.Log("Scoot mode pref is null");
                 ScootMode = false;
                 return;
             }
             lastPlacedPref.transform.position = new Vector3(GetMousePosition().x, GetMousePosition().y, 0);
         }
     }
-    private void HandleInput(Event e)
+    private void Update()
+    {
+
+        
+    }
+    private void HandleInput(Event e)   
     {/*
         if (e.isMouse && e.button == 0)
         {
@@ -351,6 +350,9 @@ public class EnvironmentEditor : EditorWindow
             case Tab.StaticProp:
                 DrawFolderButtons(stampFolders);
                 break;
+            case Tab.Effects:
+                DrawFolderButtons(effectFolders);
+                break;
         }
     }
     private void DrawLayerButtons()
@@ -413,6 +415,12 @@ public class EnvironmentEditor : EditorWindow
         {
             OnCLickToggleCameraMode();
         }
+
+        if (GUILayout.Button("High Contrast Mode", GUILayout.ExpandWidth(true)))
+        {
+            OnCLickToggleContrastMode();
+        }
+
         DrawLayerHotkeys();
         GUILayout.EndVertical();
         GUILayout.EndArea();
@@ -420,7 +428,8 @@ public class EnvironmentEditor : EditorWindow
     private void DrawBrushHotkeys()
     {
         GUILayout.Label(
-            "Hold 'E' to ROTATE the last painted prop\n" +
+            "Hold 'E' to ROTATE the current prop\n" +
+            "Hold 'W' to SCOOT the current prop\n" +
             "Ctrl+Z to DESTROY the last painted prop\n" +
             "Z Clear Stamp\n" +
             "alt-X use previous brush\n" +
@@ -547,7 +556,12 @@ public class EnvironmentEditor : EditorWindow
         {
             tab = Tab.Collection;
         }
-        
+
+        if (GUILayout.Button("Effects"))
+        {
+            tab = Tab.Effects;
+        }
+
         GUILayout.EndHorizontal();
     }
     private void DrawPrefabIconGrid(List<GameObject> prefabList, int buttonSize, int itemsPerRow)
@@ -571,11 +585,11 @@ public class EnvironmentEditor : EditorWindow
                 //get rid of button hover changes
                 iconStyle.normal.background = null;
                 iconStyle.hover.background = null;
-                if (icon != null)
-                {
+                //if (icon != null )
+                //{
                     content.image = icon;
                     content.tooltip = prefab.name;
-                }
+                //}
 
                 if (GUILayout.Button(content, GUILayout.Width(buttonSize), GUILayout.Height(buttonSize)))
                 {
@@ -756,12 +770,50 @@ public class EnvironmentEditor : EditorWindow
         SceneView.FrameLastActiveSceneView();
     }
 
+    private void RotateToMouse()
+    {
+        Vector3 mousePosition = GetMousePosition();
+        Vector3 objectPosition;
+        if (Selection.activeTransform)
+        {
+            objectPosition = Selection.activeTransform.position;
+        }
+        else
+        {
+            objectPosition = lastPlacedPref.transform.position;
+        }
+
+        // Calculate the angle in radians between the object and the mouse position
+        float angle = Mathf.Atan2(mousePosition.y - objectPosition.y, mousePosition.x - objectPosition.x);
+
+        // Convert the angle to degrees and create a rotation quaternion around the z-axis
+        Quaternion rotation = Quaternion.Euler(0, 0, angle * Mathf.Rad2Deg);
+        if (Selection.activeTransform == null)
+        {
+            lastPlacedPref.transform.rotation = rotation;
+        }
+        else { Selection.activeTransform.rotation = rotation; }
+    }
+
+    private void OnCLickToggleContrastMode() 
+    {
+
+    }
+
     private void Paint()
     {
         Debug.Log("Selected Stamp" + selectedStamp);
         lastPlacedPref = PrefabUtility.InstantiatePrefab(selectedStamp) as GameObject;
         lastPlacedPref.transform.position = new Vector3(GetMousePosition().x, GetMousePosition().y, 0);
-        lastPlacedPref.transform.parent = layersList[CurrentLayer].transform.GetChild(0);
+        switch (tab)
+        {
+            case Tab.Effects:
+                lastPlacedPref.transform.parent = layersList[CurrentLayer].transform.GetChild(1);
+                break;
+            default:
+                lastPlacedPref.transform.parent = layersList[CurrentLayer].transform.GetChild(0);
+                break;
+        }
         switch (paintMode)
         {
             case PaintMode.PaintBehind:
@@ -784,6 +836,7 @@ public class EnvironmentEditor : EditorWindow
         prefabHistory.Push(lastPlacedPref);
         ApplyBrushToObject(lastPlacedPref);
         Selection.activeObject = lastPlacedPref;
+        SetRenderLayer();
         placedObjectLastFrame = true;
     }
     #endregion ButtonFunctions
@@ -827,6 +880,30 @@ public class EnvironmentEditor : EditorWindow
         else
         {
             BrushData.ApplyBrushToObject(CurrentBrush, o);
+        }
+    }
+
+    private void SetRenderLayer()
+    {
+        switch (currentLayer) {
+            case 0:
+                lastPlacedPref.layer = 30;
+                break;
+            case 1:
+                lastPlacedPref.layer = 30;
+                break;
+            case 2:
+                lastPlacedPref.layer = 31;
+                break;
+            case 6:
+                lastPlacedPref.layer = 29;
+                break;
+            case 7:
+                lastPlacedPref.layer = 29;
+                break;
+            case 8:
+                lastPlacedPref.layer = 29;
+                break;
         }
     }
 
