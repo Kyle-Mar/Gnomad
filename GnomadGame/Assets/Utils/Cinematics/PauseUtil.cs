@@ -42,7 +42,7 @@ public class PauseUtil : MonoBehaviour
         }
 
         gameSpeed = Mathf.Clamp01(gameSpeed);
-        Debug.Log(gameSpeed);
+        //Debug.Log(gameSpeed);
 
         if(gameSpeed > 0f)
         {

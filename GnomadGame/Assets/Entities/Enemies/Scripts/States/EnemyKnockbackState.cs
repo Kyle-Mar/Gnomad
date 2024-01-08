@@ -40,13 +40,13 @@ public class EnemyKnockbackState : EnemyBaseState
         //context.animator.SetTrigger("InAirTrigger");
         context.animator.SetBool("InAir", true);
         knockbackTimer = context.KnockbackTimer;
-        initialKnockbackDirection = context.transform.GetComponentInChildren<IKnockable>().KBDirection;
+        initialKnockbackDirection = context.knockableComp.KBDirection;
 
         //Debug.Log("IsVolleyedInto = " + context.IsVolleyedInto);
 
-        // If Volleyed, use 42.5f multiplier
-        // else, use speed var
+        
 
+        // For when an enemy hits another enemy
 
         if (context.IsVolleyedInto)
         {
@@ -69,12 +69,14 @@ public class EnemyKnockbackState : EnemyBaseState
             }
         }
 
+        // If a player hits an enemy
+
         else if (context.IsGrounded)
         {
             if (context.IsSlidedInto)
             {
                 // should be multiplied by 27.5f
-                context.rb.velocity = initialKnockbackDirection * 27.5f;
+                context.rb.velocity = initialKnockbackDirection * 20.5f;
             }
             else
             {
@@ -95,15 +97,23 @@ public class EnemyKnockbackState : EnemyBaseState
         // Knockback for when player volleys enemy
         else
         {
-            //Debug.Log("EXTREME EPIC KNOCKBACK");
-
-            // should be multiplied by 42.5f
-            context.rb.velocity = initialKnockbackDirection * 42.5f;
+            // Since the KB.y value is higher on the slide, if multiplied by 42.5,
+            // It will actually give have an insane amount of y knockback
+            // So that's why there's a check here
+            //Debug.LogWarning(context.IsSlidedInto);
+            if (context.IsSlidedInto)
+            {
+                context.rb.velocity = initialKnockbackDirection * 20.5f;
+            }
+            else
+            {
+                context.rb.velocity = initialKnockbackDirection * 42.5f;
+            }
         }
         
         //context.rb.velocity = initialKnockbackDirection * 27.5f;
         currentKnockbackVelocity = context.rb.velocity;
-        Debug.Log(initialKnockbackDirection);
+        //Debug.Log(currentKnockbackVelocity);
 
         //context.rb.Sleep();
     }

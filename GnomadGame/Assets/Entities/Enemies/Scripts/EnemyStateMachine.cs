@@ -129,7 +129,7 @@ public class EnemyStateMachine : StateMachine
 
     public float knockbackSpeed = 12.5f;
     // Connected to EnemyBaseState's OnKB function
-    public delegate void OnKnockback(Vector3 dir);
+    public delegate void OnKnockback();
     public OnKnockback onKB;
     #endregion
     private void OnEnable()
@@ -211,10 +211,10 @@ public class EnemyStateMachine : StateMachine
         
     }
 
-    public void ApplyKnockback(Vector3 dir)
+    public void ApplyKnockback()
     {
         // Switches state to Knockback State inside EnemyBaseState
-        onKB?.Invoke(dir);
+        onKB?.Invoke();
     }
 
 
@@ -404,7 +404,7 @@ public class EnemyStateMachine : StateMachine
         }
         if (!IsGrounded)
         {
-            IsSlidedInto = false;
+            //IsSlidedInto = false;
             IsVolleyed = true;
             CameraSystemEvent.onShake?.Invoke();
             volleyCol.gameObject.SetActive(true);

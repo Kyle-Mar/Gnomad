@@ -15,7 +15,7 @@ public abstract class EnemyBaseState : BaseState
         currentSubState = base.currentSubState as EnemyBaseState;
         currentSuperState = base.currentSuperState as EnemyBaseState;
     }
-    public virtual void OnKB(Vector3 dir)
+    public virtual void OnKB()
     {
         if (this != context.CurrentState)
         {
