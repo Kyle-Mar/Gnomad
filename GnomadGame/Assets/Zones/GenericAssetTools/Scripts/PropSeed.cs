@@ -4,13 +4,13 @@ using UnityEngine;
 #if UNITY_EDITOR
 [ExecuteInEditMode]
 //editor script to randomize small asset locations while furnishing levels
-public class SpriteSeeder : MonoBehaviour
+public class PropSeed : MonoBehaviour
 {
     [SerializeField] BrushData brushData;
     [SerializeField] GameObject[] propPool;
     GameObject prop;
     [SerializeField] public uint index;
-    [SerializeField] bool randomize;
+    [SerializeField] bool randomize = true;
     private void OnEnable()
     {
     }
@@ -29,10 +29,12 @@ public class SpriteSeeder : MonoBehaviour
         {
             if (prop == null)
             {
+                randomize = true;
                 Debug.LogWarning("Sprite Renderer for Sprite Seeder is Null");
                 return;
             }
             prop = CreateProp(propPool[index % propPool.Length]);
+            //DestroyImmediate(this);
 
         }
 
@@ -49,6 +51,9 @@ public class SpriteSeeder : MonoBehaviour
         {
             BrushData.ApplyBrushToObject(newProp.GetComponent<Prop>().defaultBrush, newProp);
         }
+        newProp.transform.position = transform.position;
+        newProp.transform.rotation = transform.rotation;
+        newProp.transform.parent = transform;
         return newProp;
     }
 

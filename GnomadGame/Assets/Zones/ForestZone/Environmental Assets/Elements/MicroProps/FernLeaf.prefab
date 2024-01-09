@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 9123419604171572090}
   - component: {fileID: 4062391362897264540}
   - component: {fileID: 6138442989586470959}
+  - component: {fileID: 3402637528887857901}
   m_Layer: 0
   m_Name: FernLeaf
   m_TagString: Untagged
@@ -99,7 +100,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alternateSprites:
   - {fileID: 34235059, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
-  randomFlipX: 1
-  hueJitterRange: 0.468
-  saturationJitterRange: 0.338
-  sizeJitterRange: 0.04
+--- !u!114 &3402637528887857901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5703396362615086175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d568da9b6f259d47abce324aec7875a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultBrush: {fileID: 11400000, guid: c9e33b27f8c0a91479bd29d563f8efad, type: 2}

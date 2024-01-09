@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7884662841316004629}
   - component: {fileID: 1114188228754955638}
   - component: {fileID: 4692173889993262087}
+  - component: {fileID: -81376301414861386}
   m_Layer: 0
   m_Name: DirtPile
   m_TagString: Untagged
@@ -100,7 +101,16 @@ MonoBehaviour:
   alternateSprites:
   - {fileID: 73206543, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
   - {fileID: -1617918617, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
-  randomFlipX: 1
-  hueJitterRange: 0.468
-  saturationJitterRange: 0.338
-  sizeJitterRange: 0.04
+--- !u!114 &-81376301414861386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8432320540297076396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d568da9b6f259d47abce324aec7875a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultBrush: {fileID: 11400000, guid: 45b7145f7027f5a4ba9309a8acca82a4, type: 2}

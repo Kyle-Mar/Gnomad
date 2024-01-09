@@ -17,6 +17,7 @@ toggle to change tileset and sky to bright colors so holes can be seen
 clicking on current stamp icon should highlight prefab in heirarchy
 make collections not expand automatically in heirarchy
 make collection children not individually selectable
+Stop env editor from popping up when running game
 */
 public class EnvironmentEditor : EditorWindow
 {

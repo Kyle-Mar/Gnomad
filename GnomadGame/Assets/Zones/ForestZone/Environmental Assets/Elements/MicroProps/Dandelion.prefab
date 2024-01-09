@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 208932361056422972}
   - component: {fileID: 6880763655653390307}
   - component: {fileID: 8557675546777199001}
+  - component: {fileID: -8068131009193142074}
   m_Layer: 0
   m_Name: Dandelion
   m_TagString: Untagged
@@ -103,7 +104,16 @@ MonoBehaviour:
   - {fileID: -1754811910, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
   - {fileID: 113724472, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
   - {fileID: -101018488, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
-  randomFlipX: 1
-  hueJitterRange: 0.468
-  saturationJitterRange: 0.338
-  sizeJitterRange: 0.04
+--- !u!114 &-8068131009193142074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 763922529844285907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d568da9b6f259d47abce324aec7875a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultBrush: {fileID: 11400000, guid: c9e33b27f8c0a91479bd29d563f8efad, type: 2}

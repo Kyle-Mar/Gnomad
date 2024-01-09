@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3558759688060919555}
   - component: {fileID: 4854855780244262788}
   - component: {fileID: 213499145843799757}
+  - component: {fileID: 1568143018697516858}
   m_Layer: 0
   m_Name: Rocks
   m_TagString: Untagged
@@ -104,7 +105,16 @@ MonoBehaviour:
   - {fileID: 249230490, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
   - {fileID: 547946512, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
   - {fileID: -1551317828, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
-  randomFlipX: 1
-  hueJitterRange: 0.468
-  saturationJitterRange: 0.338
-  sizeJitterRange: 0.04
+--- !u!114 &1568143018697516858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 531543812840824222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d568da9b6f259d47abce324aec7875a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultBrush: {fileID: 11400000, guid: c9e33b27f8c0a91479bd29d563f8efad, type: 2}

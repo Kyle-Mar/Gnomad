@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8983253026821217283}
   - component: {fileID: 8983253026821217282}
   m_Layer: 0
-  m_Name: Random Sprite Seed
+  m_Name: PropSeed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

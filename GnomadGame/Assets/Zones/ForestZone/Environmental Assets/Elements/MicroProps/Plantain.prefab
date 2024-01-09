@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5315202845626819983}
   - component: {fileID: 6161112604043399887}
   - component: {fileID: 7712217302379911988}
+  - component: {fileID: 1138736934496453901}
   m_Layer: 0
   m_Name: Plantain
   m_TagString: Untagged
@@ -99,7 +100,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alternateSprites:
   - {fileID: -1028575148, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
-  randomFlipX: 1
-  hueJitterRange: 0.468
-  saturationJitterRange: 0.338
-  sizeJitterRange: 0.04
+--- !u!114 &1138736934496453901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 377260142957205381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d568da9b6f259d47abce324aec7875a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultBrush: {fileID: 11400000, guid: c9e33b27f8c0a91479bd29d563f8efad, type: 2}

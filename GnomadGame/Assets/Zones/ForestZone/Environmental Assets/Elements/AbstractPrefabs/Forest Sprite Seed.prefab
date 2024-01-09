@@ -16,9 +16,69 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8983253026821217282, guid: b25a01fe7eb1a424c922be7161d36a12, type: 3}
+      propertyPath: propPool.Array.size
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 8983253026821217282, guid: b25a01fe7eb1a424c922be7161d36a12, type: 3}
       propertyPath: spritePool.Array.size
       value: 38
       objectReference: {fileID: 0}
+    - target: {fileID: 8983253026821217282, guid: b25a01fe7eb1a424c922be7161d36a12, type: 3}
+      propertyPath: propPool.Array.data[0]
+      value: 
+      objectReference: {fileID: 8610943292380097974, guid: b9251b85fdd221744a2a92cf8c76c81e, type: 3}
+    - target: {fileID: 8983253026821217282, guid: b25a01fe7eb1a424c922be7161d36a12, type: 3}
+      propertyPath: propPool.Array.data[1]
+      value: 
+      objectReference: {fileID: 6353720139302309641, guid: 08e4020e697079e4eb82230139ac9ceb, type: 3}
+    - target: {fileID: 8983253026821217282, guid: b25a01fe7eb1a424c922be7161d36a12, type: 3}
+      propertyPath: propPool.Array.data[2]
+      value: 
+      objectReference: {fileID: 8407910656332215196, guid: ac21c243f344a7941be9963e94feb432, type: 3}
+    - target: {fileID: 8983253026821217282, guid: b25a01fe7eb1a424c922be7161d36a12, type: 3}
+      propertyPath: propPool.Array.data[3]
+      value: 
+      objectReference: {fileID: 2690378248427472448, guid: f59c39bf917b03540b5ee83e99679da3, type: 3}
+    - target: {fileID: 8983253026821217282, guid: b25a01fe7eb1a424c922be7161d36a12, type: 3}
+      propertyPath: propPool.Array.data[4]
+      value: 
+      objectReference: {fileID: 763922529844285907, guid: 4c601202582a46546b80108cbfe79c84, type: 3}
+    - target: {fileID: 8983253026821217282, guid: b25a01fe7eb1a424c922be7161d36a12, type: 3}
+      propertyPath: propPool.Array.data[5]
+      value: 
+      objectReference: {fileID: 8432320540297076396, guid: 6cda7eb3e207b1c4492e92e458bc977a, type: 3}
+    - target: {fileID: 8983253026821217282, guid: b25a01fe7eb1a424c922be7161d36a12, type: 3}
+      propertyPath: propPool.Array.data[6]
+      value: 
+      objectReference: {fileID: 5703396362615086175, guid: 12b58e44c47817f4ab3f8c6741b81774, type: 3}
+    - target: {fileID: 8983253026821217282, guid: b25a01fe7eb1a424c922be7161d36a12, type: 3}
+      propertyPath: propPool.Array.data[7]
+      value: 
+      objectReference: {fileID: 3615459721750046735, guid: 1fb2cab7c786cea46ae4714a40dbcbcf, type: 3}
+    - target: {fileID: 8983253026821217282, guid: b25a01fe7eb1a424c922be7161d36a12, type: 3}
+      propertyPath: propPool.Array.data[8]
+      value: 
+      objectReference: {fileID: 7437962248217257716, guid: 8629a20ad1dc64843b75b168de06e5ee, type: 3}
+    - target: {fileID: 8983253026821217282, guid: b25a01fe7eb1a424c922be7161d36a12, type: 3}
+      propertyPath: propPool.Array.data[9]
+      value: 
+      objectReference: {fileID: 5119743748208848378, guid: d5504e446fa0c4143bdc515e51d851b4, type: 3}
+    - target: {fileID: 8983253026821217282, guid: b25a01fe7eb1a424c922be7161d36a12, type: 3}
+      propertyPath: propPool.Array.data[10]
+      value: 
+      objectReference: {fileID: 2186927941976338606, guid: 979d51a5fe95931448cdd3b67f8c9ce9, type: 3}
+    - target: {fileID: 8983253026821217282, guid: b25a01fe7eb1a424c922be7161d36a12, type: 3}
+      propertyPath: propPool.Array.data[11]
+      value: 
+      objectReference: {fileID: 377260142957205381, guid: 5c237459624a2e34e82b6866695610e8, type: 3}
+    - target: {fileID: 8983253026821217282, guid: b25a01fe7eb1a424c922be7161d36a12, type: 3}
+      propertyPath: propPool.Array.data[12]
+      value: 
+      objectReference: {fileID: 531543812840824222, guid: e159737134b8a0c43884504bf1b5bf75, type: 3}
+    - target: {fileID: 8983253026821217282, guid: b25a01fe7eb1a424c922be7161d36a12, type: 3}
+      propertyPath: propPool.Array.data[13]
+      value: 
+      objectReference: {fileID: 116894213112958208, guid: d353003ca53fa4e4aa330d4e60ca34ff, type: 3}
     - target: {fileID: 8983253026821217282, guid: b25a01fe7eb1a424c922be7161d36a12, type: 3}
       propertyPath: spritePool.Array.data[0]
       value: 

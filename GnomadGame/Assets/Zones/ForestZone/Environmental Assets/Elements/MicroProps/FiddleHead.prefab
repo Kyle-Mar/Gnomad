@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7394341999416575172}
   - component: {fileID: 5299225400815635650}
   - component: {fileID: 8761079167694892231}
+  - component: {fileID: 8245191063291165869}
   m_Layer: 0
   m_Name: FiddleHead
   m_TagString: Untagged
@@ -102,7 +103,16 @@ MonoBehaviour:
   - {fileID: 1491645546, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
   - {fileID: 805602995, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
   - {fileID: 1372065875, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
-  randomFlipX: 1
-  hueJitterRange: 0.468
-  saturationJitterRange: 0.338
-  sizeJitterRange: 0.04
+--- !u!114 &8245191063291165869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3615459721750046735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d568da9b6f259d47abce324aec7875a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultBrush: {fileID: 11400000, guid: c9e33b27f8c0a91479bd29d563f8efad, type: 2}

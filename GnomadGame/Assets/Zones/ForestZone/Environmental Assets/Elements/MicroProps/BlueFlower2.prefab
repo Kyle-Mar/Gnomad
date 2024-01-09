@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1572162362738486925}
   - component: {fileID: 7440252051720010356}
   - component: {fileID: 4098807993131894256}
+  - component: {fileID: 5707259977064845235}
   m_Layer: 0
   m_Name: BlueFlower2
   m_TagString: Untagged
@@ -99,7 +100,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alternateSprites:
   - {fileID: 450402289, guid: 7c6130dad6145184abfb91c2418a7d62, type: 3}
-  randomFlipX: 1
-  hueJitterRange: 0.468
-  saturationJitterRange: 0.338
-  sizeJitterRange: 0.04
+--- !u!114 &5707259977064845235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6353720139302309641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d568da9b6f259d47abce324aec7875a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultBrush: {fileID: 11400000, guid: c9e33b27f8c0a91479bd29d563f8efad, type: 2}

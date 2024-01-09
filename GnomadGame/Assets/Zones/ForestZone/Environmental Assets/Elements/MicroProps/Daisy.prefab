@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4601976541150159080}
   - component: {fileID: 3678289613927235533}
   - component: {fileID: 621534270788348732}
+  - component: {fileID: -547109638766597076}
   m_Layer: 0
   m_Name: Daisy
   m_TagString: Untagged
@@ -98,7 +99,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   alternateSprites: []
-  randomFlipX: 1
-  hueJitterRange: 0.468
-  saturationJitterRange: 0.338
-  sizeJitterRange: 0.04
+--- !u!114 &-547109638766597076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2690378248427472448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d568da9b6f259d47abce324aec7875a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultBrush: {fileID: 11400000, guid: c9e33b27f8c0a91479bd29d563f8efad, type: 2}
